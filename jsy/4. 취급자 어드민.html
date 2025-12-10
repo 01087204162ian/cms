@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>관리자(여직원) 전용 페이지</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/static/pretendard.css" />
+    <style>
+        body { font-family: 'Pretendard', sans-serif; }
+        /* 뱃지 스타일 정의 */
+        .status-applied { @apply bg-gray-100 text-gray-600 border border-gray-200; }   /* 신청완료 */
+        .status-quoted  { @apply bg-orange-100 text-orange-700 border border-orange-200; } /* 청약서안내 */
+        .status-paid    { @apply bg-blue-100 text-blue-700 border border-blue-200; }     /* 입금완료 */
+        .status-done    { @apply bg-green-100 text-green-700 border border-green-200; }  /* 계약완료 */
+    </style>
+</head>
+<body class="bg-slate-100 min-h-screen">
+
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-20 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <span class="text-xl font-bold text-slate-800 tracking-tight">단체보험 관리 시스템</span>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="text-right hidden md:block">
+                        <p class="text-sm font-bold text-slate-800">김실무 대리</p>
+                        <p class="text-xs text-slate-500">영업지원팀</p>
+                    </div>
+                    <button class="bg-slate-800 text-white text-xs px-3 py-2 rounded hover:bg-slate-900 transition">로그아웃</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+                <p class="text-xs text-slate-500 font-bold uppercase">전체 신청</p>
+                <p class="text-2xl font-bold text-slate-800">142 <span class="text-xs font-normal text-slate-400">건</span></p>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border-l-4 border-red-500">
+                <p class="text-xs text-red-500 font-bold uppercase">신규 신청 (미처리)</p>
+                <p class="text-2xl font-bold text-slate-800">3 <span class="text-xs font-normal text-slate-400">건</span></p>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border-l-4 border-orange-500">
+                <p class="text-xs text-orange-500 font-bold uppercase">입금 대기</p>
+                <p class="text-2xl font-bold text-slate-800">5 <span class="text-xs font-normal text-slate-400">건</span></p>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border-l-4 border-green-500">
+                <p class="text-xs text-green-500 font-bold uppercase">이번달 완료</p>
+                <p class="text-2xl font-bold text-slate-800">48 <span class="text-xs font-normal text-slate-400">건</span></p>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="px-6 py-4 border-b border-slate-200 flex justify-between items-center bg-slate-50">
+                <h3 class="font-bold text-slate-800">접수 리스트</h3>
+                <div class="flex space-x-2">
+                    <input type="text" placeholder="단체명 또는 담당자 검색" class="text-sm border border-slate-300 rounded-lg px-3 py-1.5 outline-none focus:border-blue-500">
+                    <button class="text-sm bg-white border border-slate-300 px-3 py-1.5 rounded-lg hover:bg-slate-50 text-slate-600">필터</button>
+                </div>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm text-slate-600">
+                    <thead class="bg-slate-50 text-xs uppercase font-bold text-slate-500">
+                        <tr>
+                            <th class="px-6 py-4 w-16">순번</th>
+                            <th class="px-6 py-4">단체명</th>
+                            <th class="px-6 py-4">여행기간 (시작일)</th>
+                            <th class="px-6 py-4 w-24 text-center">신청인원</th>
+                            <th class="px-6 py-4 w-32 text-center">현재상태</th>
+                            <th class="px-6 py-4 w-1/4">관리자 메모</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 bg-white" id="listTableBody">
+                        </tbody>
+                </table>
+            </div>
+            
+            <div class="px-6 py-4 border-t border-slate-100 flex justify-center bg-slate-50">
+                <div class="flex space-x-1">
+                    <button class="px-3 py-1 rounded border bg-white text-slate-600 hover:bg-slate-100"><</button>
+                    <button class="px-3 py-1 rounded border bg-blue-600 text-white font-bold">1</button>
+                    <button class="px-3 py-1 rounded border bg-white text-slate-600 hover:bg-slate-100">2</button>
+                    <button class="px-3 py-1 rounded border bg-white text-slate-600 hover:bg-slate-100">></button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="detailModal" class="fixed inset-0 z-50 hidden overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 bg-slate-900 bg-opacity-75 transition-opacity" onclick="closeModal()"></div>
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen">&#8203;</span>
+            
+            <div class="inline-block align-bottom bg-white rounded-xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full">
+                <div class="bg-slate-800 px-6 py-4 flex justify-between items-center">
+                    <div>
+                        <h3 class="text-lg font-bold text-white" id="modalGroup">단체명 로딩중...</h3>
+                        <p class="text-xs text-slate-400 mt-0.5">상세 업무 처리 팝업</p>
+                    </div>
+                    <button onclick="closeModal()" class="text-slate-400 hover:text-white">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                    </button>
+                </div>
+
+                <div class="px-6 py-6 space-y-6">
+                    <div class="bg-slate-50 p-4 rounded-lg border border-slate-200 grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                        <div><span class="block text-slate-400 text-xs">담당자</span><strong class="text-slate-800" id="modalManager">홍길동</strong></div>
+                        <div><span class="block text-slate-400 text-xs">연락처</span><strong class="text-slate-800" id="modalPhone">010-0000-0000</strong></div>
+                        <div><span class="block text-slate-400 text-xs">여행기간</span><strong class="text-slate-800" id="modalPeriod">25.12.20 ~ 25.12.22</strong></div>
+                        <div><span class="block text-slate-400 text-xs">인원</span><strong class="text-blue-600" id="modalCount">24명</strong></div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="border border-slate-200 rounded-xl p-4 hover:shadow-md transition">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="bg-slate-100 text-slate-600 text-xs font-bold px-2 py-1 rounded">Step 1</span>
+                                <span class="text-xs text-slate-400">설계용</span>
+                            </div>
+                            <h4 class="font-bold text-slate-800 mb-2">명단 엑셀 다운로드</h4>
+                            <button onclick="downloadExcel()" class="w-full bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold py-2 rounded">다운로드 (전체)</button>
+                        </div>
+                         <div class="border border-slate-200 rounded-xl p-4 hover:shadow-md transition">
+                             <div class="flex items-center justify-between mb-2">
+                                <span class="bg-slate-100 text-slate-600 text-xs font-bold px-2 py-1 rounded">Step 2</span>
+                                <span class="text-xs text-slate-400">총무에게 발송</span>
+                            </div>
+                            <h4 class="font-bold text-slate-800 mb-2">청약서/계좌 안내</h4>
+                            <button onclick="alert('청약서와 계좌정보가 문자로 발송되었습니다.')" class="w-full bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 text-sm font-bold py-2 rounded">문자 발송</button>
+                        </div>
+                         <div class="border border-slate-200 rounded-xl p-4 hover:shadow-md transition">
+                             <div class="flex items-center justify-between mb-2">
+                                <span class="bg-slate-100 text-slate-600 text-xs font-bold px-2 py-1 rounded">Step 3</span>
+                                <span class="text-xs text-slate-400">최종 완료</span>
+                            </div>
+                            <h4 class="font-bold text-slate-800 mb-2">증권 업로드/완료</h4>
+                            <button onclick="alert('가입완료 처리되었습니다.')" class="w-full bg-green-600 hover:bg-green-700 text-white text-sm font-bold py-2 rounded">계약 완료</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-slate-50 px-6 py-4 flex justify-end">
+                    <button onclick="closeModal()" class="bg-white border border-slate-300 text-slate-700 font-bold py-2 px-4 rounded hover:bg-slate-100">닫기</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 데이터 (실제론 DB에서 가져옴)
+        // status: applied(신청), quoted(청약서안내), paid(입금완료), done(계약완료)
+        const applications = [
+            { id: 105, group: 'OO대학교 학생회', start: '2025-12-20', count: 24, status: 'applied', manager: '김철수', phone:'010-1111-2222', memo: '' },
+            { id: 104, group: '(주)테크솔루션 워크숍', start: '2025-12-15', count: 12, status: 'quoted', manager: '이영희', phone:'010-3333-4444', memo: '법인카드 결제 요청함' },
+            { id: 103, group: '강남 조기축구회', start: '2025-12-10', count: 35, status: 'paid', manager: '박지성', phone:'010-5555-6666', memo: '' },
+            { id: 102, group: '서울고 3학년 2반', start: '2025-12-05', count: 28, status: 'done', manager: '최선생', phone:'010-7777-8888', memo: '증권 팩스로 추가 발송함' },
+            { id: 101, group: '가족 제주도 여행', start: '2025-12-01', count: 5, status: 'done', manager: '홍아빠', phone:'010-9999-0000', memo: '' },
+        ];
+
+        // 뱃지 HTML 생성 함수
+        function getStatusBadge(status) {
+            switch(status) {
+                case 'applied': return '<span class="px-2.5 py-1 rounded-full text-xs font-bold status-applied">신청완료</span>';
+                case 'quoted':  return '<span class="px-2.5 py-1 rounded-full text-xs font-bold status-quoted">청약서안내</span>';
+                case 'paid':    return '<span class="px-2.5 py-1 rounded-full text-xs font-bold status-paid">입금완료</span>';
+                case 'done':    return '<span class="px-2.5 py-1 rounded-full text-xs font-bold status-done">계약완료</span>';
+                default: return '';
+            }
+        }
+
+        // 테이블 렌더링
+        function renderTable() {
+            const tbody = document.getElementById('listTableBody');
+            let html = '';
+
+            applications.forEach((app, index) => {
+                html += `
+                    <tr class="hover:bg-blue-50 transition cursor-pointer group" onclick="openDetail(${app.id})">
+                        <td class="px-6 py-4 font-mono text-slate-400">#${app.id}</td>
+                        <td class="px-6 py-4">
+                            <div class="font-bold text-slate-800 group-hover:text-blue-600">${app.group}</div>
+                            <div class="text-xs text-slate-400">${app.manager} (${app.phone})</div>
+                        </td>
+                        <td class="px-6 py-4 text-slate-600">${app.start}</td>
+                        <td class="px-6 py-4 text-center font-bold text-slate-700">${app.count}명</td>
+                        <td class="px-6 py-4 text-center">${getStatusBadge(app.status)}</td>
+                        <td class="px-6 py-4" onclick="event.stopPropagation()">
+                            <input type="text" 
+                                value="${app.memo}" 
+                                placeholder="메모 입력..." 
+                                class="w-full bg-transparent border-b border-transparent focus:border-blue-500 focus:bg-white outline-none text-xs text-slate-600 py-1 transition placeholder-slate-300"
+                                onchange="saveMemo(${app.id}, this.value)">
+                        </td>
+                    </tr>
+                `;
+            });
+            tbody.innerHTML = html;
+        }
+
+        // 메모 저장 시뮬레이션 (엔터 치거나 포커스 잃으면 실행)
+        function saveMemo(id, value) {
+            console.log(`ID ${id} 메모 저장됨: ${value}`);
+            // 여기에 API 호출 코드 들어감
+            // 예: fetch('/api/memo', { ... })
+        }
+
+        // 상세 모달 열기
+        function openDetail(id) {
+            const app = applications.find(a => a.id === id);
+            if(!app) return;
+
+            document.getElementById('modalGroup').innerText = app.group;
+            document.getElementById('modalManager').innerText = app.manager;
+            document.getElementById('modalPhone').innerText = app.phone;
+            document.getElementById('modalCount').innerText = app.count + '명';
+            
+            // 상태에 따라 모달 내용이 달라질 수 있음 (여기선 생략)
+            document.getElementById('detailModal').classList.remove('hidden');
+        }
+
+        // 모달 닫기
+        function closeModal() {
+            document.getElementById('detailModal').classList.add('hidden');
+        }
+
+        function downloadExcel() {
+            alert('주민번호가 포함된 엑셀 파일이 다운로드됩니다.');
+        }
+
+        // 초기 실행
+        renderTable();
+
+    </script>
+</body>
+</html>

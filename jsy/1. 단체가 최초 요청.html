@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>단체 여행자보험 간편 신청</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/static/pretendard.css" />
+    <style>
+        body { font-family: 'Pretendard', sans-serif; }
+        /* 부드러운 등장 애니메이션 */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in { animation: fadeIn 0.5s ease-out forwards; }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen">
+
+    <header class="bg-white border-b border-gray-100 sticky top-0 z-10">
+        <div class="max-w-2xl mx-auto px-6 py-4 flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+                <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-lg">G</div>
+                <span class="text-xl font-bold text-slate-800 tracking-tight">단체안심보험</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="py-10 px-4">
+        
+        <div id="applicationForm" class="max-w-2xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden animate-fade-in ring-1 ring-gray-900/5">
+            
+            <div class="bg-gradient-to-r from-blue-600 to-indigo-700 p-8 text-white">
+                <h1 class="text-2xl font-bold mb-2">간편 가입 신청</h1>
+                <p class="text-blue-100 text-sm opacity-90">복잡한 서류 없이, 필수 정보만 입력하고 링크를 공유하세요.</p>
+            </div>
+            
+            <form onsubmit="handleSubmit(event)" class="p-8 space-y-8">
+                
+                <section>
+                    <div class="flex items-center mb-4">
+                        <div class="w-8 h-8 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center font-bold mr-3 text-sm">1</div>
+                        <h3 class="text-lg font-bold text-slate-800">단체 정보</h3>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5 ml-1">
+                        <div class="col-span-1 md:col-span-2">
+                            <label class="block text-sm font-semibold text-slate-600 mb-1.5">단체(회사)명 <span class="text-blue-600">*</span></label>
+                            <input type="text" required placeholder="예: OO대학교 학생회, (주)테크솔루션"
+                                class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder-slate-400 text-slate-800">
+                        </div>
+                        <div class="col-span-1 md:col-span-2">
+                            <label class="block text-sm font-semibold text-slate-600 mb-1.5">사업자등록번호 <span class="text-gray-400 font-normal text-xs ml-1">(선택: 세금계산서 발행 시)</span></label>
+                            <input type="text" placeholder="- 없이 숫자만 입력"
+                                class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder-slate-400 text-slate-800">
+                        </div>
+                    </div>
+                </section>
+
+                <hr class="border-slate-100">
+
+                <section>
+                    <div class="flex items-center mb-4">
+                        <div class="w-8 h-8 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center font-bold mr-3 text-sm">2</div>
+                        <h3 class="text-lg font-bold text-slate-800">여행 정보</h3>
+                    </div>
+
+                    <div class="grid grid-cols-1 gap-5 ml-1">
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-600 mb-1.5">여행 목적지 <span class="text-blue-600">*</span></label>
+                            <div class="relative">
+                                <span class="absolute left-4 top-3.5 text-slate-400">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                                </span>
+                                <input type="text" required placeholder="예: 제주도, 강원도 속초"
+                                    class="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder-slate-400 text-slate-800">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-600 mb-1.5">여행 목적</label>
+                            <select class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all text-slate-800 appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%2364748b%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E')] bg-[length:12px_12px] bg-[right_1rem_center] bg-no-repeat">
+                                <option value="워크숍">워크숍</option>
+                                <option value="MT/OT">MT/OT</option>
+                                <option value="체육대회">체육대회</option>
+                                <option value="일반여행">일반여행</option>
+                                <option value="수학여행">수학여행</option>
+                            </select>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-600 mb-1.5">시작일 <span class="text-blue-600">*</span></label>
+                                <input type="date" required 
+                                    class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-slate-800">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-600 mb-1.5">종료일 <span class="text-blue-600">*</span></label>
+                                <input type="date" required 
+                                    class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-slate-800">
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <hr class="border-slate-100">
+
+                <section>
+                    <div class="flex items-center mb-4">
+                        <div class="w-8 h-8 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center font-bold mr-3 text-sm">3</div>
+                        <h3 class="text-lg font-bold text-slate-800">담당자 정보</h3>
+                    </div>
+
+                    <div class="grid grid-cols-1 gap-5 ml-1">
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-600 mb-1.5">이름 <span class="text-blue-600">*</span></label>
+                            <input type="text" required placeholder="신청자 본인 성함"
+                                class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder-slate-400 text-slate-800">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-600 mb-1.5">연락처 <span class="text-blue-600">*</span></label>
+                            <input type="tel" required placeholder="010-0000-0000"
+                                class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder-slate-400 text-slate-800">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-600 mb-1.5">이메일 <span class="text-blue-600">*</span></label>
+                            <input type="email" required placeholder="증권을 수신할 이메일 주소"
+                                class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder-slate-400 text-slate-800">
+                        </div>
+                    </div>
+                </section>
+
+                <button type="submit" id="submitBtn"
+                    class="w-full bg-gradient-to-r from-blue-600 to-indigo-700 text-white font-bold py-4 rounded-xl hover:from-blue-700 hover:to-indigo-800 transition transform active:scale-[0.99] shadow-lg shadow-blue-500/30 text-lg flex items-center justify-center">
+                    <span>신청 완료 및 링크 생성하기</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                    </svg>
+                </button>
+            </form>
+        </div>
+
+        <div id="resultCard" class="hidden max-w-md mx-auto mt-8 bg-white rounded-2xl shadow-2xl overflow-hidden animate-fade-in border border-slate-100">
+            <div class="bg-green-500 p-6 flex flex-col items-center justify-center text-white">
+                <div class="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center mb-4">
+                    <svg class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
+                    </svg>
+                </div>
+                <h2 class="text-2xl font-bold">신청이 완료되었습니다!</h2>
+                <p class="text-green-100 text-sm mt-1">담당자님, 수고하셨습니다.</p>
+            </div>
+            
+            <div class="p-6">
+                <p class="text-slate-600 text-center text-sm mb-6 leading-relaxed">
+                    입력하신 휴대폰과 이메일로<br>
+                    <strong>관리자 정보</strong>와 <strong>공유 링크</strong>가 발송되었습니다.
+                </p>
+
+                <div class="space-y-4">
+                    <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
+                        <p class="text-xs text-slate-500 font-bold uppercase mb-2 tracking-wider">참가자 공유용 링크</p>
+                        <div class="flex items-center justify-between bg-white p-3 border border-slate-200 rounded-lg shadow-sm">
+                            <code class="text-blue-600 font-medium text-sm truncate">https://insu.com/join/x7z9a2</code>
+                            <button class="text-xs font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 px-3 py-1.5 rounded-md ml-2 transition">복사</button>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
+                        <p class="text-xs text-slate-500 font-bold uppercase mb-2 tracking-wider">관리자 페이지 정보</p>
+                        <div class="text-sm space-y-2">
+                            <div class="flex justify-between border-b border-slate-200 pb-2">
+                                <span class="text-slate-500">아이디</span>
+                                <span class="font-semibold text-slate-800" id="resEmail">admin@email.com</span>
+                            </div>
+                            <div class="flex justify-between pt-1">
+                                <span class="text-slate-500">임시 비밀번호</span>
+                                <span class="font-mono font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded">a1b2c3d4</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <button onclick="window.location.reload()" 
+                    class="w-full mt-8 bg-slate-800 text-white font-bold py-3.5 rounded-xl hover:bg-slate-900 transition shadow-lg">
+                    확인
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        function handleSubmit(e) {
+            e.preventDefault(); 
+            
+            const btn = document.getElementById('submitBtn');
+            const originalText = btn.innerHTML;
+            
+            // 1. 로딩 상태 표시
+            btn.disabled = true;
+            btn.innerHTML = `
+                <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                처리 중...
+            `;
+            btn.classList.add('opacity-80', 'cursor-not-allowed');
+
+            // 2. 1.5초 후 결과 화면으로 전환
+            setTimeout(() => {
+                document.getElementById('applicationForm').style.display = 'none';
+                
+                const resultCard = document.getElementById('resultCard');
+                resultCard.classList.remove('hidden');
+                
+                // 스크롤 상단 이동
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+
+                const emailInput = document.querySelector('input[type="email"]').value;
+                if(emailInput) document.getElementById('resEmail').innerText = emailInput;
+
+            }, 1500);
+        }
+    </script>
+</body>
+</html>
