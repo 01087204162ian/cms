@@ -1,0 +1,89 @@
+/* SMS 리스트 스타일 */
+.sms-card {
+  margin-bottom: 15px;
+}
+
+.sms-card .card {
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.sms-card .card-body {
+  padding: 15px;
+}
+
+.sms-card h6 {
+  margin-bottom: 12px;
+  font-weight: 600;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.info-row {
+  display: flex;
+  margin-bottom: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #f1f1f1;
+}
+
+.info-label {
+  width: 80px;
+  font-weight: 500;
+  color: #555;
+}
+
+.info-value {
+  flex: 1;
+  word-break: break-word;
+}
+
+/* 페이지네이션 스타일 */
+.pagination .page-item.active .page-link {
+  background-color: #0d6efd;
+  border-color: #0d6efd;
+}
+
+/* 토스트 알림 스타일 */
+.toast-notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 12px 20px;
+  background-color: #333;
+  color: white;
+  border-radius: 4px;
+  z-index: 1050;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+  max-width: 90%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.toast-notification.show {
+  opacity: 0.9;
+}
+
+.toast-success {
+  background-color: #28a745;
+}
+
+.toast-error {
+  background-color: #dc3545;
+}
+
+.toast-warning {
+  background-color: #ffc107;
+  color: #333;
+}
+
+/* 모바일 반응형 스타일 */
+@media (max-width: 767.98px) {
+  .mobile-card-view {
+    margin-top: 20px;
+  }
+  
+  .info-label {
+    width: 70px;
+  }
+}

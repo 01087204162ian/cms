@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>보험 손해율 분석 보고서</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .login-container {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .login-container h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 24px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .error-message {
+            color: #e74c3c;
+            text-align: center;
+            margin-top: 15px;
+            display: none;
+        }
+
+        .content-container {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            max-width: 1200px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            display: none;
+        }
+
+        .content-container h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+        }
+
+        .content-container h2 {
+            color: #34495e;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #e0e0e0;
+        }
+
+        th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .highlight {
+            background: #fff3cd;
+            padding: 15px;
+            border-left: 4px solid #ffc107;
+            margin: 15px 0;
+        }
+
+        .summary-box {
+            background: #e8f4f8;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #3498db;
+        }
+
+        .logout-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .logout-btn:hover {
+            background: #c0392b;
+        }
+
+        ul {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+
+        li {
+            margin: 8px 0;
+            line-height: 1.6;
+        }
+
+        .number {
+            text-align: right;
+            font-family: 'Courier New', monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container" id="loginContainer">
+        <h2>🔒 보험 손해율 분석 보고서</h2>
+        <div class="input-group">
+            <label for="password">비밀번호</label>
+            <input type="password" id="password" placeholder="비밀번호를 입력하세요">
+        </div>
+        <button class="login-btn" onclick="checkPassword()">로그인</button>
+        <p class="error-message" id="errorMessage">비밀번호가 올바르지 않습니다.</p>
+    </div>
+
+    <div class="content-container" id="contentContainer">
+        <button class="logout-btn" onclick="logout()">로그아웃</button>
+        
+        <h1>🧾 하이파킹 인천공항 T1 – 2025.09 말 기준 손해율 분석 및 내년도 보험료 예상</h1>
+
+        <h2>1️⃣ 기본 현황</h2>
+        <table>
+            <tr>
+                <th>항목</th>
+                <th>값</th>
+            </tr>
+            <tr>
+                <td>보험기간</td>
+                <td>2025.01.01 ~ 2026.01.01</td>
+            </tr>
+            <tr>
+                <td>보험료</td>
+                <td class="number">303,000,000원 (일시납)</td>
+            </tr>
+            <tr>
+                <td>경과일수</td>
+                <td>273일 / 365일</td>
+            </tr>
+            <tr>
+                <td>경과보험료</td>
+                <td class="number">226,627,397원 (약 226.6백만원)</td>
+            </tr>
+            <tr>
+                <td>사고금액(9월말)</td>
+                <td class="number">388,780,000원</td>
+            </tr>
+            <tr>
+                <td>테슬라 전손사고</td>
+                <td class="number">128,000,000원 (포함 시 손해율 급등 요인)</td>
+            </tr>
+        </table>
+
+        <h2>2️⃣ 경과 손해율 비교</h2>
+        <table>
+            <tr>
+                <th>구분</th>
+                <th>손해액(₩)</th>
+                <th>경과보험료(₩)</th>
+                <th>경과 손해율(%)</th>
+                <th>비고</th>
+            </tr>
+            <tr>
+                <td>① 테슬라 포함</td>
+                <td class="number">388,780,000</td>
+                <td class="number">226,627,397</td>
+                <td class="number">171.6%</td>
+                <td>전체 사고 포함</td>
+            </tr>
+            <tr>
+                <td>② 테슬라 제외</td>
+                <td class="number">260,780,000</td>
+                <td class="number">226,627,397</td>
+                <td class="number">115.1%</td>
+                <td>대형사고 제외 시</td>
+            </tr>
+        </table>
+        <div class="highlight">
+            → 테슬라 사고 1건이 전체 손해율을 약 56.5%p 상승시킴
+        </div>
+
+        <h2>3️⃣ 만기 예상 손해율 (동일 추세 유지 가정)</h2>
+        <table>
+            <tr>
+                <th>구분</th>
+                <th>현재 손해액(₩)</th>
+                <th>경과 손해율(%)</th>
+                <th>만기예상 손해액(₩)</th>
+                <th>만기예상 손해율(%)</th>
+                <th>비고</th>
+            </tr>
+            <tr>
+                <td>① 테슬라 포함</td>
+                <td class="number">388,780,000</td>
+                <td class="number">171.6%</td>
+                <td class="number">519,554,000</td>
+                <td class="number">171.6%</td>
+                <td>동일 추세 유지 시</td>
+            </tr>
+            <tr>
+                <td>② 테슬라 제외</td>
+                <td class="number">260,780,000</td>
+                <td class="number">115.1%</td>
+                <td class="number">348,699,000</td>
+                <td class="number">115.1%</td>
+                <td>대형사고 제외 시 안정적</td>
+            </tr>
+        </table>
+
+        <h2>4️⃣ 내년도 보험료 예상 (예정 손해율 85% / 70% 가정)</h2>
+        
+        <h3>✅ 테슬라 포함 기준</h3>
+        <table>
+            <tr>
+                <th>목표 손해율</th>
+                <th>계산식</th>
+                <th>예상 보험료(₩)</th>
+                <th>증감률</th>
+            </tr>
+            <tr>
+                <td>85%</td>
+                <td>388,780,000 ÷ 0.85</td>
+                <td class="number">457,388,000</td>
+                <td class="number">▲ 50.9%</td>
+            </tr>
+            <tr>
+                <td>70%</td>
+                <td>388,780,000 ÷ 0.70</td>
+                <td class="number">555,400,000</td>
+                <td class="number">▲ 83.3%</td>
+            </tr>
+        </table>
+
+        <h3>✅ 테슬라 제외 기준</h3>
+        <table>
+            <tr>
+                <th>목표 손해율</th>
+                <th>계산식</th>
+                <th>예상 보험료(₩)</th>
+                <th>증감률</th>
+            </tr>
+            <tr>
+                <td>85%</td>
+                <td>260,780,000 ÷ 0.85</td>
+                <td class="number">306,800,000</td>
+                <td class="number">▲ 1.3%</td>
+            </tr>
+            <tr>
+                <td>70%</td>
+                <td>260,780,000 ÷ 0.70</td>
+                <td class="number">372,500,000</td>
+                <td class="number">▲ 23.0%</td>
+            </tr>
+        </table>
+
+           <h2>5️⃣ 종합 해석</h2>
+        <div class="summary-box" style="background: #ffe6e6; border-left: 4px solid #e74c3c;">
+            <h3>⚠️ 테슬라 포함 시:</h3>
+            <ul>
+                <li>손해율 171.6% → 내년 보험료는 약 2배(+83~100%) 인상 요인</li>
+                <li>보험사 입장에서는 고위험 계약으로 분류되어 계약 거절 또는 대폭 인상 가능성</li>
+                <li>단일 대형사고로 인한 일시적 손해율 악화로 보험료 산정의 합리성 부족</li>
+            </ul>
+        </div>
+
+        <div class="summary-box" style="background: #e8f8e8; border-left: 4px solid #27ae60;">
+            <h3>✅ 테슬라 제외 시 (협상 권장안):</h3>
+            <ul>
+                <li><strong>손해율 115.1% 수준</strong></li>
+                <li><strong>내년 보험료는 현재 수준(303백만원) ~ 최대 500백만원 범위로 협상 가능</strong></li>
+                <li>대형 단일사고를 제외한 일상적 손해율 기준으로 산정하는 것이 합리적</li>
+                <li>목표손해율 85% 기준: 약 307백만원 (현재 대비 +1.3%)</li>
+                <li>목표손해율 70% 기준: 약 373백만원 (현재 대비 +23.0%)</li>
+            </ul>
+        </div>
+
+        <div class="highlight">
+            <strong>💡 협상 전략:</strong> 테슬라 전손사고는 예측 불가능한 단일 대형사고로, 정상적인 위험도를 반영하지 못함. 
+            따라서 <strong>테슬라 제외 손해율(115.1%)</strong>을 기준으로 보험료를 산정하는 것이 보험 계약의 합리적 접근입니다.
+        </div>
+
+        <h2>✅ 결론 요약</h2>
+        <table>
+            <tr>
+                <th>구분</th>
+                <th>올해 보험료</th>
+                <th>올해 손해율</th>
+                <th>목표손해율 85% 보험료</th>
+                <th>목표손해율 70% 보험료</th>
+            </tr>
+            <tr>
+                <td>테슬라 포함</td>
+                <td class="number">303,000,000</td>
+                <td class="number">171.6%</td>
+                <td class="number">457,000,000</td>
+                <td class="number">555,000,000</td>
+            </tr>
+            <tr>
+                <td>테슬라 제외</td>
+                <td class="number">303,000,000</td>
+                <td class="number">115.1%</td>
+                <td class="number">307,000,000</td>
+                <td class="number">373,000,000</td>
+            </tr>
+        </table>
+    </div>
+
+    <script>
+        // 비밀번호 설정 (여기서 변경 가능)
+        const correctPassword = "hiparking2025";
+
+        function checkPassword() {
+            const inputPassword = document.getElementById('password').value;
+            const errorMessage = document.getElementById('errorMessage');
+            
+            if (inputPassword === correctPassword) {
+                document.getElementById('loginContainer').style.display = 'none';
+                document.getElementById('contentContainer').style.display = 'block';
+                sessionStorage.setItem('authenticated', 'true');
+            } else {
+                errorMessage.style.display = 'block';
+                document.getElementById('password').value = '';
+            }
+        }
+
+        function logout() {
+            sessionStorage.removeItem('authenticated');
+            document.getElementById('loginContainer').style.display = 'block';
+            document.getElementById('contentContainer').style.display = 'none';
+            document.getElementById('password').value = '';
+        }
+
+        // 엔터키로 로그인
+        document.getElementById('password').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkPassword();
+            }
+        });
+
+        // 페이지 로드 시 인증 상태 확인
+        window.onload = function() {
+            if (sessionStorage.getItem('authenticated') === 'true') {
+                document.getElementById('loginContainer').style.display = 'none';
+                document.getElementById('contentContainer').style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>홀인원 보험 - FAQ</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <!-- CSS 통합: ace.css 메인 사용 -->
+    <link href="css/ace.css" rel="stylesheet">
+    <style>
+        /* FAQ 페이지 전용 스타일 */
+        #faq-page .insurance-banner {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* FAQ 배너 장식 효과 */
+        #faq-page .insurance-banner::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 2px, transparent 2px);
+            background-size: 30px 30px;
+            animation: floatPattern 20s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes floatPattern {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            100% { transform: translate(-30px, -30px) rotate(360deg); }
+        }
+
+        /* FAQ 컨테이너 스타일 개선 */
+        .faq-container {
+            padding: 20px;
+            max-width: 100%;
+        }
+
+        .faq-search-section {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+            border: 1px solid #e9ecef;
+        }
+
+        .search-box {
+            position: relative;
+            margin-bottom: 10px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 45px 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 25px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+            font-size: 18px;
+        }
+
+        .search-results-count {
+            font-size: 14px;
+            color: #666;
+            margin-top: 8px;
+        }
+
+        /* FAQ 아이템 개선 */
+        .faq-item {
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            overflow: hidden;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+
+        .faq-item:hover {
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+
+        .faq-item.active {
+            border-color: #007bff;
+            box-shadow: 0 4px 15px rgba(0,123,255,0.15);
+        }
+
+        .faq-question {
+            padding: 20px 50px 20px 20px;
+            background: #f8f9fa;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 16px;
+            border: none;
+            width: 100%;
+            text-align: left;
+            transition: all 0.3s ease;
+            position: relative;
+            line-height: 1.5;
+        }
+
+        .faq-question::after {
+            content: '+';
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 24px;
+            font-weight: bold;
+            color: #666;
+            transition: all 0.3s ease;
+        }
+
+        .faq-question:hover {
+            background: #e9ecef;
+        }
+
+        .faq-question.active {
+            background: #007bff;
+            color: white;
+        }
+
+        .faq-question.active::after {
+            content: '−';
+            color: white;
+            transform: translateY(-50%) rotate(180deg);
+        }
+
+        .faq-answer {
+            padding: 0 20px;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            background: white;
+            opacity: 0;
+        }
+
+        .faq-answer.show {
+            padding: 25px 20px;
+            max-height: 800px;
+            opacity: 1;
+        }
+
+        .faq-answer-content {
+            line-height: 1.7;
+            color: #555;
+            font-size: 15px;
+            margin: 0;
+        }
+
+        .faq-answer-content strong {
+            color: #333;
+            font-weight: 600;
+        }
+
+        .faq-answer-content ul {
+            margin: 15px 0;
+            padding-left: 20px;
+        }
+
+        .faq-answer-content li {
+            margin-bottom: 8px;
+            color: #666;
+        }
+
+        /* 카테고리 필터 */
+        .faq-categories {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .category-btn {
+            padding: 8px 16px;
+            border: 2px solid #ddd;
+            border-radius: 20px;
+            background: white;
+            color: #666;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .category-btn:hover {
+            border-color: #007bff;
+            color: #007bff;
+        }
+
+        .category-btn.active {
+            background: #007bff;
+            border-color: #007bff;
+            color: white;
+        }
+
+        /* 빠른 도움말 섹션 */
+        .quick-help {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+            border-left: 4px solid #2196f3;
+        }
+
+        .quick-help-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1565c0;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .quick-help-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .quick-help-item {
+            background: rgba(255,255,255,0.8);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.5);
+        }
+
+        .quick-help-item strong {
+            color: #1565c0;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        /* 검색 하이라이트 */
+        .highlight {
+            background: #fff3cd;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+
+        /* 숨겨진 아이템 */
+        .faq-item.hidden {
+            display: none;
+        }
+
+        /* 검색 결과 없음 */
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+            display: none;
+        }
+
+        .no-results.show {
+            display: block;
+        }
+
+        .no-results-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .no-results-text {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+
+        .no-results-subtext {
+            font-size: 14px;
+            color: #999;
+        }
+
+        /* 반응형 디자인 */
+        @media (max-width: 768px) {
+            .faq-container {
+                padding: 15px;
+            }
+
+            .faq-question {
+                padding: 15px 40px 15px 15px;
+                font-size: 15px;
+            }
+
+            .faq-question::after {
+                right: 15px;
+                font-size: 20px;
+            }
+
+            .faq-answer.show {
+                padding: 20px 15px;
+            }
+
+            .quick-help-grid {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .faq-categories {
+                justify-content: center;
+            }
+
+            .category-btn {
+                font-size: 13px;
+                padding: 6px 12px;
+            }
+        }
+
+        /* 접근성 개선 */
+        .faq-question:focus {
+            outline: 2px solid #007bff;
+            outline-offset: 2px;
+        }
+
+        .search-input:focus {
+            outline: none;
+        }
+
+        /* 애니메이션 개선 */
+        .faq-item {
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body id="faq-page">
+    <div class="app-container">
+        <!-- 네비게이션 탭 -->
+        <div class="nav-tabs-container">
+            <ul class="nav-tabs">
+                <li><button id="nav-signup">가입 신청</button></li>
+                <li><button id="nav-claim">보상 신청</button></li>
+                <li><button id="nav-history">가입내역</button></li>
+                <li><button id="nav-faq" class="active">Q&A</button></li>
+                <li><button id="nav-terms">보장 내용</button></li>
+            </ul>
+        </div>
+        
+        <!-- FAQ 페이지 -->
+        <div class="page-content">
+            <div class="insurance-banner">
+                <div class="top-right-logo">
+                    <img src="images/db-logo.png" alt="DB손해보험" class="logo-img">
+                </div>
+                
+                <div class="banner-title">자주 묻는 질문</div>
+                <div class="banner-subtitle">DB 손해보험</div>
+                <div class="banner-amount">홀인원 골프보험</div>
+            </div>
+            
+            <div class="faq-container">
+                <!-- 빠른 도움말 -->
+                <div class="quick-help">
+                    <div class="quick-help-title">
+                        <span>💡</span>
+                        빠른 도움말
+                    </div>
+                    <div class="quick-help-grid">
+                        <div class="quick-help-item">
+                            <strong>📞 고객센터</strong>
+                            1533-5013 /1588-0100 (평일 09:00-18:00)
+                        </div>
+                        <div class="quick-help-item">
+                            <strong>⏰ 가입 시간</strong>
+                            티오프 2시간 전까지 가입 가능
+                        </div>
+                        <div class="quick-help-item">
+                            <strong>💰 보상금액</strong>
+                            홀인원 달성 시 최대 200만원
+                        </div>
+                        <div class="quick-help-item">
+                            <strong>📋 필요서류</strong>
+                            홀인원 사진 + 스코어카드
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 검색 섹션 -->
+                <div class="faq-search-section">
+                    <div class="search-box">
+                        <input type="text" class="search-input" id="faq-search" placeholder="궁금한 내용을 검색해보세요...">
+                        <span class="search-icon">🔍</span>
+                    </div>
+                    <div class="search-results-count" id="search-results-count">
+                        총 <span id="total-count">7</span>개의 질문이 있습니다.
+                    </div>
+                </div>
+
+                <!-- 카테고리 필터 -->
+                <div class="faq-categories">
+                    <button class="category-btn active" data-category="all">전체</button>
+                    <button class="category-btn" data-category="signup">가입</button>
+                    <button class="category-btn" data-category="claim">보상</button>
+                  <!--  <button class="category-btn" data-category="terms">약관</button>-->
+                    <button class="category-btn" data-category="etc">기타</button>
+                </div>
+
+                <h2 class="section-title">자주 묻는 질문</h2>
+                
+                <div class="faq-item" data-category="claim">
+                    <button class="faq-question">홀인원 보험은 어떤 경우에 보상받을 수 있나요?</button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            <p>사전에 가입 신청 후, <strong>파3 홀에서 홀인원을 기록한 경우</strong> 보상금 200만원을 지급해 드립니다.</p>
+                            <p>홀인원 증명을 위해 다음 서류가 필요합니다:</p>
+                            <ul>
+                                <li>홀과 골프공이 함께 보이는 <strong>홀인원 증명 사진</strong></li>
+                                <li>해당 홀의 스코어가 '1'로 기록된 <strong>스코어카드</strong></li>
+                                <li>골프장에서 발급한 <strong>홀인원 확인서</strong> (권장)</li>
+                                <li>동반자 및 캐디의 확인 서명</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+            <!--    <div class="faq-item" data-category="signup">
+                    <button class="faq-question">동반자도 가입할 수 있나요?</button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            <p>네, <strong>가입자 본인 포함 최대 4명까지</strong> 가입할 수 있습니다.</p>
+                            <p>동반자 가입 시에는 이름과 휴대폰 번호 뒤 4자리만 입력하시면 됩니다. 각자 개별적으로 홀인원 보험이 적용되며, 한 명이 홀인원을 달성해도 다른 동반자의 보험은 유지됩니다.</p>
+                        </div>
+                    </div>
+                </div>-->
+                
+                <div class="faq-item" data-category="claim">
+                    <button class="faq-question">보상 신청은 어떻게 하나요?</button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            <p>홀인원 발생 후 <strong>보상 신청 메뉴</strong>에서 다음 단계를 따라 신청하세요:</p>
+                            <ul>
+                                <li><strong>1단계:</strong> 가입 내역 확인 (휴대폰번호 입력)</li>
+                                <li><strong>2단계:</strong> 필요 서류 확인</li>
+                                <li><strong>3단계:</strong> 신청서 작성 및 증빙자료 첨부</li>
+                            </ul>
+                            <p>필요한 정보: 이름, 휴대폰번호, 골프장명, 라운딩 일자, 홀 번호, 홀인원 사진, 스코어카드</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="faq-item" data-category="claim">
+                    <button class="faq-question">보상금은 언제 지급되나요?</button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            <p>보상 신청 후 서류 검토를 거쳐 승인되면 <strong>영업일 기준 3~5일 내</strong>에 지급됩니다.</p>
+                            <p>보상금은 가입 시 등록한 계좌로 입금되며, 지급 완료 시 SMS로 알림을 보내드립니다. 서류 보완이 필요한 경우 추가 시간이 소요될 수 있습니다.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="faq-item" data-category="terms">
+                    <button class="faq-question">모든 골프장에서 적용되나요?</button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            <p><strong>국내 정규 18홀 이상의 골프장</strong>에서만 적용됩니다.</p>
+                            <p>다음 장소에서는 적용되지 않습니다:</p>
+                            <ul>
+                                <li>해외 골프장</li>
+                                <li>9홀 골프장</li>
+                                <li>골프 연습장</li>
+                                <li>스크린 골프장</li>
+                                <li>파블릭 골프장 중 일부 (별도 문의)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="faq-item" data-category="signup">
+                    <button class="faq-question">가입 시 필요한 정보는 무엇인가요?</button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            <p>가입 시 다음 정보가 필요합니다:</p>
+                            <ul>
+                                <li><strong>이름:</strong> 실명으로 정확히 입력</li>
+                                <li><strong>휴대폰번호:</strong> 가입시 입력한  휴대폰번호</li>
+                                <li><strong>골프장명:</strong> 라운딩 예정 골프장</li>
+                                <li><strong>티오프 시간:</strong> 정확한 라운딩 시간</li>
+                                <li><strong>VIP 쿠폰번호:</strong> 우리은행 WON뱅킹에서 부여받은 번호</li>
+                            </ul>
+                            <p>모든 정보는 정확히 입력해야 하며, 특히 쿠폰번호는 수정할 수 없으니 주의해주세요.</p>
+                        </div>
+                    </div>
+                </div>
+                
+            <!--    <div class="faq-item" data-category="etc">
+                    <button class="faq-question">가입 후 취소는 가능한가요?</button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            <p><strong>티오프 시간 전까지는 취소가 가능</strong>합니다.</p>
+                            <p>취소 방법:</p>
+                            <ul>
+                                <li>가입내역 페이지에서 직접 취소</li>
+                                <li>고객센터 <strong>1533-0000</strong>으로 연락</li>
+                                <li>라운딩 시작 후에는 취소 불가</li>
+                            </ul>
+                            <p>취소 시 가입비는 전액 환불되며, 처리 완료 시 SMS로 알림을 보내드립니다.</p>
+                        </div>
+                    </div>
+                </div>-->
+
+                <!-- 검색 결과 없음 -->
+                <div class="no-results" id="no-results">
+                    <div class="no-results-icon">🔍</div>
+                    <div class="no-results-text">검색 결과가 없습니다</div>
+                    <div class="no-results-subtext">다른 검색어로 시도해보시거나 고객센터로 문의해주세요</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 알림 팝업 -->
+        <div class="popup-overlay" id="popup-overlay">
+            <div class="popup-content">
+                <div class="popup-title" id="popup-title">알림</div>
+                <div class="popup-message" id="popup-message">처리가 완료되었습니다.</div>
+                <button class="popup-button" id="popup-button">확인</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/common.js"></script>
+    <script>
+        // FAQ 기능 개선
+        document.addEventListener('DOMContentLoaded', function() {
+            const faqQuestions = document.querySelectorAll('.faq-question');
+            const searchInput = document.getElementById('faq-search');
+            const categoryBtns = document.querySelectorAll('.category-btn');
+            const searchResultsCount = document.getElementById('search-results-count');
+            const totalCount = document.getElementById('total-count');
+            const noResults = document.getElementById('no-results');
+            const faqItems = document.querySelectorAll('.faq-item');
+
+            // FAQ 아코디언 기능
+            faqQuestions.forEach(question => {
+                question.addEventListener('click', function() {
+                    const wasActive = this.classList.contains('active');
+                    
+                    // 모든 질문 닫기
+                    faqQuestions.forEach(q => {
+                        q.classList.remove('active');
+                        q.nextElementSibling.classList.remove('show');
+                    });
+                    
+                    // 클릭된 질문만 토글
+                    if (!wasActive) {
+                        this.classList.add('active');
+                        this.nextElementSibling.classList.add('show');
+                    }
+                });
+            });
+
+            // 검색 기능
+            function performSearch() {
+                const searchTerm = searchInput.value.toLowerCase().trim();
+                let visibleCount = 0;
+
+                faqItems.forEach(item => {
+                    const question = item.querySelector('.faq-question').textContent.toLowerCase();
+                    const answer = item.querySelector('.faq-answer-content').textContent.toLowerCase();
+                    const isVisible = question.includes(searchTerm) || answer.includes(searchTerm);
+
+                    if (isVisible || searchTerm === '') {
+                        item.classList.remove('hidden');
+                        visibleCount++;
+
+                        // 하이라이트 효과
+                        if (searchTerm) {
+                            highlightText(item, searchTerm);
+                        } else {
+                            removeHighlight(item);
+                        }
+                    } else {
+                        item.classList.add('hidden');
+                    }
+                });
+
+                updateResultsCount(visibleCount);
+                noResults.classList.toggle('show', visibleCount === 0 && searchTerm !== '');
+            }
+
+            function highlightText(item, searchTerm) {
+                const question = item.querySelector('.faq-question');
+                const answer = item.querySelector('.faq-answer-content');
+                
+                [question, answer].forEach(element => {
+                    const originalText = element.textContent;
+                    const highlightedText = originalText.replace(
+                        new RegExp(searchTerm, 'gi'), 
+                        match => `<span class="highlight">${match}</span>`
+                    );
+                    element.innerHTML = highlightedText;
+                });
+            }
+
+            function removeHighlight(item) {
+                const question = item.querySelector('.faq-question');
+                const answer = item.querySelector('.faq-answer-content');
+                
+                [question, answer].forEach(element => {
+                    element.innerHTML = element.textContent;
+                });
+            }
+
+            function updateResultsCount(count) {
+                const totalItems = faqItems.length;
+                if (searchInput.value.trim()) {
+                    searchResultsCount.innerHTML = `검색 결과: <span id="visible-count">${count}</span>개`;
+                } else {
+                    searchResultsCount.innerHTML = `총 <span id="total-count">${totalItems}</span>개의 질문이 있습니다.`;
+                }
+            }
+
+            // 카테고리 필터
+            categoryBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // 활성 카테고리 변경
+                    categoryBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+
+                    const category = this.dataset.category;
+                    let visibleCount = 0;
+
+                    faqItems.forEach(item => {
+                        const itemCategory = item.dataset.category;
+                        const isVisible = category === 'all' || itemCategory === category;
+
+                        if (isVisible) {
+                            item.classList.remove('hidden');
+                            visibleCount++;
+                        } else {
+                            item.classList.add('hidden');
+                        }
+                    });
+
+                    updateResultsCount(visibleCount);
+                    noResults.classList.remove('show');
+                    
+                    // 검색어 초기화
+                    searchInput.value = '';
+                    faqItems.forEach(item => removeHighlight(item));
+                });
+            });
+
+            // 검색 이벤트
+            searchInput.addEventListener('input', performSearch);
+            
+            // 엔터 키 검색
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    performSearch();
+                }
+            });
+
+            // 초기 결과 카운트 설정
+            updateResultsCount(faqItems.length);
+
+            // 키보드 접근성
+            faqQuestions.forEach((question, index) => {
+                question.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        this.click();
+                        e.preventDefault();
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

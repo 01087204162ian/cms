@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PCI Korea 홀인원보험 관리 시스템 - 대시보드</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+	<link href="css/dashboard.css" rel="stylesheet">
+</head>
+<body>
+    <!-- 네비게이션 -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <i class="bi bi-trophy me-2"></i><span id="navbarClientName">홀인원보험 관리</span>
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+         
+                <!-- 개선된 쿠폰 통계 영역 -->
+			<!-- 1차/2차 완전 구분 쿠폰 통계 영역 -->
+			<div class="nav-stats me-auto">
+				<!-- 1차 쿠폰 그룹 -->
+				<div class="nav-stat-group phase1-group">
+					<div class="nav-stat-group-label">1차 쿠폰</div>
+					<div class="nav-stat-items">
+						<div class="nav-stat-mini">
+							<span class="mini-label">총</span>
+							<span class="mini-value" id="navPhase1Coupons">0</span>
+						</div>
+						<div class="nav-stat-mini">
+							<span class="mini-label">미사용</span>
+							<span class="mini-value" id="navPhase1Unused">0</span>
+						</div>
+						<div class="nav-stat-mini">
+							<span class="mini-label">1회</span>
+							<span class="mini-value" id="navPhase1Once">0</span>
+						</div>
+						<div class="nav-stat-mini">
+							<span class="mini-label">2회</span>
+							<span class="mini-value" id="navPhase1Full">0</span>
+						</div>
+						<div class="nav-stat-mini highlight">
+							<span class="mini-label">총신청</span>
+							<span class="mini-value" id="navPhase1Applications">0</span>
+						</div>
+					</div>
+				</div>
+				
+				<!-- 2차 쿠폰 그룹 -->
+				<div class="nav-stat-group phase2-group">
+					<div class="nav-stat-group-label">2차 쿠폰</div>
+					<div class="nav-stat-items">
+						<div class="nav-stat-mini">
+							<span class="mini-label">총</span>
+							<span class="mini-value" id="navPhase2Coupons">0</span>
+						</div>
+						<div class="nav-stat-mini">
+							<span class="mini-label">미사용</span>
+							<span class="mini-value" id="navPhase2Unused">0</span>
+						</div>
+						<div class="nav-stat-mini">
+							<span class="mini-label">1회</span>
+							<span class="mini-value" id="navPhase2Once">0</span>
+						</div>
+						<div class="nav-stat-mini">
+							<span class="mini-label">2회</span>
+							<span class="mini-value" id="navPhase2Full">0</span>
+						</div>
+						<div class="nav-stat-mini highlight">
+							<span class="mini-label">총신청</span>
+							<span class="mini-value" id="navPhase2Applications">0</span>
+						</div>
+					</div>
+				</div>
+			</div>
+                
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-circle me-1"></i><span id="managerName">로딩중...</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><span class="dropdown-item-text" id="clientName">로딩중...</span></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" onclick="logout()">
+                                <i class="bi bi-box-arrow-right me-1"></i>로그아웃
+                            </a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 메인 콘텐츠 -->
+    <div class="container-fluid py-4">
+
+        <!-- 가입신청 내역 관리 -->
+        <div class="row">
+			<div class="col-12">
+				<div class="recent-activity">
+					<div class="p-4">
+						<!-- 탭 네비게이션 추가 -->
+						<ul class="nav nav-pills mb-4" id="dashboardTabs" role="tablist">
+							<li class="nav-item" role="presentation">
+								<button class="nav-link active" id="applications-tab-btn" data-bs-toggle="pill" 
+										data-bs-target="#applications-tab" type="button" role="tab" 
+										style="border-radius: 10px; margin-right: 8px;">
+									<i class="bi bi-file-earmark-text me-2"></i>가입신청 내역
+									<span class="badge bg-light text-dark ms-2" id="applicationsTabCount">0</span>
+									<span class="badge bg-primary text-white ms-1" id="todayApplicationsCount">오늘 0</span>
+								</button>
+							</li>
+							<li class="nav-item" role="presentation">
+								<button class="nav-link" id="claims-tab-btn" data-bs-toggle="pill" 
+										data-bs-target="#claims-tab" type="button" role="tab"
+										style="border-radius: 10px;">
+									<i class="bi bi-trophy me-2"></i>홀인원 보상신청
+									<span class="badge bg-light text-dark ms-2" id="claimsTabCount">0</span>
+									<span class="badge bg-danger text-white ms-1" id="todayClaimsCount">오늘 0</span>
+								</button>
+							</li>
+						</ul>
+
+						<!-- 탭 컨텐츠 -->
+						<div class="tab-content" id="dashboardTabContent">
+							<!-- 가입신청 탭 (기존 내용) -->
+							<div class="tab-pane fade show active" id="applications-tab" role="tabpanel">
+								<div class="d-flex justify-content-between align-items-center mb-4">
+									<h5 class="mb-0"><i class="bi bi-file-earmark-text me-2"></i></h5>
+									<div class="d-flex gap-2">
+									    <button class="btn btn-outline-secondary btn-sm" onclick="dailyApplications()" 
+												style="border-radius: 8px;">
+											<i class="bi bi-arrow-clockwise me-1"></i>일일현황
+										</button>
+										<button class="btn btn-outline-info btn-sm" onclick="openDataAnalysisModal()" 
+												style="border-radius: 8px;">
+											<i class="bi bi-graph-up me-1"></i>데이터 분석
+										</button>
+										<button class="btn btn-outline-success btn-sm" onclick="exportApplications()"
+												style="border-radius: 8px;">
+											<i class="bi bi-download me-1"></i>Excel
+										</button>
+									</div>
+								</div>
+
+								<!-- 기존 검색 및 필터 영역 그대로 -->
+									<div class="chart-container mb-4">
+									<div class="row g-3">
+										<div class="col-md-2">
+											<label class="form-label text-muted small fw-medium">검색 타입</label>
+											<select class="form-select" id="searchType" 
+													style="border: 2px solid #e9ecef; border-radius: 8px;">
+												<option value="all">전체</option>
+												<option value="name">이름</option>
+												<option value="phone">전화번호</option>
+												<option value="golf_course">골프장</option>
+												<option value="coupon">쿠폰번호</option>
+											</select>
+										</div>
+										<div class="col-md-3">
+											<label class="form-label text-muted small fw-medium">검색어</label>
+											<div class="input-group">
+												<span class="input-group-text" style="background: white; border: 2px solid #e9ecef; border-radius: 8px 0 0 8px;">
+													<i class="bi bi-search text-muted"></i>
+												</span>
+												<input type="text" class="form-control" id="searchInput" 
+													   placeholder="검색어를 입력하세요"
+													   style="border: 2px solid #e9ecef; border-left: none; border-radius: 0 8px 8px 0;">
+											</div>
+										</div>
+										<div class="col-md-2">
+											<label class="form-label text-muted small fw-medium">쿠폰 차수</label>
+											<select class="form-select" id="testIsFilter" 
+													style="border: 2px solid #e9ecef; border-radius: 8px;">
+												<option value="">전체</option>
+												<option value="1">1차</option>
+												<option value="2">2차</option>
+											</select>
+										</div>
+										<div class="col-md-2">
+											<label class="form-label text-muted small fw-medium">시작일</label>
+											<input type="date" class="form-control" id="startDate" 
+												   style="border: 2px solid #e9ecef; border-radius: 8px;">
+										</div>
+										<div class="col-md-2">
+											<label class="form-label text-muted small fw-medium">종료일</label>
+											<input type="date" class="form-control" id="endDate" 
+												   style="border: 2px solid #e9ecef; border-radius: 8px;">
+										</div>
+										<div class="col-md-1">
+											<label class="form-label text-muted small fw-medium">&nbsp;</label>
+											<button class="btn w-100 d-block" onclick="filterApplications()"
+													style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); 
+														   color: white; border: none; border-radius: 8px; padding: 10px 16px; font-weight: 600; transition: all 0.3s ease;"
+													onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 15px rgba(44, 90, 160, 0.3)'"
+													onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+												<i class="bi bi-funnel me-1"></i>검색
+											</button>
+										</div>
+									</div>
+									
+									<div class="mt-2">
+										<small class="text-muted" id="searchHint">
+											💡 <strong>이름</strong> 또는 <strong>전화번호</strong> 검색시 정확한 값을 입력해주세요. 골프장은 부분 검색이 가능합니다.
+										</small>
+									</div>
+								</div>
+								
+								<!-- 기존 데이터 테이블 영역 그대로 -->
+								<div id="applicationsTableContainer">
+									<div class="text-center py-5">
+										<div class="loading-spinner mx-auto"></div>
+										<p class="text-muted mt-2">데이터를 불러오는 중...</p>
+									</div>
+								</div>
+
+								<!-- 기존 페이지네이션 영역 그대로 -->
+								<nav aria-label="가입신청 페이지네이션" class="mt-4">
+									<ul class="pagination justify-content-center" id="applicationsPagination" 
+										style="--bs-pagination-active-bg: var(--primary-color); --bs-pagination-active-border-color: var(--primary-color);">
+									</ul>
+								</nav>
+
+								<!-- 기존 하단 정보 그대로 -->
+								<div class="mt-3 d-flex align-items-center">
+									<i class="bi bi-info-circle text-primary me-2"></i>
+									<small class="text-muted fw-medium" id="applicationsCount">총 0건</small>
+								</div>
+							</div>
+
+							<!-- 홀인원 보상신청 탭 (새로 추가) -->
+							<div class="tab-pane fade" id="claims-tab" role="tabpanel">
+								<div class="d-flex justify-content-between align-items-center mb-4">
+									<h5 class="mb-0"><i class="bi bi-trophy me-2"></i></h5>
+									<div class="d-flex gap-2">
+										<button class="btn btn-outline-primary btn-sm" onclick="refreshClaims()" 
+												style="border-radius: 8px;">
+											<i class="bi bi-arrow-clockwise me-1"></i>새로고침
+										</button>
+										<button class="btn btn-outline-success btn-sm" onclick="exportClaims()"
+												style="border-radius: 8px;">
+											<i class="bi bi-download me-1"></i>Excel
+										</button>
+									</div>
+								</div>
+
+								<!-- 보상신청용 검색 및 필터 영역 (일단 기본만) -->
+								<div class="chart-container mb-4">
+									<div class="row g-3">
+										<div class="col-md-3">
+											<label class="form-label text-muted small fw-medium">검색어</label>
+											<div class="input-group">
+												<span class="input-group-text" style="background: white; border: 2px solid #e9ecef; border-radius: 8px 0 0 8px;">
+													<i class="bi bi-search text-muted"></i>
+												</span>
+												<input type="text" class="form-control" id="claimsSearchInput" 
+													   placeholder="신청자명, 골프장명 검색"
+													   style="border: 2px solid #e9ecef; border-left: none; border-radius: 0 8px 8px 0;">
+											</div>
+										</div>
+										<div class="col-md-2">
+											<label class="form-label text-muted small fw-medium">상태</label>
+											<select class="form-select" id="claimsStatusFilter" 
+													style="border: 2px solid #e9ecef; border-radius: 8px;">
+												<option value="">전체 상태</option>
+												<option value="pending">검토대기</option>
+												<option value="reviewing">검토중</option>
+												<option value="approved">승인완료</option>
+												<option value="rejected">거절</option>
+											</select>
+										</div>
+										<div class="col-md-2">
+											<label class="form-label text-muted small fw-medium">시작일</label>
+											<input type="date" class="form-control" id="claimsStartDate" 
+												   style="border: 2px solid #e9ecef; border-radius: 8px;">
+										</div>
+										<div class="col-md-2">
+											<label class="form-label text-muted small fw-medium">종료일</label>
+											<input type="date" class="form-control" id="claimsEndDate" 
+												   style="border: 2px solid #e9ecef; border-radius: 8px;">
+										</div>
+										<div class="col-md-1">
+											<label class="form-label text-muted small fw-medium">&nbsp;</label>
+											<button class="btn w-100 d-block" onclick="filterClaims()"
+													style="background: linear-gradient(135deg, #dc2626, #991b1b); 
+														   color: white; border: none; border-radius: 8px; padding: 10px 16px; font-weight: 600; transition: all 0.3s ease;"
+													onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 15px rgba(220, 38, 38, 0.3)'"
+													onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+												<i class="bi bi-funnel me-1"></i>검색
+											</button>
+										</div>
+									</div>
+								</div>
+								
+								<!-- 보상신청 데이터 테이블 영역 -->
+								<div id="claimsTableContainer">
+									<div class="text-center py-5">
+										<i class="bi bi-trophy text-muted" style="font-size: 3rem;"></i>
+										<p class="text-muted mt-3">홀인원 보상신청 내역이 없습니다.</p>
+										<small class="text-muted">고객이 홀인원을 달성하고 보상 신청을 하면 여기에 표시됩니다.</small>
+									</div>
+								</div>
+
+								<!-- 보상신청 페이지네이션 영역 -->
+								<nav aria-label="보상신청 페이지네이션" class="mt-4">
+									<ul class="pagination justify-content-center" id="claimsPagination" 
+										style="--bs-pagination-active-bg: #dc2626; --bs-pagination-active-border-color: #dc2626;">
+									</ul>
+								</nav>
+
+								<!-- 보상신청 하단 정보 -->
+								<div class="mt-3 d-flex align-items-center">
+									<i class="bi bi-info-circle text-danger me-2"></i>
+									<small class="text-muted fw-medium" id="claimsCount">총 0건</small>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- 가입신청 모달 관련 스크립트 별도 파일로 로드 -->
+	<script src="js/application-detail.js"></script>
+    <script src="js/applications.js"></script>
+	<script src="js/claim.js"></script>
+	<script src="js/claim-detail.js"></script>
+	<script src="js/daily-statistics.js"></script>
+	<script src="js/data-analysis.js"></script>
+	
+    <script>
+        // 전역 변수
+        let dashboardData = null;
+        
+        // 페이지 로드시 데이터 가져오기
+        document.addEventListener('DOMContentLoaded', function() {
+            loadDashboardData();
+            
+            // 5분마다 데이터 새로고침
+            setInterval(loadDashboardData, 5 * 60 * 1000);
+        });
+        
+        // 대시보드 데이터 로드
+        async function loadDashboardData() {
+            try {
+                const response = await fetch('api/dashboard_data.php');
+                
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        // 로그인 세션 만료
+                        window.location.href = 'index.html';
+                        return;
+                    }
+                    throw new Error('Network response was not ok');
+                }
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    dashboardData = data.data;
+                    updateDashboard(dashboardData);
+                } else {
+                    showError(data.message || '데이터를 불러오는데 실패했습니다.');
+                }
+            } catch (error) {
+                console.error('Dashboard data load error:', error);
+                showError('서버 연결에 실패했습니다. 잠시 후 다시 시도해주세요.');
+            }
+        }
+        
+        // 대시보드 UI 업데이트
+      function updateDashboard(data) {
+				document.getElementById('managerName').textContent = data.user.manager_name;
+				document.getElementById('clientName').textContent = data.user.client_name;
+				
+				const navbarClientName = document.getElementById('navbarClientName');
+				if (navbarClientName && data.user.client_name) {
+					navbarClientName.textContent = data.user.client_name + ' 홀인원보험';
+				}
+				
+				// === 1차 쿠폰 상세 통계 ===
+				document.getElementById('navPhase1Coupons').textContent = numberFormat(data.stats.phase1_coupons || 0);
+				document.getElementById('navPhase1Unused').textContent = numberFormat(data.stats.phase1_unused || 0);
+				document.getElementById('navPhase1Once').textContent = numberFormat(data.stats.phase1_once || 0);
+				document.getElementById('navPhase1Full').textContent = numberFormat(data.stats.phase1_full || 0);
+				document.getElementById('navPhase1Applications').textContent = numberFormat(data.stats.phase1_applications || 0);
+				
+				// === 2차 쿠폰 상세 통계 ===
+				document.getElementById('navPhase2Coupons').textContent = numberFormat(data.stats.phase2_coupons || 0);
+				document.getElementById('navPhase2Unused').textContent = numberFormat(data.stats.phase2_unused || 0);
+				document.getElementById('navPhase2Once').textContent = numberFormat(data.stats.phase2_once || 0);
+				document.getElementById('navPhase2Full').textContent = numberFormat(data.stats.phase2_full || 0);
+				document.getElementById('navPhase2Applications').textContent = numberFormat(data.stats.phase2_applications || 0);
+				
+				// 탭 카운트
+				const applicationsTabCount = document.getElementById('applicationsTabCount');
+				const todayApplicationsCount = document.getElementById('todayApplicationsCount');
+				
+				if (applicationsTabCount) {
+					applicationsTabCount.textContent = numberFormat(data.stats.total_applications);
+				}
+				
+				if (todayApplicationsCount) {
+					todayApplicationsCount.textContent = `오늘 ${numberFormat(data.stats.today_applications)}`;
+					todayApplicationsCount.className = data.stats.today_applications > 0 
+						? 'badge bg-success text-white ms-1' 
+						: 'badge bg-primary text-white ms-1';
+				}
+				
+				if (typeof loadAllApplications === 'function') {
+					loadAllApplications();
+				}
+			}
+   
+        // 최근 가입신청 내역 업데이트
+        function updateRecentApplications(applications) {
+            const container = document.getElementById('recentApplications');
+            
+            if (applications.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-5">
+                        <i class="bi bi-inbox text-muted" style="font-size: 3rem;"></i>
+                        <p class="text-muted mt-3">아직 가입신청 내역이 없습니다.</p>
+                        <a href="coupons.html" class="btn btn-primary">쿠폰 관리하기</a>
+                    </div>
+                `;
+                return;
+            }
+            
+            let html = `
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>신청자</th>
+                                <th>골프장</th>
+                                <th>티오프 시간</th>
+                                <th>상태</th>
+                                <th>신청일</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+            
+            applications.forEach(app => {
+                const statusInfo = getStatusInfo(app.status);
+                html += `
+                    <tr>
+                        <td>${escapeHtml(app.applicant_name)}</td>
+                        <td>${escapeHtml(app.golf_course)}</td>
+                        <td>${formatDateTime(app.tee_time)}</td>
+                        <td><span class="badge status-badge bg-success">신청완료</span></td>
+                        <td>${formatDateTime(app.created_at)}</td>
+                    </tr>
+                `;
+            });
+            
+            html += `
+                        </tbody>
+                    </table>
+                </div>
+            `;
+            
+            container.innerHTML = html;
+        }
+        
+        // 유틸리티 함수들
+        function numberFormat(number) {
+            return new Intl.NumberFormat('ko-KR').format(number);
+        }
+        
+        function formatDateTime(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('ko-KR', {
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+        
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        function getStatusInfo(status) {
+            const statusMap = {
+                'pending': { class: 'bg-warning', text: '대기중' },
+                'approved': { class: 'bg-success', text: '승인' },
+                'rejected': { class: 'bg-danger', text: '거부' }
+            };
+            return statusMap[status] || { class: 'bg-secondary', text: status };
+        }
+        
+        function showError(message) {
+            // 에러 알림 표시
+            const errorHTML = `
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="bi bi-exclamation-triangle me-2"></i>${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            `;
+            
+            // 첫 번째 컨테이너에 에러 메시지 추가
+            const container = document.querySelector('.container-fluid');
+            container.insertAdjacentHTML('afterbegin', errorHTML);
+        }
+        
+        // 로그아웃 함수
+        async function logout() {
+            try {
+                const response = await fetch('api/logout.php', { method: 'POST' });
+                window.location.href = 'index.html';
+            } catch (error) {
+                window.location.href = 'index.html';
+            }
+        }
+
+        // 새로고침 함수
+        function refreshApplications() {
+            if (typeof loadAllApplications === 'function') {
+                loadAllApplications();
+            }
+        }
+    </script>
+	
+	
+	<!-- 홀인원 보상신청 상세보기 모달 -->
+		<div class="modal fade" id="claimDetailModal" tabindex="-1" aria-labelledby="claimDetailModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-xl">
+				<div class="modal-content">
+					<div class="modal-header bg-danger text-white">
+						<h5 class="modal-title" id="claimDetailModalLabel">
+							<i class="bi bi-trophy me-2"></i>홀인원 보상신청 상세보기
+						</h5>
+						<button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					
+					<div class="modal-body p-0">
+						<!-- 로딩 상태 -->
+						<div id="claimDetailLoading" class="text-center py-5">
+							<div class="spinner-border text-danger" role="status">
+								<span class="visually-hidden">로딩중...</span>
+							</div>
+							<p class="text-muted mt-2">상세 정보를 불러오는 중...</p>
+						</div>
+						
+						<!-- 상세 정보 컨테이너 -->
+						<div id="claimDetailContent" style="display: none;">
+							<!-- 상단 요약 정보 -->
+							<div class="bg-light p-4 border-bottom">
+								<div class="row">
+									<div class="col-md-6">
+										<div class="d-flex align-items-center mb-3">
+											<div class="stat-icon bg-danger me-3">
+												<i class="bi bi-trophy text-white"></i>
+											</div>
+											<div>
+												<h4 class="mb-0" id="claimCustomerName">신청자명</h4>
+												<span class="badge" id="claimStatusBadge">상태</span>
+											</div>
+										</div>
+										<div class="row text-sm">
+											<div class="col-6">
+												<strong>신청번호:</strong><br>
+												<code id="claimNumber">-</code>
+											</div>
+											<div class="col-6">
+												<strong>신청일:</strong><br>
+												<span id="claimCreatedAt">-</span>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="row text-sm">
+											<div class="col-6">
+												<strong>골프장:</strong><br>
+												<span id="claimGolfCourse">-</span>
+											</div>
+											<div class="col-6">
+												<strong>경기일:</strong><br>
+												<span id="claimPlayDate">-</span>
+											</div>
+											<div class="col-6 mt-2">
+												<strong>홀/야드:</strong><br>
+												<span id="claimHoleInfo" class="text-success fw-bold">-</span>
+											</div>
+											<div class="col-6 mt-2">
+												<strong>연락처:</strong><br>
+												<span id="claimCustomerPhone">-</span>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<!-- 탭 네비게이션 -->
+							<ul class="nav nav-tabs nav-fill" id="claimDetailTabs" role="tablist">
+								<li class="nav-item" role="presentation">
+									<button class="nav-link active" id="claim-basic-tab" data-bs-toggle="tab" 
+											data-bs-target="#claim-basic" type="button" role="tab">
+										<i class="bi bi-info-circle me-1"></i>기본정보
+									</button>
+								</li>
+								<li class="nav-item" role="presentation">
+									<button class="nav-link" id="claim-photos-tab" data-bs-toggle="tab" 
+											data-bs-target="#claim-photos" type="button" role="tab">
+										<i class="bi bi-camera me-1"></i>증명사진 <span class="badge bg-secondary ms-1" id="photosCount">0</span>
+									</button>
+								</li>
+								<li class="nav-item" role="presentation">
+									<button class="nav-link" id="claim-scorecard-tab" data-bs-toggle="tab" 
+											data-bs-target="#claim-scorecard" type="button" role="tab">
+										<i class="bi bi-file-earmark-text me-1"></i>스코어카드
+									</button>
+								</li>
+								<li class="nav-item" role="presentation">
+									<button class="nav-link" id="claim-history-tab" data-bs-toggle="tab" 
+											data-bs-target="#claim-history" type="button" role="tab">
+										<i class="bi bi-clock-history me-1"></i>처리이력
+									</button>
+								</li>
+							</ul>
+
+							<!-- 탭 컨텐츠 -->
+							<div class="tab-content" id="claimDetailTabContent">
+								<!-- 기본정보 탭 -->
+								<div class="tab-pane fade show active" id="claim-basic" role="tabpanel">
+									<div class="p-4">
+										<div class="row">
+											<div class="col-md-6">
+												<h6 class="text-primary mb-3"><i class="bi bi-person me-1"></i>신청자 정보</h6>
+												<table class="table table-borderless table-sm">
+													<tr>
+														<td width="100"><strong>성명:</strong></td>
+														<td id="detailCustomerName">-</td>
+													</tr>
+													<tr>
+														<td><strong>연락처:</strong></td>
+														<td id="detailCustomerPhone">-</td>
+													</tr>
+													<tr>
+														<td><strong>이메일:</strong></td>
+														<td id="detailCustomerEmail">-</td>
+													</tr>
+													<tr>
+														<td><strong>주소:</strong></td>
+														<td id="detailCustomerAddress">-</td>
+													</tr>
+												</table>
+											</div>
+											<div class="col-md-6">
+												<h6 class="text-success mb-3"><i class="bi bi-flag me-1"></i>경기 정보</h6>
+												<table class="table table-borderless table-sm">
+													<tr>
+														<td width="100"><strong>골프장:</strong></td>
+														<td id="detailGolfCourse">-</td>
+													</tr>
+													<tr>
+														<td><strong>경기일:</strong></td>
+														<td id="detailPlayDate">-</td>
+													</tr>
+													<tr>
+														<td><strong>홀번호:</strong></td>
+														<td id="detailHoleNumber" class="text-success fw-bold">-</td>
+													</tr>
+													<tr>
+														<td><strong>거리:</strong></td>
+														<td id="detailYardage">-</td>
+													</tr>
+													<tr>
+														<td><strong>사용클럽:</strong></td>
+														<td id="detailUsedClub">-</td>
+													</tr>
+													<tr>
+														<td><strong>캐디명:</strong></td>
+														<td id="detailCaddyName">-</td>
+													</tr>
+												</table>
+											</div>
+										</div>
+										
+										<div class="row mt-4">
+											<div class="col-12">
+												<h6 class="text-info mb-3"><i class="bi bi-card-text me-1"></i>추가 정보</h6>
+												<div class="bg-light p-3 rounded">
+													<p id="detailDescription" class="mb-0">-</p>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<!-- 증명사진 탭 -->
+								<div class="tab-pane fade" id="claim-photos" role="tabpanel">
+									<div class="p-4">
+										<div id="photosGallery" class="row">
+											<!-- 사진들이 동적으로 추가됩니다 -->
+										</div>
+										<div id="noPhotos" class="text-center py-5" style="display: none;">
+											<i class="bi bi-camera text-muted" style="font-size: 3rem;"></i>
+											<p class="text-muted mt-3">업로드된 증명사진이 없습니다.</p>
+										</div>
+									</div>
+								</div>
+
+								<!-- 스코어카드 탭 -->
+								<div class="tab-pane fade" id="claim-scorecard" role="tabpanel">
+									<div class="p-4">
+										<div id="scorecardImage" class="text-center">
+											<!-- 스코어카드 이미지가 표시됩니다 -->
+										</div>
+										<div id="noScorecard" class="text-center py-5" style="display: none;">
+											<i class="bi bi-file-earmark-text text-muted" style="font-size: 3rem;"></i>
+											<p class="text-muted mt-3">업로드된 스코어카드가 없습니다.</p>
+										</div>
+									</div>
+								</div>
+
+								<!-- 처리이력 탭 -->
+								<div class="tab-pane fade" id="claim-history" role="tabpanel">
+									<div class="p-4">
+										<div id="claimHistory">
+											<!-- 처리이력이 동적으로 추가됩니다 -->
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+						<!-- 에러 상태 -->
+						<div id="claimDetailError" class="text-center py-5" style="display: none;">
+							<i class="bi bi-exclamation-triangle text-danger" style="font-size: 3rem;"></i>
+							<p class="text-danger mt-3" id="claimDetailErrorMessage">상세 정보를 불러올 수 없습니다.</p>
+							<button class="btn btn-danger" onclick="reloadClaimDetail()">다시 시도</button>
+						</div>
+					</div>
+					
+					
+					<!-- 수정된 모달 푸터 - 상태변경 드롭다운 중복 제거 -->
+					<div class="modal-footer bg-light border-0" style="padding: 12px 20px;">
+						<div class="d-flex justify-content-between align-items-center w-100">
+							<!-- 좌측: 보조 기능 -->
+							<div class="d-flex gap-2">
+								<button type="button" class="btn btn-sm btn-outline-secondary" onclick="printClaimDetail()">
+									<i class="bi bi-printer me-1"></i>인쇄
+								</button>
+								<button type="button" class="btn btn-sm btn-outline-secondary" onclick="downloadClaimPDF()">
+									<i class="bi bi-download me-1"></i>PDF
+								</button>
+							</div>
+							
+							<!-- 우측: 주요 액션 버튼들만 (상태변경 드롭다운 제거) -->
+							<div id="claimActionButtons" class="d-flex gap-2">
+								<!-- JavaScript에서 모든 버튼을 동적으로 생성 -->
+							</div>
+						</div>
+					</div><!-- 수정된 모달 푸터 - 상태변경 드롭다운 중복 제거 -->
+				</div>
+			</div>
+		</div>
+
+		<!-- 이미지 확대보기 모달 -->
+		<div class="modal fade" id="imageViewModal" tabindex="-1" aria-hidden="true">
+			<div class="modal-dialog modal-lg modal-dialog-centered">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="imageViewTitle">이미지 보기</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+					</div>
+					<div class="modal-body text-center">
+						<img id="enlargedImage" class="img-fluid" style="max-height: 70vh;">
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		
+		<!-- 가입신청 상세보기 모달 -->
+<div class="modal fade" id="applicationDetailModal" tabindex="-1" aria-labelledby="applicationDetailModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="applicationDetailModalLabel">
+                    <i class="bi bi-file-earmark-text me-2"></i>가입신청 상세보기
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            
+            <div class="modal-body p-0">
+                <!-- 로딩 상태 -->
+                <div id="applicationDetailLoading" class="text-center py-5">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">로딩중...</span>
+                    </div>
+                    <p class="text-muted mt-2">상세 정보를 불러오는 중...</p>
+                </div>
+                
+                <!-- 상세 정보 컨테이너 -->
+                <div id="applicationDetailContent" class="d-none">
+                    <!-- 상단 요약 정보 -->
+                    <div class="bg-light p-4 border-bottom">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="stat-icon bg-primary me-3">
+                                        <i class="bi bi-person text-white"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="mb-0" id="detailApplicantName">신청자명</h4>
+                                        <span class="badge" id="detailStatusBadge">상태</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="row text-sm">
+                                    <div class="col-6">
+                                        <strong>신청번호:</strong><br>
+                                        <code id="detailSignupId">-</code>
+                                    </div>
+                                    <div class="col-6">
+                                        <strong>신청일:</strong><br>
+                                        <span id="detailCreatedAt">-</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 탭 네비게이션 -->
+                    <ul class="nav nav-tabs nav-fill" id="applicationDetailTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="app-basic-tab" data-bs-toggle="tab" 
+                                    data-bs-target="#app-basic" type="button" role="tab">
+                                <i class="bi bi-info-circle me-1"></i>기본정보
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="app-companions-tab" data-bs-toggle="tab" 
+                                    data-bs-target="#app-companions" type="button" role="tab">
+                                <i class="bi bi-people me-1"></i>동반자 정보
+                                <span class="badge bg-secondary ms-1" id="companionsCount">0</span>
+                            </button>
+                        </li>
+                    </ul>
+
+                    <!-- 탭 컨텐츠 -->
+                    <div class="tab-content" id="applicationDetailTabContent">
+                        <!-- 기본정보 탭 -->
+                        <div class="tab-pane fade show active" id="app-basic" role="tabpanel">
+                            <div class="p-4">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                       
+                                        <table class="table table-borderless table-sm">
+                                            <tr>
+                                                <td width="120"><strong>성명:</strong></td>
+                                                <td id="detailName">-</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>연락처:</strong></td>
+                                                <td id="detailPhone">-</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>쿠폰번호:</strong></td>
+                                                <td><code id="detailCouponNumber">-</code></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="col-md-6">
+                                        
+                                        <table class="table table-borderless table-sm">
+                                            <tr>
+                                                <td width="120"><strong>골프장:</strong></td>
+                                                <td id="detailGolfCourse2">-</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>티오프:</strong></td>
+                                                <td id="detailTeeTime">-</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>쿠폰차수:</strong></td>
+                                                <td id="detailTestIs">-</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 동반자 정보 탭 -->
+                        <div class="tab-pane fade" id="app-companions" role="tabpanel">
+                            <div class="p-4">
+                                <div id="companionsList">
+                                    <!-- 동반자 목록이 동적으로 추가됩니다 -->
+                                </div>
+                                <div id="noCompanions" class="text-center py-5">
+                                    <i class="bi bi-person-x text-muted" style="font-size: 3rem;"></i>
+                                    <p class="text-muted mt-3">동반자 정보가 없습니다.</p>
+                                    <small class="text-muted">1차 쿠폰은 본인만 신청 가능합니다.</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 에러 상태 -->
+                <div id="applicationDetailError" class="text-center py-5" style="display: none;">
+                    <i class="bi bi-exclamation-triangle text-danger" style="font-size: 3rem;"></i>
+                    <p class="text-danger mt-3" id="applicationDetailErrorMessage">상세 정보를 불러올 수 없습니다.</p>
+                </div>
+            </div>
+            
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,749 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Noto Sans KR', sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f5f5f5;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 100px auto 0;
+    padding: 20px;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+h1 {
+    color: #1a73e8;
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+h2 {
+    color: #1a73e8;
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #1a73e8;
+}
+
+h3 {
+    color: #1a73e8;
+    font-size: 1.4rem;
+    margin-bottom: 15px;
+}
+
+h4 {
+    color: #333;
+    font-size: 1.2rem;
+    margin: 15px 0;
+}
+
+section {
+    background-color: #fff;
+    padding: 30px;
+    margin-bottom: 30px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.step-container {
+    display: grid;
+    gap: 20px;
+}
+
+.step {
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid #1a73e8;
+}
+
+.step-content {
+    padding: 10px;
+}
+
+ul {
+    list-style-position: inside;
+    margin-left: 20px;
+}
+
+li {
+    margin-bottom: 10px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    background-color: #fff;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+th {
+    background-color: #1a73e8;
+    color: #fff;
+}
+
+tr:nth-child(even) {
+    background-color: #f8f9fa;
+}
+
+.payment-table {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.coverage-table, .premium-table {
+    overflow-x: auto;
+}
+
+.info-content {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.info-content p {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.info-content ul {
+    list-style: none;
+    margin-left: 0;
+}
+
+.info-content li {
+    margin-bottom: 8px;
+}
+
+/* 네비게이션 스타일 */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    z-index: 1000;
+}
+
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 80px;
+}
+
+.logo img {
+    height: 40px;
+    width: auto;
+}
+
+.nav-menu {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-menu li {
+    margin: 0 15px;
+}
+
+.nav-menu a {
+    color: #333;
+    text-decoration: none;
+    font-size: 1.1rem;
+    font-weight: 500;
+    padding: 10px;
+    transition: color 0.3s ease;
+}
+
+.nav-menu a:hover {
+    color: #1a73e8;
+}
+
+.login-btn a {
+    background-color: #1a73e8;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.login-btn a:hover {
+    background-color: #1557b0;
+    color: #fff;
+}
+
+.mobile-menu-btn {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #333;
+    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+    }
+
+    h3 {
+        font-size: 1.2rem;
+    }
+
+    section {
+        padding: 20px;
+    }
+
+    .step {
+        padding: 15px;
+    }
+
+    table {
+        font-size: 0.9rem;
+    }
+
+    th, td {
+        padding: 8px;
+    }
+
+    .mobile-menu-btn {
+        display: block;
+    }
+
+    .nav-menu {
+        display: none;
+        position: absolute;
+        top: 80px;
+        left: 0;
+        width: 100%;
+        background-color: #fff;
+        flex-direction: column;
+        padding: 20px 0;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .nav-menu.active {
+        display: flex;
+    }
+
+    .nav-menu li {
+        margin: 10px 0;
+        text-align: center;
+    }
+
+    .nav-menu a {
+        display: block;
+        padding: 15px;
+    }
+
+    .login-btn a {
+        display: inline-block;
+        margin: 10px auto;
+    }
+
+    .container {
+        margin-top: 80px;
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 1.8rem;
+    }
+
+    h2 {
+        font-size: 1.3rem;
+    }
+
+    .step {
+        padding: 10px;
+    }
+
+    table {
+        font-size: 0.8rem;
+    }
+
+    th, td {
+        padding: 6px;
+    }
+}
+
+/* 스크롤 동작 설정 */
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 80px; /* 네비게이션 바 높이만큼 패딩 추가 */
+}
+
+/* 가입신청 폼 스타일 */
+.insurance-application {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    margin-bottom: 30px;
+}
+
+.application-form {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.form-section {
+    margin-bottom: 30px;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+}
+.cheader {
+    display: flex;
+    align-items: center;
+    gap: 2px; /* 아주 작은 간격 */
+}
+
+.cheader h3 {
+    margin: 0;
+    flex-shrink: 0; /* 제목이 줄어들지 않도록 */
+}
+
+.checkbox-label {
+    white-space: nowrap; /* 체크박스 텍스트가 줄바꿈되지 않도록 */
+}
+.form-section h3 {
+   display: flex;
+    align-items: center;
+    gap: 40px; /* 제목과 체크박스 사이 간격 */
+    margin-bottom: 20px;
+    color: #333;
+    font-size: 1.2rem;
+	
+}
+
+/* 계약자 정보 섹션만 넓게 */
+.application-form .form-section.contractor-section h3 {
+    gap: 40px;
+    min-width: 600px;
+}
+
+.application-form .form-section h3 .checkbox-label {
+    margin: 0;
+    padding: 0;
+    font-size: 0.9rem;
+    font-weight: normal;
+    white-space: nowrap;
+}
+
+.application-form .form-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    gap: 20px;
+}
+
+.application-form .form-group label {
+    flex: 0 0 200px;
+    font-weight: 500;
+    color: #333;
+}
+
+.application-form .form-group input,
+.application-form .form-group select {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.application-form .checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    padding: 10px 0;
+    width: 100%;
+    margin-left: 200px;
+}
+
+.application-form .checkbox-label input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    margin: 0;
+    cursor: pointer;
+    accent-color: #1a73e8;
+}
+
+.application-form .checkbox-label span {
+    font-size: 1rem;
+    color: #333;
+}
+
+/* 에러 메시지 스타일 */
+.error-message {
+    color: #dc3545;
+    font-size: 0.9rem;
+    margin-top: 5px;
+}
+
+/* 반응형 스타일 */
+@media (max-width: 768px) {
+    .application-form .form-group {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+        gap: 10px;
+    }
+
+    .application-form .form-group label {
+        flex: 0 0 120px;
+        font-weight: 500;
+        color: #333;
+        font-size: 0.95rem;
+    }
+
+    .application-form .form-group input,
+    .application-form .form-group select {
+        flex: 1;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 0.95rem;
+        height: 36px;
+    }
+
+    .application-form .checkbox-label {
+        padding: 5px 0;
+        margin-left: 0;
+        gap: 6px;
+    }
+
+    .application-form .checkbox-label input[type="checkbox"] {
+        width: 16px;
+        height: 16px;
+    }
+
+    .insurance-application {
+        padding: 20px;
+    }
+
+    .form-section {
+        padding: 15px;
+    }
+
+    .form-section h3 {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .form-section.contractor-section h3 {
+        min-width: auto;
+    }
+
+    .form-section h3 .checkbox-label {
+        margin-left: 0;
+    }
+
+    .radio-group {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .radio-label {
+        width: 100%;
+        min-width: auto;
+    }
+
+    .submit-btn {
+        width: 100%;
+        padding: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .insurance-application {
+        padding: 15px;
+    }
+
+    .form-section {
+        padding: 12px;
+    }
+
+    .form-section h3 {
+        font-size: 1.1rem;
+    }
+
+    .form-group label {
+        flex: 0 0 100px;
+        font-size: 0.9rem;
+    }
+
+    .application-form .form-group input,
+    .application-form .form-group select {
+        padding: 6px;
+        font-size: 0.9rem;
+        height: 32px;
+    }
+
+    .form-group select {
+        background-size: 12px;
+        padding-right: 30px;
+    }
+}
+
+/* 아코디언 스타일 */
+.accordion {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.accordion-item {
+    margin-bottom: 10px;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.accordion-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background-color: #f8f9fa;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.accordion-header:hover {
+    background-color: #e9ecef;
+}
+
+.accordion-header h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    color: #1a73e8;
+}
+
+.accordion-icon {
+    font-size: 1.5rem;
+    color: #1a73e8;
+    transition: transform 0.3s ease;
+}
+
+.accordion-item.active .accordion-icon {
+    transform: rotate(45deg);
+}
+
+.accordion-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+    background-color: #fff;
+}
+
+.accordion-item.active .accordion-content {
+    max-height: 1000px;
+}
+
+.step-content {
+    padding: 20px;
+}
+
+.step-content h4 {
+    color: #333;
+    margin: 15px 0 10px;
+    font-size: 1.1rem;
+}
+
+.step-content ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.step-content li {
+    margin-bottom: 8px;
+    color: #555;
+}
+
+.payment-table {
+    margin: 20px 0;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.payment-table th,
+.payment-table td {
+    padding: 12px;
+    text-align: center;
+    border: 1px solid #dee2e6;
+}
+
+.payment-table th {
+    background-color: #1a73e8;
+    color: white;
+    font-weight: 500;
+}
+
+.payment-table th:first-child,
+.payment-table th:nth-child(2) {
+    background-color: #1a73e8;
+    color: white;
+}
+
+/* 반응형 스타일 */
+@media (max-width: 768px) {
+    .accordion-header {
+        padding: 15px;
+    }
+
+    .accordion-header h3 {
+        font-size: 1.1rem;
+    }
+
+    .step-content {
+        padding: 15px;
+    }
+
+    .payment-table th,
+    .payment-table td {
+        padding: 8px;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .accordion-header {
+        padding: 12px;
+    }
+
+    .accordion-header h3 {
+        font-size: 1rem;
+    }
+
+    .step-content {
+        padding: 12px;
+    }
+
+    .step-content h4 {
+        font-size: 1rem;
+    }
+
+    .step-content li {
+        font-size: 0.9rem;
+    }
+}
+
+.age-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+.age-table th, .age-table td.guide-cell {
+    text-align: center;
+    padding: 12px;
+    border: 1px solid #dee2e6;
+}
+
+.age-table td.premium-cell {
+    text-align: right;
+    padding: 12px;
+    border: 1px solid #dee2e6;
+}
+
+.age-table th {
+    background-color: #1a73e8;
+    color: white;
+    font-weight: 500;
+}
+
+.age-table tr:nth-child(even) {
+    background-color: #f8f9fa;
+}
+
+.application-form .submit-btn {
+    background: linear-gradient(135deg, #1a73e8, #1557b0);
+    color: #fff;
+    padding: 15px 40px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 200px;
+    box-shadow: 0 4px 15px rgba(26, 115, 232, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+.application-form .submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(26, 115, 232, 0.3);
+    background: linear-gradient(135deg, #1557b0, #1a73e8);
+}
+
+.application-form .submit-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 10px rgba(26, 115, 232, 0.2);
+}
+
+.application-form .submit-btn::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transform: translateX(-100%);
+    transition: transform 0.6s ease;
+}
+
+.application-form .submit-btn:hover::after {
+    transform: translateX(100%);
+}
+
+.application-form .form-actions {
+    text-align: center;
+    margin-top: 40px;
+    padding: 20px;
+} 
+
+

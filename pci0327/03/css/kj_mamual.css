@@ -1,0 +1,41 @@
+ .kje-menu {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        
+        .kje-menu-btn {
+			background-color:#F2F2F2 ;
+			color: #000000;;
+			border: none;
+			padding: 8px 15px;
+			font-size: 14px;
+			font-weight: 400;
+		    transition: all 0.2s ease;
+            margin-right: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .kje-menu-btn.active {
+            background-color: #8E6C9D;
+            color: white;
+            border-color: #3a5ec7;
+        }
+        
+                
+        .view-btn, .edit-btn, .detail-btn {
+            padding: 3px 8px;
+            background-color: #5a7be3;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 20px;
+            font-style: italic;
+            color: #888;
+        }

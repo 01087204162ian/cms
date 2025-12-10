@@ -1,0 +1,55 @@
+<!DOCTYPE html> 
+<html> 
+  <head> 
+	<title>대리운전보험관리</title> 
+	<meta charset="euc-kr" /> 	
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no"/>	
+	<link rel="shortcut icon" href="../images/icon.png">
+	<link rel="apple-touch-icon" href="../image/icon.png">
+	<link rel="apple-touch-startup-image" href="../img/startup.png">
+        <meta name="apple-mobile-web-app-capable" content="yes"/>
+        <meta name="apple-mobile-web-app-status-bar-style" content="black" /> 
+        <link rel="stylesheet" href="framework/jquery.mobile-1.1.0.min.css" />
+	<link rel="stylesheet" href="style/style.css" />
+		<!-- action sheet plugin 스타일시트 참조 -->
+	<link rel="stylesheet" href="framework/plugin/actionsheet/jquery.mobile.actionsheet.css" />
+        <script src="framework/jquery-1.7.2.min.js"></script>
+	<script src="app.js"></script>
+	<script language="JavaScript" src="/kibs_admin/jsfile/lib_numcheck.js"></script>
+        <script src="framework/jquery.mobile-1.1.0.min.js"></script>
+		<!-- action sheet plugin 스크립트 참조 -->
+	<script type="text/javascript" src="framework/plugin/actionsheet/jquery.mobile.actionsheet.js"></script>
+  <head>
+	<body>
+		<div data-role="page" id="list">
+			<div data-role="header" class="titlebar1" data-position="fixed">
+				<h1><?=$drow[company]?></h1>
+				<a data-icon="home" data-theme="a" href="first.html?id=<?=$id?>"  >홈</a>
+				<a data-icon="plus" data-theme="b" href="second.html?id=<?=$id?>">진배</a>
+			</div>
+			<div data-role="content">
+				<p><span>배서기준일<input type='hidden' id='endorse_day' value='<?=$now_time?>' /><?=$now_time?><?=$Num?>명</span></p>
+				<ul data-role='listview' data-filter='true'>
+					<li> 
+						<h3><?=$j+1?><?=$a?><?=$row[Name]?><?=$row[Jumin]?></h3>
+						<p><?=$inSname?>&nbsp;<?=$row[dongbuCerti]?></p>
+						<p class="ui-li-aside"><a data-icon="edit" data-role="actionsheet" data-sheet='edit_password' data-inline="true">정상</a></p>
+						<form id='edit_password' style="display:none">
+							<div class="ui-bar ui-bar-a"><?=$row[Name]?>해지 합니다</div>			
+							<input type='hidden' id='password' value='<?=$row[num]?>' />
+							<a data-role='button' id="btn_edit" data-mini="true" data-theme="b">OK</a>
+							<a data-role='button' data-rel='close' data-mini="true">Cancel</a>
+						 </form>			
+					</li>
+				</ul>
+			</div>
+			<div data-role="footer" data-theme="b" data-position="fixed">
+				<div data-role="navbar">
+					<ul>
+					  <li><a data-icon="plus" data-theme="b" href="third.html?id=<?=$row[InsuraneCompany]?>&dNumber=<?=$id?>&CertiTableNum=<?=$row[num]?>" ><?=$inSom[$_p]?></a></li>
+				  </ul>
+				 </div>
+			</div>
+        </div>
+	</body>
+</html>

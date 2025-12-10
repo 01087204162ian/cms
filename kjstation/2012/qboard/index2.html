@@ -1,0 +1,112 @@
+<?include '../../2012/lib/lib_auth.php';?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=euc-kr" />
+	<title><?=$titleName?></title>
+	<link href="../css/sj.css" rel="stylesheet" type="text/css" />
+	<link href="../../sj/calendar/dhtmlgoodies_calendar/dhtmlgoodies_calendar.css" rel="stylesheet" type="text/css" />
+	<script src="../../sj/calendar/dhtmlgoodies_calendar/dhtmlgoodies_calendar.js" type="text/javascript"></script>
+	<script src="../../sj/js/smsAjax.js" type="text/javascript"></script><!--SmsAjax-->
+	<script src="../js/boardCreate.js" type="text/javascript"></script><!--ajax-->	
+	<script src="./js/IntroAjax2.js" type="text/javascript"></script><!--ajax-->
+</head>
+<?$redirectURL='DMM_System'?>
+<body id="qboard">
+<div id="wrapper">
+	<div id="banner"><? include "../php/idname.php"?></div>
+	<div id="mainNav"><? include "../php/nav.php";?><!--메인 메뉴--></div>
+	<div id="contentWrapper"> 
+		<div id="main">
+		  <form>
+			  <div id="serchPart">
+				  <input type="text" value="<?=$weeksigi?>" readonly name="sigi" id="sigi" size='10' maxlength='10' />
+				  <img class="calendar" src="/sj/images/calendar.gif" onclick="displayCalendar(document.forms[0].sigi,'yyyy-mm-dd',this)"  />
+				  <input type="text" value="<?=$now_time?>" readonly name="end" id="end" size='10' maxlength='10' />
+				  <img class="calendar" src="/sj/images/calendar.gif" onclick="displayCalendar(document.forms[0].end,'yyyy-mm-dd',this)"  />
+				  <input type='text' id='s_contents'  size='16' maxlength='16' >
+				  <img class="searchButton" src="/sj/images/search.gif" align='absmiddle' onfocus='blur()' onClick="serch()" />
+				  <input type="button" class="btn-b" style="cursor:hand;width:80;"  value="킥보드 데이터 보험사 보고용 엑셀"  onFocus='this.blur()'   onClick="insuranceCompnay()" />
+			   </div><!-- serchPart 끝-->
+
+
+			   <div id="listPart" >
+					  <input type='hidden' id='page' />
+					<table>
+					 <caption>배서리스트</caption>
+					  <thead>
+					  <tr>
+						<td width='5%'>번호</td>
+						<td width='18%'>대리회사명</td>
+						<td width='7%'>대표자</td>
+						<td width='12%'>주민번호</td>
+						<td width='12%'>핸드폰</td>
+						<td width='12%'>전화번호</td>
+						<td width='9%'>
+						<select id='damdanja' onChange='serch()'>
+						<option value='9999'>=담당자==</option>
+						   <? for($_q=0;$_q<$dNum;$_q++){
+								$dRow=mysql_fetch_array($drs);
+								
+						   ?>
+						   <option value='<?=$dRow[num]?>' <? if($dRow[mem_id]==$userId){ echo "selected";}?>><?=$dRow[name]?></option>
+						
+						   <?}?>
+						</select>
+						</td>
+						<td width='6%'>
+						<select id='getDay' onChange='serch()'>
+						<option value='9999'>=선택==</option>
+						   <? for($_p=1;$_p<32;$_p++){
+						   if($_p<10){$_p='0'.$_p;}
+						   ?>
+						   <option value='<?=$_p?>' <? if($_p==$today){ echo "selected";}?>><?=$_p?>일</option>
+						
+						   <?}?>
+						</select>
+
+						</td>
+						<td width='9%'>은행</td>
+						<td width='6%'>인원</td>
+				
+					</tr>
+					</thead>
+					<tbody class="scrollingContent">
+					<? for($j=0;$j<20;$j++){?>
+					 <tr>
+						<td onMouseOver="this.style.backgroundColor='#EFF4F8'; style.cursor='hand'" onMouseOut="this.style.backgroundColor=''" >
+						  <span id='bunho<?=$j?>' >&nbsp;</span>
+						  <input type='hidden' id='num<?=$j?>'>
+						  
+						</td>
+						<td><span id='A2a<?=$j?>' >&nbsp;</span></td>
+						<td><span id='A3a<?=$j?>'>&nbsp;</span></td>
+						<td><span id='A4a<?=$j?>'>&nbsp;</span></td>
+						<td><span id='A5a<?=$j?>'>&nbsp;</span></td>
+						<td><span id='A6a<?=$j?>'>&nbsp;</span></td>
+						<td><span id='A7a<?=$j?>'>&nbsp;</span></td>
+						<td><span id='A8a<?=$j?>'>&nbsp;</span></td>
+						<td><span id='A9a<?=$j?>'>&nbsp;</span><input type='hidden' id='pBankNum<?=$j?>'></td>
+						<td onMouseOver="this.style.backgroundColor='#EFF4F8'; style.cursor='hand'" onMouseOut="this.style.backgroundColor=''"><span id='A10a<?=$j?>'>&nbsp;</span></td>
+					</tr>
+					<?}?>
+					</tbody>
+					</table>
+					<div id="paging"><span id='sql2'>&nbsp;</span><span id='sql3'>&nbsp;</span></div>
+					</form>
+				</div>
+				<div id="second">
+					<div id="sidebar"><? include "../php/boardLeftmenu.php";?><!--좌측메뉴--></div>
+					<div id="chubbGeneral"><? include "../php/general.php";?><!--기본등록--></div>
+				</div>
+  
+				
+		    </div><!--main끝-->
+			<div id="adverts"><? include "../php/rightmenu.php"?><!--우측 핸드폰메뉴--></div>
+       </div><!--contentWrapper 끝-->
+	
+  <p id="copyright"><? include "../php/footer.php";?></p>
+</div><!--wrapper 끝-->
+
+</body>
+</html>

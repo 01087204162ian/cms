@@ -1,0 +1,43 @@
+/* 메뉴 컨테이너 */
+.menu-container {
+    width: 180px;          /* 200px에서 축소 */
+    min-height: 100vh;
+    background: #2c3e50;
+    padding: 15px 0;       /* 20px에서 축소 */
+}
+
+/* 메뉴 아이템 */
+.menu-item {
+    padding: 10px 15px;    /* 12px 20px에서 축소 */
+    color: #ecf0f1;
+    font-size: 13px;       /* 14px에서 축소 */
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+/* 서브메뉴 아이템 */
+.submenu-item {
+    padding: 8px 25px;     /* 10px 30px에서 축소 */
+    font-size: 12px;       /* 13px에서 축소 */
+}
+
+/* 메뉴 헤더 */
+.menu-header {
+    padding: 10px 15px;    /* 15px 20px에서 축소 */
+    font-size: 14px;       /* 16px에서 축소 */
+    font-weight: bold;
+    color: #fff;
+    border-bottom: 1px solid #34495e;
+}
+
+/* 로고 영역 */
+.logo-container {
+    padding: 15px;         /* 20px에서 축소 */
+    text-align: center;
+    margin-bottom: 10px;   /* 15px에서 축소 */
+}
+
+.logo-container img {
+    max-width: 150px;      /* 180px에서 축소 */
+    height: auto;
+} 

@@ -1,0 +1,53 @@
+<!DOCTYPE html> 
+<html> 
+	<head> 
+		<title>대리운전보험관리</title> 
+		<meta charset="euc-kr" /> 	
+		<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no"/>	
+		<link rel="shortcut icon" href="../images/icon.png">
+		<link rel="apple-touch-icon" href="../image/icon.png">
+		<link rel="apple-touch-startup-image" href="../img/startup.png">
+        <meta name="apple-mobile-web-app-capable" content="yes"/>
+        <meta name="apple-mobile-web-app-status-bar-style" content="black" /> 
+        <link rel="stylesheet" href="framework/jquery.mobile-1.1.0.min.css" />
+		<link rel="stylesheet" href="style/style.css" />
+		<!-- action sheet plugin 스타일시트 참조 -->
+		<link rel="stylesheet" href="framework/plugin/actionsheet/jquery.mobile.actionsheet.css" />
+        <script src="framework/jquery-1.7.2.min.js"></script>
+		<script src="app.js"></script>
+		<script language="JavaScript" src="/kibs_admin/jsfile/lib_numcheck.js"></script>
+        <script src="framework/jquery.mobile-1.1.0.min.js"></script>
+		<!-- action sheet plugin 스크립트 참조 -->
+		<script type="text/javascript" src="framework/plugin/actionsheet/jquery.mobile.actionsheet.js"></script>
+   </head>
+	<body>
+		  <div  data-role="page" >
+			<div data-role="header" >
+			<a href="template.html" data-transition="flip">첫번째</a>
+				<h1>두번째 페이지</h1>
+			</div>
+		    <div data-role="content" >
+				<!--대화상자 형태로 페이지 열기-->
+				<a href="#terms" data-rel="dialog" data-transition="slidedown">이용약관</a>
+			</div>
+			<div data-role="footer" data-position="fixed">
+				<h4>페이지 푸터2</h4>
+			</div>
+		  </div> 
+
+		  <div  data-role="page"  id="terms">
+			<div data-role="header" >
+			
+				<h1>이용약관</h1>
+			</div>
+		    <div data-role="content" >
+				서비스 이용약관에 동의합니끼>
+				<a href="#" data-role="button" data-inline="true" data-rel="back" data-theme="a">동의안함</a>
+				<a href="#" data-role="button" data-inline="true">동의</a>
+			</div>
+			<div data-role="footer" data-position="fixed">
+				<h4>페이지 푸터2</h4>
+			</div>
+		  </div> 
+	</body>
+</html>

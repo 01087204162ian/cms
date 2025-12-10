@@ -1,0 +1,87 @@
+<?include '../../2012/lib/lib_auth.php';?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=euc-kr" />
+<title><?=$titleName?></title>
+<link href="../css/sj.css" rel="stylesheet" type="text/css" />
+<link href="../../sj/calendar/dhtmlgoodies_calendar/dhtmlgoodies_calendar.css" rel="stylesheet" type="text/css" />
+<script src="../../sj/calendar/dhtmlgoodies_calendar/dhtmlgoodies_calendar.js" type="text/javascript"></script>
+<script src="../js/smsAjax.js" type="text/javascript"></script><!--SmsAjax-->
+<script src="../js/create.js" type="text/javascript"></script><!--ajax-->
+<script src="./js/basicAjax.js" type="text/javascript"></script><!--ajaxloading-->
+<script src="./js/ajax3.js" type="text/javascript"></script><!--ajax-->
+</head>
+
+<body id="dongbu">
+<div id="wrapper">
+<div id="banner"><? include "../php/idname.php"?></div>
+
+<div id="mainNav"><? include "../php/nav.php";?><!--메인 메뉴--></div>
+
+<div id="contentWrapper"> 
+  <div id="main">
+   <form>
+      <div id="serchPart">
+		  <input type="text" value="<?=$sigi?>" readonly name="sigi" id="sigi" size='10' maxlength='10' />
+		  <img class="calendar" src="/sj/images/calendar.gif" onclick="displayCalendar(document.forms[0].sigi,'yyyy-mm-dd',this)"  />
+		  <input type="text" value="<?=$now_time?>" readonly name="end" id="end" size='10' maxlength='10' />
+		  <img class="calendar" src="/sj/images/calendar.gif" onclick="displayCalendar(document.forms[0].end,'yyyy-mm-dd',this)"  />
+		 <input type='text' id='s_contents'  size='16' maxlength='16' >
+		  <img class="searchButton" src="/sj/images/search.gif" align='absmiddle' onfocus='blur()' onClick="serch()" />
+		 
+	   </div>
+	<div id="listPart" >
+			  <input type='hidden' id='page' />
+	<table>
+	 <caption>web산출리스트</caption>
+	  <thead>
+	  <tr>
+		<td width='5%'>번호</td>
+		<td width='8%'>담당자</td>
+		<td width='18%'>주민번호</td>
+		<td width='15%'>연락처</td>
+		<td width='7%'></td>
+		<td width='20%' colspan='2'>상담예정일</td>
+		<td width=''>I.D</td>
+		<td width=''>I.D</td>
+		<td width='8%'>신청일</td>
+	</tr>
+	</thead>
+	<tbody class="scrollingContent">
+	<? for($j=0;$j<20;$j++){?>
+	 <tr>
+		
+		<td onMouseOver="this.style.backgroundColor='#EFF4F8'; style.cursor='hand'" onMouseOut="this.style.backgroundColor=''" onclick="chkmodify_dong_bu(<?=$j?>)">
+			<input type='hidden' id='num<?=$j?>'>
+		  <?=$j+1?>
+		</td>
+		<td onMouseOver="this.style.backgroundColor='#EFF4F8'; style.cursor='hand'" onMouseOut="this.style.backgroundColor=''" onclick="chkmodify_dong_bu2(<?=$j?>)"><span id='e_name<?=$j?>' >&nbsp;</span></td>
+		<td><span id='company<?=$j?>'>&nbsp;</span></td>
+		<td><span id='com_phone<?=$j?>'>&nbsp;</span></td>
+		<td><span id='pun<?=$j?>'>&nbsp;</span></td>
+		<td width='10%'><span id='sangdamday<?=$j?>'>&nbsp;</span></td>
+		<td width='10%'><span id='sangTime<?=$j?>'>&nbsp;</span></td>
+		<td><span id='email<?=$j?>'>&nbsp;</span></td>
+		<td><span id='user_id<?=$j?>'>&nbsp;</span></td>
+		<td><span id='wdate<?=$j?>'>&nbsp;</span></td>
+	</tr>
+	<?}?>
+	</tbody>
+	</table>
+    </form>
+	</div>
+    </form>
+	<div id="paging"><span id='sql2'>&nbsp;</span><span id='sql3'>&nbsp;</span></div>
+  </div>
+  <div id="third">
+  <div id="sidebar"><? include "../php/dongbuleftmenu.php";?><!--좌측메뉴--></div>
+  <div id="chubbGeneral"><? include "./php/general.php";?></div>
+ </div>
+  <div id="adverts">
+   <? include "../php/rightmenu.php"?><!--우측 핸드폰메뉴--></div>
+  <p id="copyright"><? include "../php/footer.php";?></p>
+</div>
+</div>
+</body>
+</html>

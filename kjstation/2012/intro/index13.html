@@ -1,0 +1,129 @@
+<?include '../../2012/lib/lib_auth.php';?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=euc-kr" />
+	<title><?=$titleName?></title>
+	<link href="../css/sj.css" rel="stylesheet" type="text/css" />
+	<link href="../../sj/calendar/dhtmlgoodies_calendar/dhtmlgoodies_calendar.css" rel="stylesheet" type="text/css" />
+	<script src="../../sj/calendar/dhtmlgoodies_calendar/dhtmlgoodies_calendar.js" type="text/javascript"></script>
+	<script src="../js/jquery-2.1.1.min.js" type="text/javascript"></script><!---->
+	<script src="../../sj/js/smsAjax.js" type="text/javascript"></script><!--SmsAjax-->
+	<script src="../js/create.js" type="text/javascript"></script><!--ajax-->	
+	<script src="./js/IntroAjax13.js" type="text/javascript"></script><!--ajax-->
+</head>
+<?$redirectURL='DMM_System'?>
+<body id="ssangyong">
+<div id="wrapper">
+	<div id="banner"><? include "../php/idname.php"?></div>
+	<div id="mainNav"><? include "../php/nav.php";?><!--메인 메뉴--></div>
+	<div id="contentWrapper"> 
+		<div id="main">
+		  <form>
+			  <div id="serchPart">
+				  
+				  <input type="text" value="<?=$yearbefore?>" readonly name="sigi" id="sigi" size='10' maxlength='10' />
+				  <img class="calendar" src="/sj/images/calendar.gif" onclick="displayCalendar(document.forms[0].sigi,'yyyy-mm-dd',this)"  />
+				  <input type="text" value="<?=$daumsigi?>" readonly name="end" id="end" size='10' maxlength='10' />
+				  <img class="calendar" src="/sj/images/calendar.gif" onclick="displayCalendar(document.forms[0].end,'yyyy-mm-dd',this)"  />
+				  <input type='text' id='s_contents'  size='16' maxlength='16' >
+				  <img class="searchButton" src="/sj/images/search.gif" align='absmiddle' onfocus='blur()' onClick="serch()" />
+				 
+			   </div><!-- serchPart 끝-->
+
+
+			   <div id="listPart" >
+					  <input type='hidden' id='page' />
+					<table>
+					 <caption>증권리스트</caption>
+					  <thead>
+					  <tr>
+						<td width='3%'>번호</td>
+						<td width='7%'>증권번호</td>
+						<td width='14%'>회사명</td>
+						<td width='7%'>계약자</td>
+						<td width='7%'>소유자</td>
+						<td width='7%'>주민번호</td>
+						<td width='6%'>
+						<select id='insuranceComNum' onChange='serch()'>
+						   <option value='99'>전체</option>
+						   <option value='1'>흥국</option>
+						   <option value='2'>DB</option>
+						   <option value='3'>KB</option>
+						   <option value='4'>현대</option>
+						   <option value='5'>한화</option>
+						   <option value='6'>더케이</option>
+						</select>
+						</td>
+						<td width='7%'>계약일</td>
+						<td width='2%'>회차</td>
+						<td width='6%'>인원</td>
+						<td width='6%'>max</td>
+						<td width='7%'>코드</td>
+						<td width='7%'>비밀번호</td>
+						<td width='7%'>인증번호</td>
+						<td width='7%'>단체</td>
+						<td width='7%'>할인</td>
+					</tr>
+					</thead>
+					<tbody class="scrollingContent">
+					<? for($j=0;$j<20;$j++){
+					   $k=$j%2;
+						if($k==0){
+							$cl='P';
+						}else{
+
+							$cl='O';
+						}?>
+					 <tr>
+						<td onMouseOver="this.style.backgroundColor='#EFF4F8'; style.cursor='hand'" onMouseOut="this.style.backgroundColor=''"  >
+						  <span id='bunho<?=$j?>' >&nbsp;</span>
+						  <input type='hidden' id='num<?=$j?>'>
+						  <input type='hidden' id='insNum<?=$j?>'>
+						</td>
+						
+						<td><span id='M1a<?=$j?>'>&nbsp;</span></td><!--증권번호-->
+						<td><input type='text' id='A1a<?=$j?>' class='textare<?=$cl?>' onBlur='change(<?=$j?>)'></td><!--회사-->
+						<td><input type='text' id='A2a<?=$j?>' class='textare<?=$cl?>'></td><!--계약자-->
+						<td><span id='m11a<?=$j?>' class='textare<?=$cl?>'></span></td><!--소유자-->
+						<td><input type='text' id='A3a<?=$j?>' class='textare<?=$cl?>'></td><!--주민번호-->
+						<td><span id='M2a<?=$j?>'>&nbsp;</span></td><!--보험회사-->
+						<td><input type='text' id='A4a<?=$j?>' class='textare<?=$cl?>'></td><!--계약일-->
+						<td><input type='text' id='A5a<?=$j?>' class='textare<?=$cl?>'></td><!--회차--><!--CertiTableNum-->
+						<td><span id='M3a<?=$j?>'>&nbsp;</span></td><!--인원-->
+						<td><input type='text' id='A9a<?=$j?>' class='textare<?=$cl?>' onBlur='maxInwon(<?=$j?>)'></td><!--코드-->
+						<td><input type='text' id='A6a<?=$j?>' class='textare<?=$cl?>' onBlur='cord(<?=$j?>)'></td><!--코드-->
+						<td><input type='text' id='A7a<?=$j?>' class='textare<?=$cl?>'></td><!--비밀번호-->
+						<td><input type='text' id='A8a<?=$j?>' class='textare<?=$cl?>'></td><!--비밀번호확인-->
+						<td><span id='M4a<?=$j?>'>&nbsp;</span></td><!--단체-->
+						<td><span id='M5a<?=$j?>'>&nbsp;</span></td><!--할인-->
+						
+						
+					</tr>
+					<?}?>
+					</tbody>
+					<tr>
+						<td colspan='9'> </td>
+						<td ><span id='tot'>&nbsp;</span></td> </td>
+						<td ><span id='tot2'>&nbsp;</span></td> </td>
+						<td colspan='5'> </td>
+					</tr>
+					</table>
+					<div id="paging"><span id='sql2'>&nbsp;</span><span id='sql3'>&nbsp;</span></div>
+					</form>
+				</div>
+				<div id="thirteenth">
+					<div id="sidebar"><? include "../php/leftmenu.php";?><!--좌측메뉴--></div>
+					<div id="chubbGeneral"><? include "../php/general.php";?><!--기본등록--></div>
+				</div>
+  
+				
+		    </div><!--main끝-->
+			<div id="adverts"><? include "../php/rightmenu.php"?><!--우측 핸드폰메뉴--></div>
+       </div><!--contentWrapper 끝-->
+	
+  <p id="copyright"><? include "../php/footer.php";?></p>
+</div><!--wrapper 끝-->
+
+</body>
+</html>

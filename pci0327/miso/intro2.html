@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>플랫폼 매칭 순간 개별 보험 자동 가입 절차</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .premise {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .section-number {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .table th {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .table td {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            vertical-align: top;
+        }
+
+        .table tr:hover {
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .process-steps {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+
+        .step {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 15px;
+            gap: 15px;
+        }
+
+        .step-number {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .workflow {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            white-space: pre-line;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        .warning-box {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            border-left: 5px solid #e74c3c;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+
+        .warning-title {
+            font-weight: bold;
+            color: #c0392b;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        .conclusion {
+            background: linear-gradient(135deg, #a8e6cf 0%, #dcedc8 100%);
+            border-radius: 20px;
+            padding: 30px;
+            margin-top: 30px;
+        }
+
+        .conclusion h2 {
+            color: #2e7d32;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: bold;
+        }
+
+        .bullet-points {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .bullet-points li {
+            padding: 10px 0;
+            padding-left: 30px;
+            position: relative;
+        }
+
+        .bullet-points li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #27ae60;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .section {
+                padding: 20px;
+            }
+            
+            .table {
+                font-size: 14px;
+            }
+        }
+
+		 /* 플로팅 메뉴 스타일 */
+        .floating-menu {
+            position: fixed;
+            top: 50%;
+            right: 30px;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(15px);
+            border-radius: 25px;
+            padding: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+        }
+        
+        .floating-menu-toggle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+        
+        .floating-menu-toggle:hover {
+            transform: rotate(180deg);
+        }
+        
+        .floating-menu-items {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .floating-menu.collapsed .floating-menu-items {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .floating-menu-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 15px;
+            text-decoration: none;
+            color: #333;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+            min-width: 150px;
+        }
+        
+        .floating-menu-item:hover {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+        
+        .floating-menu-item.home {
+            background: linear-gradient(135deg, #00b894, #00a085);
+            color: white;
+        }
+        
+        .scroll-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2rem;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+        
+        .scroll-to-top.visible {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📋 플랫폼 매칭 순간 개별 보험 자동 가입</h1>
+            <p class="subtitle">매칭 순간에 개별적으로 보험을 자동 가입하는 구조의 일반적인 보험가입 절차</p>
+            
+            <div class="premise">
+                <strong>※ 전제:</strong> 공급자(클리너 등)가 미소와 계약된 상태이고, 고객 매칭 시점에 
+                <strong>자동으로 1건 단위 보험이 가입</strong>되는 구조<br>
+                (예: "이용 1건당 1일짜리 책임보험 가입")
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">
+                <span class="section-number">1</span>
+                보험상품 설계 및 사전 계약
+            </h2>
+            
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>항목</th>
+                        <th>내용</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>보험사와의 사전 협의</strong></td>
+                        <td>플랫폼 맞춤형 '온디맨드 보험' 상품 설계</td>
+                    </tr>
+                    <tr>
+                        <td><strong>플랫폼이 계약자</strong></td>
+                        <td>계약자는 미소, 피보험자는 공급자</td>
+                    </tr>
+                    <tr>
+                        <td><strong>보험요율 설정</strong></td>
+                        <td>1건당 보험료 책정 (예: 1회 매칭당 300원)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>가입 조건 사전 합의</strong></td>
+                        <td>가입정보, 가입 타이밍, 방식(API 등), 고지의무 면제 여부 등 합의</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">
+                <span class="section-number">2</span>
+                매칭 시점의 실시간 가입 절차
+            </h2>
+            
+            <div class="process-steps">
+                <div class="step">
+                    <span class="step-number">①</span>
+                    <div class="step-content">
+                        <div class="step-title">매칭 발생</div>
+                        <div>고객 ↔ 공급자 매칭 확정 시점 트리거</div>
+                    </div>
+                </div>
+                
+                <div class="step">
+                    <span class="step-number">②</span>
+                    <div class="step-content">
+                        <div class="step-title">보험가입 요청 전송</div>
+                        <div>플랫폼 서버가 보험사 또는 MGA API에 가입 요청</div>
+                    </div>
+                </div>
+                
+                <div class="step">
+                    <span class="step-number">③</span>
+                    <div class="step-content">
+                        <div class="step-title">가입정보 전송</div>
+                        <div>공급자 이름/ID, 서비스일시, 위치, 보험기간, 보험금액 등 전송</div>
+                    </div>
+                </div>
+                
+                <div class="step">
+                    <span class="step-number">④</span>
+                    <div class="step-content">
+                        <div class="step-title">보험증권 발급</div>
+                        <div>보험사로부터 가입 확인 및 증권번호/인수번호 반환 (JSON 등)</div>
+                    </div>
+                </div>
+                
+                <div class="step">
+                    <span class="step-number">⑤</span>
+                    <div class="step-content">
+                        <div class="step-title">플랫폼에 기록</div>
+                        <div>민원/사고 대비를 위해 로그와 DB에 기록 보관</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="text-align: center; font-weight: bold; color: #2c3e50; margin-top: 20px;">
+                ⚙️ 대부분의 경우, 이 과정을 <span class="highlight">1~2초 내 실시간 처리</span>하도록 API로 자동화
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">
+                <span class="section-number">3</span>
+                보험료 정산 방식
+            </h2>
+            
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>방식</th>
+                        <th>설명</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>일괄 후불 정산</strong></td>
+                        <td>월 단위로 매칭 수량 × 단가 계산 → 보험사에 납입</td>
+                    </tr>
+                    <tr>
+                        <td><strong>선불 충전 방식</strong></td>
+                        <td>플랫폼이 선충전 후 건당 차감 (선급금 성격)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>리스크 공유형</strong></td>
+                        <td>일정 손해율 초과 시 보험사가 보상, 그 이하 미소 부담 (공유모델)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">
+                <span class="section-number">4</span>
+                증권·보장 확인
+            </h2>
+            
+            <ul class="bullet-points">
+                <li>공급자는 앱 또는 이메일 등으로 <strong>보장 내역 확인 가능</strong></li>
+                <li>사고 발생 시, 증권번호를 근거로 보험사에 청구</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">
+                <span class="section-number">5</span>
+                고지의무, 계약자 동의 등 특수 처리
+            </h2>
+            
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>이슈</th>
+                        <th>처리 방식</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>고지의무</strong></td>
+                        <td>플랫폼 일괄 면제 또는 고지 간주 조항 삽입 (단체형)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>동의 여부</strong></td>
+                        <td>공급자 약관에 보험 자동가입 및 정보제공 동의 포함</td>
+                    </tr>
+                    <tr>
+                        <td><strong>개인정보 전달</strong></td>
+                        <td>최소 식별정보만 암호화/API 전송 (법적 고지 필요)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">
+                <span style="background: linear-gradient(135deg, #f093fb, #f5576c); color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold;">📌</span>
+                예시: 시간제 보험 가입 구조 (워크플로우)
+            </h2>
+            
+            <div class="workflow">1. 고객이 8/10 14:00에 입주청소 예약
+2. 플랫폼이 공급자 A와 매칭
+3. 8/10 14:00 ~ 18:00 청소 예정 → 이 시간 기준 보험가입 API 호출
+4. 보험사 API 응답 → 가입완료, 증권번호 저장
+5. 공급자 앱에 "보험 가입 완료됨" 안내 표시</div>
+        </div>
+
+        <div class="warning-box">
+            <div class="warning-title">🔍 법적 주의사항 요약</div>
+            
+            <table class="table" style="margin-top: 15px;">
+                <thead>
+                    <tr>
+                        <th>항목</th>
+                        <th>주의내용</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>모집/권유가 아님</strong></td>
+                        <td>실시간 자동가입은 '권유 행위'가 아니므로 금소법 적용 회피 가능</td>
+                    </tr>
+                    <tr>
+                        <td><strong>약관 고지</strong></td>
+                        <td>공급자에 약관 및 보장내용을 사전 동의 방식으로 고지해야 함</td>
+                    </tr>
+                    <tr>
+                        <td><strong>보험사/플랫폼 책임</strong></td>
+                        <td>실시간 시스템 오류로 미가입 상태에서 사고 발생 시, 계약 책임 주의 필요</td>
+                    </tr>
+                    <tr>
+                        <td><strong>API 장애 대비</strong></td>
+                        <td>Fallback 처리(재시도, 로그 저장, 미가입 알림 등) 필수</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="conclusion">
+            <h2>✅ 결론 요약</h2>
+            
+            <ul class="bullet-points">
+                <li><strong>매칭 순간에 개별 보험을 자동 가입하는 구조는 현실적으로 가능</strong>하며, API 기반으로 이미 다양한 플랫폼에서 운영 중</li>
+                <li><strong>사전 계약 구조</strong>, <strong>API 연동 프로세스</strong>, <strong>공급자 동의 체계</strong>, <strong>정산 로직</strong>, <strong>법률 고지 절차</strong>가 반드시 명확해야 함</li>
+                <li>핵심은 <strong>실시간성과 법적 정합성 확보</strong>이며, 보험사 또는 MGA(보험인수관리사)와의 사전 조율이 중요</li>
+            </ul>
+        </div>
+    </div>
+
+
+	 <div class="floating-menu" id="floatingMenu">
+        <button class="floating-menu-toggle" id="menuToggle">☰</button>
+        <div class="floating-menu-items">
+            <a href="./index.html" class="floating-menu-item home">
+                <span class="floating-menu-icon">🏠</span>
+                <span>메인으로</span>
+            </a>
+            <a href="1.html" class="floating-menu-item process">
+                <span class="floating-menu-icon">💰</span>
+                <span>보험료 산정</span>
+            </a>
+            <a href="2.html" class="floating-menu-item">
+                <span class="floating-menu-icon">⚖️</span>
+                <span>법적 가이드</span>
+            </a>
+            <a href="#" class="floating-menu-item" onclick="scrollToSection('보험상품 설계')">
+                <span class="floating-menu-icon">📋</span>
+                <span>사전 계약</span>
+            </a>
+            <a href="#" class="floating-menu-item" onclick="scrollToSection('매칭 시점')">
+                <span class="floating-menu-icon">⚡</span>
+                <span>실시간 가입</span>
+            </a>
+            <a href="#" class="floating-menu-item" onclick="scrollToSection('보험료 정산')">
+                <span class="floating-menu-icon">💳</span>
+                <span>정산 방식</span>
+            </a>
+        </div>
+    </div>
+
+	<script>
+		// 메뉴 토글 기능
+        const floatingMenu = document.getElementById('floatingMenu');
+        const menuToggle = document.getElementById('menuToggle');
+        
+        menuToggle.addEventListener('click', function() {
+            floatingMenu.classList.toggle('collapsed');
+            menuToggle.textContent = floatingMenu.classList.contains('collapsed') ? '☰' : '✕';
+        });
+        
+        // 맨 위로 버튼
+        const scrollToTopBtn = document.getElementById('scrollToTop');
+        
+        window.addEventListener('scroll', function() {
+            if (window.pageYOffset > 300) {
+                scrollToTopBtn.classList.add('visible');
+            } else {
+                scrollToTopBtn.classList.remove('visible');
+            }
+        });
+        
+        scrollToTopBtn.addEventListener('click', function() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+        
+        // 섹션으로 스크롤하는 함수
+        function scrollToSection(sectionTitle) {
+            const sections = document.querySelectorAll('.section-title');
+            let targetSection = null;
+
+            sections.forEach(section => {
+                if (section.textContent.includes(sectionTitle)) {
+                    targetSection = section.closest('.section');
+                }
+            });
+
+            if (targetSection) {
+                targetSection.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        }
+	</script>
+</body>
+</html>

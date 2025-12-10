@@ -1,0 +1,146 @@
+<?include '../../2012c/lib/lib_auth.php';?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<script>
+	if (location.protocol === 'http:' && location.host.indexOf('cafe24.com') === -1) {
+    var sUrl = 'https://' + location.host + location.pathname + location.search;
+
+		 window.location.replace(sUrl);
+	}
+	</script>
+	<meta http-equiv="Content-Type" content="text/html; charset=euc-kr" />
+	<title><?=$titleName?></title>
+	<link href="../css/p.css" rel="stylesheet" type="text/css" />
+	<link href="../../sj/calendar/dhtmlgoodies_calendar/dhtmlgoodies_calendar.css" rel="stylesheet" type="text/css" />
+	<script src="../../sj/calendar/dhtmlgoodies_calendar/dhtmlgoodies_calendar.js" type="text/javascript"></script>
+	<script src="../../2012/js/jquery-2.1.1.min.js" type="text/javascript"></script><!--SmsAjax-->
+	<script src="../../sj/js/smsAjax.js" type="text/javascript"></script><!--SmsAjax-->
+	<script src="../js/create.js" type="text/javascript"></script><!--ajax-->	
+	<script src="./js/IntroAjax1.js" type="text/javascript"></script><!--ajax-->
+	<script src="../../2012c/js/common_tong.js" type="text/javascript"></script><!--인증관련-->
+</head>
+<?$redirectURL='DMM_System'?>
+<body id="ssangyong">
+<div id="wrapper">
+	<div id="banner"><? include "../php/idname.php"?></div>
+	<div id="mainNav"><? include "../php/nav.php";?><!--메인 메뉴--></div>
+	<div id="contentWrapper"> 
+		<div id="main">
+		  <form>
+			  <div id="serchPart">
+				  운전자
+		    <input type='text' id='s_contents'  size='16' maxlength='16' >
+		    <select id='kind_state2' '>
+						   <option value='99'>선택</option>
+						   <option value='1'>대리</option>
+							<option value='2'>탁송</option>
+							<option value='3'>대리/렌트</option>
+							<option value='4'>탁송/렌트</option>
+							<option value='5'>확대탁송</option>
+						</select><!--개별적 조회-->
+		 
+		  <img class="searchButton" src="../../sj/images/search.gif" align='absmiddle' onfocus='blur()' onClick="pserch()" /> 
+		  <?include '../php/customer_endorse_day_lig2.php';?>
+		<!--  <input type='hidden' id='endorseDay' name='endorse_day' value='<?=$now_time?>'>-->
+			배서기준일  <input type="text" id='endorseDay' value="<?=$now_time?>" readonly name="endorseDay"  size='10' maxlength='10' /><img class="calendar" src="/sj/images/calendar.gif" onclick="displayCalendar(document.forms[0].endorseDay,'yyyy-mm-dd',this)"  />
+			   	<!--   대리기사 성명
+				  <input type='text' id='s_contents'  size='16' maxlength='16' >
+				  <img class="searchButton" src="/sj/images/search.gif" align='absmiddle' onfocus='blur()' onClick="pserch()" />
+				 <input type="button" class="btn-b" style="cursor:hand;width:80;"  value="Memo"  onFocus='this.blur()' onClick="order()">-->
+
+				 
+			   </div><!-- serchPart 끝-->
+
+
+			   <div id="listPart" >
+					  <input type='hidden' id='page' />
+					<table>
+					 <caption><span id='smtotal'>&nbsp;</span></caption>
+					  <thead>
+					  <tr>
+						<td width='4%'>번호</td>
+						<td width='8%'>성명</td>
+						<td width='8%'>주민번호</td>
+						<td width='7%'>상태</td>
+						<td width='10%'><select id='kind_state' onChange='serch()'>
+						   <option value='99'>선택</option>
+						   <option value='1'>대리</option>
+							<option value='2'>탁송</option>
+							<option value='3'>대리/렌트</option>
+							<option value='4'>탁송/렌트</option>
+							<option value='5'>확대탁송</option>
+						</select>
+						</td>
+					<!--	<td width='12%'>대리운전회사</td>-->
+						<td width='5%'>
+						<select id='insuranceComNum' onChange='serch()'>
+						   <option value='99'>보험사</option>
+						   <option value='1'>흥국</option>
+						   <option value='2'>DB</option>
+						   <option value='3'>KB</option>
+						   <option value='4'>현대</option>
+						   <option value='5'>롯데</option>
+						   <option value='6'>더케이</option>
+						  <option value='7'>MG화재</option>
+						  <option value='8'>삼성화재</option>
+
+						</select></td>
+						<td width='7%'>증권번호</td>
+						<td width='17%'>할인할증</td>
+							<td width='4%'>등록일</td>
+						<!--<td width='9%'>해지일</td>-->
+						<td width='10%'>핸드폰번호</td>
+						<td width='5%'>통신사</td>
+						<td width='5%'>명의</td>
+						<td width='27%'>주소</td>
+						
+					</tr>
+					</thead>
+					<tbody class="scrollingContent">
+					<? for($j=0;$j<20;$j++){?>
+					 <tr>
+						<td onMouseOver="this.style.backgroundColor='#EFF4F8'; style.cursor='hand'" onMouseOut="this.style.backgroundColor=''" >
+						  <span id='bunho<?=$j?>' >&nbsp;</span>
+						  <input type='hidden' id='num<?=$j?>'>
+						  
+						</td>
+						<td><span id='A2a<?=$j?>' >&nbsp;</span></td>
+						<td><span id='A3a<?=$j?>'>&nbsp;</span></td>
+						<td><span id='A4a<?=$j?>'>&nbsp;</span></td>
+						<td><span id='A5a<?=$j?>'>&nbsp;</span><input type='hidden' id='cNum<?=$j?>'></td>
+					<!--	<td><span id='A6a<?=$j?>'>&nbsp;</span>--><!--</td><!--대리컴퍼티-->
+						<td><span id='A8a<?=$j?>'>&nbsp;</span></td><!--보힘회사-->
+
+						<td><span id='A9a<?=$j?>'>&nbsp;</span><input type='hidden' id='iNum<?=$j?>'></td><!--보힘회사-->
+						<td><span id='A51a<?=$j?>'>&nbsp;</span></td><!--할인할증-->
+						<td><span id='A10a<?=$j?>'>&nbsp;</span></td>
+							<!--<td><span id='A11a<?=$j?>'>&nbsp;</span>11</td>-->
+						<td><span id='A29a<?=$j?>'>&nbsp;</span></td><!--핸드폰-->
+						<input type='hidden' id='pNum<?=$j?>'>
+						<td><span id='A30a<?=$j?>'>&nbsp;</span></td><!--통신사-->
+						<td><span id='A31a<?=$j?>'>&nbsp;</span></td><!--명의-->
+						<td><span id='A32a<?=$j?>'>&nbsp;</span></td><!--주소-->
+						
+					</tr>
+					<?}?>
+					</tbody>
+					</table>
+					<div id="paging"><span id='sql2'>&nbsp;</span><span id='sql3'>&nbsp;</span></div>
+					</form>
+				</div>
+				<div id="first">
+					<div id="sidebar"><? include "../php/leftmenu.php";?><!--좌측메뉴--></div>
+					<div id="chubbGeneral"><? include "../php/general.php";?><!--기본등록--></div>
+				</div>
+  
+				
+		    </div><!--main끝-->
+			<div id="adverts"><? include "../php/rightmenu.php"?><!--우측 핸드폰메뉴--></div>
+       </div><!--contentWrapper 끝-->
+	
+  <p id="copyright"><? include "../php/footer.php";?></p>
+</div><!--wrapper 끝-->
+
+</body>
+</html>

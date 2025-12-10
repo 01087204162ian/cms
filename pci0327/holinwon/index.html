@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>우리은행 홀인원 보험</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #1974E8;
+            --secondary-color: #e7f3ff;
+            --dark-blue: #0046AA;
+            --success-color: #1974E8;
+            --background-color: #f9f9fa;
+            --text-color: #333;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        
+        body {
+            background-color: var(--background-color);
+        }
+        
+        .app-container {
+            max-width: 420px;
+            margin: 0 auto;
+            background-color: white;
+            min-height: 100vh;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+        }
+        
+        /* 헤더 스타일 */
+        .app-header {
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+            background-color: #fff;
+        }
+        
+        .back-button {
+            border: none;
+            background: none;
+            padding: 5px;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+        
+        .header-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        /* 가입 페이지 스타일 */
+        .insurance-banner {
+            background-color: var(--secondary-color);
+            padding: 30px 20px;
+            text-align: center;
+            border-radius: 10px;
+            margin: 20px;
+            position: relative;
+        }
+        
+        .banner-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--dark-blue);
+            margin-bottom: 10px;
+        }
+        
+        .banner-amount {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--dark-blue);
+            margin-bottom: 10px;
+        }
+        
+        .banner-subtitle {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--dark-blue);
+            margin-bottom: 15px;
+        }
+        
+        .golf-hole {
+            width: 90px;
+            height: 90px;
+            background-color: var(--dark-blue);
+            border-radius: 50%;
+            position: relative;
+            margin: 15px auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .golf-hole::after {
+            content: '';
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background-color: var(--secondary-color);
+            border-radius: 50%;
+            z-index: 1;
+        }
+        
+        .golf-flag {
+            position: absolute;
+            width: 5px;
+            height: 60px;
+            background-color: #333;
+            top: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+        }
+        
+        .golf-flag::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 5px;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 12px 20px 12px 0;
+            border-color: transparent #FF5A5A transparent transparent;
+        }
+        
+        .golf-ball {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background-color: white;
+            border-radius: 50%;
+            left: calc(50% - 20px);
+            bottom: 25px;
+            z-index: 3;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        /* 보상 페이지 스타일 */
+        .reward-banner {
+            background-color: var(--primary-color);
+            padding: 30px 20px;
+            text-align: center;
+            border-radius: 10px;
+            margin: 20px;
+            color: white;
+            position: relative;
+        }
+        
+        .reward-title {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+        
+        .reward-amount {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+        
+        .reward-subtitle {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 20px;
+        }
+        
+        .golf-ball-reward {
+            width: 80px;
+            height: 80px;
+            background-color: white;
+            border-radius: 50%;
+            margin: 20px auto;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            position: relative;
+        }
+        
+        .golf-ball-reward::after {
+            content: '';
+            position: absolute;
+            width: 70px;
+            height: 70px;
+            top: 5px;
+            left: 5px;
+            background: radial-gradient(circle, rgba(255,255,255,1) 60%, rgba(230,230,230,1) 100%);
+            border-radius: 50%;
+        }
+        
+        .golf-tee {
+            position: absolute;
+            width: 8px;
+            height: 20px;
+            background-color: #4CAF50;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: -1;
+        }
+        
+        /* 폼 스타일 */
+        .form-section {
+            padding: 20px;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        
+        .form-control {
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            width: 100%;
+            font-size: 16px;
+        }
+        
+        .form-control::placeholder {
+            color: #aaa;
+        }
+        
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+        }
+        
+        .checkbox-container input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+            border-radius: 50%;
+            border: 1px solid #ddd;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            outline: none;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .checkbox-container input[type="checkbox"]:checked::after {
+            content: '';
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .checkbox-label {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .submit-button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 15px;
+            width: 100%;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background-color 0.3s;
+        }
+        
+        .submit-button:hover {
+            background-color: var(--dark-blue);
+        }
+        
+        /* 파일 업로드 부분 */
+        .file-upload-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .file-upload-box {
+            flex: 1;
+            height: 100px;
+            border: 1px dashed #ccc;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            background-color: #f9f9f9;
+        }
+        
+        .file-upload-box i {
+            font-size: 24px;
+            color: #999;
+            margin-bottom: 5px;
+        }
+        
+        .file-upload-text {
+            font-size: 12px;
+            color: #999;
+        }
+        
+        /* 토글 스타일 */
+        .toggle-container {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        
+        .toggle-button {
+            padding: 10px 20px;
+            background-color: white;
+            border: 1px solid #ddd;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .toggle-button.active {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        
+        .toggle-button:first-child {
+            border-radius: 5px 0 0 5px;
+        }
+        
+        .toggle-button:last-child {
+            border-radius: 0 5px 5px 0;
+        }
+        
+        /* 폭죽 애니메이션 */
+        .firework {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: white;
+            opacity: 0.7;
+        }
+        
+        .firework-1 {
+            top: 20px;
+            left: 20px;
+        }
+        
+        .firework-2 {
+            top: 40px;
+            right: 30px;
+        }
+        
+        .firework-3 {
+            bottom: 30px;
+            left: 50px;
+        }
+        
+        .firework-4 {
+            bottom: 50px;
+            right: 40px;
+        }
+        
+        .firework::before, .firework::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border: 1px solid white;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            animation: firework-animate 2s infinite;
+        }
+        
+        .firework::after {
+            animation-delay: 0.5s;
+        }
+        
+        @keyframes firework-animate {
+            0% {
+                width: 0;
+                height: 0;
+                opacity: 0.8;
+            }
+            100% {
+                width: 30px;
+                height: 30px;
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- 가입 페이지 -->
+        <div id="signup-page">
+            <div class="app-header">
+                <button class="back-button">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M15 19L8 12L15 5" stroke="#333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                <div class="header-title">가입 신청</div>
+            </div>
+            
+            <div class="insurance-banner">
+                <div class="banner-title">PB고객님을 위한</div>
+                <div class="banner-amount">홀인원 200만원</div>
+                <div class="banner-subtitle">보험 무료 제공</div>
+                
+                <div class="golf-hole">
+                    <div class="golf-flag"></div>
+                    <div class="golf-ball"></div>
+                </div>
+            </div>
+            
+            <div class="form-section">
+                <div class="section-title">가입자 정보</div>
+                
+                <input type="text" class="form-control" placeholder="이름" id="name">
+                
+                <div class="checkbox-container">
+                    <input type="checkbox" id="agree-checkbox">
+                    <label for="agree-checkbox" class="checkbox-label">개인정보 활용에 동의합니다.</label>
+                </div>
+                
+                <button class="submit-button" id="signup-button">가입하기</button>
+            </div>
+        </div>
+        
+        <!-- 추가 정보 페이지 (보이지 않음) -->
+        <div id="additional-info-page" style="display:none;">
+            <div class="app-header">
+                <button class="back-button" id="back-to-signup">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M15 19L8 12L15 5" stroke="#333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                <div class="header-title">추가 정보</div>
+            </div>
+            
+            <div class="form-section">
+                <div class="section-title">은행계좌 쿠폰번호</div>
+                
+                <input type="text" class="form-control" placeholder="이름" value="" disabled>
+                <input type="tel" class="form-control" placeholder="핸드폰번호">
+                <input type="text" class="form-control" placeholder="골프장명">
+                <input type="datetime-local" class="form-control" placeholder="티오프 시간">
+                
+                <button class="submit-button" id="complete-signup">등록하기</button>
+            </div>
+        </div>
+        
+        <!-- 보상 신청 페이지 (보이지 않음) -->
+        <div id="reward-page" style="display:none;">
+            <div class="app-header">
+                <button class="back-button" id="back-to-main">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M15 19L8 12L15 5" stroke="#333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                <div class="header-title">보상 신청</div>
+            </div>
+            
+            <div class="reward-banner">
+                <div class="firework firework-1"></div>
+                <div class="firework firework-2"></div>
+                <div class="firework firework-3"></div>
+                <div class="firework firework-4"></div>
+                
+                <div class="reward-title">축하합니다!</div>
+                <div class="reward-amount">홀인원 200만원</div>
+                <div class="reward-subtitle">보상 신청</div>
+                
+                <div class="golf-ball-reward">
+                    <div class="golf-tee"></div>
+                </div>
+            </div>
+            
+            <div class="form-section">
+                <div class="section-title">가입자 정보</div>
+                
+                <input type="text" class="form-control" placeholder="홀길동" id="reward-name">
+                <input type="text" class="form-control" placeholder="라운딩 일시">
+                <input type="text" class="form-control" placeholder="골프장명">
+                
+                <div class="file-upload-container">
+                    <div class="file-upload-box">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15" stroke="#999" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M17 8L12 3L7 8" stroke="#999" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M12 3V15" stroke="#999" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <div class="file-upload-text">사진 추가</div>
+                    </div>
+                    <div class="file-upload-box">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15" stroke="#999" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M17 8L12 3L7 8" stroke="#999" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M12 3V15" stroke="#999" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <div class="file-upload-text">사진 추가</div>
+                    </div>
+                </div>
+                
+                <input type="text" class="form-control" placeholder="증명서 확인서/확인서">
+                
+                <div class="checkbox-container">
+                    <input type="checkbox" id="reward-agree-checkbox">
+                    <label for="reward-agree-checkbox" class="checkbox-label">개인정보 활용에 동의합니다.</label>
+                </div>
+                
+                <button class="submit-button" id="reward-button">신청하기</button>
+            </div>
+        </div>
+        
+        <!-- 페이지 토글 버튼 -->
+        <div class="toggle-container">
+            <button class="toggle-button active" id="toggle-signup">가입 신청</button>
+            <button class="toggle-button" id="toggle-reward">보상 신청</button>
+        </div>
+    </div>
+    
+    <script>
+        // 페이지 토글 기능
+        const signupPage = document.getElementById('signup-page');
+        const additionalInfoPage = document.getElementById('additional-info-page');
+        const rewardPage = document.getElementById('reward-page');
+        
+        const toggleSignup = document.getElementById('toggle-signup');
+        const toggleReward = document.getElementById('toggle-reward');
+        
+        toggleSignup.addEventListener('click', function() {
+            signupPage.style.display = 'block';
+            rewardPage.style.display = 'none';
+            additionalInfoPage.style.display = 'none';
+            
+            toggleSignup.classList.add('active');
+            toggleReward.classList.remove('active');
+        });
+        
+        toggleReward.addEventListener('click', function() {
+            signupPage.style.display = 'none';
+            rewardPage.style.display = 'block';
+            additionalInfoPage.style.display = 'none';
+            
+            toggleSignup.classList.remove('active');
+            toggleReward.classList.add('active');
+        });
+        
+        // 가입하기 버튼 클릭
+        document.getElementById('signup-button').addEventListener('click', function() {
+            const name = document.getElementById('name').value;
+            const agreeCheckbox = document.getElementById('agree-checkbox').checked;
+            
+            if (!name) {
+                alert('이름을 입력해주세요.');
+                return;
+            }
+            
+            if (!agreeCheckbox) {
+                alert('개인정보 활용에 동의해주세요.');
+                return;
+            }
+            
+            // 이름 자동 채우기
+            document.querySelectorAll('.form-control[placeholder="이름"]')[1].value = name;
+            
+            // 추가 정보 페이지로 이동
+            signupPage.style.display = 'none';
+            additionalInfoPage.style.display = 'block';
+        });
+        
+        // 뒤로 가기 버튼
+        document.getElementById('back-to-signup').addEventListener('click', function() {
+            additionalInfoPage.style.display = 'none';
+            signupPage.style.display = 'block';
+        });
+        
+        document.getElementById('back-to-main').addEventListener('click', function() {
+            rewardPage.style.display = 'none';
+            signupPage.style.display = 'block';
+            
+            toggleSignup.classList.add('active');
+            toggleReward.classList.remove('active');
+        });
+        
+       // 핸드폰 번호 입력 필드에 이벤트 리스너 추가
+const phoneInput = document.querySelector('#additional-info-page .form-control[placeholder="핸드폰번호"]');
+
+// 핸드폰 번호 포맷팅 함수
+function formatPhoneNumber(value) {
+    // 숫자만 추출
+    const numbers = value.replace(/[^\d]/g, '');
+    
+    // 숫자 길이에 따라 포맷팅
+    if (numbers.length <= 3) {
+        return numbers;
+    } else if (numbers.length <= 7) {
+        return numbers.slice(0, 3) + '-' + numbers.slice(3);
+    } else {
+        return numbers.slice(0, 3) + '-' + numbers.slice(3, 7) + '-' + numbers.slice(7, 11);
+    }
+}
+
+// input 이벤트 리스너 추가 (입력할 때마다 실행)
+phoneInput.addEventListener('input', function(e) {
+    // 현재 커서 위치 저장
+    const start = this.selectionStart;
+    const end = this.selectionEnd;
+    const previousLength = this.value.length;
+    
+    // 입력 값 포맷팅
+    this.value = formatPhoneNumber(this.value);
+    
+    // 포맷팅 후 길이
+    const newLength = this.value.length;
+    
+    // 커서 위치 조정 (하이픈이 추가된 경우 고려)
+    const cursorPosition = start + (newLength - previousLength);
+    this.setSelectionRange(cursorPosition, cursorPosition);
+});
+
+// 추가적으로 서버 전송 함수에서 핸드폰 번호 처리 수정
+document.getElementById('complete-signup').addEventListener('click', async function() {
+    try {
+        // FormData 객체 생성
+        const formData = new FormData();
+        
+        // 이름 가져오기
+        const name = document.querySelector('#additional-info-page .form-control[placeholder="이름"]').value;
+        
+        // 전화번호 가져오기 (이미 포맷팅된 상태)
+        const phoneNumber = document.querySelector('#additional-info-page .form-control[placeholder="핸드폰번호"]').value;
+        
+        // 골프장명 가져오기
+        const golfCourseName = document.querySelector('#additional-info-page .form-control[placeholder="골프장명"]').value;
+        
+        // 티오프 시간 가져오기
+        const teeOffTime = document.querySelector('#additional-info-page .form-control[placeholder="티오프 시간"]').value;
+        
+        // 필수 필드 검증
+        if (!name || !phoneNumber || !golfCourseName || !teeOffTime) {
+            alert('모든 필드를 입력해주세요.');
+            return;
+        }
+        
+        // FormData에 데이터 추가
+        formData.append('name', name);
+        formData.append('phoneNumber', phoneNumber);
+        formData.append('golfCourseName', golfCourseName);
+        formData.append('teeOffTime', teeOffTime);
+        
+        // 서버로 데이터 전송
+        const response = await fetch('https://your-server-url.com/api/holeinone-insurance', {
+            method: 'POST',
+            body: formData
+        });
+        
+        // 응답 확인
+        if (response.ok) {
+            // 성공적으로 전송됨
+            alert('홀인원 보험 가입이 완료되었습니다!');
+            
+            // 폼 초기화
+            document.getElementById('name').value = '';
+            document.getElementById('agree-checkbox').checked = false;
+            document.querySelectorAll('#additional-info-page .form-control').forEach(input => {
+                if (input.placeholder !== "이름") {
+                    input.value = '';
+                }
+            });
+            
+            // 첫 페이지로 돌아가기
+            additionalInfoPage.style.display = 'none';
+            signupPage.style.display = 'block';
+        } else {
+            // 서버 오류 처리
+            alert('서버 오류가 발생했습니다. 나중에 다시 시도해 주세요.');
+        }
+    } catch (error) {
+        console.error('에러 발생:', error);
+        alert('통신 중 오류가 발생했습니다. 나중에 다시 시도해 주세요.');
+    }
+});
+        
+        // 보상 신청 버튼
+        document.getElementById('reward-button').addEventListener('click', function() {
+            const rewardName = document.getElementById('reward-name').value;
+            const rewardAgreeCheckbox = document.getElementById('reward-agree-checkbox').checked;
+            
+            if (!rewardName) {
+                alert('이름을 입력해주세요.');
+                return;
+            }
+            
+            if (!rewardAgreeCheckbox) {
+                alert('개인정보 활용에 동의해주세요.');
+                return;
+            }
+            
+            alert('홀인원 보상 신청이 완료되었습니다!');
+            
+            // 폼 초기화
+            document.getElementById('reward-name').value = '';
+            document.getElementById('reward-agree-checkbox').checked = false;
+            document.querySelectorAll('#reward-page .form-control:not(#reward-name)').forEach(input => {
+                input.value = '';
+            });
+        });
+    </script>
+</body>
+</html>

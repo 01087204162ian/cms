@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>케이드라이브 - 대리운전자보험 가입신청</title>
+  
+  <!-- 파비콘 -->
+  <link rel="shortcut icon" type="image/x-icon" href="https://pcikorea.com/favicon.ico"/>
+  
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+  <!-- Bootstrap 아이콘 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+  
+  <!-- Font Awesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  
+  <!-- 커스텀 CSS -->
+  <style>
+    :root {
+      --primary-color: #0066cc; /* 첫 번째 파일의 primary-color 값으로 변경 */
+      --secondary-color: #e9ecef;
+      --accent-color: #ff9900; /* 첫 번째 파일의 secondary-color 값으로 변경 */
+      --text-color: #343a40;
+      --light-color: #f8f9fa;
+      --dark-color: #212529;
+      --bg-light: #f8f9fa; /* 첫 번째 파일에서 추가 */
+      --border-radius: 0.5rem;
+      --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      color: var(--text-color);
+      background-color: #f5f5f5;
+      line-height: 1.6;
+    }
+    
+    /* 헤더 - 첫 번째 파일의 스타일 적용 */
+    .header {
+      background-color: var(--primary-color);
+      color: white;
+      padding: 1.5rem 0;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .logo {
+      height: 40px;
+      margin-right: 10px;
+    }
+    
+    /* 기존의 site-header 스타일은 제거하고 header 스타일로 대체 */
+    
+    .logo-container {
+      max-width: 200px;
+    }
+    
+    .logo-container img {
+      width: 100%;
+      height: auto;
+    }
+    
+    .product-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary-color);
+      margin-bottom: 0;
+    }
+    
+    @media (min-width: 768px) {
+      .product-title {
+        font-size: 2rem;
+      }
+    }
+    
+    /* 본문 컨테이너 */
+    .content-container {
+      background-color: white;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      padding: 2rem;
+      margin: 2rem auto;
+    }
+    
+    /* 섹션 타이틀 */
+    .section-title {
+      position: relative;
+      color: var(--primary-color);
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--primary-color);
+    }
+    
+    /* 프로세스 단계 */
+    .process-step {
+      position: relative;
+      padding-left: 3rem;
+      margin-bottom: 1rem;
+    }
+    
+    .step-number {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 2.5rem;
+      height: 2.5rem;
+      background-color: var(--primary-color);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+    }
+    
+    .step-content {
+      font-size: 1rem;
+    }
+    
+    /* 보장내용 테이블 */
+    .coverage-table th {
+      background-color: var(--secondary-color);
+      font-weight: 600;
+    }
+    
+    .coverage-table th, .coverage-table td {
+      text-align: center;
+      vertical-align: middle;
+      padding: 0.75rem;
+    }
+    
+    /* 폼 스타일 */
+    .form-label {
+      font-weight: 600;
+    }
+    
+    .form-label.required::after {
+      content: " *";
+      color: var(--accent-color);
+    }
+    
+    .form-control {
+      border-radius: var(--border-radius);
+      padding: 0.75rem;
+    }
+    
+    .form-control:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 0.2rem rgba(0, 86, 179, 0.25);
+    }
+    
+    /* 버튼 */
+    .btn-primary {
+      background-color: var(--primary-color);
+      border-color: var(--primary-color);
+      border-radius: var(--border-radius);
+      padding: 0.75rem 2rem;
+      font-weight: 700;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-primary:hover {
+      background-color: #0055b3;
+      border-color: #0055b3;
+      transform: translateY(-2px);
+    }
+    
+    /* 푸터 */
+    .site-footer {
+      background-color: var(--dark-color);
+      color: white;
+      padding: 1.5rem 0;
+      font-size: 0.9rem;
+      text-align: center;
+    }
+    
+    /* 알림 박스 */
+    .info-box {
+      background-color: var(--light-color);
+      border-left: 4px solid var(--primary-color);
+      padding: 1rem;
+      margin-bottom: 1.5rem;
+      border-radius: 0 var(--border-radius) var(--border-radius) 0;
+    }
+    
+    .warning-box {
+      background-color: #fff3cd;
+      border-left: 4px solid #ffc107;
+      padding: 1rem;
+      margin-bottom: 1.5rem;
+      border-radius: 0 var(--border-radius) var(--border-radius) 0;
+    }
+    
+    /* 로딩 스피너 */
+    .spinner-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      visibility: hidden;
+      opacity: 0;
+      transition: all 0.3s;
+    }
+    
+    .spinner-overlay.active {
+      visibility: visible;
+      opacity: 1;
+    }
+    
+    .loader {
+      width: 5rem;
+      height: 5rem;
+    }
+    
+    /* 연결 상태 표시 */
+    .connection-status {
+      font-size: 0.85rem;
+    }
+    
+    .connection-pending {
+      color: #ffc107;
+    }
+    
+    .connection-success {
+      color: #28a745;
+    }
+    
+    .connection-error {
+      color: #dc3545;
+    }
+  </style>
+  
+  <!-- 한글 폰트 (Noto Sans) -->
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- 로딩 스피너 -->
+  <div class="spinner-overlay" id="loadingSpinner">
+    <div class="spinner-border text-light loader" role="status">
+      <span class="visually-hidden">로딩중...</span>
+    </div>
+  </div>
+  
+  <!-- 숨겨진 입력 필드 -->
+  <input type="hidden" id="requestNum" value="">
+  <input type="hidden" id="serviceType" value="대리">
+
+  <!-- 헤더 - 첫 번째 파일의 구조로 변경 -->
+  <header class="header">
+    <div class="container">
+        <div class="d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center">
+                <img src="/ordering/kdrive/img/logo_w.svg" alt="케이드라이브 로고" class="logo">
+                <!--<h1 class="fs-4 mb-0">케이드라이브 대리운전</h1>-->
+            </div>
+            <div>
+                <a class="text-white text-decoration-none">
+                   <!-- <i class="fas fa-phone-alt me-1"></i> 1599-0000-->
+				   케이드라이브
+                </a>
+            </div>
+        </div>
+    </div>
+  </header>
+
+  <!-- 메인 콘텐츠 -->
+  <main class="container py-4">
+    <!-- 소개 섹션 -->
+    <section class="content-container">
+      <h2 class="section-title">케이드라이브 <span id="serviceTypeText"></span>운전보험</h2>
+      
+      <div class="info-box mb-4">
+        <div class="row">
+          <div class="col-md-12">
+            <h5 class="mb-3"><i class="bi bi-info-circle-fill me-2"></i><span id="serviceTypeText2"></span>운전보험 가입 안내</h5>
+            <p>케이드라이브 <span id="serviceTypeText3"></span>운전보험은 <span id="serviceTypeText4"></span>운전 업무 중 발생할 수 있는 사고에 대비한 보험상품입니다. 가입 절차는 아래와 같습니다.</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="row mb-4">
+        <div class="col-md-6">
+          <div class="process-step">
+            <div class="step-number">1</div>
+            <div class="step-content">개인정보(성명, 주민번호, 핸드폰번호)를 제출합니다.</div>
+          </div>
+          <div class="process-step">
+            <div class="step-number">2</div>
+            <div class="step-content">현대해상 대리운전보험 고객등록 안내 문자가 발송됩니다.</div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="process-step">
+            <div class="step-number">3</div>
+            <div class="step-content">심사 결과 통과 시, 통보받은 날 24시부터 <span id="serviceTypeProcess2">대리</span>운전 가능합니다.</div>
+          </div>
+          <div class="process-step">
+            <div class="step-number">4</div>
+            <div class="step-content">보험가입 거절 시, 개별적으로 안내드립니다.</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="warning-box">
+        <h5 class="mb-2"><i class="bi bi-exclamation-triangle-fill me-2"></i>개인정보 보호 안내</h5>
+        <p class="mb-0">입력하신 개인정보는 보험가입 심사 목적으로만 사용되며, 관련 법령에 따라 안전하게 보관됩니다. 본 페이지는 보안 접속(HTTPS)으로 운영됩니다.</p>
+      </div>
+      
+      <!-- API 연결 상태 표시 -->
+      <div class="connection-status mt-3" id="connectionStatus">
+        <div class="d-flex align-items-center">
+          <div id="connectionIndicator" class="me-2 connection-pending">
+            <i class="bi bi-wifi"></i>
+          </div>
+          <small id="connectionMessage">서버 연결 중...</small>
+        </div>
+      </div>
+    </section>
+
+    <!-- 보장내용 섹션 -->
+    <section class="content-container">
+      <h2 class="section-title">담보 및 보상한도</h2>
+      
+      <div class="table-responsive">
+        <table class="table table-bordered coverage-table">
+          <thead class="table-light">
+            <tr>
+              <th scope="col" width="40%">담보</th>
+              <th scope="col" width="60%">보상한도</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">대인배상</th>
+              <td>책임초과 무한</td>
+            </tr>
+            <tr>
+              <th scope="row">대물배상</th>
+              <td>1억 원</td>
+            </tr>
+            <tr>
+              <th scope="row">자기신체사고(자손)</th>
+              <td>3천만 원</td>
+            </tr>
+            <tr>
+              <th scope="row">자기차량손해(자차)</th>
+              <td>3천만 원</td>
+            </tr>
+            <tr>
+              <th scope="row">자기부담금</th>
+              <td>300,000원</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="d-flex justify-content-end mt-3">
+        <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#noticeModal">
+          <i class="bi bi-file-earmark-text me-2"></i>유의사항
+        </button>
+        <a href="./ordering/kdrive/img/취급업자 약관.pdf" target="_blank" class="btn btn-outline-primary ms-2">
+          <i class="bi bi-file-earmark-pdf me-2"></i>약관 다운로드
+        </a>
+      </div>
+    </section>
+
+<!-- 가입신청 폼 섹션 -->
+<section class="content-container">
+  <h2 class="section-title">가입 신청</h2>
+  
+  <form id="insuranceForm" class="needs-validation" novalidate>
+    <div class="row g-4 mb-4">
+      <div class="col-md-6">
+        <label for="userName" class="form-label required">성명</label>
+        <input type="text" class="form-control" id="userName" required>
+        <div class="invalid-feedback">성명을 입력해주세요.</div>
+      </div>
+      <div class="col-md-6">
+        <label for="userPhone" class="form-label required">휴대폰 번호</label>
+        <input type="tel" class="form-control" id="userPhone" placeholder="자동으로 하이픈(-) 추가됨" maxlength="13" required>
+        <div class="invalid-feedback">올바른 휴대폰 번호를 입력해주세요.</div>
+      </div>
+    </div>
+    
+    <div class="row g-4 mb-4">
+      <div class="col-md-6">
+        <label for="userSsn" class="form-label required">주민등록번호</label>
+        <input type="text" class="form-control" id="userSsn" placeholder="하이픈(-) 자동 추가 및 뒷자리 마스킹" maxlength="14" required>
+        <div class="invalid-feedback">올바른 주민등록번호를 입력해주세요.</div>
+        <div class="form-text">보험가입 심사를 위해 필요한 정보입니다.</div>
+      </div>
+      
+    </div>
+    
+    <div class="mb-4">
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="termsCheck" required>
+        <label class="form-check-label" for="termsCheck">
+          개인정보 수집 및 이용에 동의합니다. (필수)
+        </label>
+        <div class="invalid-feedback">
+          개인정보 수집 및 이용에 동의해주세요.
+        </div>
+      </div>
+      <div class="form-check mt-2">
+        <input class="form-check-input" type="checkbox" id="marketingCheck">
+        <label class="form-check-label" for="marketingCheck">
+          마케팅 정보 수신에 동의합니다. (선택)
+        </label>
+      </div>
+    </div>
+    
+    <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+      <button type="button" class="btn btn-primary px-5 py-3" onClick='sendDataWithFetch()'>
+        <i class="bi bi-check-circle me-2"></i>가입신청
+      </button>
+    </div>
+    
+    <!-- 필요한 hidden 필드 추가 -->
+    <input type="hidden" id="serviceType" value="대리">
+    <input type="hidden" id="requestNum" value="">
+  </form>
+</section>
+
+
+
+
+  </main>
+
+ <footer class="site-footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <p class="copyright">© 2025 Copyright By 케이제이보험대리점 All Rights Reserved</p>
+                    <div class="company-info">
+                        보험대리점 : 케이제이보험대리점 | 대리점번호 : 2002-2111452 | 대표자 : 이근재<br>
+                        사업자등록번호 : 120-90-57832<br>
+                        주소 : 서울특별시 강남구 테헤란로 416, 16층(연봉빌딩)<br>
+                        전화 : 1877-3006 | 팩스 : 02-6442-6419
+                    </div>
+                    <div class="legal-notice">
+                        케이제이보험대리점의 사전 서면동의 없이 서비스 일체의 정보 콘텐츠상 및 UI 등을<br>
+                        상업적 목적으로 전제하여 전송 및 스크래핑 등 무단 사용할 수 없습니다.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+  <!-- 유의사항 모달 -->
+  <div class="modal fade" id="noticeModal" tabindex="-1" aria-labelledby="noticeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header bg-light">
+          <h5 class="modal-title" id="noticeModalLabel"><span id="serviceTypeText5"></span>운전보험 유의사항</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <h6 class="fw-bold"><i class="bi bi-exclamation-circle me-2"></i>1. <span id="serviceTypeText6"></span>운전이란</h6>
+            <ul class="list-unstyled ps-4 mb-0">
+              <li><i class="bi bi-check2 me-2"></i>특별약관에서 <span id="serviceTypeText7"></span>운전이라 함은 <span id="serviceTypeText8"></span>운전을 의뢰하는 자가, 정상적으로 사업자등록을 하고 <span id="serviceTypeText9"></span>운전업을 영위하는 사업자(<span id="serviceTypeText10"></span>운전업체)에 <span id="serviceTypeText11"></span>운전을 요청하고, <span id="serviceTypeText12"></span>운전업체는 이들이 고용하고 있는 피용자(보험증권에 또는 운전자명세에 기재된 자)으로 하여금 의뢰받은 차량을 수탁받아 운전케 한 후, 의뢰인이 요청하는 장소까지 인도해 주고 그에 상응하는 일정의 금액을 수수하는 일련의 과정을 의미합니다.</li>
+              <li><i class="bi bi-check2 me-2"></i>단, 탁송(*1) 및 대리주차는 포함하지 않습니다.</li>
+              <li><i class="bi bi-check2 me-2"></i>(*1) '탁송'이라 함은 차주가 동승하지 않은 상태에서 다른 사람에게 요청하여 차량을 보내는 것을 말합니다.</li>
+            </ul>
+          </div>
+          
+          <div class="mb-3">
+            <h6 class="fw-bold"><i class="bi bi-info-circle me-2"></i>2. 피보험자동차</h6>
+            <ul class="list-unstyled ps-4 mb-0">
+              <li><i class="bi bi-check2 me-2"></i>이 특별약관에서 피보험자동차라 함은 피보험자가 <span id="serviceTypeText13"></span>운전 업무를 위하여 수탁 받아 관리중인 다음의 자동차를 말합니다. 단, 피보험자와 그 부모, 배우자 또는 자녀가 소유하거나 통상적으로 사용하는 자동차는 피보험자동차로 보지 않습니다.</li>
+              <li><i class="bi bi-check2 me-2"></i>① 승용자동차 ② 경․3종 승합자동차 ③ 1.4톤이하 화물자동차</li>
+            </ul>
+          </div>
+          
+          <div class="mb-3">
+            <h6 class="fw-bold"><i class="bi bi-exclamation-triangle me-2"></i>3. 보상하지 아니하는 손해</h6>
+            <ul class="list-unstyled ps-4 mb-0">
+              <li><i class="bi bi-check2 me-2"></i>회사는 보통약관 제5조(보상하지 않는 손해), 제10조(보상하지 않는 손해) 이 외에 다음의 손해에 대하여도 보상하지 않습니다.</li>
+              <li><i class="bi bi-check2 me-2"></i>① 통상의 <span id="serviceTypeText14"></span>운전 과정을 현저하게 이탈하여 피보험자동차를 사용 또는 관리하던 중 발생한 사고로 인한 손해</li>
+              <li><i class="bi bi-check2 me-2"></i>② 이 특별약관 '2. 피보험자'에서 정한 피보험자 이외의 사람이 피보험자동차를 운전하였을 때에 생긴 사고로 인한 손해</li>
+              <li><i class="bi bi-check2 me-2"></i>③ 대물배상의 경우 피보험자동차에 직접적으로 발생한 손해로 피보험자가 피보험자동차의 소유자에 대하여 법률상 손해배상책임을 짐으로써 입은 손해</li>
+              <li><i class="bi bi-check2 me-2"></i>④ 피보험자동차의 도난으로 인한 손해</li>
+            </ul>
+          </div>
+          
+          <div class="mb-3">
+            <h6 class="fw-bold"><i class="bi bi-calendar-check me-2"></i>4. 보험기간 및 보험료 납입기간</h6>
+            <ul class="list-unstyled ps-4 mb-0">
+              <li><i class="bi bi-check2 me-2"></i>보험 기간은 1년을 원칙으로 하되, 보험료는 일시납을 원칙으로 합니다.</li>
+            </ul>
+          </div>
+          
+          <div class="mb-3">
+            <h6 class="fw-bold"><i class="bi bi-shield-exclamation me-2"></i>5. 보험모집질서 위반행위 신고센터</h6>
+            <ul class="list-unstyled ps-4 mb-0">
+              <li><i class="bi bi-check2 me-2"></i>보험계약과 관련한 보험모집질서 문란 행위는 보험업법에 의해 처벌받을 수 있습니다.</li>
+              <li><i class="bi bi-check2 me-2"></i>금융감독원: 전화: 국번 없이 1332 / 인터넷: www.fss.or.kr</li>
+              <li><i class="bi bi-check2 me-2"></i>손해보험협회: 전화 02-3702-8585, 8619 / www.knia.or.kr</li>
+            </ul>
+          </div>
+          
+          <div class="mb-3">
+            <h6 class="fw-bold"><i class="bi bi-chat-dots me-2"></i>6. 보험상담 및 분쟁조정 안내</h6>
+            <ul class="list-unstyled ps-4 mb-0">
+              <li><i class="bi bi-check2 me-2"></i>가입하신 보험에 관하여 상담이 필요하거나 불만사항이 있을 때에는 먼저 저희 회사로 연락 주시면 신속히 해결하실 수 있습니다.</li>
+              <li><i class="bi bi-check2 me-2"></i>당사 연락처(현대해상 상담전화: 1588-5656 / (03183) 서울특별시 종로구 세종대로 163, 현대해상빌딩(세종로)</li>
+              <li><i class="bi bi-check2 me-2"></i>한국소비자원 상담전화: 국번 없이 1372 / 충청북도 음성군 맹동면 용두로 54</li>
+              <li><i class="bi bi-check2 me-2"></i>금융감독원 상담전화: 국번 없이 1332 / 서울특별시 영등포구 여의대로 38</li>
+              <li><i class="bi bi-check2 me-2"></i>만일, 고의 또는 중대한 과실로 중요한 사항에 대하여 사실과 다르게 알린 경우, 보험사는 보험계약자 또는 피보험자의 의사와 관계없이 계약을 해지하거나 보장을 제한할 수 있습니다.</li>
+            </ul>
+          </div>
+          
+          <div>
+            <h6 class="fw-bold"><i class="bi bi-exclamation-octagon me-2"></i>7. 금융감독원 보험범죄 신고센터</h6>
+            <ul class="list-unstyled ps-4 mb-0">
+              <li><i class="bi bi-check2 me-2"></i>보험범죄는 보험사기방지특별법 제8조(보험사기죄)에 의거하여 10년 이하의 징역이나 5천만원 이하의 벌금에 처해지며 보험범죄를 교사한 경우에도 동일한 처벌을 받을 수 있습니다.</li>
+              <li><i class="bi bi-check2 me-2"></i>전화: 국번 없이 1332 / 인터넷: www.fss.or.kr</li>
+              <li><i class="bi bi-check2 me-2"></i>인터넷 금융감독원 홈페이지(www.fss.or.kr) 내 「보험범죄신고센터」</li>
+              <li><i class="bi bi-check2 me-2"></i>보험범죄신고센터(insucop.fss.or.kr)</li>
+            </ul>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- 제출 성공 모달 -->
+  <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header bg-success text-white">
+          <h5 class="modal-title" id="successModalLabel">가입신청 완료</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body text-center py-4">
+          <i class="bi bi-check-circle text-success" style="font-size: 3rem;"></i>
+          <h4 class="mt-3">가입신청이 접수되었습니다</h4>
+          <p class="mb-0">심사 후 결과를 안내해 드리겠습니다.<br>보험사로부터 안내 문자가 발송될 예정입니다.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-success" data-bs-dismiss="modal">확인</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+<!-- 성공 모달 (없는 경우 추가) -->
+<div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="successModalLabel">가입신청 완료</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center">
+        <i class="bi bi-check-circle-fill text-success fs-1 mb-3"></i>
+        <h4>가입신청이 접수되었습니다</h4>
+        <p class="mt-3">곧 상담원이 연락드릴 예정입니다.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">확인</button>
+      </div>
+    </div>
+  </div>
+</div>
+  <!-- Bootstrap 5 JS 및 Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  
+  
+  <script>
+document.addEventListener('DOMContentLoaded', function() {
+  // URL에서 파라미터 가져오기
+  const getUrlParameter = function(name) {
+    const url = window.location.search.substring(1);
+    const urlParams = url.split('&');
+    for (let i = 0; i < urlParams.length; i++) {
+      const param = urlParams[i].split('=');
+      if (param[0] === name) {
+        return param[1] === undefined ? true : decodeURIComponent(param[1]);
+      }
+    }
+    return null;
+  };
+
+  // checkServiceType 함수의 문제 부분을 수정합니다
+// checkServiceType 함수를 완전히 수정합니다
+async function checkServiceType() {
+  // 연결 상태 표시 요소
+  const connectionIndicator = document.getElementById('connectionIndicator');
+  const connectionMessage = document.getElementById('connectionMessage');
+  
+  // num 파라미터 값 가져오기
+  const numParam = getUrlParameter('num');
+  
+  // num 파라미터 값을 hidden 필드에 저장
+  const requestNumField = document.getElementById('requestNum');
+  if (requestNumField) {
+    requestNumField.value = numParam || '';
+  }
+  
+  // 연결 대기 상태로 표시
+  if (connectionIndicator) connectionIndicator.classList.add('connection-pending');
+  if (connectionMessage) connectionMessage.textContent = '서버 연결 중...';
+  
+  // 서비스 타입 요소들을 더 효율적으로 관리
+  // 기본 요소 정의
+  const serviceTypeElements = {
+    serviceType: document.getElementById('serviceType'),
+    serviceTypeProcess2: document.getElementById('serviceTypeProcess2')
+  };
+  
+  // 동적으로 serviceTypeText1 ~ serviceTypeText14 요소 추가
+  for (let i = 1; i <= 14; i++) {
+    const elementId = `serviceTypeText${i === 1 ? '' : i}`;
+    serviceTypeElements[elementId] = document.getElementById(elementId);
+  }
+  
+  // 모든 서비스 타입 요소 업데이트 함수
+  const updateAllServiceTypeElements = (type) => {
+    // hidden input 값 설정
+    if (serviceTypeElements.serviceType) {
+      serviceTypeElements.serviceType.value = type;
+    }
+    
+    // 모든 텍스트 요소 업데이트
+    Object.entries(serviceTypeElements).forEach(([key, element]) => {
+      if (key !== 'serviceType' && element) {
+        element.textContent = type;
+      }
+    });
+  };
+  
+  // 연결 상태 업데이트 헬퍼 함수
+  function updateConnectionStatus(status, message) {
+    if (connectionIndicator) {
+      connectionIndicator.classList.remove('connection-pending', 'connection-success', 'connection-error');
+      connectionIndicator.classList.add(`connection-${status}`);
+    }
+    
+    if (connectionMessage) {
+      connectionMessage.textContent = message;
+    }
+  }
+  
+  // 서비스 타입 기본값
+  const DEFAULT_SERVICE_TYPE = '대리';
+  
+  // 파라미터가 없는 경우
+  if (!numParam) {
+    // 기본값으로 설정
+    updateAllServiceTypeElements(DEFAULT_SERVICE_TYPE);
+    
+    // 연결 오류 표시
+    updateConnectionStatus('error', `서버 연결 오류: 기본값(${DEFAULT_SERVICE_TYPE}운전)으로 진행`);
+    
+    return DEFAULT_SERVICE_TYPE;
+  }
+
+  // 타임아웃 설정을 위한 Promise.race 사용
+  const timeoutPromise = new Promise((_, reject) => {
+    setTimeout(() => reject(new Error('서버 연결 시간 초과')), 5000);
+  });
+  
+  try {
+    // 서버에 요청할 데이터 준비
+    const formData = new FormData();
+    formData.append('requestNum', numParam);
+    
+    // 서버 요청 Promise
+    const fetchPromise = fetch('./kj/api/customer/check_service_type.php', {
+      method: 'POST',
+      body: formData
+    }).then(response => {
+      if (!response.ok) {
+        throw new Error('서버 응답 오류');
+      }
+      return response.json();
+    });
+    
+    // Promise.race를 사용하여 타임아웃 처리
+    const data = await Promise.race([fetchPromise, timeoutPromise]);
+    
+    // 성공적으로 응답을 받았는지 확인
+    if (!data.success) {
+      throw new Error(data.error || data.message || '서버 응답 오류');
+    }
+    
+    // 서버에서 받은 서비스 유형 설정
+    const serviceType = data.type || DEFAULT_SERVICE_TYPE;
+    
+    // 모든 서비스 타입 요소 업데이트
+    updateAllServiceTypeElements(serviceType);
+    
+    // 연결 성공 표시
+    updateConnectionStatus('success', `서버 연결 성공: ${serviceType}운전 신청서`);
+    
+    console.log('서비스 유형 확인 완료:', serviceType);
+    return serviceType;
+  } catch (error) {
+    console.error('서비스 유형 확인 오류:', error);
+    
+    // 기본값 사용
+    updateAllServiceTypeElements(DEFAULT_SERVICE_TYPE);
+    
+    // 연결 오류 표시
+    updateConnectionStatus('error', `서버 연결 오류: 기본값(${DEFAULT_SERVICE_TYPE}운전)으로 진행`);
+    
+    return DEFAULT_SERVICE_TYPE;
+  }
+}
+  /**
+   * 폼 데이터를 서버에 제출하는 함수
+   * @param {HTMLFormElement} form - 제출할 폼 요소
+   * @returns {Promise<Object>} 서버 응답 데이터
+   */
+  async function submitForm(form) {
+    // 폼 요소
+    const userName = document.getElementById('userName');
+    const userPhone = document.getElementById('userPhone');
+    const userSsn = document.getElementById('userSsn');
+    const termsCheck = document.getElementById('termsCheck');
+    const loadingSpinner = document.getElementById('loadingSpinner');
+    
+    // 필드별 유효성 검사
+    let isValid = true;
+    
+    // 이름 검사
+    if (!userName.value.trim()) {
+      userName.classList.add('is-invalid');
+      isValid = false;
+    } else {
+      userName.classList.remove('is-invalid');
+      userName.classList.add('is-valid');
+    }
+    
+    // 휴대폰 번호 검사
+    const cleanPhone = userPhone.value.replace(/[^0-9]/g, '');
+    if (!validatePhone(cleanPhone)) {
+      userPhone.classList.add('is-invalid');
+      isValid = false;
+    } else {
+      userPhone.classList.remove('is-invalid');
+      userPhone.classList.add('is-valid');
+    }
+    
+    // 주민번호 검사
+    const cleanSsn = userSsn.value.replace(/[^0-9*-]/g, '').replace(/-/g, '');
+    if (!validateSsn(cleanSsn)) {
+      userSsn.classList.add('is-invalid');
+      isValid = false;
+    } else {
+      userSsn.classList.remove('is-invalid');
+      userSsn.classList.add('is-valid');
+    }
+    
+    // 약관 동의 체크
+    if (!termsCheck.checked) {
+      termsCheck.classList.add('is-invalid');
+      isValid = false;
+    } else {
+      termsCheck.classList.remove('is-invalid');
+      termsCheck.classList.add('is-valid');
+    }
+    
+    form.classList.add('was-validated');
+    
+    // 유효하지 않으면 함수 종료
+    if (!isValid) {
+      return Promise.reject(new Error('폼 유효성 검사 실패'));
+    }
+    
+    // 로딩 스피너 표시
+    loadingSpinner.classList.add('active');
+    
+    try {
+      // 서비스 유형과 요청 번호 가져오기
+      const serviceType = document.getElementById('serviceType').value;
+      const requestNum = document.getElementById('requestNum').value;
+      
+      // FormData 객체 생성
+      const formData = new FormData();
+      formData.append('name', userName.value);
+      
+      // 휴대폰 번호 원래 형식으로 복원 (하이픈 제거)
+      formData.append('phone', cleanPhone);
+      
+      // 주민번호 원래 형식으로 복원 (마스킹된 부분 포함)
+      const rawSsn = restoreSsn(userSsn.value);
+      formData.append('ssn', rawSsn);
+      
+      formData.append('serviceType', serviceType);
+      formData.append('requestNum', requestNum);
+      formData.append('marketingConsent', document.getElementById('marketingCheck').checked ? '1' : '0');
+      
+      // 서버에 데이터 전송
+      const response = await fetch('submit_insurance.php', {
+        method: 'POST',
+        body: formData
+      });
+      
+      if (!response.ok) {
+        throw new Error('서버 응답 오류');
+      }
+      
+      const data = await response.json();
+      
+      // 로딩 스피너 숨김
+      loadingSpinner.classList.remove('active');
+      
+      // 폼 초기화
+      form.reset();
+      form.classList.remove('was-validated');
+      
+      // 성공 모달의 메시지 업데이트
+      const modalTitle = document.querySelector('#successModal .modal-title');
+      const modalMessage = document.querySelector('#successModal h4');
+      modalTitle.textContent = `${serviceType}운전보험 가입신청 완료`;
+      modalMessage.textContent = `${serviceType}운전보험 가입신청이 접수되었습니다`;
+      
+      // 성공 모달 표시
+      const successModal = new bootstrap.Modal(document.getElementById('successModal'));
+      successModal.show();
+      
+      console.log('가입 신청 성공:', data);
+      
+      return data;
+    } catch (error) {
+      console.error('가입 신청 오류:', error);
+      
+      // 로딩 스피너 숨김
+      loadingSpinner.classList.remove('active');
+      
+      // 오류 메시지 표시
+      alert('가입 신청 중 오류가 발생했습니다. 다시 시도해주세요.');
+      
+      return Promise.reject(error);
+    }
+  }
+  
+
+  
+  // 페이지 로드 시 서비스 유형 확인
+  checkServiceType().then(serviceType => {
+    console.log('서비스 유형 확인 완료:', serviceType);
+  });
+ 
+});
+
+
+
+// FormData를 사용하여 fetch로 데이터 전송하는 함수
+async function sendDataWithFetch() {
+  // 로딩 스피너 표시 (있는 경우)
+  const loadingSpinner = document.getElementById('loadingSpinner');
+  if (loadingSpinner) loadingSpinner.classList.add('active');
+  
+  try {
+    // 필요한 데이터 가져오기
+    const userName = document.getElementById('userName').value.trim();
+    const userPhone = document.getElementById('userPhone').value;
+    const userSsnWithMask = document.getElementById('userSsn').value;
+    const termsAgreed = document.getElementById('termsCheck').checked;
+    
+    // 필수 필드 확인 및 포커싱
+    if (!userName) {
+      document.getElementById('userName').focus();
+      alert('이름을 입력해주세요.');
+      return;
+    }
+    
+    if (!userPhone) {
+      document.getElementById('userPhone').focus();
+      alert('휴대폰 번호를 입력해주세요.');
+      return;
+    }
+    
+    if (!userSsnWithMask) {
+      document.getElementById('userSsn').focus();
+      alert('주민등록번호를 입력해주세요.');
+      return;
+    }
+    
+    // 필수 동의 체크 확인
+    if (!termsAgreed) {
+      document.getElementById('termsCheck').focus();
+      alert('개인정보 수집 및 이용에 동의해주세요.');
+      return;
+    }
+    
+    
+    
+    const ssnClean = userSsnWithMask.replace(/[^0-9*-]/g, '').replace(/-/g, '');
+    if (ssnClean.length < 13 || !validateKoreanSsn(ssnClean)) {
+      document.getElementById('userSsn').focus();
+      alert('올바른 주민등록번호를 입력해주세요.');
+      return;
+    }
+    
+    // 주민번호 원래 형식으로 복원 (마스킹된 부분 포함)
+    const rawSsn = userSsnWithMask.replace(/[*]/g, ''); // 마스킹이 있는 경우 제거
+    const marketingConsent = document.getElementById('marketingCheck')?.checked ? '1' : '0';
+   // const requestNum = generateRequestNumber();
+
+   const requestNum = document.getElementById('requestNum').value;
+    
+    // FormData 객체 생성 및 데이터 추가
+    const formData = new FormData();
+    formData.append('name', userName);
+    formData.append('phone', userPhone);
+    formData.append('ssn', rawSsn);
+    formData.append('requestNum', requestNum);
+    formData.append('termsAgreed', '1'); // 동의함
+    formData.append('marketingConsent', marketingConsent);
+    
+    // fetch를 사용하여 데이터 전송
+    const response = await fetch('./kj/api/customer/submit_insurance.php', {
+      method: 'POST',
+      body: formData
+    });
+    
+    if (!response.ok) {
+      throw new Error(`서버 응답 오류: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    console.log('데이터 전송 성공:', data);
+    
+    // 성공 처리 (모달 또는 알림 표시)
+    showSuccessMessage();
+    
+    // 폼 초기화
+    document.getElementById('insuranceForm').reset();
+    
+    return data;
+  } catch (error) {
+    console.error('데이터 전송 오류:', error);
+    
+    // 오류 메시지 표시
+    alert('데이터 전송 중 오류가 발생했습니다. 다시 시도해주세요.');
+    
+    return Promise.reject(error);
+  } finally {
+    // 로딩 스피너 숨김 (있는 경우)
+    if (loadingSpinner) loadingSpinner.classList.remove('active');
+  }
+}
+
+// 휴대폰 번호 형식화 이벤트 리스너
+document.getElementById('userPhone').addEventListener('input', function(e) {
+  let value = this.value.replace(/[^0-9]/g, '');
+  
+  // 최대 11자리까지만 입력 가능
+  if (value.length > 11) {
+    value = value.slice(0, 11);
+  }
+  
+  // 전화번호 형식으로 변환 (예: 010-8720-4162)
+  if (value.length > 7) {
+    this.value = value.slice(0, 3) + '-' + value.slice(3, 7) + '-' + value.slice(7);
+  } else if (value.length > 3) {
+    this.value = value.slice(0, 3) + '-' + value.slice(3);
+  } else {
+    this.value = value;
+  }
+});
+
+// 주민번호 형식화 및 마스킹 이벤트 리스너
+document.getElementById('userSsn').addEventListener('input', function(e) {
+  let value = this.value.replace(/[^0-9]/g, '');
+  
+  // 주민번호가 6자리 이상일 경우 하이픈 추가 (660327-1069017)
+  if (value.length > 6) {
+    const firstPart = value.slice(0, 6);
+    const secondPart = value.slice(6, 13); // 최대 7자리까지만 처리
+    
+    // 뒷자리는 그대로 표시 (실제로는 보안을 위해 뒷자리 마스킹이 필요할 수 있음)
+    if (secondPart.length > 0) {
+      this.value = firstPart + '-' + secondPart.substring(0, Math.min(7, secondPart.length));
+    } else {
+      this.value = firstPart;
+    }
+  } else {
+    this.value = value;
+  }
+  
+  // 총 14자리(하이픈 포함)로 제한
+  if (this.value.length > 14) {
+    this.value = this.value.substring(0, 14);
+  }
+});
+
+// 요청 번호 생성 함수
+function generateRequestNumber() {
+  return 'REQ' + Date.now().toString();
+}
+
+// 한국 주민등록번호 유효성 검사 함수
+function validateKoreanSsn(ssn) {
+  // 하이픈 제거
+  const cleanSsn = ssn.replace(/-/g, '');
+  
+  // 주민번호 길이 확인 (13자리)
+  if (cleanSsn.length !== 13) {
+    return false;
+  }
+  
+  // 주민번호 첫 6자리는 생년월일 (YYMMDD)
+  const year = parseInt(cleanSsn.substring(0, 2));
+  const month = parseInt(cleanSsn.substring(2, 4));
+  const day = parseInt(cleanSsn.substring(4, 6));
+  
+  // 월과 일 범위 확인
+  if (month < 1 || month > 12) {
+    return false;
+  }
+  
+  // 각 월의 일수 확인 (윤년 고려)
+  const lastDayOfMonth = [0, 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+  if (day < 1 || day > lastDayOfMonth[month]) {
+    return false;
+  }
+  
+  // 성별 코드 확인 (1, 2, 3, 4, 5, 6, 7, 8, 9, 0)
+  const genderCode = parseInt(cleanSsn.substring(6, 7));
+  if (genderCode < 1 || genderCode > 9) {
+    return false;
+  }
+  
+  // 검증 숫자 계산 (주민번호 알고리즘)
+  // 가중치
+  const weights = [2, 3, 4, 5, 6, 7, 8, 9, 2, 3, 4, 5];
+  let sum = 0;
+  
+  for (let i = 0; i < 12; i++) {
+    sum += parseInt(cleanSsn.charAt(i)) * weights[i];
+  }
+  
+  sum = (11 - (sum % 11)) % 10;
+  
+  // 계산된 검증숫자와 실제 검증숫자 비교
+  return sum === parseInt(cleanSsn.charAt(12));
+}
+
+// 성공 메시지 표시 함수
+function showSuccessMessage() {
+  // 성공 모달이 있는 경우
+  const successModal = document.getElementById('successModal');
+  if (successModal) {
+    const modalTitle = document.querySelector('#successModal .modal-title');
+    const modalMessage = document.querySelector('#successModal h4');
+    
+    if (modalTitle) modalTitle.textContent = '보험 가입신청 완료';
+    if (modalMessage) modalMessage.textContent = '보험 가입신청이 접수되었습니다';
+    
+    // 부트스트랩 모달 표시
+    const modal = new bootstrap.Modal(successModal);
+    modal.show();
+  } else {
+    // 모달이 없는 경우 알림으로 표시
+    alert('보험 가입신청이 접수되었습니다.');
+  }
+}
+  </script>
+</body>
+</html>

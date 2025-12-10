@@ -1,0 +1,1492 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>우리은행 홀인원 보험</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #1974E8;
+            --secondary-color: #e7f3ff;
+            --dark-blue: #0046AA;
+            --success-color: #1974E8;
+            --background-color: #f9f9fa;
+            --text-color: #333;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        
+        body {
+            background-color: var(--background-color);
+        }
+        
+        .app-container {
+            max-width: 420px;
+            margin: 0 auto;
+            background-color: white;
+            min-height: 100vh;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+        }
+        
+        /* 헤더 스타일 */
+        .app-header {
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+            background-color: #fff;
+        }
+        
+        .back-button {
+            border: none;
+            background: none;
+            padding: 5px;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+        
+        .header-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        /* 가입 페이지 스타일 */
+        body {
+            margin: 0;
+            padding: 0;
+            background: #e6f1d9;
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+
+        .insurance-banner {
+				max-width: 360px;
+				margin: 30px auto;
+				padding: 25px 20px 40px;
+				border-radius: 15px;
+				background: 
+					linear-gradient(rgba(21, 71, 52, 0.7), rgba(21, 71, 52, 0.9)), 
+					url('https://cdn.pixabay.com/photo/2017/02/01/22/02/grass-2029919_1280.jpg') no-repeat center bottom;
+				background-size: cover;
+				box-shadow: 0 6px 25px rgba(0, 0, 0, 0.5);
+				color: #e6f1d9;
+				text-align: center;
+				position: relative;
+				overflow: visible;
+			}
+
+        .banner-title {
+            font-weight: 600;
+            font-size: 1.3rem;
+            color: #dbe7c4;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+            margin-bottom: 6px;
+        }
+
+        .banner-amount {
+            font-weight: 900;
+            font-size: 2.6rem;
+            color: #f1f8e9;
+            letter-spacing: -0.05em;
+            text-shadow: 0 1px 5px rgba(0,0,0,0.7);
+            margin-bottom: 10px;
+        }
+
+        .banner-subtitle {
+            font-weight: 500;
+            font-size: 1rem;
+            color: #c6d0a6;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.4);
+            margin-bottom: 30px;
+        }
+
+        /* 홀 위치 */
+        .grass-area {
+            position: relative;
+            height: 80px;
+            width: 100%;
+        }
+        
+        .golf-hole {
+			position: absolute;
+			bottom: 20px;
+			right: 15px;
+			width: 40px;
+			height: 40px;
+			z-index: 2;
+		}
+
+        .hole-ring {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 3px solid rgba(0, 0, 0, 0.4);
+            background: rgba(0, 0, 0, 0.08);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+
+        .hole-ring::after {
+			content: "";
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			width: 60%;
+			height: 60%;
+			transform: translate(-50%, -50%);
+			background: radial-gradient(circle at center, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.7) 80%);
+			border-radius: 50%;
+			transition: all 0.3s ease;
+		}
+		/* 홀 반짝임 효과 추가 */
+			@keyframes hole-glow {
+				0% {
+					box-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
+				}
+				50% {
+					box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+				}
+				100% {
+					box-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
+				}
+			}
+
+			.hole-active {
+				animation: hole-glow 1s ease;
+			}
+        .golf-flag {
+            position: absolute;
+            top: -40px;
+            right: 10px;
+            width: 5px;
+            height: 45px;
+            background: #e57373cc;
+            border-radius: 2px;
+            transform-origin: bottom center;
+            animation: flag-swing 2.8s ease-in-out infinite;
+            opacity: 0.85;
+            z-index: 3;
+        }
+
+        .golf-flag::after {
+            content: "";
+            position: absolute;
+            left: 5px;
+            top: 0;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 12px 0 12px 18px;
+            border-color: transparent transparent transparent #e57373cc;
+        }
+
+        /* 골프공 */
+        .golf-ball {
+            position: absolute;
+            bottom: 28px;
+            left: 15px;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background:
+                radial-gradient(circle at 40% 40%, #fff, #ccc 85%),
+                radial-gradient(circle at 60% 60%, #ddd 30%, transparent 60%),
+                repeating-radial-gradient(circle at center,
+                rgba(0,0,0,0.12) 0 3px,
+                rgba(255,255,255,0.6) 3px 6px);
+            box-shadow:
+                inset 0 3px 6px rgba(255, 255, 255, 0.85),
+                inset 0 -2px 3px rgba(0, 0, 0, 0.15),
+                0 2px 5px rgba(0, 0, 0, 0.3);
+            animation: golf-ball-roll 2.5s linear;
+            z-index: 4;
+        }
+
+        @keyframes golf-ball-roll {
+			0% {
+				left: 15px;
+				bottom: 28px;
+				opacity: 1;
+				transform: scale(1);
+			}
+			70% {
+				left: 270px;  /* 홀 위치 바로 전 */
+				bottom: 28px;
+				opacity: 1;
+				transform: scale(1);
+			}
+			85% {
+				left: 280px;  /* 홀의 정확한 위치 */
+				bottom: 28px;
+				opacity: 0.9;
+				transform: scale(0.9);
+			}
+			100% {
+				left: 280px;  /* 위치 유지 */
+				bottom: 0px;  /* 완전히 내려감 */
+				opacity: 0;
+				transform: scale(0.5);
+			}
+		}
+
+        /* 깃발 흔들림 */
+        @keyframes flag-swing {
+            0%, 100% {
+                transform: rotate(0deg);
+            }
+            50% {
+                transform: rotate(8deg);
+            }
+        }
+
+        .fireworks {
+            position: absolute;
+            bottom: 60px;
+            right: 50px;
+            width: 50px;
+            height: 50px;
+            pointer-events: none;
+            z-index: 5;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+        }
+
+        .fireworks span {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0;
+            box-shadow:
+                0 0 6px 2px currentColor,
+                inset 0 0 4px 1px white;
+            animation: fireworks-burst 1.5s ease forwards;
+        }
+
+        .fireworks span:nth-child(odd) {
+            width: 8px;
+            height: 8px;
+        }
+
+        .fireworks span:nth-child(even) {
+            width: 4px;
+            height: 4px;
+        }
+
+        .fireworks span:nth-child(1)  { top: 170%; left: 155%; color: #FF3F8E; animation-delay: 0s; }
+        .fireworks span:nth-child(2)  { top: 170%; left: 155%; color: #04C2C9; animation-delay: 0.05s; }
+        .fireworks span:nth-child(3)  { top: 170%; left: 155%; color: #2E55C1; animation-delay: 0.1s; }
+        .fireworks span:nth-child(4)  { top: 170%; left: 155%; color: #FFB549; animation-delay: 0.15s; }
+        .fireworks span:nth-child(5)  { top: 170%; left: 155%; color: #F53855; animation-delay: 0.2s; }
+        .fireworks span:nth-child(6)  { top: 170%; left: 155%; color: #F5D547; animation-delay: 0.25s; }
+        .fireworks span:nth-child(7)  { top: 170%; left: 155%; color: #3FE0D0; animation-delay: 0.3s; }
+        .fireworks span:nth-child(8)  { top: 170%; left: 155%; color: #FF3F8E; animation-delay: 0.35s; }
+
+        @keyframes fireworks-burst {
+            0% {
+                opacity: 1;
+                transform: translate(0, 0) scale(1);
+                filter: drop-shadow(0 0 5px currentColor);
+            }
+            80% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                transform: translate(calc(var(--dx) * 50px), calc(var(--dy) * 50px)) scale(0.3);
+                filter: drop-shadow(0 0 10px currentColor);
+            }
+        }
+        
+        /* 보상 페이지 스타일 */
+        .reward-banner {
+            max-width: 360px;
+			margin: 30px auto;
+			padding: 25px 20px 40px;
+			border-radius: 15px;
+			background: 
+				linear-gradient(rgba(21, 71, 52, 0.7), rgba(21, 71, 52, 0.9)), 
+				url('https://cdn.pixabay.com/photo/2017/02/01/22/02/grass-2029919_1280.jpg') no-repeat center bottom;
+			background-size: cover;
+			box-shadow: 0 6px 25px rgba(0, 0, 0, 0.5);
+			color: #e6f1d9;
+			text-align: center;
+			position: relative;
+			overflow: visible;
+        }
+
+        .reward-title {
+            font-weight: 600;
+            font-size: 1.3rem;
+            color: #dbe7c4;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+            margin-bottom: 8px;
+        }
+
+        .reward-amount {
+            font-weight: 900;
+            font-size: 2.6rem;
+            color: #f1f8e9;
+            letter-spacing: -0.05em;
+            text-shadow: 0 1px 5px rgba(0,0,0,0.7);
+            margin-bottom: 10px;
+        }
+
+        .reward-subtitle {
+            font-weight: 500;
+            font-size: 1rem;
+            color: #c6d0a6;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.4);
+            margin-bottom: 30px;
+        }
+
+        .golf-ball-reward {
+            width: 80px;
+            height: 80px;
+            background-color: white;
+            border-radius: 50%;
+            margin: 20px auto;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            position: relative;
+        }
+        
+        .golf-ball-reward::after {
+            content: '';
+            position: absolute;
+            width: 70px;
+            height: 70px;
+            top: 5px;
+            left: 5px;
+            background: radial-gradient(circle, rgba(255,255,255,1) 60%, rgba(230,230,230,1) 100%);
+            border-radius: 50%;
+        }
+
+        .golf-tee {
+            position: absolute;
+            width: 8px;
+            height: 20px;
+            background-color: #4CAF50;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: -1;
+            border-radius: 2px;
+        }
+        
+        /* 폼 스타일 */
+        .form-section {
+            padding: 20px;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        
+        .form-control {
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            width: 100%;
+            font-size: 16px;
+        }
+        
+        .form-control::placeholder {
+            color: #aaa;
+        }
+        
+        .form-control:disabled {
+            background-color: #f8f8f8;
+            color: #999;
+            cursor: not-allowed;
+        }
+        
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+        }
+        
+        .checkbox-container input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+            border-radius: 50%;
+            border: 1px solid #ddd;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            outline: none;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .checkbox-container input[type="checkbox"]:checked::after {
+            content: '';
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .checkbox-label {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .submit-button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 15px;
+            width: 100%;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background-color 0.3s;
+        }
+        
+        .submit-button:hover:not(:disabled) {
+            background-color: var(--dark-blue);
+        }
+        
+        .submit-button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        
+        /* 파일 업로드 부분 */
+        .file-upload-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .file-upload-box {
+            flex: 1;
+            height: 100px;
+            border: 1px dashed #ccc;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            background-color: #f9f9f9;
+        }
+        
+        .file-upload-box i {
+            font-size: 24px;
+            color: #999;
+            margin-bottom: 5px;
+        }
+        
+        .file-upload-text {
+            font-size: 12px;
+            color: #999;
+        }
+        
+        /* 네비게이션 스타일 */
+        .nav-tabs-container {
+            background-color: white;
+            padding: 0 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .nav-tabs {
+            display: flex;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            white-space: nowrap;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .nav-tabs::-webkit-scrollbar {
+            display: none;
+        }
+
+        .nav-tabs li {
+            display: inline-block;
+        }
+
+        .nav-tabs li button {
+            padding: 15px 20px;
+            background: none;
+            border: none;
+            color: #666;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            position: relative;
+            transition: color 0.3s;
+        }
+
+        .nav-tabs li button.active {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .nav-tabs li button.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 20%;
+            width: 60%;
+            height: 3px;
+            background-color: var(--primary-color);
+            border-radius: 3px 3px 0 0;
+        }
+        
+        /* 동반자 정보 섹션 */
+        .companions-section {
+            margin-top: 20px;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+        }
+        
+        .companion-item {
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+            position: relative;
+        }
+        
+        .companion-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .companion-title {
+            font-weight: 600;
+            font-size: 16px;
+        }
+        
+        .remove-companion {
+            background: none;
+            border: none;
+            color: #999;
+            cursor: pointer;
+            font-size: 18px;
+        }
+        
+        .companion-fields {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .companion-fields input {
+            flex: 1;
+        }
+        
+        .add-companion-btn {
+            display: flex;
+            align-items: center;
+            background: none;
+            border: 1px dashed #ccc;
+            border-radius: 8px;
+            padding: 10px;
+            width: 100%;
+            margin-top: 10px;
+            color: #666;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        
+        .add-companion-btn svg {
+            margin-right: 10px;
+        }
+        
+        /* FAQ 스타일 */
+        .faq-container {
+            padding: 20px;
+        }
+        
+        .faq-item {
+            margin-bottom: 15px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 15px;
+        }
+        
+        .faq-question {
+            font-weight: 600;
+            cursor: pointer;
+            padding: 10px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .faq-question::after {
+            content: '+';
+            font-size: 20px;
+            color: #999;
+        }
+        
+        .faq-question.active::after {
+            content: '-';
+        }
+        
+        .faq-answer {
+            display: none;
+            padding: 10px 0;
+            color: #666;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        .faq-answer.show {
+            display: block;
+        }
+        
+        /* 알림 팝업 */
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+        
+        .popup-overlay.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        
+        .popup-content {
+            background-color: white;
+            border-radius: 15px;
+            padding: 30px;
+            width: 90%;
+            max-width: 350px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transform: scale(0.9);
+            transition: transform 0.3s;
+        }
+        
+        .popup-overlay.show .popup-content {
+            transform: scale(1);
+        }
+        
+        .popup-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+        
+        .popup-message {
+            margin-bottom: 20px;
+            color: #666;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        .popup-button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- 네비게이션 탭 -->
+        <div class="nav-tabs-container">
+            <ul class="nav-tabs">
+                <li><button id="nav-signup" class="active">가입 신청</button></li>
+                <li><button id="nav-claim">보상 신청</button></li>
+                <li><button id="nav-faq">Q&A</button></li>
+                <li><button id="nav-terms">보장 내용</button></li>
+            </ul>
+        </div>
+        
+        <!-- 가입 신청 페이지 -->
+        <div id="signup-page" class="page-content">
+            <div class="insurance-banner" role="region" aria-label="홀인원 보험 안내">
+                <div class="banner-title">VIP 고객님을 위한</div>
+                <div class="banner-amount">홀인원 200만원</div>
+                <div class="banner-subtitle">보험 무료 제공</div>
+                
+                <div class="grass-area" aria-hidden="true">
+                    <div class="golf-hole">
+                        <div class="hole-ring"></div>
+                        <div class="golf-flag"></div>
+                        <div class="fireworks">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </div>
+                    <div class="golf-ball"></div>
+                </div>
+            </div>
+            
+            <div class="form-section">
+                <div class="section-title">가입자 정보</div>
+                <!-- 쿠폰 번호 필드 수정 부분 -->
+				<div style="margin-bottom: 15px;">
+					<input type="text" class="form-control" id="coupon-number" placeholder="쿠폰번호" readonly>
+					<div style="font-size: 12px; color: #666; margin-top: 5px;">
+						* 쿠폰번호는 SMS로 전달받은 고유번호입니다. 수정할 수 없습니다.
+					</div>
+				</div>
+                <input type="text" class="form-control" id="name" placeholder="이름" required>
+                <input type="tel" class="form-control" id="phone" placeholder="휴대폰번호" required>
+                <input type="text" class="form-control" id="golf-course" placeholder="골프장명" required>
+                <input type="datetime-local" class="form-control" id="tee-time" placeholder="티오프 시간" required>
+                
+                <!-- 동반자 정보 -->
+                <div class="companions-section">
+                    <div class="section-title">동반자 정보 <small>(선택 사항)</small></div>
+                    <div id="companions-container"></div>
+                    
+                    <button class="add-companion-btn" id="add-companion">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                            <path d="M12 5V19" stroke="#666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M5 12H19" stroke="#666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        동반자 추가하기 (최대 3명)
+                    </button>
+                </div>
+                
+                <div class="checkbox-container">
+                    <input type="checkbox" id="terms-checkbox" required>
+                    <label for="terms-checkbox" class="checkbox-label">
+                        보험약관 및 개인정보 활용에 동의합니다.
+                    </label>
+                </div>
+                
+                <button class="submit-button" id="signup-button">가입하기</button>
+            </div>
+        </div>
+        
+        <!-- 보상 신청 페이지 -->
+        <div id="claim-page" class="page-content" style="display:none;">
+            <div class="reward-banner">
+                <div class="reward-title">축하합니다!</div>
+                <div class="reward-amount">홀인원 200만원</div>
+                <div class="reward-subtitle">보상 신청</div>
+                
+                <div class="golf-ball-reward">
+                    <div class="golf-tee"></div>
+                </div>
+            </div>
+            
+            <div class="form-section">
+                <div class="section-title">신청자 정보</div>
+                
+                <input type="text" class="form-control" id="claim-name" placeholder="이름" required>
+                <input type="tel" class="form-control" id="claim-phone" placeholder="휴대폰번호" required>
+                <input type="text" class="form-control" id="claim-golf-course" placeholder="골프장명" required>
+                <input type="date" class="form-control" id="claim-date" placeholder="라운딩 일자" required>
+                <input type="text" class="form-control" id="claim-hole" placeholder="홀인원 홀 번호 (예: 3번홀)" required>
+                
+                <div class="section-title">증빙 자료</div>
+                <div class="file-upload-container">
+                    <div class="file-upload-box" id="upload-photo">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15" stroke="#999" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M17 8L12 3L7 8" stroke="#999" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M12 3V15" stroke="#999" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <div class="file-upload-text">홀인원 사진</div>
+                    </div>
+                    <div class="file-upload-box" id="upload-certificate">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15" stroke="#999" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M17 8L12 3L7 8" stroke="#999" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M12 3V15" stroke="#999" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <div class="file-upload-text">확인증(스코어카드)</div>
+                    </div>
+                </div>
+                
+                <input type="file" id="photo-input" style="display:none;" accept="image/*">
+                <input type="file" id="certificate-input" style="display:none;" accept="image/*">
+                
+                <div class="checkbox-container">
+                    <input type="checkbox" id="claim-terms-checkbox" required>
+                    <label for="claim-terms-checkbox" class="checkbox-label">
+                        개인정보 활용에 동의합니다.
+                    </label>
+                </div>
+                
+                <button class="submit-button" id="claim-button">신청하기</button>
+            </div>
+        </div>
+        
+        <!-- FAQ 페이지 -->
+        <div id="faq-page" class="page-content" style="display:none;">
+            <div class="faq-container">
+                <h2 class="section-title">자주 묻는 질문</h2>
+                
+                <div class="faq-item">
+                    <div class="faq-question">홀인원 보험은 어떤 경우에 보상받을 수 있나요?</div>
+                    <div class="faq-answer">
+                        사전에 가입 신청 후, 파3 홀에서 홀인원을 기록한 경우 보상금 200만원을 지급해 드립니다. 홀인원 증명을 위해 골프장의 확인서나 스코어카드와 홀인원 사진 등이 필요합니다.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">동반자도 가입할 수 있나요?</div>
+                    <div class="faq-answer">
+                        네, 가입자 본인 포함 최대 4명까지 가입할 수 있습니다. 동반자는 이름과 휴대폰 번호 뒤 4자리만 입력하시면 됩니다.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">가입 신청은 언제까지 해야 하나요?</div>
+                    <div class="faq-answer">
+                        티오프 시간 이전에 가입 신청을 완료해야 합니다. 라운딩 중이나 라운딩 후에는 가입이 불가능합니다.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">보상 신청은 어떻게 하나요?</div>
+                    <div class="faq-answer">
+                        홀인원 발생 후 보상 신청 메뉴에서 이름, 휴대폰번호, 골프장명, 라운딩 일자, 홀 번호를 입력하고 증빙 자료(홀인원 사진, 스코어카드 등)를 첨부하여 신청하시면 됩니다.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">보상금은 언제 지급되나요?</div>
+                    <div class="faq-answer">
+                        보상 신청 후 서류 검토를 거쳐 승인되면 영업일 기준 3~5일 내에 지급됩니다. 보상금은 가입 시 등록한 계좌로 입금됩니다.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">모든 골프장에서 적용되나요?</div>
+                    <div class="faq-answer">
+                        국내 정규 18홀 이상의 골프장에서만 적용됩니다. 해외 골프장, 9홀 골프장, 연습장, 스크린 골프 등에서는 적용되지 않습니다.
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 보장 내용 페이지 -->
+        <div id="terms-page" class="page-content" style="display:none;">
+            <div class="form-section">
+                <h2 class="section-title">홀인원 보험 보장 내용</h2>
+                
+                <div style="background: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                    <h3 style="font-size: 16px; margin-bottom: 10px;">보장 범위</h3>
+                    <p style="font-size: 14px; line-height: 1.6; color: #555;">
+                        본 보험은 사전 가입 후 국내 정규 18홀 이상 골프장의 파3 홀에서 홀인원을 기록한 경우 보상금 200만원을 지급합니다.
+                    </p>
+                </div>
+                
+                <div style="background: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                    <h3 style="font-size: 16px; margin-bottom: 10px;">가입 조건</h3>
+                    <p style="font-size: 14px; line-height: 1.6; color: #555;">
+                        - 우리은행 VIP 고객 대상<br>
+                        - 티오프 시간 이전 가입 신청 필수<br>
+                        - 본인 포함 최대 4명까지 가입 가능
+                    </p>
+                </div>
+                
+                <div style="background: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                    <h3 style="font-size: 16px; margin-bottom: 10px;">보상금 지급 절차</h3>
+                    <p style="font-size: 14px; line-height: 1.6; color: #555;">
+                        1. 홀인원 발생<br>
+                        2. 보상 신청 페이지에서 신청서 작성<br>
+                        3. 증빙 자료 첨부 (홀인원 사진, 스코어카드 등)<br>
+                        4. 서류 검토 및 승인<br>
+                        5. 보상금 지급 (영업일 기준 3~5일 소요)
+                    </p>
+                </div>
+                
+                <div style="background: #f9f9f9; padding: 15px; border-radius: 8px;">
+                    <h3 style="font-size: 16px; margin-bottom: 10px;">제외 사항</h3>
+                    <p style="font-size: 14px; line-height: 1.6; color: #555;">
+                        - 사전 가입 신청이 없는 경우<br>
+                        - 파3 홀이 아닌 다른 홀에서의 홀인원<br>
+                        - 국내 정규 18홀 미만 골프장<br>
+                        - 해외 골프장, 연습장, 스크린 골프 등<br>
+                        - 증빙 자료가 불충분한 경우
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 알림 팝업 -->
+        <div class="popup-overlay" id="popup-overlay">
+            <div class="popup-content">
+                <div class="popup-title" id="popup-title">알림</div>
+                <div class="popup-message" id="popup-message">처리가 완료되었습니다.</div>
+                <button class="popup-button" id="popup-button">확인</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // 전역 변수
+        let companionCount = 0;
+        let isFormDisabled = false;
+        
+        // 페이지 전환 기능
+        const navSignup = document.getElementById('nav-signup');
+        const navClaim = document.getElementById('nav-claim');
+        const navFaq = document.getElementById('nav-faq');
+        const navTerms = document.getElementById('nav-terms');
+        
+        const signupPage = document.getElementById('signup-page');
+        const claimPage = document.getElementById('claim-page');
+        const faqPage = document.getElementById('faq-page');
+        const termsPage = document.getElementById('terms-page');
+        
+        // 네비게이션 탭 클릭 이벤트
+        navSignup.addEventListener('click', function() {
+            showPage(signupPage);
+            setActiveTab(navSignup);
+        });
+        
+        navClaim.addEventListener('click', function() {
+            showPage(claimPage);
+            setActiveTab(navClaim);
+        });
+        
+        navFaq.addEventListener('click', function() {
+            showPage(faqPage);
+            setActiveTab(navFaq);
+        });
+        
+        navTerms.addEventListener('click', function() {
+            showPage(termsPage);
+            setActiveTab(navTerms);
+        });
+        
+        // 페이지 표시 함수
+        function showPage(page) {
+            // 모든 페이지 숨기기
+            signupPage.style.display = 'none';
+            claimPage.style.display = 'none';
+            faqPage.style.display = 'none';
+            termsPage.style.display = 'none';
+            
+            // 선택한 페이지 표시
+            page.style.display = 'block';
+        }
+        
+        // 탭 활성화 함수
+        function setActiveTab(tab) {
+            // 모든 탭 비활성화
+            navSignup.classList.remove('active');
+            navClaim.classList.remove('active');
+            navFaq.classList.remove('active');
+            navTerms.classList.remove('active');
+            
+            // 선택한 탭 활성화
+            tab.classList.add('active');
+        }
+
+        // 폼 비활성화 함수 추가
+        function disableForm() {
+            isFormDisabled = true;
+            const formElements = [
+                'name', 'phone', 'golf-course', 'tee-time', 
+                'terms-checkbox', 'signup-button'
+            ];
+            
+            formElements.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.disabled = true;
+                }
+            });
+            
+            // 동반자 추가 버튼도 비활성화
+            const addCompanionBtn = document.getElementById('add-companion');
+            if (addCompanionBtn) {
+                addCompanionBtn.disabled = true;
+                addCompanionBtn.style.opacity = '0.5';
+                addCompanionBtn.style.cursor = 'not-allowed';
+            }
+        }
+
+        // 폼 활성화 함수 추가
+        function enableForm() {
+            isFormDisabled = false;
+            const formElements = [
+                'name', 'phone', 'golf-course', 'tee-time', 
+                'terms-checkbox', 'signup-button'
+            ];
+            
+            formElements.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.disabled = false;
+                }
+            });
+            
+            // 동반자 추가 버튼도 활성화
+            const addCompanionBtn = document.getElementById('add-companion');
+            if (addCompanionBtn) {
+                addCompanionBtn.disabled = false;
+                addCompanionBtn.style.opacity = '1';
+                addCompanionBtn.style.cursor = 'pointer';
+            }
+        }
+        
+        // 골프공 애니메이션
+        const golfBall = document.querySelector('.golf-ball');
+
+        function playGolfBallAnimation() {
+			const holeRing = document.querySelector('.hole-ring');
+			golfBall.style.animation = 'none'; // 애니메이션 초기화
+			golfBall.offsetHeight; // 리플로우 강제 발생
+			golfBall.style.animation = 'golf-ball-roll 2.5s linear'; // 애니메이션 재적용
+			
+			// 공이 홀에 들어가는 시점에 홀 반짝임 효과 추가
+			setTimeout(() => {
+				holeRing.classList.add('hole-active');
+				setTimeout(() => {
+					holeRing.classList.remove('hole-active');
+				}, 1000);
+			}, 2000);
+			
+			// 애니메이션 실행 후 재귀 호출
+			setTimeout(playGolfBallAnimation, 3000);
+		}
+        
+        // 초기 애니메이션 실행
+        playGolfBallAnimation();
+
+        // 폭죽 애니메이션
+        const fireworks = document.querySelector('.fireworks');
+        const fireworksSpans = document.querySelectorAll('.fireworks span');
+        const directions = [
+            [0, -1], [0.7, -0.7], [1, 0], [0.7, 0.7], [0, 1],
+            [-0.7, 0.7], [-1, 0], [-0.7, -0.7]
+        ];
+
+        fireworksSpans.forEach((span, i) => {
+            span.style.setProperty('--dx', directions[i][0]);
+            span.style.setProperty('--dy', directions[i][1]);
+        });
+
+        function triggerFireworks() {
+            fireworks.style.opacity = '1';
+
+            fireworksSpans.forEach(span => {
+                span.style.animation = 'none';
+                span.offsetHeight; // 리플로우 강제 발생
+                span.style.animation = 'fireworks-burst 1.5s ease forwards';
+            });
+
+            setTimeout(() => {
+                fireworks.style.opacity = '0';
+            }, 1500);
+        }
+
+        // 골프공 애니메이션 종료 시 폭죽 실행
+        golfBall.addEventListener('animationend', triggerFireworks);
+
+        // 페이지 로드 시 쿠폰 검증 실행 (디버깅 추가)
+		window.addEventListener('load', function() {
+			console.log('페이지 로드 완료');
+			
+			// URL 파라미터에서 쿠폰 번호를 가져옵니다
+			const urlParams = new URLSearchParams(window.location.search);
+			const couponFromUrl = urlParams.get('coupon') || 'VIP-2025-1234';
+			
+			console.log('쿠폰 번호:', couponFromUrl);
+			
+			// 쿠폰 번호 필드에 값 설정
+			const couponNumberField = document.getElementById('coupon-number');
+			couponNumberField.value = couponFromUrl;
+			
+			// validateCouponNumber 함수 존재 확인
+			if (typeof validateCouponNumber !== 'function') {
+				console.error('validateCouponNumber 함수가 정의되지 않았습니다!');
+				console.log('외부 JS 파일이 로드되지 않았을 수 있습니다.');
+				disableForm();
+				return;
+			}
+			
+			console.log('쿠폰 검증 시작...');
+			
+			// 쿠폰 사전 검증 실행
+			validateCouponNumber(
+				couponFromUrl,
+				// 성공 시
+				function(couponData) {
+					console.log('✅ 쿠폰 검증 성공:', couponData);
+					CouponUI.showSuccess(couponData);
+					enableForm(); // 폼 활성화
+					// 필요시 고객 정보 자동 입력
+					if (couponData.customerInfo && couponData.customerInfo.name) {
+						document.getElementById('name').value = couponData.customerInfo.name;
+					}
+				},
+				// 실패 시  
+				function(errorMessage) {
+					console.error('❌ 쿠폰 검증 실패:', errorMessage);
+					CouponUI.showError(errorMessage);
+					disableForm(); // 입력 폼 비활성화
+				},
+				// 로딩 중
+				function(isLoading) {
+					console.log('로딩 상태:', isLoading);
+					CouponUI.showLoading(isLoading);
+				}
+			);
+		});
+        
+        // 동반자 추가 기능
+        const addCompanionBtn = document.getElementById('add-companion');
+        const companionsContainer = document.getElementById('companions-container');
+        
+        addCompanionBtn.addEventListener('click', function() {
+            if (isFormDisabled) return; // 폼이 비활성화된 경우 실행하지 않음
+            
+			if (companionCount < 3) {
+				companionCount++;
+				
+				const companionItem = document.createElement('div');
+				companionItem.className = 'companion-item';
+				companionItem.innerHTML = `
+					<div class="companion-header">
+						<div class="companion-title">동반자 ${companionCount}</div>
+						<button class="remove-companion" type="button">&times;</button>
+					</div>
+					<div class="companion-fields">
+						<input type="text" class="form-control" placeholder="이름" required>
+						<input type="text" class="form-control phone-number" placeholder="휴대폰 번호" required>
+					</div>
+				`;
+				
+				companionsContainer.appendChild(companionItem);
+				
+				// 휴대폰 번호 형식 변환 이벤트 추가
+				const phoneInput = companionItem.querySelector('.phone-number');
+				phoneInput.addEventListener('input', function(e) {
+					// 현재 커서 위치 저장
+					const cursorPosition = e.target.selectionStart;
+					
+					// 입력된 값에서 하이픈 제거
+					let value = e.target.value.replace(/-/g, '');
+					
+					// 숫자만 입력받기
+					value = value.replace(/[^0-9]/g, '');
+					
+					// 최대 11자리까지만 허용
+					if (value.length > 11) {
+						value = value.slice(0, 11);
+					}
+					
+					// 형식화된 번호 생성
+					let formattedValue = '';
+					if (value.length > 7) {
+						formattedValue = value.slice(0, 3) + '-' + value.slice(3, 7) + '-' + value.slice(7);
+					} else if (value.length > 3) {
+						formattedValue = value.slice(0, 3) + '-' + value.slice(3);
+					} else {
+						formattedValue = value;
+					}
+					
+					// 이전 값과 다를 경우에만 업데이트
+					if (e.target.value !== formattedValue) {
+						// 하이픈이 추가된 경우 커서 위치 조정
+						const addedHyphens = (formattedValue.match(/-/g) || []).length - (e.target.value.match(/-/g) || []).length;
+						
+						e.target.value = formattedValue;
+						
+						// 커서 위치 복원 (하이픈이 추가된 경우 조정)
+						if (cursorPosition <= 3) {
+							// 첫 번째 구역 (000)
+							e.target.setSelectionRange(cursorPosition, cursorPosition);
+						} else if (cursorPosition <= 8) {
+							// 두 번째 구역 (000-0000)
+							e.target.setSelectionRange(cursorPosition + addedHyphens, cursorPosition + addedHyphens);
+						} else {
+							// 세 번째 구역 (000-0000-0000)
+							e.target.setSelectionRange(cursorPosition + addedHyphens, cursorPosition + addedHyphens);
+						}
+					}
+				});
+				
+				// 동반자 삭제 버튼 이벤트
+				const removeBtn = companionItem.querySelector('.remove-companion');
+				removeBtn.addEventListener('click', function() {
+					companionsContainer.removeChild(companionItem);
+					companionCount--;
+					
+					// 동반자 수가 3명 미만이면 추가 버튼 활성화
+					if (companionCount < 3) {
+						addCompanionBtn.style.display = 'flex';
+					}
+				});
+			}
+			
+			// 동반자 수가 3명이면 추가 버튼 비활성화
+			if (companionCount >= 3) {
+				addCompanionBtn.style.display = 'none';
+			}
+		});
+					
+        // FAQ 아코디언 기능
+        const faqQuestions = document.querySelectorAll('.faq-question');
+        
+        faqQuestions.forEach(question => {
+            question.addEventListener('click', function() {
+                // 현재 질문 활성화/비활성화 토글
+                this.classList.toggle('active');
+                
+                // 답변 표시/숨김 토글
+                const answer = this.nextElementSibling;
+                answer.classList.toggle('show');
+            });
+        });
+        
+        // 휴대폰 번호 포맷팅
+        const phoneInputs = document.querySelectorAll('input[type="tel"]');
+        
+        phoneInputs.forEach(input => {
+            input.addEventListener('input', function(e) {
+                // 숫자만 추출
+                let value = this.value.replace(/[^\d]/g, '');
+                
+                // 포맷팅
+                if (value.length <= 3) {
+                    this.value = value;
+                } else if (value.length <= 7) {
+                    this.value = value.slice(0, 3) + '-' + value.slice(3);
+                } else {
+                    this.value = value.slice(0, 3) + '-' + value.slice(3, 7) + '-' + value.slice(7, 11);
+                }
+            });
+        });
+        
+        // 파일 업로드 기능
+        const uploadPhoto = document.getElementById('upload-photo');
+        const uploadCertificate = document.getElementById('upload-certificate');
+        const photoInput = document.getElementById('photo-input');
+        const certificateInput = document.getElementById('certificate-input');
+        
+        uploadPhoto.addEventListener('click', function() {
+            photoInput.click();
+        });
+        
+        uploadCertificate.addEventListener('click', function() {
+            certificateInput.click();
+        });
+        
+        photoInput.addEventListener('change', function() {
+            if (this.files.length > 0) {
+                const fileName = this.files[0].name;
+                uploadPhoto.querySelector('.file-upload-text').textContent = fileName;
+                uploadPhoto.style.borderColor = '#4CAF50';
+            }
+        });
+        
+        certificateInput.addEventListener('change', function() {
+            if (this.files.length > 0) {
+                const fileName = this.files[0].name;
+                uploadCertificate.querySelector('.file-upload-text').textContent = fileName;
+                uploadCertificate.style.borderColor = '#4CAF50';
+            }
+        });
+        
+        // 팝업 기능
+        const popupOverlay = document.getElementById('popup-overlay');
+        const popupTitle = document.getElementById('popup-title');
+        const popupMessage = document.getElementById('popup-message');
+        const popupButton = document.getElementById('popup-button');
+        
+        function showPopup(title, message) {
+            popupTitle.textContent = title;
+            popupMessage.textContent = message;
+            popupOverlay.classList.add('show');
+        }
+        
+        popupButton.addEventListener('click', function() {
+            popupOverlay.classList.remove('show');
+        });
+        
+        // 가입 신청 제출
+        const signupButton = document.getElementById('signup-button');
+        
+        // 가입 신청 제출 이벤트 핸들러
+		signupButton.addEventListener('click', function() {
+            if (isFormDisabled) {
+                showPopup('오류', '쿠폰 검증이 완료되지 않았습니다.');
+                return;
+            }
+            
+			const couponNumber = document.getElementById('coupon-number').value;
+			const name = document.getElementById('name').value;
+			const phone = document.getElementById('phone').value;
+			const golfCourse = document.getElementById('golf-course').value;
+			const teeTime = document.getElementById('tee-time').value;
+			const termsCheckbox = document.getElementById('terms-checkbox').checked;
+			
+			// 필수 입력 검증
+			if (!name || !phone || !golfCourse || !teeTime) {
+				showPopup('입력 오류', '모든 필수 항목을 입력해주세요.');
+				return;
+			}
+			
+			if (!termsCheckbox) {
+				showPopup('약관 동의', '약관 및 개인정보 활용 동의가 필요합니다.');
+				return;
+			}
+			
+			// 쿠폰 번호 검증 (필요시)
+			if (!couponNumber) {
+				showPopup('쿠폰 번호 오류', '유효한 쿠폰 번호가 필요합니다.');
+				return;
+			}
+			
+			// 동반자 정보 수집
+			const companions = [];
+			document.querySelectorAll('.companion-item').forEach(item => {
+				const fields = item.querySelectorAll('.form-control');
+				const companionName = fields[0].value;
+				const companionPhone = fields[1].value;
+				
+				if (companionName && companionPhone) {
+					companions.push({
+						name: companionName,
+						phone: companionPhone
+					});
+				}
+			});
+			
+			// FormData 객체 생성 및 데이터 추가
+			const formData = new FormData();
+			formData.append('couponNumber', couponNumber);
+			formData.append('name', name);
+			formData.append('phone', phone);
+			formData.append('golfCourse', golfCourse);
+			formData.append('teeTime', teeTime);
+			formData.append('termsAgreed', termsCheckbox);
+			formData.append('companions', JSON.stringify(companions));
+			
+			// fetch를 사용하여 서버로 데이터 전송
+			fetch('api/customer/applyAce.php', {
+				method: 'POST',
+				body: formData
+			})
+			.then(response => {
+				if (!response.ok) {
+					throw new Error('서버 응답이 올바르지 않습니다.');
+				}
+				return response.json();
+			})
+			.then(data => {
+				// 성공적으로 서버에 데이터가 전송된 경우
+				showPopup('가입 완료', '홀인원 보험 가입이 완료되었습니다. 즐거운 라운딩 되세요!');
+				
+				// 폼 초기화 - 단, 쿠폰 번호는 초기화하지 않음
+				document.getElementById('name').value = '';
+				document.getElementById('phone').value = '';
+				document.getElementById('golf-course').value = '';
+				document.getElementById('tee-time').value = '';
+				document.getElementById('terms-checkbox').checked = false;
+				
+				// 동반자 정보 초기화
+				companionsContainer.innerHTML = '';
+				companionCount = 0;
+				addCompanionBtn.style.display = 'flex';
+			})
+			.catch(error => {
+				// 오류 발생 시 처리
+				console.error('데이터 전송 중 오류가 발생했습니다:', error);
+				showPopup('오류 발생', '서버와의 통신 중 문제가 발생했습니다. 다시 시도해 주세요.');
+			});
+		});
+        
+        // 보상 신청 제출
+        const claimButton = document.getElementById('claim-button');
+        
+        claimButton.addEventListener('click', function() {
+            const name = document.getElementById('claim-name').value;
+            const phone = document.getElementById('claim-phone').value;
+            const golfCourse = document.getElementById('claim-golf-course').value;
+            const date = document.getElementById('claim-date').value;
+            const hole = document.getElementById('claim-hole').value;
+            const termsCheckbox = document.getElementById('claim-terms-checkbox').checked;
+            
+            // 필수 입력 검증
+            if (!name || !phone || !golfCourse || !date || !hole) {
+                showPopup('입력 오류', '모든 필수 항목을 입력해주세요.');
+                return;
+            }
+            
+            if (!termsCheckbox) {
+                showPopup('약관 동의', '개인정보 활용 동의가 필요합니다.');
+                return;
+            }
+            
+            // 파일 업로드 검증
+            if (photoInput.files.length === 0 || certificateInput.files.length === 0) {
+                showPopup('파일 누락', '홀인원 사진과 확인증을 모두 첨부해주세요.');
+                return;
+            }
+            
+            // 서버 전송 대신 성공 팝업 표시
+            showPopup('신청 완료', '홀인원 보상 신청이 완료되었습니다. 영업일 기준 3~5일 내에 검토 후 보상금이 지급됩니다.');
+            
+            // 폼 초기화
+            document.getElementById('claim-name').value = '';
+            document.getElementById('claim-phone').value = '';
+            document.getElementById('claim-golf-course').value = '';
+            document.getElementById('claim-date').value = '';
+            document.getElementById('claim-hole').value = '';
+            document.getElementById('claim-terms-checkbox').checked = false;
+            
+            // 파일 업로드 초기화
+            photoInput.value = '';
+            certificateInput.value = '';
+            uploadPhoto.querySelector('.file-upload-text').textContent = '홀인원 사진';
+            uploadCertificate.querySelector('.file-upload-text').textContent = '확인증(스코어카드)';
+            uploadPhoto.style.borderColor = '#ccc';
+            uploadCertificate.style.borderColor = '#ccc';
+        });
+
+        // 쿠폰 검증 관련 함수들은 validateCoupon.js에서 로드됨
+    </script>
+    <script src="js/validateCoupon.js"></script>
+</body>
+</html>

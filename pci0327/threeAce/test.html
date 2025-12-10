@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>네트워크 요청 디버깅</title>
+    <style>
+        body {
+            font-family: 'Noto Sans KR', Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .debug-container {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .debug-title {
+            color: #333;
+            border-bottom: 2px solid #1974E8;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .test-button {
+            background: #1974E8;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 10px 5px;
+            font-size: 14px;
+        }
+        .test-button:hover {
+            background: #0046AA;
+        }
+        .log-area {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            padding: 15px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .error {
+            color: #dc3545;
+            font-weight: bold;
+        }
+        .success {
+            color: #28a745;
+            font-weight: bold;
+        }
+        .warning {
+            color: #ffc107;
+            font-weight: bold;
+        }
+        .info {
+            color: #17a2b8;
+        }
+        .step {
+            background: #e9ecef;
+            padding: 10px;
+            margin: 10px 0;
+            border-left: 4px solid #1974E8;
+            border-radius: 4px;
+        }
+        .url-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="debug-container">
+        <h1 class="debug-title">🔍 네트워크 요청 디버깅 도구</h1>
+        
+        <div class="step">
+            <h3>1. 현재 URL 및 환경 확인</h3>
+            <div id="url-info"></div>
+        </div>
+
+        <div class="step">
+            <h3>2. API 엔드포인트 테스트</h3>
+            <input type="text" id="api-url" class="url-input" placeholder="API URL 입력 (예: api/customer/validateCoupon.php)">
+            <button class="test-button" onclick="testApiEndpoint()">🔗 엔드포인트 연결 테스트</button>
+            <button class="test-button" onclick="testCouponValidation()">🎫 쿠폰 검증 테스트</button>
+            <button class="test-button" onclick="checkConsoleErrors()">⚠️ 콘솔 오류 확인</button>
+        </div>
+
+        <div class="step">
+            <h3>3. 네트워크 요청 로그</h3>
+            <button class="test-button" onclick="clearLogs()">🗑️ 로그 지우기</button>
+            <div id="log-area" class="log-area"></div>
+        </div>
+
+        <div class="step">
+            <h3>4. 문제 해결 가이드</h3>
+            <div id="solution-guide"></div>
+        </div>
+    </div>
+
+    <script>
+        let logArea = document.getElementById('log-area');
+        
+        // 로그 함수들
+        function log(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = document.createElement('div');
+            logEntry.className = type;
+            logEntry.innerHTML = `[${timestamp}] ${message}`;
+            logArea.appendChild(logEntry);
+            logArea.scrollTop = logArea.scrollHeight;
+            console.log(`[${type.toUpperCase()}] ${message}`);
+        }
+
+        function clearLogs() {
+            logArea.innerHTML = '';
+        }
+
+        // 1. 현재 환경 정보 표시
+        function displayEnvironmentInfo() {
+            const urlInfo = document.getElementById('url-info');
+            const currentUrl = window.location.href;
+            const baseUrl = window.location.origin + window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/'));
+            
+            urlInfo.innerHTML = `
+                <strong>현재 URL:</strong> ${currentUrl}<br>
+                <strong>Base URL:</strong> ${baseUrl}<br>
+                <strong>Protocol:</strong> ${window.location.protocol}<br>
+                <strong>Host:</strong> ${window.location.host}<br>
+                <strong>Path:</strong> ${window.location.pathname}
+            `;
+            
+            // API URL 자동 설정
+            document.getElementById('api-url').value = baseUrl + '/api/customer/validateCoupon.php';
+            
+            log('환경 정보 확인 완료', 'success');
+        }
+
+        // 2. API 엔드포인트 연결 테스트
+        async function testApiEndpoint() {
+            const apiUrl = document.getElementById('api-url').value;
+            
+            if (!apiUrl) {
+                log('API URL을 입력해주세요', 'error');
+                return;
+            }
+            
+            log(`API 엔드포인트 테스트 시작: ${apiUrl}`, 'info');
+            
+            try {
+                // OPTIONS 요청 먼저 테스트 (CORS preflight)
+                log('CORS preflight 요청 테스트...', 'info');
+                
+                const optionsResponse = await fetch(apiUrl, {
+                    method: 'OPTIONS',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+                
+                log(`OPTIONS 응답 상태: ${optionsResponse.status}`, optionsResponse.ok ? 'success' : 'warning');
+                
+                // 실제 POST 요청 테스트
+                log('POST 요청 테스트...', 'info');
+                
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        couponNumber: 'TEST-COUPON-0001'
+                    })
+                });
+                
+                log(`POST 응답 상태: ${response.status} ${response.statusText}`, response.ok ? 'success' : 'error');
+                log(`응답 헤더: ${JSON.stringify([...response.headers.entries()])}`, 'info');
+                
+                const responseText = await response.text();
+                log(`응답 내용: ${responseText}`, 'info');
+                
+                // JSON 파싱 시도
+                try {
+                    const jsonData = JSON.parse(responseText);
+                    log(`JSON 파싱 성공: ${JSON.stringify(jsonData, null, 2)}`, 'success');
+                } catch (e) {
+                    log(`JSON 파싱 실패: ${e.message}`, 'warning');
+                }
+                
+            } catch (error) {
+                log(`네트워크 오류: ${error.message}`, 'error');
+                log(`오류 상세: ${error.stack}`, 'error');
+                
+                // 일반적인 오류 원인 분석
+                if (error.message.includes('CORS')) {
+                    log('❌ CORS 정책 오류가 발생했습니다', 'error');
+                } else if (error.message.includes('Failed to fetch')) {
+                    log('❌ 서버에 연결할 수 없습니다 (404, 500 등)', 'error');
+                } else if (error.message.includes('NetworkError')) {
+                    log('❌ 네트워크 연결 오류입니다', 'error');
+                }
+            }
+        }
+
+        // 3. 실제 쿠폰 검증 함수 테스트
+        async function testCouponValidation() {
+            log('쿠폰 검증 함수 테스트 시작...', 'info');
+            
+            // validateCouponNumber 함수 존재 여부 확인
+            if (typeof validateCouponNumber === 'undefined') {
+                log('❌ validateCouponNumber 함수가 정의되지 않았습니다!', 'error');
+                log('validateCoupon.js 파일이 로드되지 않았을 수 있습니다', 'warning');
+                return;
+            }
+            
+            log('✅ validateCouponNumber 함수 발견', 'success');
+            
+            // 테스트 쿠폰으로 실제 함수 실행
+            const testCoupon = 'VIP-2025-1234';
+            log(`테스트 쿠폰으로 검증 시작: ${testCoupon}`, 'info');
+            
+            validateCouponNumber(
+                testCoupon,
+                // 성공 콜백
+                function(couponData) {
+                    log(`✅ 쿠폰 검증 성공: ${JSON.stringify(couponData, null, 2)}`, 'success');
+                },
+                // 실패 콜백
+                function(errorMessage) {
+                    log(`❌ 쿠폰 검증 실패: ${errorMessage}`, 'error');
+                },
+                // 로딩 콜백
+                function(isLoading) {
+                    log(`로딩 상태: ${isLoading ? '시작' : '완료'}`, 'info');
+                }
+            );
+        }
+
+        // 4. 콘솔 오류 확인
+        function checkConsoleErrors() {
+            log('콘솔 오류 모니터링 시작...', 'info');
+            
+            // 기존 console.error 메서드 백업
+            const originalError = console.error;
+            const originalWarn = console.warn;
+            
+            // console.error 오버라이드
+            console.error = function(...args) {
+                log(`콘솔 오류 감지: ${args.join(' ')}`, 'error');
+                originalError.apply(console, args);
+            };
+            
+            // console.warn 오버라이드
+            console.warn = function(...args) {
+                log(`콘솔 경고 감지: ${args.join(' ')}`, 'warning');
+                originalWarn.apply(console, args);
+            };
+            
+            log('콘솔 오류 모니터링 활성화됨', 'success');
+            
+            // 5초 후 원복
+            setTimeout(() => {
+                console.error = originalError;
+                console.warn = originalWarn;
+                log('콘솔 오류 모니터링 비활성화됨', 'info');
+            }, 5000);
+        }
+
+        // 5. 문제 해결 가이드 표시
+        function displaySolutionGuide() {
+            const solutionGuide = document.getElementById('solution-guide');
+            solutionGuide.innerHTML = `
+                <div style="background: #fff3cd; padding: 15px; border-radius: 6px; border-left: 4px solid #ffc107;">
+                    <h4>🔧 일반적인 문제 및 해결방법</h4>
+                    <ol>
+                        <li><strong>네트워크 탭에 요청이 안 보이는 경우:</strong>
+                            <ul>
+                                <li>JavaScript 오류로 fetch 함수가 실행되지 않음</li>
+                                <li>validateCoupon.js 파일이 로드되지 않음</li>
+                                <li>API URL 경로가 잘못됨</li>
+                            </ul>
+                        </li>
+                        <li><strong>CORS 오류가 발생하는 경우:</strong>
+                            <ul>
+                                <li>서버에서 Access-Control-Allow-Origin 헤더 확인</li>
+                                <li>OPTIONS 요청 처리 확인</li>
+                            </ul>
+                        </li>
+                        <li><strong>404 오류가 발생하는 경우:</strong>
+                            <ul>
+                                <li>API 파일 경로 및 존재 여부 확인</li>
+                                <li>웹서버 설정 확인 (.htaccess 등)</li>
+                            </ul>
+                        </li>
+                        <li><strong>500 오류가 발생하는 경우:</strong>
+                            <ul>
+                                <li>PHP 문법 오류 확인</li>
+                                <li>데이터베이스 연결 확인</li>
+                                <li>서버 오류 로그 확인</li>
+                            </ul>
+                        </li>
+                    </ol>
+                    
+                    <h4>🚀 추천 해결 순서</h4>
+                    <ol>
+                        <li>위 테스트 버튼들을 순서대로 실행</li>
+                        <li>개발자도구 Console 탭에서 오류 메시지 확인</li>
+                        <li>Network 탭에서 실제 요청 상태 확인</li>
+                        <li>API 파일이 서버에 올바르게 업로드되었는지 확인</li>
+                        <li>상대 경로 대신 절대 경로로 테스트</li>
+                    </ol>
+                </div>
+            `;
+        }
+
+        // 페이지 로드 시 초기화
+        window.addEventListener('load', function() {
+            displayEnvironmentInfo();
+            displaySolutionGuide();
+            log('디버깅 도구 준비 완료', 'success');
+        });
+
+        // Network 요청 모니터링 (실험적)
+        function monitorNetworkRequests() {
+            const originalFetch = window.fetch;
+            window.fetch = function(...args) {
+                log(`🌐 Fetch 요청 감지: ${args[0]}`, 'info');
+                return originalFetch.apply(this, args)
+                    .then(response => {
+                        log(`📥 Fetch 응답: ${response.status} ${response.statusText}`, response.ok ? 'success' : 'error');
+                        return response;
+                    })
+                    .catch(error => {
+                        log(`💥 Fetch 오류: ${error.message}`, 'error');
+                        throw error;
+                    });
+            };
+            log('네트워크 요청 모니터링 활성화', 'success');
+        }
+
+        // 모니터링 즉시 시작
+        monitorNetworkRequests();
+    </script>
+</body>
+</html>

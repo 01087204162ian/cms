@@ -1,0 +1,1 @@
+<img src="../images/kibslogo.gif" alt="6 Years!" width="60" height="32" id="badge"/>Copyright 1999, kibs.co.kr

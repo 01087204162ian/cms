@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>홀인원 보험 - 보상 신청</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <!-- CSS 통합: ace.css에 claim.css 스타일이 포함되어 있음 -->
+    <link href="css/ace.css" rel="stylesheet">
+    <link href="css/claim.css" rel="stylesheet">
+</head>
+<body id="claim-page">
+    <div class="app-container">
+        <!-- 네비게이션 탭 -->
+        <div class="nav-tabs-container">
+            <ul class="nav-tabs">
+                <li><button id="nav-signup">가입 신청</button></li>
+                <li><button id="nav-claim" class="active">보상 신청</button></li>
+                <li><button id="nav-history">가입내역</button></li>
+                <li><button id="nav-faq">Q&A</button></li>
+                <li><button id="nav-terms">보장 내용</button></li>
+            </ul>
+        </div>
+        
+        <!-- 보상 신청 페이지 -->
+        <div class="page-content">
+            <!-- 보상 배너 -->
+            <div class="insurance-banner" role="region" aria-label="홀인원 보상 안내">
+                <!-- 우측 상단 로고 -->
+                <div class="top-right-logo">
+                    <img src="images/db-logo.png" alt="DB손해보험" class="logo-img">
+                </div>
+                
+                <div class="banner-title">고객님의 홀인원을 축하합니다!</div>
+                <div class="banner-subtitle">DB 손해보험</div>
+                <div class="banner-amount">최대 200만원 보상</div>
+                
+                <!-- 보상 항목 리스트 -->
+                <div class="reward-items">
+                    <ul class="reward-list">
+                        <li>🎁 증정품·기념품 구입비용</li>
+                        <li>🍽️ 축하회식 비용</li>
+                        <li>⛳ 축하라운드비용 (그린피, 캐디피, 카트비용 등)</li>
+                        <li>💰 동반 캐디에 대한 축의금</li>
+                    </ul>
+                </div>
+
+                <!-- 축하 골프 애니메이션 -->
+               
+            </div>
+
+            <!-- 단계 표시기 -->
+            <div class="claim-steps">
+                <div class="step-item active" id="step-1">
+                    <div class="step-number">1</div>
+                    <div class="step-text">가입확인</div>
+                </div>
+                <div class="step-connector"></div>
+                <div class="step-item" id="step-2">
+                    <div class="step-number">2</div>
+                    <div class="step-text">서류안내</div>
+                </div>
+                <div class="step-connector"></div>
+                <div class="step-item" id="step-3">
+                    <div class="step-number">3</div>
+                    <div class="step-text">신청서작성</div>
+                </div>
+            </div>
+
+            <!-- 1단계: 가입 확인 -->
+            <div id="claim-step-1" class="claim-step-content active">
+                <div class="form-section">
+                    <div class="section-title">
+                        <span class="step-badge">STEP 1</span>
+                        홀인원 보험 가입 확인
+                    </div>
+                    
+                    <div class="step-description">
+                        <p>보상 신청을 위해 먼저 홀인원 보험 가입 시 사용하신 휴대폰번호를 입력해주세요.</p>
+                    </div>
+                    
+                    <div class="verification-section">
+                        <div class="form-group">
+                            <label for="verify-phone" class="form-label">휴대폰번호 <span class="required">*</span></label>
+                            <input type="tel" class="form-control" id="verify-phone" placeholder="010-0000-0000" required>
+                            
+                        </div>
+                        
+                        <button class="submit-button enhanced" id="verify-signup-button">
+                            <span class="button-text">가입 내역 확인</span>
+                            <span class="button-icon">🔍</span>
+                        </button>
+                    </div>
+
+                    <!-- 가입 내역 확인 결과 -->
+                    <div id="signup-verification-result" class="verification-result" style="display: none;">
+                        <!-- 성공 시 표시될 내용 -->
+                        <div id="verification-success-content" class="verification-content success" style="display: none;">
+                            <div class="result-icon success">✅</div>
+                            <div class="result-title">가입 내역 확인 완료</div>
+                            <div class="result-message">홀인원 보험에 가입되어 있습니다.</div>
+                            
+                            <div id="signup-details" class="signup-details">
+                                <!-- 가입 정보가 여기에 표시됩니다 -->
+                            </div>
+                            
+                            <button class="next-step-button" id="go-to-step-2">
+                                다음 단계로 진행 →
+                            </button>
+                        </div>
+                        
+                        <!-- 실패 시 표시될 내용 -->
+                        <div id="verification-failed-content" class="verification-content failed" style="display: none;">
+                            <div class="result-icon failed">❌</div>
+                            <div class="result-title">가입 내역을 찾을 수 없습니다</div>
+                            <div class="result-message">입력하신 휴대폰번호로 가입된 홀인원 보험이 없습니다.</div>
+                            
+                            <div class="failed-actions">
+                                <button class="secondary-button" id="try-again-button">
+                                    다시 확인하기
+                                </button>
+                                <button class="secondary-button" id="go-to-signup">
+                                    보험 가입하기
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2단계: 서류 안내 -->
+            <div id="claim-step-2" class="claim-step-content" style="display: none;">
+                <div class="form-section">
+                    <div class="section-title">
+                        <span class="step-badge">STEP 2</span>
+                        필요 서류 안내
+                    </div>
+                    
+                    <div class="document-guide">
+                        <div class="guide-intro">
+                            <p>보상 신청을 위해 다음 서류들을 준비해주세요.</p>
+   
+                        </div>
+                        
+                        <div class="required-documents">
+                            <div class="document-item">
+                                <div class="doc-icon">📸</div>
+                                <div class="doc-content">
+                                    <h3>홀인원 증명 사진</h3>
+                                    <ul class="doc-requirements">
+                                        <li>홀과 골프공이 함께 보이는 사진</li>
+                                        <li>홀 번호판이 명확히 보여야 함</li>
+                                        <li>날짜/시간 정보가 포함된 사진 권장</li>
+                                        <li>다양한 각도에서 촬영된 여러 장 권장</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <div class="document-item">
+                                <div class="doc-icon">📋</div>
+                                <div class="doc-content">
+                                    <h3>스코어카드 또는 확인서</h3>
+                                    <ul class="doc-requirements">
+                                        <li>해당 홀의 스코어가 '1'로 기록된 스코어카드</li>
+                                        <li>골프장에서 발급한 홀인원 확인서</li>
+                                        <li>동반자 서명이 포함된 서류</li>
+                                        <li>캐디 또는 골프장 직원 확인 서명</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="guide-tips">
+                            <h3>📝 촬영 및 준비 팁</h3>
+                            <div class="tip-grid">
+                                <div class="tip-item">
+                                    <strong>사진 품질:</strong> 10MB 이하, JPG/PNG 형식
+                                </div>
+                                <div class="tip-item">
+                                    <strong>촬영 각도:</strong> 정면, 측면 등 다양한 각도
+                                </div>
+                                <div class="tip-item">
+                                    <strong>조명:</strong> 충분한 자연광 또는 조명 확보
+                                </div>
+                                <div class="tip-item">
+                                    <strong>서류 보관:</strong> 원본 서류는 따로 보관
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="step-actions">
+                        <button class="secondary-button" id="back-to-step-1">
+                            ← 이전 단계
+                        </button>
+                        <button class="submit-button enhanced" id="go-to-step-3">
+                            <span class="button-text">서류 준비 완료</span>
+                            <span class="button-icon">→</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3단계: 신청서 작성 -->
+            <div id="claim-step-3" class="claim-step-content" style="display: none;">
+                <div class="form-section">
+                    <div class="section-title">
+                        <span class="step-badge">STEP 3</span>
+                        보상 신청서 작성
+                    </div>
+                    
+                    <!-- 홀인원 정보 입력 -->
+                    <div class="holeinone-info-section">
+                        <h3>홀인원 정보</h3>
+                        
+                        <div class="form-group">
+                            <label for="claim-date" class="form-label">홀인원 발생 날짜 <span class="required">*</span></label>
+                            <input type="date" class="form-control" id="claim-date" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="claim-golf-course" class="form-label">골프장명 <span class="required">*</span></label>
+                            <input type="text" class="form-control" id="claim-golf-course" placeholder="○○○ 골프클럽" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="claim-hole" class="form-label">홀인원 홀 번호 <span class="required">*</span></label>
+                            <input type="text" class="form-control" id="claim-hole" placeholder="예: 3번홀" required>
+                        </div>
+
+                      <!--  <div class="form-group">
+                            <label for="claim-distance" class="form-label">홀 거리 (선택사항)</label>
+                            <input type="text" class="form-control" id="claim-distance" placeholder="예: 150야드">
+                        </div>-->
+                    </div>
+
+                    <!-- 목격자 정보 입력 -->
+                    <div class="witness-info-section">
+                        <h3>목격자 정보 (선택사항)</h3>
+                        
+                        <div class="form-group">
+                            <label for="witnesses" class="form-label">목격자 정보</label>
+                            <textarea class="form-control" id="witnesses" rows="3" placeholder="목격자 이름과 연락처를 한 줄씩 입력해주세요.&#10;예:&#10;홍길동&#10;010-1234-5678"></textarea>
+                            <small class="form-text">동반 플레이어 또는 캐디 정보를 입력해주세요.</small>
+                        </div>
+                    </div>
+
+                    <!-- 🆕 계좌 정보 입력 섹션 추가 -->
+                    <div class="account-info-section">
+                        <h3>보상금 입금 계좌 정보</h3>
+                        
+                        <div class="form-group">
+                            <label for="bank-name" class="form-label">은행명 <span class="required">*</span></label>
+                            <select class="form-control" id="bank-name" required>
+                                <option value="">은행을 선택하세요</option>
+                                <option value="KB국민은행">KB국민은행</option>
+                                <option value="신한은행">신한은행</option>
+                                <option value="우리은행">우리은행</option>
+                                <option value="하나은행">하나은행</option>
+                                <option value="NH농협은행">NH농협은행</option>
+                                <option value="IBK기업은행">IBK기업은행</option>
+                                <option value="SC제일은행">SC제일은행</option>
+                                <option value="씨티은행">씨티은행</option>
+                                <option value="대구은행">대구은행</option>
+                                <option value="부산은행">부산은행</option>
+                                <option value="경남은행">경남은행</option>
+                                <option value="광주은행">광주은행</option>
+                                <option value="전북은행">전북은행</option>
+                                <option value="제주은행">제주은행</option>
+                                <option value="새마을금고">새마을금고</option>
+                                <option value="신협">신협</option>
+                                <option value="우체국">우체국</option>
+                                <option value="카카오뱅크">카카오뱅크</option>
+                                <option value="케이뱅크">케이뱅크</option>
+                                <option value="토스뱅크">토스뱅크</option>
+                                <option value="기타">기타</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="account-number" class="form-label">계좌번호 <span class="required">*</span></label>
+                            <input type="text" class="form-control" id="account-number" placeholder="하이픈(-) 없이 숫자만 입력" required>
+                            <small class="form-text">하이픈(-) 없이 숫자만 입력해주세요.</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="account-holder" class="form-label">예금주명 <span class="required">*</span></label>
+                            <input type="text" class="form-control" id="account-holder" placeholder="예금주 이름을 정확히 입력" required>
+                            <small class="form-text">은행 계좌에 등록된 이름과 정확히 일치해야 합니다.</small>
+                        </div>
+                    </div>
+
+                    <!-- 추가 정보 입력 -->
+                    <div class="additional-info-section">
+                        <h3>추가 정보 (선택사항)</h3>
+                        
+                        <div class="form-group">
+                            <label for="description" class="form-label">홀인원 상황 설명</label>
+                            <textarea class="form-control" id="description" rows="4" placeholder="홀인원 당시 상황이나 특이사항을 자유롭게 기록해주세요."></textarea>
+                        </div>
+                    </div>
+                    
+                    <!-- 파일 업로드 섹션 -->
+                    <div class="upload-section">
+                        <h3>증빙 서류 업로드</h3>
+                        
+                        <div class="file-upload-container">
+                            <div class="file-upload-box enhanced" id="upload-photo">
+                                <div class="file-upload-icon">📸</div>
+                                <div class="file-upload-text">홀인원 증명 사진</div>
+                                <div class="file-upload-hint">클릭하여 업로드</div>
+                                <div class="file-requirement">JPG, PNG / 최대 10MB</div>
+                            </div>
+                            
+                            <div class="file-upload-box enhanced" id="upload-certificate">
+                                <div class="file-upload-icon">📋</div>
+                                <div class="file-upload-text">스코어카드/확인서</div>
+                                <div class="file-upload-hint">클릭하여 업로드</div>
+                                <div class="file-requirement">JPG, PNG / 최대 10MB</div>
+                            </div>
+                        </div>
+
+                        <!-- 추가 파일 업로드 -->
+                        <div class="additional-files">
+                            <button type="button" class="add-file-button" id="add-additional-file">
+                                + 추가 증빙 서류 업로드 (선택사항)
+                            </button>
+                            <div id="additional-files-container">
+                                <!-- 추가된 파일들이 여기에 표시됩니다 -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 숨겨진 파일 입력들 -->
+                    <input type="file" id="photo-input" style="display:none;" accept="image/*" multiple>
+                    <input type="file" id="certificate-input" style="display:none;" accept="image/*" multiple>
+                    <input type="file" id="additional-input" style="display:none;" accept="image/*" multiple>
+                    
+                    <!-- 약관 동의 -->
+                    <div class="checkbox-container enhanced">
+                        <input type="checkbox" id="claim-terms-checkbox" required>
+                        <label for="claim-terms-checkbox" class="checkbox-label">
+                            개인정보 수집·이용 및 보상처리를 위한 정보 활용에 동의합니다. <span class="required">*</span>
+                        </label>
+                    </div>
+                    
+                    <!-- 최종 제출 -->
+                    <div class="step-actions">
+                        <button class="secondary-button" id="back-to-step-2">
+                            ← 이전 단계
+                        </button>
+                        <button class="submit-button enhanced final" id="submit-claim-button">
+                            <span class="button-text">보상 신청 완료</span>
+                            <span class="button-icon">✅</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 알림 팝업 -->
+        <div class="popup-overlay" id="popup-overlay">
+            <div class="popup-content">
+                <div class="popup-title" id="popup-title">알림</div>
+                <div class="popup-message" id="popup-message">처리가 완료되었습니다.</div>
+                <button class="popup-button" id="popup-button">확인</button>
+            </div>
+        </div>
+
+        <!-- 최종 확인 모달 -->
+        <div class="popup-overlay" id="final-confirm-popup">
+            <div class="popup-content" style="max-width: 500px;">
+                <div class="popup-title">보상 신청 내용 확인</div>
+                <div class="final-confirmation" id="final-confirmation-content">
+                    <!-- 최종 확인 내용이 여기에 표시됩니다 -->
+                </div>
+                <div class="confirm-buttons">
+                    <button class="popup-button secondary" id="final-cancel-button">취소</button>
+                    <button class="popup-button primary" id="final-submit-button">신청 완료</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 홀인원 발생 날짜 제한 설정
+            const claimDateInput = document.getElementById('claim-date');
+            if (claimDateInput) {
+                // 현재 날짜를 최대값으로 설정 (미래 날짜 선택 방지)
+                const today = new Date().toISOString().split('T')[0];
+                claimDateInput.max = today;
+                
+                // 1년 전을 최소값으로 설정
+                const oneYearAgo = new Date();
+                oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
+                claimDateInput.min = oneYearAgo.toISOString().split('T')[0];
+            }
+
+            // 계좌번호 입력 포맷팅
+            const accountNumberInput = document.getElementById('account-number');
+            if (accountNumberInput) {
+                accountNumberInput.addEventListener('input', function(e) {
+                    // 숫자만 남기고 모든 문자 제거
+                    let value = this.value.replace(/[^\d]/g, '');
+                    this.value = value;
+                });
+            }
+
+            // 예금주명 입력 검증
+          /*  const accountHolderInput = document.getElementById('account-holder');
+            if (accountHolderInput) {
+                accountHolderInput.addEventListener('input', function(e) {
+                    // 한글, 영문, 공백만 허용
+                    let value = this.value.replace(/[^가-힣a-zA-Z\s]/g, '');
+                    this.value = value;
+                });
+            }*/
+
+            // 축하 폭죽 효과 트리거
+            const celebrationFireworks = document.querySelector('.fireworks.celebration');
+            if (celebrationFireworks) {
+                // 페이지 로드 후 3초 뒤에 폭죽 효과 시작
+                setTimeout(() => {
+                    celebrationFireworks.style.opacity = '1';
+                }, 3000);
+            }
+
+            // 골프홀 클릭 시 추가 효과
+            const celebrationHole = document.querySelector('.golf-hole.celebration');
+            if (celebrationHole) {
+                celebrationHole.addEventListener('click', function() {
+                    this.classList.add('hole-active');
+                    setTimeout(() => {
+                        this.classList.remove('hole-active');
+                    }, 2000);
+                });
+            }
+
+            // 파일 업로드 드래그 앤 드롭 효과
+            const uploadBoxes = document.querySelectorAll('.file-upload-box.enhanced');
+            uploadBoxes.forEach(box => {
+                box.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    this.classList.add('dragover');
+                });
+
+                box.addEventListener('dragleave', function(e) {
+                    e.preventDefault();
+                    this.classList.remove('dragover');
+                });
+
+                box.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    this.classList.remove('dragover');
+                    // 드롭된 파일 처리 로직은 claim.js에서 구현
+                });
+            });
+        });
+    </script>
+    <script src="js/common.js"></script>
+    <script src="js/claim.js"></script>
+</body>
+</html>

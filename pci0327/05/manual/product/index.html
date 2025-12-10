@@ -1,0 +1,2474 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- 보안 관련 메타 태그 -->
+    <meta http-equiv="Content-Security-Policy" 
+          content="default-src 'self'; 
+                   script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com;
+                   connect-src 'self' https://silbo.kr https://lincinsu.kr https://kjstation.kr;
+                   style-src 'self' 'unsafe-inline';
+                   img-src 'self' data: https:;
+                   font-src 'self' https:;">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+    <meta http-equiv="Strict-Transport-Security" content="max-age=31536000; includeSubDomains">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    
+    <title>보험대리점 CMS 매뉴얼</title>
+    
+    <!-- 스타일시트 -->
+    <link rel="stylesheet" href="../../css/basic.css">
+    <style>
+        :root {
+            --primary-color: #007bff;
+            --secondary-color: #6c757d;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --light-color: #f8f9fa;
+            --dark-color: #343a40;
+            --header-height: 60px;
+            --transition-speed: 0.3s;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark-color);
+            background-color: #f5f7fa;
+            min-height: 100vh;
+        }
+
+        /* 헤더 스타일 */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 280px;
+            height: 100vh;
+            background: white;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            padding: 2rem 0;
+        }
+
+        .header-top {
+            padding: 0 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .user-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 1.25rem;
+        }
+
+        .user-details {
+            flex: 1;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: var(--dark-color);
+            margin-bottom: 0.25rem;
+        }
+
+        .user-role {
+            font-size: 0.875rem;
+            color: var(--secondary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .current-time {
+            font-size: 0.875rem;
+            color: var(--secondary-color);
+            margin-top: 0.5rem;
+        }
+
+        .logout-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: var(--light-color);
+            border-radius: 8px;
+            color: var(--dark-color);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .logout-btn:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        /* 메인 콘텐츠 영역 */
+        .main-content {
+            margin-left: 280px;
+            padding: 2rem;
+            max-width: 1400px;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            color: var(--dark-color);
+            margin-bottom: 3rem;
+            text-align: left;
+            font-weight: 700;
+            position: relative;
+            padding-bottom: 1rem;
+        }
+
+        .page-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: var(--primary-color);
+            border-radius: 2px;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2.5rem;
+            padding: 1rem;
+            max-width: 1200px;
+        }
+
+        .menu-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            overflow: hidden;
+            position: relative;
+            aspect-ratio: 16/9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem;
+            border: 2px solid transparent;
+            background: linear-gradient(145deg, #ffffff, #f5f7fa);
+        }
+
+        .menu-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(145deg, var(--primary-color), #0056b3);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: 1;
+        }
+
+        .menu-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+            border-color: var(--primary-color);
+        }
+
+        .menu-card:hover::before {
+            opacity: 0.05;
+        }
+
+        .menu-card.active {
+            background: linear-gradient(145deg, var(--primary-color), #0056b3);
+            color: white;
+        }
+
+        .menu-card .icon {
+            width: 72px;
+            height: 72px;
+            margin-bottom: 1.5rem;
+            stroke: currentColor;
+            stroke-width: 2;
+            fill: none;
+            position: relative;
+            z-index: 2;
+            transition: transform 0.4s ease;
+        }
+
+        .menu-card:hover .icon {
+            transform: scale(1.1);
+        }
+
+        .menu-card .menu-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 0.75rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .menu-card .menu-description {
+            font-size: 1rem;
+            color: var(--secondary-color);
+            text-align: center;
+            opacity: 0.9;
+            position: relative;
+            z-index: 2;
+            max-width: 80%;
+            line-height: 1.5;
+        }
+
+        .menu-card.active .menu-description {
+            color: white;
+        }
+
+        /* 반응형 디자인 */
+        @media (max-width: 1200px) {
+            .header {
+                width: 240px;
+            }
+
+            .main-content {
+                margin-left: 240px;
+            }
+
+            .menu-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 2rem;
+                padding: 0.5rem;
+            }
+
+            .menu-card {
+                padding: 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                width: 100%;
+                height: auto;
+                position: relative;
+                padding: 1rem;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 1rem;
+            }
+
+            .page-title {
+                font-size: 2rem;
+                margin-bottom: 2rem;
+                text-align: center;
+            }
+
+            .page-title::after {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
+            .menu-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .menu-card {
+                padding: 2rem;
+                aspect-ratio: 16/9;
+            }
+
+            .menu-card .icon {
+                width: 56px;
+                height: 56px;
+            }
+
+            .menu-card .menu-title {
+                font-size: 1.25rem;
+            }
+
+            .menu-card .menu-description {
+                font-size: 0.875rem;
+            }
+        }
+
+        /* 애니메이션 */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .menu-card {
+            animation: fadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            opacity: 0;
+        }
+
+        .menu-card:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .menu-card:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .menu-card:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        .menu-card:nth-child(4) {
+            animation-delay: 0.4s;
+        }
+
+		/* 메뉴 시스템 스타일 */
+.menu-header {
+    background: white;
+    padding: 20px;
+    border-bottom: 1px solid #e0e0e0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.menu-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.control-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: #f5f5f5;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s ease;
+}
+
+.control-btn:hover {
+    background: #e8e8e8;
+    border-color: #bbb;
+}
+
+.control-btn.add-menu {
+    background: #4CAF50;
+    color: white;
+    border-color: #45a049;
+}
+
+.control-btn.add-client {
+    background: #FF9800;
+    color: white;
+    border-color: #F57C00;
+}
+
+.control-btn.add-client:hover {
+    background: #F57C00;
+}
+
+.control-btn.client-list {
+    background: #9C27B0;
+    color: white;
+    border-color: #7B1FA2;
+}
+
+.control-btn.client-list:hover {
+    background: #7B1FA2;
+}
+
+.form-group select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: border-color 0.2s ease;
+    box-sizing: border-box;
+    background: white;
+}
+
+.form-group select:focus {
+    outline: none;
+    border-color: #2196F3;
+    box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.2);
+}
+
+/* 큰 모달 스타일 */
+.modal.modal-large .modal-content {
+    width: 95%;
+    max-width: 1000px;
+    max-height: 90vh;
+}
+
+/* 거래처 리스트 컨트롤 */
+.client-list-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.client-search {
+    position: relative;
+    flex: 1;
+}
+
+.client-search input {
+    width: 100%;
+    padding: 8px 40px 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.client-search svg {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #666;
+}
+
+.btn-refresh {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    background: #f5f5f5;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s ease;
+}
+
+.btn-refresh:hover {
+    background: #e8e8e8;
+    border-color: #bbb;
+}
+
+/* 거래처 테이블 */
+.client-table {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.client-table-header {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1.5fr 1.5fr 100px;
+    background: #f8f9fa;
+    font-weight: 600;
+    font-size: 14px;
+    color: #333;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.client-table-header > div {
+    padding: 12px;
+    border-right: 1px solid #e0e0e0;
+}
+
+.client-table-header > div:last-child {
+    border-right: none;
+}
+
+.client-table-body {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.client-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1.5fr 1.5fr 100px;
+    border-bottom: 1px solid #f0f0f0;
+    transition: background-color 0.2s ease;
+}
+
+.client-row:hover {
+    background: #f8f9fa;
+}
+
+.client-row > div {
+    padding: 12px;
+    border-right: 1px solid #f0f0f0;
+    font-size: 14px;
+    color: #333;
+    display: flex;
+    align-items: center;
+}
+
+.client-row > div:last-child {
+    border-right: none;
+}
+
+.client-type-badge {
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 500;
+    text-align: center;
+    min-width: 50px;
+}
+
+.client-type-badge.보험사 {
+    background: #e3f2fd;
+    color: #1976d2;
+}
+
+.client-type-badge.대리점 {
+    background: #f3e5f5;
+    color: #7b1fa2;
+}
+
+.client-type-badge.협력업체 {
+    background: #e8f5e8;
+    color: #388e3c;
+}
+
+.client-type-badge.기타 {
+    background: #fff3e0;
+    color: #f57c00;
+}
+
+.client-col-actions {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+}
+
+.btn-edit,
+.btn-delete {
+    padding: 4px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-edit {
+    background: #e3f2fd;
+    color: #1976d2;
+}
+
+.btn-edit:hover {
+    background: #bbdefb;
+}
+
+.btn-delete {
+    background: #ffebee;
+    color: #d32f2f;
+}
+
+.btn-delete:hover {
+    background: #ffcdd2;
+}
+
+.no-data {
+    text-align: center;
+    padding: 40px 20px;
+    color: #666;
+    font-size: 16px;
+}
+
+.search-box {
+    position: relative;
+    margin-left: auto;
+}
+
+.search-box input {
+    padding: 8px 40px 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    width: 250px;
+}
+
+.search-box svg {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #666;
+}
+
+/* 2열 그리드 컨테이너 */
+.integrated-menu-container.two-column-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+    gap: 20px;
+    padding: 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+@media (max-width: 1100px) {
+    .integrated-menu-container.two-column-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* 메뉴 섹션 스타일 */
+.menu-section {
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.menu-section:hover {
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    transform: translateY(-2px);
+}
+
+.menu-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    cursor: pointer;
+    background: #fafafa;
+    border-bottom: 1px solid #e0e0e0;
+    transition: background-color 0.2s ease;
+}
+
+.menu-section-header:hover {
+    background: #f0f0f0;
+}
+
+.menu-section-header.expanded {
+    background: #e3f2fd;
+}
+
+.section-main {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex: 1;
+}
+
+.section-icon {
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.section-icon .icon {
+    width: 24px;
+    height: 24px;
+}
+
+.section-info {
+    flex: 1;
+}
+
+.section-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0 0 4px 0;
+    color: #333;
+}
+
+.section-description {
+    font-size: 14px;
+    color: #666;
+    margin: 0;
+    line-height: 1.4;
+}
+
+.section-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.expand-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 6px;
+    transition: background-color 0.2s ease;
+}
+
+.expand-btn:hover {
+    background: rgba(0,0,0,0.1);
+}
+
+.expand-icon {
+    transition: transform 0.3s ease;
+}
+
+.menu-section-header.expanded .expand-icon {
+    transform: rotate(180deg);
+}
+
+.stat-badge {
+    background: #2196F3;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+/* 서브메뉴 컨테이너 */
+.submenu-container {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+}
+
+.submenu-container.expanded {
+    max-height: 1000px;
+}
+
+.submenu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    padding: 20px;
+    background: #f9f9f9;
+}
+
+.submenu-card {
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.submenu-card:hover {
+    border-color: #2196F3;
+    box-shadow: 0 2px 8px rgba(33, 150, 243, 0.2);
+}
+
+.submenu-card.selected {
+    border-color: #2196F3;
+    background: #e3f2fd;
+}
+
+.submenu-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.submenu-icon {
+    width: 20px;
+    height: 20px;
+    color: #666;
+}
+
+.submenu-title {
+    font-size: 14px;
+    font-weight: 500;
+    margin: 0;
+    flex: 1;
+}
+
+.submenu-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+}
+
+.submenu-manager {
+    font-size: 10px;
+    color: #888;
+    font-weight: 400;
+    line-height: 1;
+    max-width: 80px;
+    text-align: right;
+    word-break: keep-all;
+}
+
+/* 서브메뉴 액션 버튼 */
+.submenu-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid #f0f0f0;
+}
+
+.submenu-btn {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background: #f8f9fa;
+    color: #666;
+    font-size: 11px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex: 1;
+    justify-content: center;
+}
+
+.submenu-btn:hover {
+    background: #e9ecef;
+    border-color: #bbb;
+}
+
+.submenu-btn.add-client-btn:hover {
+    background: #fff3e0;
+    border-color: #FF9800;
+    color: #FF9800;
+}
+
+.submenu-btn.client-list-btn:hover {
+    background: #f3e5f5;
+    border-color: #9C27B0;
+    color: #9C27B0;
+}
+
+.submenu-description {
+    font-size: 12px;
+    color: #666;
+    margin: 0;
+    line-height: 1.3;
+}
+
+/* 직접 아이템 스타일 */
+.direct-items {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+}
+
+.direct-items.expanded {
+    max-height: 500px;
+}
+
+.direct-items-title {
+    padding: 15px 20px 10px;
+    margin: 0;
+    font-size: 14px;
+    font-weight: 500;
+    color: #666;
+    background: #f5f5f5;
+}
+
+.direct-items-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 12px;
+    padding: 20px;
+    background: #f9f9f9;
+}
+
+.direct-item-card {
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    padding: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.direct-item-card:hover {
+    border-color: #2196F3;
+    box-shadow: 0 2px 6px rgba(33, 150, 243, 0.2);
+}
+
+.direct-item-title {
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 6px;
+    color: #333;
+}
+
+.direct-item-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: #666;
+}
+
+/* 모달 스타일 */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    backdrop-filter: blur(4px);
+}
+
+.modal-content {
+    background: white;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    animation: modalSlideIn 0.3s ease;
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.modal-header h2 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    color: #666;
+    transition: all 0.2s ease;
+}
+
+.modal-close:hover {
+    background: #f0f0f0;
+    color: #333;
+}
+
+.modal-body {
+    padding: 24px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: border-color 0.2s ease;
+    box-sizing: border-box;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #2196F3;
+    box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.2);
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.form-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid #e0e0e0;
+}
+
+.btn-cancel,
+.btn-submit {
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+}
+
+.btn-cancel {
+    background: #f5f5f5;
+    color: #666;
+    border-color: #ddd;
+}
+
+.btn-cancel:hover {
+    background: #e8e8e8;
+    border-color: #bbb;
+}
+
+.btn-submit {
+    background: #2196F3;
+    color: white;
+    border-color: #1976D2;
+}
+
+.btn-submit:hover {
+    background: #1976D2;
+}
+
+/* 로딩 및 에러 상태 */
+.loading,
+.error {
+    text-align: center;
+    padding: 40px 20px;
+    font-size: 16px;
+}
+
+.loading {
+    color: #666;
+}
+
+.error {
+    color: #f44336;
+    background: #ffebee;
+    border: 1px solid #ffcdd2;
+    border-radius: 8px;
+    margin: 20px;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .menu-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .search-box {
+        margin-left: 0;
+    }
+    
+    .search-box input {
+        width: 100%;
+    }
+    
+    .submenu-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .direct-items-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .modal-content {
+        margin: 20px;
+        width: calc(100% - 40px);
+    }
+}
+
+/* 애니메이션 */
+.menu-section {
+    animation: fadeInUp 0.5s ease forwards;
+    opacity: 0;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+    </style>
+</head>
+<body>
+    <!-- 헤더 -->
+    <header class="header">
+        <div class="header-top">
+            <div class="sidebar-header">
+                <div class="user-avatar">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                </div>
+                <div class="user-info">
+                  <!--  <span class="welcome-text">환영합니다</span>
+                    <span class="user-name">섹션사용자님</span>-->
+                    <span id="userName">로딩중...</span>님 환영합니다!
+                    <div id="currentDateTime" class="current-time"></div>
+                </div>
+            </div>
+            <a href="#" class="logout-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                    <polyline points="16 17 21 12 16 7"></polyline>
+                    <line x1="21" y1="12" x2="9" y2="12"></line>
+                </svg>
+                로그아웃
+            </a>
+        </div>
+    </header>
+
+    <!-- 메인 콘텐츠 -->
+    <main class="main-content">
+			<div id="menu_List">
+                  <!-- 데이터가 여기에 동적으로 로드됨 -->
+            </div>
+       
+    </main>
+
+    <!-- 스크립트 -->
+    <script src="../../js/basic.js"></script>
+    <script src="js/manual.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async function() {
+            // 세션 체크
+            const sessionValid = await checkSession();
+            if (!sessionValid) {
+                window.location.href = '/05/sj.html';
+                return;
+            }
+
+            // 사용자 정보 업데이트
+            updateUserInfo();
+            
+            // 시계 초기화
+            initClock();
+
+            // 로그아웃 버튼 이벤트
+            const logoutButton = document.querySelector('.logout-btn');
+            if (logoutButton) {
+                logoutButton.addEventListener('click', () => {
+                    SessionManager.logout();
+                });
+            }
+			  const serverStatus = await fetchServerStatus();
+            // 메뉴 카드 이벤트
+            const menuCards = document.querySelectorAll('.menu-card');
+            menuCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    // 활성 메뉴 설정
+                    menuCards.forEach(c => c.classList.remove('active'));
+                    this.classList.add('active');
+
+                    // 메뉴 텍스트 가져오기
+                    const menuText = this.querySelector('.menu-title').textContent;
+                    
+                    // 매뉴얼 매니저 초기화
+                    const manualManager = new ManualManager();
+                    manualManager.updateContent(menuText);
+                });
+            });
+        });
+
+
+// 동적 아이콘 생성 시스템
+function getMenuIcon(menu1st) {
+    // 메뉴명을 기반으로 동적으로 아이콘 생성
+    const menuName = menu1st.toLowerCase().replace(/\s+/g, '');
+    
+    // 키워드 기반 아이콘 매칭
+    if (menuName.includes('대리') || menuName.includes('운전')) {
+        return generateCarIcon();
+    } else if (menuName.includes('시간') || menuName.includes('time')) {
+        return generateClockIcon();
+    } else if (menuName.includes('공유') || menuName.includes('모빌리티') || menuName.includes('mobility')) {
+        return generateShareIcon();
+    } else if (menuName.includes('여행') || menuName.includes('travel')) {
+        return generateTravelIcon();
+    } else if (menuName.includes('영업') || menuName.includes('배상') || menuName.includes('책임')) {
+        return generateShieldIcon();
+    } else if (menuName.includes('일반') || menuName.includes('보험') || menuName.includes('insurance')) {
+        return generateInsuranceIcon();
+    } else if (menuName.includes('배민') || menuName.includes('pm') || menuName.includes('delivery')) {
+        return generateDeliveryIcon();
+    } else if (menuName.includes('건강') || menuName.includes('의료')) {
+        return generateHealthIcon();
+    } else if (menuName.includes('자동차') || menuName.includes('차량')) {
+        return generateVehicleIcon();
+    } else if (menuName.includes('금융') || menuName.includes('은행')) {
+        return generateFinanceIcon();
+    } else {
+        // 기본 아이콘 - 메뉴명의 첫 글자를 기반으로 생성
+        return generateDefaultIcon(menu1st);
+    }
+}
+
+// 서브메뉴용 소형 아이콘 생성
+function getSubMenuIcon(menu1st, menu2nd) {
+    const menu2Name = menu2nd.toLowerCase().replace(/\s+/g, '');
+    
+    // 2차 메뉴 특화 키워드 매칭
+    if (menu2Name.includes('개인') || menu2Name.includes('personal')) {
+        return generatePersonIcon();
+    } else if (menu2Name.includes('단체') || menu2Name.includes('group')) {
+        return generateGroupIcon();
+    } else if (menu2Name.includes('연간') || menu2Name.includes('annual')) {
+        return generateCalendarIcon();
+    } else if (menu2Name.includes('콜') || menu2Name.includes('call')) {
+        return generatePhoneIcon();
+    } else if (menu2Name.includes('이륜차') || menu2Name.includes('bike')) {
+        return generateBikeIcon();
+    } else if (menu2Name.includes('현대') || menu2Name.includes('hyundai')) {
+        return generateBuildingIcon();
+    } else if (menu2Name.includes('해외') || menu2Name.includes('overseas')) {
+        return generateGlobeIcon();
+    } else if (menu2Name.includes('국내') || menu2Name.includes('domestic')) {
+        return generateHomeIcon();
+    } else if (menu2Name.includes('유학') || menu2Name.includes('study')) {
+        return generateBookIcon();
+    } else if (menu2Name.includes('정보') || menu2Name.includes('info')) {
+        return generateInfoIcon();
+    } else if (menu2Name.includes('실습') || menu2Name.includes('practice')) {
+        return generateToolIcon();
+    } else {
+        // 1차 메뉴 아이콘을 기반으로 변형된 소형 아이콘 생성
+        return generateVariantIcon(menu1st, menu2nd);
+    }
+}
+
+// SVG 아이콘 생성 함수들
+function generateCarIcon() {
+    return `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M7 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/>
+        <path d="M17 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/>
+        <path d="M5 17h-2v-6l2-5h9l4 5h1a2 2 0 0 1 2 2v4"/>
+        <circle cx="7" cy="17" r="2"/>
+        <circle cx="17" cy="17" r="2"/>
+    </svg>`;
+}
+
+function generateClockIcon() {
+    return `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/>
+        <polyline points="12 6 12 12 16 14"/>
+    </svg>`;
+}
+
+function generateShareIcon() {
+    return `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="18" cy="5" r="3"/>
+        <circle cx="6" cy="12" r="3"/>
+        <circle cx="18" cy="19" r="3"/>
+        <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+        <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+    </svg>`;
+}
+
+function generateTravelIcon() {
+    return `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+        <circle cx="12" cy="10" r="3"/>
+    </svg>`;
+}
+
+function generateShieldIcon() {
+    return `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        <path d="m9 12 2 2 4-4"/>
+    </svg>`;
+}
+
+function generateInsuranceIcon() {
+    return `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+        <circle cx="9" cy="9" r="2"/>
+        <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/>
+    </svg>`;
+}
+
+function generateDeliveryIcon() {
+    return `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M3 9h18v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9Z"/>
+        <path d="m3 9 2.45-4.9A2 2 0 0 1 7.24 3h9.52a2 2 0 0 1 1.8 1.1L21 9"/>
+        <path d="M12 3v6"/>
+    </svg>`;
+}
+
+function generateHealthIcon() {
+    return `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"/>
+    </svg>`;
+}
+
+function generateVehicleIcon() {
+    return `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M14 16H9m10 0h3v-3.15a1 1 0 0 0-.84-.99L16 11V7a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v4l-5.16 1.86A1 1 0 0 0 2 14.85V16h3"/>
+        <circle cx="6.5" cy="16" r="2"/>
+        <circle cx="16.5" cy="16" r="2"/>
+    </svg>`;
+}
+
+function generateFinanceIcon() {
+    return `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="12" y1="1" x2="12" y2="23"/>
+        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+    </svg>`;
+}
+
+// 서브메뉴 아이콘 생성 함수들
+function generatePersonIcon() {
+    return `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+        <circle cx="12" cy="7" r="4"/>
+    </svg>`;
+}
+
+function generateGroupIcon() {
+    return `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+        <circle cx="9" cy="7" r="4"/>
+        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+    </svg>`;
+}
+
+function generateCalendarIcon() {
+    return `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+        <line x1="16" y1="2" x2="16" y2="6"/>
+        <line x1="8" y1="2" x2="8" y2="6"/>
+        <line x1="3" y1="10" x2="21" y2="10"/>
+    </svg>`;
+}
+
+function generatePhoneIcon() {
+    return `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+    </svg>`;
+}
+
+function generateBikeIcon() {
+    return `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="5.5" cy="17.5" r="3.5"/>
+        <circle cx="18.5" cy="17.5" r="3.5"/>
+        <path d="M15 6a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/>
+        <path d="M6 18V8h2l4 6 1-1V6h2"/>
+    </svg>`;
+}
+
+function generateBuildingIcon() {
+    return `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/>
+        <path d="M6 12H4a2 2 0 0 0-2 2v8h20v-8a2 2 0 0 0-2-2h-2"/>
+    </svg>`;
+}
+
+function generateGlobeIcon() {
+    return `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="2" y1="12" x2="22" y2="12"/>
+        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+    </svg>`;
+}
+
+function generateHomeIcon() {
+    return `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+        <polyline points="9,22 9,12 15,12 15,22"/>
+    </svg>`;
+}
+
+function generateBookIcon() {
+    return `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+    </svg>`;
+}
+
+function generateInfoIcon() {
+    return `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="12" y1="16" x2="12" y2="12"/>
+        <line x1="12" y1="8" x2="12.01" y2="8"/>
+    </svg>`;
+}
+
+function generateToolIcon() {
+    return `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+    </svg>`;
+}
+
+// 변형 아이콘 생성 (1차 메뉴 기반)
+function generateVariantIcon(menu1st, menu2nd) {
+    const firstChar = menu2nd.charAt(0);
+    const charCode = firstChar.charCodeAt(0);
+    
+    // 간단한 기하학적 패턴들
+    const patterns = [
+        `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3"/>
+            <circle cx="12" cy="12" r="8"/>
+        </svg>`,
+        `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="6" y="6" width="12" height="12" rx="2"/>
+            <circle cx="12" cy="12" r="2"/>
+        </svg>`,
+        `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="12,2 22,12 12,22 2,12"/>
+        </svg>`,
+        `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2l3.09 6.26L22 9l-5 4.87L18.18 22 12 18.77 5.82 22 7 13.87 2 9l6.91-.74L12 2z"/>
+        </svg>`
+    ];
+    
+    const patternIndex = charCode % patterns.length;
+    return patterns[patternIndex];
+}
+
+// 기본 아이콘 - 메뉴명 기반 동적 생성
+function generateDefaultIcon(menuName) {
+    // 메뉴명의 첫 글자를 추출
+    const firstChar = menuName.charAt(0);
+    const charCode = firstChar.charCodeAt(0);
+    
+    // 문자 코드를 기반으로 다양한 패턴 생성
+    const patterns = [
+        // 사각형 기반
+        `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+            <path d="M9 9h6v6H9z"/>
+        </svg>`,
+        // 원형 기반
+        `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <circle cx="12" cy="12" r="4"/>
+        </svg>`,
+        // 다이아몬드 기반
+        `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="12,2 22,12 12,22 2,12"/>
+            <circle cx="12" cy="12" r="3"/>
+        </svg>`,
+        // 육각형 기반
+        `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="17.5,3.5 22.5,12 17.5,20.5 6.5,20.5 1.5,12 6.5,3.5"/>
+            <line x1="9" y1="9" x2="15" y2="15"/>
+            <line x1="15" y1="9" x2="9" y2="15"/>
+        </svg>`,
+        // 별 기반
+        `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="12,2 15.09,8.26 22,9 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9 8.91,8.26"/>
+        </svg>`
+    ];
+    
+    // 문자 코드를 기반으로 패턴 선택
+    const patternIndex = charCode % patterns.length;
+    return patterns[patternIndex];
+}
+
+// 기본 아이콘 함수 (호환성 유지)
+function getDefaultIcon() {
+    return generateDefaultIcon('기본');
+}
+
+// 메뉴 상태 관리
+let menuState = {
+    data: null,
+    expandedSections: new Set(),
+    selectedItems: new Set()
+};
+
+// 메뉴 데이터를 계층 구조로 변환 (서버 응답 기반)
+function organizeMenuData(items) {
+    const hierarchy = {};
+    
+    // 서버에서 받은 데이터를 그대로 사용
+    items.forEach(item => {
+        const menu1 = item.menu_1st;
+        const menu2 = item.menu_2nd;
+        const menu3 = item.menu_3rd;
+        
+        // menu_1st가 없는 경우 건너뛰기
+        if (!menu1) return;
+        
+        if (!hierarchy[menu1]) {
+            hierarchy[menu1] = {
+                items: [],
+                subMenus: {},
+                stats: { 
+                    total: 0, 
+                    writers: new Set(),
+                    lastUpdated: null
+                }
+            };
+        }
+        
+        hierarchy[menu1].stats.total++;
+        if (item.manual_writer) {
+            hierarchy[menu1].stats.writers.add(item.manual_writer);
+        }
+        
+        // 최근 업데이트 시간 추적
+        const itemDate = new Date(item.updated_at || item.created_at);
+        if (!hierarchy[menu1].stats.lastUpdated || itemDate > hierarchy[menu1].stats.lastUpdated) {
+            hierarchy[menu1].stats.lastUpdated = itemDate;
+        }
+        
+        // menu_2nd가 없으면 1차 메뉴에 직접 추가
+        if (!menu2) {
+            hierarchy[menu1].items.push(item);
+        } else {
+            // 2차 메뉴 처리
+            if (!hierarchy[menu1].subMenus[menu2]) {
+                hierarchy[menu1].subMenus[menu2] = {
+                    items: [],
+                    subMenus: {},
+                    stats: { 
+                        total: 0, 
+                        writers: new Set(),
+                        lastUpdated: null
+                    }
+                };
+            }
+            
+            hierarchy[menu1].subMenus[menu2].stats.total++;
+            if (item.manual_writer) {
+                hierarchy[menu1].subMenus[menu2].stats.writers.add(item.manual_writer);
+            }
+            
+            const itemDate2 = new Date(item.updated_at || item.created_at);
+            if (!hierarchy[menu1].subMenus[menu2].stats.lastUpdated || itemDate2 > hierarchy[menu1].subMenus[menu2].stats.lastUpdated) {
+                hierarchy[menu1].subMenus[menu2].stats.lastUpdated = itemDate2;
+            }
+            
+            // menu_3rd가 있으면 3차 메뉴 처리
+            if (menu3) {
+                if (!hierarchy[menu1].subMenus[menu2].subMenus[menu3]) {
+                    hierarchy[menu1].subMenus[menu2].subMenus[menu3] = {
+                        items: [],
+                        stats: { 
+                            total: 0, 
+                            writers: new Set(),
+                            lastUpdated: null
+                        }
+                    };
+                }
+                
+                hierarchy[menu1].subMenus[menu2].subMenus[menu3].stats.total++;
+                if (item.manual_writer) {
+                    hierarchy[menu1].subMenus[menu2].subMenus[menu3].stats.writers.add(item.manual_writer);
+                }
+                
+                const itemDate3 = new Date(item.updated_at || item.created_at);
+                if (!hierarchy[menu1].subMenus[menu2].subMenus[menu3].stats.lastUpdated || itemDate3 > hierarchy[menu1].subMenus[menu2].subMenus[menu3].stats.lastUpdated) {
+                    hierarchy[menu1].subMenus[menu2].subMenus[menu3].stats.lastUpdated = itemDate3;
+                }
+                
+                hierarchy[menu1].subMenus[menu2].subMenus[menu3].items.push(item);
+            } else {
+                // menu_3rd가 없으면 2차 메뉴에 직접 추가
+                hierarchy[menu1].subMenus[menu2].items.push(item);
+            }
+        }
+    });
+    
+    return hierarchy;
+}
+
+function getSubMenuManager(writers) {
+    if (!writers || writers.size === 0) {
+        return '담당자 없음';
+    }
+    
+    const writerArray = Array.from(writers);
+    if (writerArray.length === 1) {
+        return writerArray[0];
+    } else if (writerArray.length === 2) {
+        return `${writerArray[0]}, ${writerArray[1]}`;
+    } else {
+        return `${writerArray[0]} 외 ${writerArray.length - 1}명`;
+    }
+}
+
+// 메뉴 설명 생성 함수들 (서버 데이터 기반)
+function getMenuDescription(menu1st, stats) {
+    const writerCount = stats.writers.size;
+    const totalCount = stats.total;
+    const writerText = writerCount > 0 ? `${writerCount}명 작성자` : '작성자 없음';
+    
+    return `${menu1st} 관련 보험 상품 및 서비스 • ${totalCount}개 매뉴얼 • ${writerText}`;
+}
+
+function getSubMenuDescription(menu1st, menu2nd, stats) {
+    const totalCount = stats.total;
+    const writerCount = stats.writers.size;
+    
+    let description = `${menu2nd} 관련 서비스`;
+    if (totalCount > 0) {
+        description += ` • ${totalCount}개 매뉴얼`;
+        if (writerCount > 0) {
+            description += ` • ${writerCount}명 작성자`;
+        }
+    }
+    
+    return description;
+}
+
+// 통합 메뉴 표시
+function displayIntegratedMenu(hierarchyData) {
+    const menuListContainer = document.getElementById('menu_List');
+    const firstLevelMenus = Object.keys(hierarchyData).sort();
+    
+    let menuHTML = `
+        <div class="menu-header">
+            <div class="menu-controls">
+                <button class="control-btn add-menu" onclick="openAddMenuModal()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    메뉴 추가
+                </button>
+                <button class="control-btn add-client" onclick="openAddClientModal()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    </svg>
+                    거래처 등록
+                </button>
+                <button class="control-btn client-list" onclick="openClientListModal()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M8 6h13"></path>
+                        <path d="M8 12h13"></path>
+                        <path d="M8 18h13"></path>
+                        <path d="M3 6h.01"></path>
+                        <path d="M3 12h.01"></path>
+                        <path d="M3 18h.01"></path>
+                    </svg>
+                    거래처 리스트
+                </button>
+                <button class="control-btn" onclick="expandAllSections()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                    전체 펼치기
+                </button>
+                <button class="control-btn" onclick="collapseAllSections()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="18 15 12 9 6 15"></polyline>
+                    </svg>
+                    전체 접기
+                </button>
+                <div class="search-box">
+                    <input type="text" id="menuSearch" placeholder="메뉴 검색..." onkeyup="searchMenus(this.value)">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.35-4.35"></path>
+                    </svg>
+                </div>
+            </div>
+        </div>
+        <div class="integrated-menu-container two-column-grid">
+    `;
+    
+    firstLevelMenus.forEach((menu1st, index) => {
+        const menu1stData = hierarchyData[menu1st];
+        const isExpanded = menuState.expandedSections.has(menu1st);
+        const hasSubMenus = Object.keys(menu1stData.subMenus).length > 0;
+        const icon = getMenuIcon(menu1st);
+        const description = getMenuDescription(menu1st, menu1stData.stats);
+        
+        menuHTML += `
+            <div class="menu-section" data-menu="${menu1st}" style="animation-delay: ${index * 0.1}s">
+                <div class="menu-section-header ${isExpanded ? 'expanded' : ''}" onclick="toggleSection('${menu1st}')">
+                    <div class="section-main">
+                        <div class="section-icon">
+                            ${icon}
+                        </div>
+                        <div class="section-info">
+                            <h2 class="section-title">${menu1st}</h2>
+                            <p class="section-description">${description}</p>
+                        </div>
+                    </div>
+                    <div class="section-controls">
+                        ${hasSubMenus ? `
+                            <button class="expand-btn">
+                                <svg class="expand-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                        ` : ''}
+                        <div class="section-stats">
+                            <span class="stat-badge">${menu1stData.stats.total}</span>
+                        </div>
+                    </div>
+                </div>
+        `;
+        
+        if (hasSubMenus) {
+            menuHTML += `
+                <div class="submenu-container ${isExpanded ? 'expanded' : ''}" id="submenu-${menu1st}">
+                    <div class="submenu-grid">
+            `;
+            
+            const subMenus = Object.keys(menu1stData.subMenus).sort();
+            subMenus.forEach((menu2nd, subIndex) => {
+                const menu2ndData = menu1stData.subMenus[menu2nd];
+                const subDescription = getSubMenuDescription(menu1st, menu2nd, menu2ndData.stats);
+                const has3rdLevel = Object.keys(menu2ndData.subMenus || {}).length > 0;
+                
+                menuHTML += `
+                    <div class="submenu-card" data-menu1st="${menu1st}" data-menu2nd="${menu2nd}" 
+                         style="animation-delay: ${(subIndex + 1) * 0.1}s"
+                         onclick="handleSubMenuClick('${menu1st}', '${menu2nd}')">
+                        <div class="submenu-header">
+                            <div class="submenu-icon">
+                                ${getSubMenuIcon(menu1st, menu2nd)}
+                            </div>
+                            <h3 class="submenu-title">${menu2nd}</h3>
+                            <div class="submenu-info">
+                                <span class="submenu-manager">${getSubMenuManager(menu2ndData.stats.writers)}</span>
+                            </div>
+                        </div>
+                        ${has3rdLevel ? `
+                            <div class="submenu-indicator">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="9 18 15 12 9 6"></polyline>
+                                </svg>
+                            </div>
+                        ` : ''}
+                        <div class="submenu-actions">
+                            <button class="submenu-btn add-client-btn" onclick="event.stopPropagation(); openAddClientModal()">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="9" cy="7" r="4"></circle>
+                                    <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                </svg>
+                                거래처 등록
+                            </button>
+                            <button class="submenu-btn client-list-btn" onclick="event.stopPropagation(); openClientListModal()">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M8 6h13"></path>
+                                    <path d="M8 12h13"></path>
+                                    <path d="M8 18h13"></path>
+                                    <path d="M3 6h.01"></path>
+                                    <path d="M3 12h.01"></path>
+                                    <path d="M3 18h.01"></path>
+                                </svg>
+                                거래처 리스트
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            menuHTML += `
+                    </div>
+                </div>
+            `;
+        }
+        
+        // 1차 메뉴에 직접 속한 항목들
+        if (menu1stData.items.length > 0) {
+            menuHTML += `
+                <div class="direct-items ${isExpanded ? 'expanded' : ''}" id="direct-${menu1st}">
+                    <h4 class="direct-items-title">직접 매뉴얼</h4>
+                    <div class="direct-items-grid">
+            `;
+            
+            menu1stData.items.forEach(item => {
+                const itemTitle = item.description || `${menu1st} 매뉴얼`;
+                const itemWriter = item.manual_writer || '작성자 미지정';
+                const itemDate = new Date(item.created_at).toLocaleDateString('ko-KR');
+                
+                menuHTML += `
+                    <div class="direct-item-card" data-id="${item.id}" onclick="handleItemClick(${item.id})">
+                        <div class="direct-item-title">${itemTitle}</div>
+                        <div class="direct-item-meta">
+                            <span class="direct-item-writer">${itemWriter}</span>
+                            <span class="direct-item-date">${itemDate}</span>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            menuHTML += `
+                    </div>
+                </div>
+            `;
+        }
+        
+        menuHTML += '</div>';
+    });
+    
+    menuHTML += '</div>';
+    
+    // 메뉴 추가 모달 HTML 추가
+    menuHTML += `
+        <!-- 거래처 등록 모달 -->
+        <div id="addClientModal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>거래처 등록</h2>
+                    <button class="modal-close" onclick="closeAddClientModal()">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="addClientForm" onsubmit="handleAddClient(event)">
+                        <div class="form-group">
+                            <label for="clientName">거래처명 *</label>
+                            <input type="text" id="clientName" name="clientName" required placeholder="예: (주)삼성화재">
+                        </div>
+                        <div class="form-group">
+                            <label for="clientCode">거래처 코드</label>
+                            <input type="text" id="clientCode" name="clientCode" placeholder="예: SF001">
+                        </div>
+                        <div class="form-group">
+                            <label for="clientType">거래처 유형</label>
+                            <select id="clientType" name="clientType">
+                                <option value="">선택하세요</option>
+                                <option value="보험사">보험사</option>
+                                <option value="대리점">대리점</option>
+                                <option value="협력업체">협력업체</option>
+                                <option value="기타">기타</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="clientContact">담당자</label>
+                            <input type="text" id="clientContact" name="clientContact" placeholder="담당자명">
+                        </div>
+                        <div class="form-group">
+                            <label for="clientPhone">연락처</label>
+                            <input type="tel" id="clientPhone" name="clientPhone" placeholder="010-1234-5678">
+                        </div>
+                        <div class="form-group">
+                            <label for="clientEmail">이메일</label>
+                            <input type="email" id="clientEmail" name="clientEmail" placeholder="contact@company.com">
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn-cancel" onclick="closeAddClientModal()">취소</button>
+                            <button type="submit" class="btn-submit">거래처 등록</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- 거래처 리스트 모달 -->
+        <div id="clientListModal" class="modal modal-large" style="display: none;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>거래처 리스트</h2>
+                    <button class="modal-close" onclick="closeClientListModal()">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="client-list-controls">
+                        <div class="client-search">
+                            <input type="text" id="clientSearch" placeholder="거래처 검색..." onkeyup="searchClients(this.value)">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <path d="m21 21-4.35-4.35"></path>
+                            </svg>
+                        </div>
+                        <button class="btn-refresh" onclick="refreshClientList()">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="23 4 23 10 17 10"></polyline>
+                                <polyline points="1 20 1 14 7 14"></polyline>
+                                <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"></path>
+                            </svg>
+                            새로고침
+                        </button>
+                    </div>
+                    <div id="clientListContent" class="client-list-content">
+                        <div class="loading">거래처 목록을 불러오는 중...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="addMenuModal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>새 메뉴 추가</h2>
+                    <button class="modal-close" onclick="closeAddMenuModal()">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="addMenuForm" onsubmit="handleAddMenu(event)">
+                        <div class="form-group">
+                            <label for="menu1st">1차 메뉴명 *</label>
+                            <input type="text" id="menu1st" name="menu1st" required placeholder="예: 자동차보험">
+                        </div>
+                        <div class="form-group">
+                            <label for="menu2nd">2차 메뉴명</label>
+                            <input type="text" id="menu2nd" name="menu2nd" placeholder="예: 개인용">
+                        </div>
+                        <div class="form-group">
+                            <label for="menu3rd">3차 메뉴명</label>
+                            <input type="text" id="menu3rd" name="menu3rd" placeholder="예: 종합보험">
+                        </div>
+                        <div class="form-group">
+                            <label for="menuDescription">메뉴 설명</label>
+                            <textarea id="menuDescription" name="description" rows="3" placeholder="메뉴에 대한 설명을 입력하세요"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="menuWriter">작성자</label>
+                            <input type="text" id="menuWriter" name="writer" placeholder="작성자명">
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn-cancel" onclick="closeAddMenuModal()">취소</button>
+                            <button type="submit" class="btn-submit">메뉴 추가</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    menuListContainer.innerHTML = menuHTML;
+    
+    // 애니메이션 초기화
+    initMenuAnimations();
+}
+
+// 섹션 토글 기능
+function toggleSection(menu1st) {
+    const section = document.querySelector(`.menu-section[data-menu="${menu1st}"]`);
+    const header = section.querySelector('.menu-section-header');
+    const submenuContainer = section.querySelector('.submenu-container');
+    const directItems = section.querySelector('.direct-items');
+    
+    if (menuState.expandedSections.has(menu1st)) {
+        // 접기
+        menuState.expandedSections.delete(menu1st);
+        header.classList.remove('expanded');
+        if (submenuContainer) submenuContainer.classList.remove('expanded');
+        if (directItems) directItems.classList.remove('expanded');
+    } else {
+        // 펼치기
+        menuState.expandedSections.add(menu1st);
+        header.classList.add('expanded');
+        if (submenuContainer) submenuContainer.classList.add('expanded');
+        if (directItems) directItems.classList.add('expanded');
+    }
+}
+
+// 전체 펼치기/접기
+function expandAllSections() {
+    const hierarchyData = menuState.data;
+    if (!hierarchyData) return;
+    
+    Object.keys(hierarchyData).forEach(menu1st => {
+        menuState.expandedSections.add(menu1st);
+    });
+    displayIntegratedMenu(hierarchyData);
+}
+
+function collapseAllSections() {
+    menuState.expandedSections.clear();
+    if (menuState.data) {
+        displayIntegratedMenu(menuState.data);
+    }
+}
+
+// 검색 기능
+function searchMenus(searchTerm) {
+    const sections = document.querySelectorAll('.menu-section');
+    const term = searchTerm.toLowerCase().trim();
+    
+    sections.forEach(section => {
+        const menuText = section.textContent.toLowerCase();
+        const shouldShow = term === '' || menuText.includes(term);
+        
+        if (shouldShow) {
+            section.style.display = 'block';
+            section.style.opacity = '1';
+        } else {
+            section.style.display = 'none';
+            section.style.opacity = '0.5';
+        }
+    });
+}
+
+// 서브메뉴 클릭 처리
+function handleSubMenuClick(menu1st, menu2nd) {
+    console.log(`서브메뉴 클릭: ${menu1st} > ${menu2nd}`);
+    // 여기에 서브메뉴 클릭 시 로직 추가
+    // 예: 모달 열기, 상세 페이지 이동 등
+    
+    // 선택 상태 토글
+    const key = `${menu1st}-${menu2nd}`;
+    const card = document.querySelector(`[data-menu1st="${menu1st}"][data-menu2nd="${menu2nd}"]`);
+    
+    if (card) {
+        if (menuState.selectedItems.has(key)) {
+            menuState.selectedItems.delete(key);
+            card.classList.remove('selected');
+        } else {
+            menuState.selectedItems.add(key);
+            card.classList.add('selected');
+        }
+    }
+}
+
+// 아이템 클릭 처리
+function handleItemClick(itemId) {
+    console.log(`매뉴얼 클릭: ID ${itemId}`);
+    // 여기에 매뉴얼 클릭 시 로직 추가
+}
+
+// 애니메이션 초기화
+function initMenuAnimations() {
+    const sections = document.querySelectorAll('.menu-section');
+    sections.forEach((section, index) => {
+        section.style.animationDelay = `${index * 0.1}s`;
+    });
+}
+
+// 거래처 등록 모달 관련 함수들
+function openAddClientModal() {
+    const modal = document.getElementById('addClientModal');
+    if (modal) {
+        modal.style.display = 'flex';
+        setTimeout(() => {
+            const firstInput = document.getElementById('clientName');
+            if (firstInput) firstInput.focus();
+        }, 100);
+    }
+}
+
+function closeAddClientModal() {
+    const modal = document.getElementById('addClientModal');
+    if (modal) {
+        modal.style.display = 'none';
+        const form = document.getElementById('addClientForm');
+        if (form) form.reset();
+    }
+}
+
+function handleAddClient(event) {
+    event.preventDefault();
+    
+    const formData = new FormData(event.target);
+    const clientData = {
+        name: formData.get('clientName'),
+        code: formData.get('clientCode') || null,
+        type: formData.get('clientType') || null,
+        contact: formData.get('clientContact') || null,
+        phone: formData.get('clientPhone') || null,
+        email: formData.get('clientEmail') || null
+    };
+    
+    if (!clientData.name.trim()) {
+        alert('거래처명은 필수입니다.');
+        return;
+    }
+    
+    console.log('새 거래처 데이터:', clientData);
+    submitNewClient(clientData);
+}
+
+async function submitNewClient(clientData) {
+    try {
+        const response = await fetch('/api/client/addClient.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include',
+            body: JSON.stringify(clientData)
+        });
+        
+        if (!response.ok) {
+            throw new Error('거래처 등록 실패: ' + response.status);
+        }
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            alert('거래처가 성공적으로 등록되었습니다.');
+            closeAddClientModal();
+        } else {
+            throw new Error(result.message || '거래처 등록 실패');
+        }
+    } catch (error) {
+        console.error('거래처 등록 중 오류:', error);
+        alert('거래처 등록 중 오류가 발생했습니다: ' + error.message);
+    }
+}
+
+// 거래처 리스트 모달 관련 함수들
+function openClientListModal() {
+    const modal = document.getElementById('clientListModal');
+    if (modal) {
+        modal.style.display = 'flex';
+        loadClientList();
+    }
+}
+
+function closeClientListModal() {
+    const modal = document.getElementById('clientListModal');
+    if (modal) {
+        modal.style.display = 'none';
+    }
+}
+
+async function loadClientList() {
+    try {
+        const clientListContent = document.getElementById('clientListContent');
+        clientListContent.innerHTML = '<div class="loading">거래처 목록을 불러오는 중...</div>';
+        
+        const response = await fetch('/api/client/getClients.php', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include'
+        });
+        
+        if (!response.ok) {
+            throw new Error('거래처 목록 로드 실패: ' + response.status);
+        }
+        
+        const result = await response.json();
+        
+        if (result.success && result.data) {
+            displayClientList(result.data);
+        } else {
+            throw new Error(result.message || '거래처 목록 로드 실패');
+        }
+    } catch (error) {
+        console.error('거래처 목록 로드 중 오류:', error);
+        document.getElementById('clientListContent').innerHTML = `
+            <div class="error">거래처 목록을 불러오는 중 오류가 발생했습니다.<br>${error.message}</div>
+        `;
+    }
+}
+
+function displayClientList(clients) {
+    const clientListContent = document.getElementById('clientListContent');
+    
+    if (!clients || clients.length === 0) {
+        clientListContent.innerHTML = '<div class="no-data">등록된 거래처가 없습니다.</div>';
+        return;
+    }
+    
+    let html = `
+        <div class="client-table">
+            <div class="client-table-header">
+                <div class="client-col-name">거래처명</div>
+                <div class="client-col-code">코드</div>
+                <div class="client-col-type">유형</div>
+                <div class="client-col-contact">담당자</div>
+                <div class="client-col-phone">연락처</div>
+                <div class="client-col-actions">관리</div>
+            </div>
+            <div class="client-table-body">
+    `;
+    
+    clients.forEach(client => {
+        html += `
+            <div class="client-row" data-client-id="${client.id}">
+                <div class="client-col-name">${client.name}</div>
+                <div class="client-col-code">${client.code || '-'}</div>
+                <div class="client-col-type">
+                    <span class="client-type-badge ${client.type ? client.type.toLowerCase() : ''}">${client.type || '-'}</span>
+                </div>
+                <div class="client-col-contact">${client.contact || '-'}</div>
+                <div class="client-col-phone">${client.phone || '-'}</div>
+                <div class="client-col-actions">
+                    <button class="btn-edit" onclick="editClient(${client.id})" title="수정">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                        </svg>
+                    </button>
+                    <button class="btn-delete" onclick="deleteClient(${client.id})" title="삭제">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="3,6 5,6 21,6"></polyline>
+                            <path d="M19,6V20a2,2 0 0,1 -2,2H7a2,2 0 0,1 -2,-2V6m3,0V4a2,2 0 0,1 2,-2h4a2,2 0 0,1 2,2V6"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        `;
+    });
+    
+    html += `
+            </div>
+        </div>
+    `;
+    
+    clientListContent.innerHTML = html;
+}
+
+function searchClients(searchTerm) {
+    const rows = document.querySelectorAll('.client-row');
+    const term = searchTerm.toLowerCase().trim();
+    
+    rows.forEach(row => {
+        const text = row.textContent.toLowerCase();
+        const shouldShow = term === '' || text.includes(term);
+        row.style.display = shouldShow ? 'grid' : 'none';
+    });
+}
+
+function refreshClientList() {
+    loadClientList();
+}
+
+function editClient(clientId) {
+    console.log('거래처 수정:', clientId);
+    // 여기에 거래처 수정 로직 추가
+}
+
+function deleteClient(clientId) {
+    if (confirm('정말로 이 거래처를 삭제하시겠습니까?')) {
+        console.log('거래처 삭제:', clientId);
+        // 여기에 거래처 삭제 로직 추가
+    }
+}
+
+// 메뉴 추가 모달 관련 함수들
+function openAddMenuModal() {
+    const modal = document.getElementById('addMenuModal');
+    if (modal) {
+        modal.style.display = 'flex';
+        // 첫 번째 입력 필드에 포커스
+        setTimeout(() => {
+            const firstInput = document.getElementById('menu1st');
+            if (firstInput) firstInput.focus();
+        }, 100);
+    }
+}
+
+function closeAddMenuModal() {
+    const modal = document.getElementById('addMenuModal');
+    if (modal) {
+        modal.style.display = 'none';
+        // 폼 초기화
+        const form = document.getElementById('addMenuForm');
+        if (form) form.reset();
+    }
+}
+
+function handleAddMenu(event) {
+    event.preventDefault();
+    
+    const formData = new FormData(event.target);
+    const menuData = {
+        menu_1st: formData.get('menu1st'),
+        menu_2nd: formData.get('menu2nd') || null,
+        menu_3rd: formData.get('menu3rd') || null,
+        description: formData.get('description') || null,
+        manual_writer: formData.get('writer') || null
+    };
+    
+    // 필수 필드 검증
+    if (!menuData.menu_1st.trim()) {
+        alert('1차 메뉴명은 필수입니다.');
+        return;
+    }
+    
+    console.log('새 메뉴 데이터:', menuData);
+    
+    // 여기에 서버로 데이터 전송 로직 추가
+    submitNewMenu(menuData);
+}
+
+async function submitNewMenu(menuData) {
+    try {
+        const response = await fetch('/api/manual/addMenu.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include',
+            body: JSON.stringify(menuData)
+        });
+        
+        if (!response.ok) {
+            throw new Error('메뉴 추가 실패: ' + response.status);
+        }
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            alert('메뉴가 성공적으로 추가되었습니다.');
+            closeAddMenuModal();
+            // 메뉴 목록 새로고침
+            fetchServerStatus();
+        } else {
+            throw new Error(result.message || '메뉴 추가 실패');
+        }
+    } catch (error) {
+        console.error('메뉴 추가 중 오류:', error);
+        alert('메뉴 추가 중 오류가 발생했습니다: ' + error.message);
+    }
+}
+
+// 모달 외부 클릭 시 닫기
+document.addEventListener('click', function(event) {
+    const addMenuModal = document.getElementById('addMenuModal');
+    const addClientModal = document.getElementById('addClientModal');
+    const clientListModal = document.getElementById('clientListModal');
+    
+    if (addMenuModal && event.target === addMenuModal) {
+        closeAddMenuModal();
+    }
+    if (addClientModal && event.target === addClientModal) {
+        closeAddClientModal();
+    }
+    if (clientListModal && event.target === clientListModal) {
+        closeClientListModal();
+    }
+});
+
+// ESC 키로 모달 닫기
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+        closeAddMenuModal();
+        closeAddClientModal();
+        closeClientListModal();
+    }
+});
+
+// 메인 로드 함수
+async function fetchServerStatus() {
+    try {
+        const menuListContainer = document.getElementById('menu_List');
+        if (!menuListContainer) {
+            console.error('menu_List 요소를 찾을 수 없습니다.');
+            return null;
+        }
+        
+        menuListContainer.innerHTML = '<div class="loading">메뉴 데이터를 불러오는 중...</div>';
+
+        const response = await fetch('/api/manual/menuList.php', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include'
+        });
+
+        if (!response.ok) {
+            throw new Error('서버 응답 실패: ' + response.status);
+        }
+
+        const data = await response.json();
+        console.log('서버 상태:', data);
+
+        if (!data.success || !data.data.items) {
+            throw new Error(data.message || '데이터 로드 실패');
+        }
+
+        // 계층 구조로 데이터 정리
+        const hierarchyData = organizeMenuData(data.data.items);
+        menuState.data = hierarchyData;
+        
+        // 통합 메뉴 표시
+        displayIntegratedMenu(hierarchyData);
+
+        return data;
+    } catch (error) {
+        console.error('서버 상태 확인 중 오류 발생:', error);
+        const menuListContainer = document.getElementById('menu_List');
+        if (menuListContainer) {
+            menuListContainer.innerHTML = `
+                <div class="error">
+                    메뉴 데이터를 불러오는 중 오류가 발생했습니다.<br>
+                    ${error.message}
+                </div>
+            `;
+        }
+        return null;
+    }
+}
+    </script>
+</body>
+</html>

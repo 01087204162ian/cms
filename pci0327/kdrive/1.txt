@@ -1,0 +1,32 @@
+<?php
+session_start();
+if (!isset($_SESSION['admin'])) {
+    header("Location: login.php");
+    exit;
+}
+
+require_once './includes/db.php';
+
+$db = new DatabaseConnection();
+$pdo = $db->pdo;
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $results = $_POST['result'] ?? [];
+    $devStatuses = $_POST['dev_status'] ?? [];
+
+    foreach ($results as $id => $resultText) {
+        $devText = $devStatuses[$id] ?? '';  // 해당 ID에 대한 개발현황이 없으면 빈 문자열
+        $stmt = $pdo->prepare("UPDATE checklist SET result = :result, dev_status = :dev_status WHERE id = :id");
+        $stmt->execute([
+            ':result' => trim($resultText),
+            ':dev_status' => trim($devText),
+            ':id' => (int)$id
+        ]);
+    }
+
+    // 저장 후 dashboard로 리디렉션 (메시지 표시를 위해 ?saved=1 파라미터 추가)
+    header("Location: dashboard.php?saved=1");
+    exit;
+} else {
+    echo "<script>alert('잘못된 접근입니다.'); history.back();</script>";
+}

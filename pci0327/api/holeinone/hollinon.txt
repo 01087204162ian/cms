@@ -1,0 +1,21 @@
+-- 예치금 관리 테이블
+-- 고객별 예치금 정보를 저장하고 추적하기 위한 테이블입니다.
+CREATE TABLE deposits (
+  deposit_id INT AUTO_INCREMENT PRIMARY KEY COMMENT '예치금 항목의 고유 식별자',
+  client_id INT NOT NULL COMMENT '고객의 고유 식별자(clients 테이블 참조)',
+  cert_id INT NOT NULL COMMENT '인증서의 고유 식별자(certificates 테이블 참조)',
+  cert_number VARCHAR(50) NOT NULL COMMENT '인증서 번호',
+  deposit_amount DECIMAL(15, 2) NOT NULL COMMENT '예치된 금액(원화)',
+  description TEXT COMMENT '예치금에 대한 설명, 비고 또는 추가 정보',
+  deposit_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '예치금이 입금된 날짜',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '레코드 생성 시간',
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '레코드 마지막 업데이트 시간',
+  manager_name VARCHAR(100) NOT NULL COMMENT '예치금 등록/관리 담당자 이름',
+  INDEX idx_client_id (client_id) COMMENT '고객 ID로 예치금 검색 성능 향상',
+  INDEX idx_cert_id (cert_id) COMMENT '인증서 ID로 예치금 검색 성능 향상',
+  INDEX idx_deposit_date (deposit_date) COMMENT '예치일자 기준 검색 성능 향상'
+) ENGINE=InnoDB COMMENT '고객의 예치금 정보를 저장하는 테이블';
+
+CREATE INDEX idx_client_id ON deposits(client_id) COMMENT '고객 ID로 예치금 검색 성능 향상';
+CREATE INDEX idx_cert_id ON deposits(cert_id) COMMENT '인증서 ID로 예치금 검색 성능 향상';
+CREATE INDEX idx_deposit_date ON deposits(deposit_date) COMMENT '예치일자 기준 검색 성능 향상';

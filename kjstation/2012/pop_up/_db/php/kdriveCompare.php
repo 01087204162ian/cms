@@ -1,0 +1,1 @@
+<? echo $pName; echo $jumin; echo $etage; echo $daeriCompanyNum; ?>

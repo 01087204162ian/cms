@@ -1,0 +1,623 @@
+/* ===== Manual Modal 스타일 ===== */
+#manual-modal {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+
+.manualModal {
+    position: fixed;
+    z-index: 3033;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+
+/* 모달 콘텐츠 기본 스타일 - 스크롤 문제 해결 */
+.manualModal-content {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    position: relative;
+    width: 100%;
+    max-width: 900px;
+    max-height: 90vh;
+    margin: auto;
+    padding: 0;
+    transform: translateY(0);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* 모달 내부 스크롤 영역 */
+#m_manual {
+    overflow-y: auto;
+    flex: 1;
+    max-height: calc(90vh - 60px); /* 헤더와 여백 고려 */
+}
+
+/* 닫기 버튼 스타일 - 위치 수정 */
+.close-manualModal {
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    font-size: 20px;
+    font-weight: bold;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #6c757d;
+    transition: all 0.2s;
+    padding: 0;
+    line-height: 1;
+    z-index: 10;
+}
+
+.close-manualModal:hover {
+    background-color: #e9ecef;
+    color: #495057;
+    transform: scale(1.1);
+}
+
+/* 모달 헤더 스타일 - 깔끔한 디자인 */
+.modal-header {
+    background-color: #ffffff;
+    color: #333;
+    padding: 20px 20px 15px 20px;
+    border-bottom: 1px solid #e9ecef;
+    position: relative;
+    font-size: 18px;
+    font-weight: 600;
+    border-radius: 8px 8px 0 0;
+}
+
+.modal-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    margin: 0;
+    line-height: 1.2;
+}
+
+/* 모달 폼 스타일 */
+.modal-form {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.form-row {
+    display: flex;
+    gap: 15px;
+}
+
+.form-group {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.form-group.full-width {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+}
+
+.form-group label {
+    min-width: 80px;
+    font-weight: bold;
+    color: #333;
+    font-size: 14px;
+    text-align: right;
+    white-space: nowrap;
+}
+
+.form-group.full-width label {
+    text-align: left;
+    min-width: auto;
+}
+
+.form-group input, 
+.form-group textarea {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: border-color 0.3s;
+    box-sizing: border-box;
+}
+
+.form-group input:focus, 
+.form-group textarea:focus {
+    outline: none;
+    border-color: #228B22;
+    box-shadow: 0 0 0 2px rgba(34, 139, 34, 0.25);
+}
+
+.form-group input[required] {
+    border-left: 3px solid #228B22;
+}
+
+/* 폼 액션 버튼 스타일 */
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+}
+
+.btn-cancel, 
+.btn-submit {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    transition: all 0.3s;
+    min-width: 80px;
+}
+
+.btn-cancel {
+    background-color: #6c757d;
+    color: white;
+}
+
+.btn-cancel:hover {
+    background-color: #5a6268;
+    transform: translateY(-1px);
+}
+
+.btn-submit {
+    background-color: #228B22;
+    color: white;
+}
+
+.btn-submit:hover {
+    background-color: #1e7e1e;
+    transform: translateY(-1px);
+}
+
+.btn-primary {
+    background-color: #228B22;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-primary:hover {
+    background-color: #1e7e1e;
+}
+
+/* Manual Modal 숨김/표시 */
+.manualModal {
+    display: none;
+}
+
+.manualModal.show {
+    display: flex;
+}
+
+/* 모달 본문 컨테이너 */
+#manualModal-body {
+    padding: 10px 0;
+}
+
+/* 모달 애니메이션 */
+.manualModal {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.manualModal.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.manualModal-content {
+    transform: translateY(-20px);
+    transition: transform 0.3s ease;
+}
+
+.manualModal.show .manualModal-content {
+    transform: translateY(0);
+}
+
+/* ===== 태블릿 반응형 (768px ~ 1024px) ===== */
+@media (max-width: 1024px) and (min-width: 769px) {
+    .manualModal-content {
+        max-width: 750px;
+        margin: 20px;
+    }
+    
+    .modal-form {
+        padding: 18px;
+    }
+    
+    .form-row {
+        gap: 12px;
+    }
+    
+    .form-group label {
+        min-width: 70px;
+        font-size: 13px;
+    }
+    
+    .form-group input,
+    .form-group textarea {
+        font-size: 13px;
+        padding: 7px 10px;
+    }
+}
+
+/* ===== 모바일 반응형 (768px 이하) - 헤더 수정 반영 ===== */
+@media (max-width: 768px) {
+    #manual-modal,
+    .manualModal {
+        padding: 10px;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .manualModal-content {
+        max-width: 100%;
+        width: 100%;
+        max-height: 95vh;
+        margin: auto;
+        border-radius: 8px;
+        transform: translateY(0);
+    }
+    
+    .modal-header {
+        padding: 15px 20px 12px 20px;
+        font-size: 16px;
+    }
+    
+    .close-manualModal {
+        width: 28px;
+        height: 28px;
+        font-size: 18px;
+        right: 10px;
+        top: 12px;
+    }
+    
+    .close-manualModal:hover {
+        transform: scale(1.1);
+    }
+    
+    #m_manual {
+        max-height: calc(95vh - 50px);
+    }
+    
+    .modal-form {
+        padding: 15px;
+        gap: 12px;
+    }
+    
+    /* 모바일에서 폼 행을 세로로 배치 */
+    .form-row {
+        flex-direction: column;
+        gap: 12px;
+    }
+    
+    .form-group {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 5px;
+    }
+    
+    .form-group label {
+        text-align: left;
+        min-width: auto;
+        font-size: 13px;
+        font-weight: 600;
+    }
+    
+    .form-group input,
+    .form-group textarea {
+        width: 100%;
+        padding: 10px 12px;
+        font-size: 16px; /* iOS 줌 방지 */
+        border-radius: 6px;
+    }
+    
+    .form-group textarea {
+        min-height: 80px;
+        resize: vertical;
+    }
+    
+    /* 모바일 버튼 스타일 */
+    .form-actions {
+        flex-direction: column-reverse;
+        gap: 8px;
+        margin-top: 15px;
+        padding-top: 12px;
+    }
+    
+    .btn-cancel,
+    .btn-submit {
+        width: 100%;
+        padding: 12px 20px;
+        font-size: 16px;
+        border-radius: 6px;
+        min-width: auto;
+    }
+    
+    /* 필수 입력 표시 개선 */
+    .form-group input[required] {
+        border-left: none;
+        border: 2px solid #228B22;
+    }
+    
+    /* 포커스 효과 개선 */
+    .form-group input:focus,
+    .form-group textarea:focus {
+        box-shadow: 0 0 0 3px rgba(34, 139, 34, 0.2);
+        border-color: #228B22;
+    }
+}
+
+/* ===== 소형 모바일 (480px 이하) - 헤더 수정 반영 ===== */
+@media (max-width: 480px) {
+    #manual-modal,
+    .manualModal {
+        padding: 5px;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .manualModal-content {
+        border-radius: 6px;
+        max-height: 95vh;
+        margin: auto;
+        transform: translateY(0);
+    }
+    
+    .modal-header {
+        padding: 12px 15px 10px 15px;
+        font-size: 15px;
+    }
+    
+    .close-manualModal {
+        width: 26px;
+        height: 26px;
+        font-size: 16px;
+        right: 8px;
+        top: 10px;
+    }
+    
+    .modal-form {
+        padding: 12px;
+        gap: 10px;
+    }
+    
+    .form-group input,
+    .form-group textarea {
+        padding: 8px 10px;
+        font-size: 16px;
+    }
+    
+    .form-group label {
+        font-size: 12px;
+    }
+    
+    .btn-cancel,
+    .btn-submit {
+        padding: 10px 16px;
+        font-size: 15px;
+    }
+    
+    .modal-title {
+        font-size: 16px;
+    }
+    
+    #m_manual {
+        max-height: calc(95vh - 45px);
+    }
+}
+
+/* ===== 가로 모드 모바일 - 헤더 수정 반영 ===== */
+@media (max-width: 768px) and (orientation: landscape) {
+    #manual-modal,
+    .manualModal {
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .manualModal-content {
+        max-height: 90vh;
+        margin: auto;
+        transform: translateY(0);
+    }
+    
+    .modal-header {
+        padding: 10px 15px 8px 15px;
+    }
+    
+    .modal-form {
+        gap: 8px;
+    }
+    
+    .form-group input,
+    .form-group textarea {
+        padding: 6px 10px;
+    }
+    
+    .form-group textarea {
+        min-height: 60px;
+    }
+    
+    .form-actions {
+        margin-top: 10px;
+        padding-top: 8px;
+    }
+    
+    .btn-cancel,
+    .btn-submit {
+        padding: 8px 16px;
+    }
+    
+    #m_manual {
+        max-height: calc(90vh - 40px);
+    }
+}
+
+/* ===== 초소형 모바일 (320px 이하) ===== */
+@media (max-width: 320px) {
+    .modal-title {
+        font-size: 15px;
+    }
+    
+    .modal-form {
+        padding: 10px;
+    }
+    
+    .form-group input,
+    .form-group textarea {
+        padding: 6px 8px;
+        font-size: 15px;
+    }
+    
+    .btn-cancel,
+    .btn-submit {
+        padding: 8px 12px;
+        font-size: 14px;
+    }
+}
+
+/* ===== 접근성 개선 ===== */
+@media (prefers-reduced-motion: reduce) {
+    .close-manualModal,
+    .btn-cancel,
+    .btn-submit,
+    .form-group input,
+    .form-group textarea,
+    .manualModal,
+    .manualModal-content {
+        transition: none;
+    }
+    
+    .close-manualModal:hover,
+    .btn-cancel:hover,
+    .btn-submit:hover {
+        transform: none;
+    }
+}
+
+/* 고대비 모드 지원 */
+@media (prefers-contrast: high) {
+    .manualModal-content {
+        border: 2px solid #000;
+    }
+    
+    .form-group input,
+    .form-group textarea {
+        border: 2px solid #000;
+    }
+    
+    .form-group input:focus,
+    .form-group textarea:focus {
+        border-color: #000;
+        box-shadow: 0 0 0 3px #000;
+    }
+    
+    .modal-header {
+        border-bottom: 2px solid #000;
+    }
+    
+    .btn-cancel,
+    .btn-submit,
+    .btn-primary {
+        border: 2px solid #000;
+    }
+}
+
+/* 터치 디바이스 최적화 */
+@media (pointer: coarse) {
+    .close-manualModal {
+        min-width: 44px;
+        min-height: 44px;
+    }
+    
+    .btn-cancel,
+    .btn-submit {
+        min-height: 44px;
+        padding: 12px 20px;
+    }
+    
+    .form-group input,
+    .form-group textarea {
+        min-height: 44px;
+        padding: 10px 12px;
+    }
+}
+
+/* ===== 다크 모드 지원 ===== */
+@media (prefers-color-scheme: dark) {
+    .manualModal-content {
+        background-color: #2d3748;
+        color: #f7fafc;
+    }
+    
+    .form-group input,
+    .form-group textarea {
+        background-color: #4a5568;
+        border-color: #718096;
+        color: #f7fafc;
+    }
+    
+    .form-group input:focus,
+    .form-group textarea:focus {
+        border-color: #48bb78;
+        box-shadow: 0 0 0 2px rgba(72, 187, 120, 0.25);
+    }
+    
+    .form-group label {
+        color: #e2e8f0;
+    }
+    
+    .form-actions {
+        border-top-color: #4a5568;
+    }
+}
+
+/* ===== 인쇄 시 숨김 ===== */
+@media print {
+    #manual-modal,
+    .manualModal {
+        display: none !important;
+    }
+}

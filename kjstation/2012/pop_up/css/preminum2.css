@@ -1,0 +1,254 @@
+#listPart{
+	
+	margin-top: 0;
+	padding-top: 0;
+}
+
+#listPart table { 
+	border-collapse: collapse;
+	width: 100%;
+	font:normal 12px/1.5 dotum,"µ¸À½",Arial,AppleGothic,Sans-serif; color:#666;
+	/*font-family: "Century Gothic", "Gill Sans", Arial, sans-serif;*/
+}
+
+#listPart caption {
+	text-align: right;
+	font-size: 1em;
+}
+#listPart th {
+	text-align: right;
+	border: 1px solid #CCCCCC;
+	padding: 3px 5px 2px 5px;
+	font-size: 1em;
+	height: 12px;
+}
+#listPart td {
+	text-align: center;
+	border: 1px solid #CCCCCC;
+	padding: 3px 5px 2px 5px;
+	font-size: 1em;
+	height: 24px;
+}
+
+
+
+
+.textareP{
+	border: 1px none #FFFFFF; 
+	width:97%;
+	background-color:#FFFFFF;
+	padding:2 0 0 0; 
+	font-family:µ¸¿ò,±¼¸²,arial,verdana; 
+	font-size:10pt;
+	height:19px;
+	text-align: center;
+	}
+.textareR{
+	border: 1px none #f9f8f0; 
+	width:97%;
+	background-color:#f9f8f0;
+	padding:2 0 0 0; 
+	font-family:µ¸¿ò,±¼¸²,arial,verdana; 
+	font-size:10pt;
+	height:19px;
+	text-align: center;
+	}
+.textareQ{
+	border: 1px none #FFFFFF; 
+	width:10%;
+	background-color:#FFFFFF;
+	padding:2 0 0 0; 
+	font-family:µ¸¿ò,±¼¸²,arial,verdana; 
+	font-size:10pt;
+	height:19px;
+	text-align: center;
+	}
+
+#listPartE{
+	
+	margin-top: 0;
+	padding-top: 0;
+}
+
+#listPartE table { 
+	border-collapse: collapse;
+	width: 100%;
+	font-family: "Century Gothic", "Gill Sans", Arial, sans-serif;
+}
+
+#listPartE caption {
+	text-align: right;
+	font-size: 1em;
+}
+#listPartE th {
+	text-align:right;
+	border: 1px solid #CCCCCC;
+	padding: 3px 5px 2px 5px;
+	font-size: 1em;
+	height: 12px;
+}
+#listPartE td {
+	text-align: center;
+	border: 1px solid #CCCCCC;
+	padding: 3px 5px 2px 5px;
+	font-size: 1em;
+	height: 24px;
+}
+
+
+
+#secondPartE{
+	
+	margin-top: 10px;
+	padding-top: 0;
+}
+
+#secondPartE table { 
+	border-collapse: collapse;
+	width: 100%;
+	font-family: "Century Gothic", "Gill Sans", Arial, sans-serif;
+}
+
+#secondPartE caption {
+	text-align: right;
+	font-size: 1em;
+}
+
+.secondthd{
+    padding: 3px 5px 2px 5px;
+	font-size: 1em;
+	height: 24px;
+	}
+
+
+
+#secondPartE th {
+	
+	padding: 3px 5px 2px 5px;
+	font-size: 1em;
+	height: 12px;
+}
+#secondPartE td {
+	//text-align: center;
+	//border: 1px solid #CCCCCC;
+	padding: 3px 5px 2px 5px;
+	font-size: 1em;
+	height: 24px;
+}
+
+
+
+#thirdPartE{
+	
+	margin-top: 10px;
+	padding-top: 0;
+}
+
+#thirdPartE table { 
+	border-collapse: collapse;
+	width: 100%;
+	font-family: "Century Gothic", "Gill Sans", Arial, sans-serif;
+}
+
+#thirdPartE caption {
+	text-align: right;
+	font-size: 1em;
+}
+#thirdPartE th {
+	text-align: right;
+	border: 1px solid #CCCCCC;
+	padding: 3px 5px 2px 5px;
+	font-size: 1em;
+	height: 12px;
+}
+#thirdPartE td {
+	text-align: center;
+	border: 1px solid #CCCCCC;
+	padding: 3px 5px 2px 5px;
+	font-size: 1em;
+	height: 24px;
+}
+#MonthTable{  /*¿ùº¸Çè·á gusongList.php */
+	
+	margin-top: 0;
+	padding-top: 0;
+}
+
+#MonthTable table { 
+	border-collapse: collapse;
+	width: 100%;
+	font:normal 12px/1.5 dotum,"µ¸À½",Arial,AppleGothic,Sans-serif; color:#666;
+	/*font-family: "Century Gothic", "Gill Sans", Arial, sans-serif;*/
+}
+
+#MonthTable caption {
+	text-align: right;
+	font-size: 1em;
+}
+#MonthTable th {
+	text-align: right;
+	border: 1px solid #CCCCCC;
+	padding: 3px 5px 2px 5px;
+	font-size: 1em;
+	height: 12px;
+}
+#MonthTable td {
+	text-align: center;
+	border: 1px solid #CCCCCC;
+	padding: 3px 5px 2px 5px;
+	font-size: 1em;
+	height: 24px;
+}
+
+.ctitle{
+	text-align:left;
+	border: 1px none #FFFFFF; 
+	width:58%;
+	padding:2 0 0 0; 
+	color: blue;
+	font-size:10pt;
+	font-size: 5em;
+	
+	
+
+}
+.ctitle2{
+	text-align:left;
+	border: 1px none #FFFFFF; 
+	width:58%;
+	padding:2 0 0 0; 
+	font-family:µ¸¿ò,±¼¸²,arial,verdana; 
+	font-size:10pt;
+	font-size: 2em;
+}
+#excelUpload{
+	
+	margin: 10px ;
+	padding-top: 10;
+}
+
+#excelUpload table { 
+	border-collapse: collapse;
+	width: 100%;
+	font:normal 12px/1.5 dotum,"µ¸À½",Arial,AppleGothic,Sans-serif; color:#666;
+	/*font-family: "Century Gothic", "Gill Sans", Arial, sans-serif;*/
+}
+
+#excelUpload caption {
+	text-align: right;
+	font-size: 1em;
+}
+#excelUpload th {
+	text-align: right;
+	border: 1px solid #CCCCCC;
+	padding: 3px 5px 2px 5px;
+	font-size: 1em;
+	height: 12px;
+}
+#excelUpload td {
+	text-align: center;
+	border: 1px solid #CCCCCC;
+	padding: 3px 5px 2px 5px;
+	font-size: 1em;
+	height: 24px;
+}

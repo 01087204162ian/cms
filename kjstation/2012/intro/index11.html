@@ -1,0 +1,181 @@
+<?include '../../2012/lib/lib_auth.php';?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=euc-kr" />
+	<title><?=$titleName?></title>
+	<link href="../css/sj.css" rel="stylesheet" type="text/css" />
+	<link href="../../sj/calendar/dhtmlgoodies_calendar/dhtmlgoodies_calendar.css" rel="stylesheet" type="text/css" />
+	<script src="../../sj/calendar/dhtmlgoodies_calendar/dhtmlgoodies_calendar.js" type="text/javascript"></script>
+	<script src="../../sj/js/smsAjax.js" type="text/javascript"></script><!--SmsAjax-->
+	<script src="../js/create.js" type="text/javascript"></script><!--ajax-->	
+	<script src="./js/IntroAjax11.js" type="text/javascript"></script><!--ajax-->
+	<script src="./js/basicAjax.js" type="text/javascript"></script><!--ajaxloading-->
+</head>
+<?$redirectURL='DMM_System'?>
+<body id="ssangyong">
+<div id="wrapper">
+	<div id="banner"><? include "../php/idname.php"?></div>
+	<div id="mainNav"><? include "../php/nav.php";?><!--메인 메뉴--></div>
+	<div id="contentWrapper"> 
+		<div id="main">
+		  <form>
+			  <div id="serchPart">
+				  <input type="text" value="<?=$now_time?>" readonly name="end" id="end" size='10' maxlength='10' />
+				  <img class="calendar" src="/sj/images/calendar.gif" onclick="displayCalendar(document.forms[0].end,'yyyy-mm-dd',this)"  />
+				 <select id="c_name"  onChange='jump()'>
+					<option value="1">운전자</option>
+					<option value="4">증권번호</option>
+					<option>========</option>
+				<!--	<option value="2">계약자</option>
+					<option value="3">회사명</option>
+				   -->
+				</select>
+				<select id="insCompany"  onChange='serch()'>
+					<option value="2">동부</option>
+					<option value="8">삼성</option>
+					<option>========</option>
+				<!--	<option value="2">계약자</option>
+					<option value="3">회사명</option>
+				   -->
+				</select>
+				 <!-- <input type='text' id='driver_name'  size='10' maxlength='10' OnBlur="certi_check()" OnClick='certi_check_reverse()'>-->
+				  <input type='text' id='driver_name'  size='20' maxlength='20' >
+				<!--	<select id="gi" class="input">
+					  <option value='9'>전체보기</option>
+					  <option value='1'>당월납입</option>
+					  <option value='2'>당월미납</option>
+					  <option value='3'>유예</option>
+					  <option value='4'>실효</option>
+					  <option value='5'>해지</option>
+					  <option value='6'>완납</option>
+					  <option value='7'>배서</option>
+					  <option value='8'>최종납입</option>
+					</select>-->
+				  <img class="searchButton" src="/sj/images/search.gif" align='absmiddle' onfocus='blur()' onClick="serch()" /> 
+				<!-- <select id='mem' name='mem' onchange='mNabChange()' class='selectbox'>
+					
+						<option value='9999'>==관리자선택==</option>
+						 <?for($k=0;$k<$Rnum;$k++){
+							 $row=mysql_fetch_array($rs11);
+							 ?>
+						  <option value='<?=$row[mem_id]?>'><?=$row[mem_id]?></option>
+						 <?}?>
+					</select>-->
+			   </div>
+
+
+			<div id="listPart" >
+			  <input type='hidden' id='page' />
+		<table>
+	 <caption>기사리스트<img src="/kibs_admin/cargo/image/excell.gif" border="0" onfocus="this.blur()" onclick="javascript:newAdminExcell(<?=$ssang_c_num?>);" style="cursor:hand" align="absmiddle"></caption>
+	  <thead>
+	  <tr>
+		<td width='5%'>번호</td>
+        <td width='14%'>회사</td>
+		
+		<td width='8%'>운전자</td>
+		<td width='12%'>주민번호</td>
+		<td width='9%'>증권번호</td>
+		<td width='5%'>
+		    <select id="p_bunho"  onChange='serch()'>
+					<option value="99">전체</option>
+					<option value="1">조홍기</option>
+					<option value="2">오성준</option>
+					<option value="3">이근재</option>
+					<option value="4">오성엽</option>
+					<option value="5">박종민</option>
+					<option value="6">오경선</option>
+				
+				<!--	<option value="2">계약자</option>
+					<option value="3">회사명</option>
+				   -->
+				</select></td>
+		<td width='5%'>상태</td>
+		<td width='9%'> <select id='manGi' onChange='serch()'>
+							<option value='99'>가입월찾기</option>
+						  <?for($_u_=1;$_u_<13;$_u_++){
+								if($_u_<10){$_u_='0'.$_u_;}
+						  ?>
+							<option value='<?=$_u_?>'><?=$_u_?>월가입</option>
+						  <?}?>
+						</select></td>
+		<td width='8%'> 
+		  <!-- <select id='mNab' name='mNab' onchange='mNabChange(1,this.value)' class='input' >-->
+		   <select id='mNab' name='mNab' onchange='serch()' class='input' >
+			 <option value='12'>분납</option>
+			 <?for($i=1;$i<11;$i++){?>
+			  <option value='<?=$i?>' ><?=$i?>회차</option>
+			<?}?>
+			 </select>
+		</td>
+		<td width='7%'>
+		<select id='state' onChange='serch()'>
+			<option value='9999'>=전체=</option>
+			  
+			   <option value='2' >유예</option>
+			   <option value='1' >미납</option>
+				<option value='0' >납입</option>
+				<option value='-1' >실효</option>
+			   
+			</select>
+		</td>
+		<td width='7%'>설계번호</td>
+		<td><select id='damdanja' onChange='serch()'>
+			<option value='9999'>=담당자==</option>
+			   <? for($_q=0;$_q<$dNum;$_q++){
+					$dRow=mysql_fetch_array($drs);
+			   ?>
+			   <option value='<?=$dRow[num]?>' <? if($dRow[mem_id]==$userId){ echo "selected";}?>><?=$dRow[name]?></option>
+			
+			   <?}?>
+			</select>
+		</td>
+		<td width='5%'>퇴직</td>
+	</tr>
+	</thead>
+	<tbody class="scrollingContent">
+	<? for($j=0;$j<20;$j++){?>
+	 <tr>
+		<!--ajax으로 사용합니다-->
+		<td onMouseOver="this.style.backgroundColor='#EFF4F8'; style.cursor='hand'" onMouseOut="this.style.backgroundColor=''"><span id='cNum<?=$j?>'></span>
+		  <input type='hidden' id='driver_num<?=$j?>' name='driver_num<?=$j?>' >
+		  <input type='hidden' id='useruid' name='useruid' value='<?=$useruid?>' >
+		  <input type='hidden' id='com_phone<?=$j?>'  >
+		 </td>
+	<td><span id='company<?=$j?>'></span></td>
+	   <td onMouseOver="this.style.backgroundColor='#EFF4F8'; style.cursor='hand'" onMouseOut="this.style.backgroundColor=''"><span id='ounname<?=$j?>'></span></td>
+		<td><span id='jumin<?=$j?>'></span></td>
+		<td><span id='certi<?=$j?>'></span></td>
+		<td><span id='pun<?=$j?>'>&nbsp;</span></td>
+		<td><span id='pro2<?=$j?>'>&nbsp;</span></td>
+		<td><span id='gai<?=$j?>'>&nbsp;</span></td>
+		<td><span id='pro<?=$j?>'>&nbsp;</span></td><!--회차-->
+		<td><span id='ssi<?=$j?>'>&nbsp;</span></td><!--상태-->
+		<td><span id='appNum<?=$j?>'></span></td>
+		<td><span id='Ak<?=$j?>'></span></td>
+		<td onMouseOver="this.style.backgroundColor='#EFF4F8'; style.cursor='hand'" onMouseOut="this.style.backgroundColor=''"><span id='but<?=$j?>'></span></td>
+	</tr>
+	<?}?>
+	</tbody>
+	</table>
+
+ 
+					<div id="paging"><span id='sql2'>&nbsp;</span><span id='sql3'>&nbsp;</span></div>
+					</form>
+				</div>
+				<div id="eleventh">
+					<div id="sidebar"><? include "../php/leftmenu.php";?><!--좌측메뉴--></div>
+					<div id="chubbGeneral"><? include "../php/general.php";?><!--기본등록--></div>
+				</div>
+  
+				
+		    </div><!--main끝-->
+			<div id="adverts"><? include "../php/rightmenu.php"?><!--우측 핸드폰메뉴--></div>
+       </div><!--contentWrapper 끝-->
+	
+  <p id="copyright"><? include "../php/footer.php";?></p>
+</div><!--wrapper 끝-->
+
+</body>
+</html>

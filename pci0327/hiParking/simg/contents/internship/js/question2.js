@@ -1,0 +1,1859 @@
+let currentEventListeners = new Set();
+
+function removeExistingEventListeners() {
+    currentEventListeners.forEach(({element, type, handler}) => {
+        element.removeEventListener(type, handler);
+    });
+    currentEventListeners.clear();
+}
+
+function addEventListenerWithTracking(element, type, handler) {
+    element.addEventListener(type, handler);
+    currentEventListeners.add({element, type, handler});
+}
+
+function initializeQuestionScripts() {
+	removeExistingEventListeners();
+    console.log("📌 question.js 초기화 시작");
+	
+    const itemsPerPage = 15;
+    let searchSchool = ''; 
+    let searchMode = 1;
+
+    function loadTable(page = 1, searchSchool = '', searchMode = 1) {
+        const tableBody = document.querySelector("#questionnaire-table tbody");
+        const pagination = document.querySelector(".pagination");
+
+        // 로딩 표시
+        tableBody.innerHTML = '<tr><td colspan="14" class="loading">데이터 로드 중...</td></tr>';
+        pagination.innerHTML = "";
+
+        fetch(`https://lincinsu.kr/2025/api/question/fetch_questionnaire.php?page=${page}&limit=${itemsPerPage}&search_school=${searchSchool}&search_mode=${searchMode}`)
+            .then(response => response.json())
+            .then(response => {
+                let rows = "";
+
+                // 데이터 존재 여부 확인
+                if (!response.data || response.data.length === 0) {
+                    rows = `<tr><td colspan="13" style="text-align: center;">검색 결과가 없습니다.</td></tr>`;
+                } else {
+                    response.data.forEach((item, index) => {
+                        const formattedPreiminum = item.preiminum ? parseFloat(item.preiminum).toLocaleString("en-US") : "0";
+
+                        const insuranceOptions = `
+                            <select class="insurance-select" data-id="${item.num}">
+                                <option value="-1" ${item.inscompany == -1 ? "selected" : ""}>선택</option>
+                                <option value="1" ${item.inscompany == 1 ? "selected" : ""}>한화</option>
+                                <option value="2" ${item.inscompany == 2 ? "selected" : ""}>Meritz</option>
+                            </select>
+                        `;
+
+                       const statusOptions = `
+						<select class="status-select" data-id="${item.num}" >
+							<option value="1" ${item.ch == 1 ? "selected" : ""}>접수</option>
+							<option value="2" ${item.ch == 2 ? "selected" : ""}>보험료 안내중</option>
+							<option value="3" ${item.ch == 3 ? "selected" : ""}>청약서</option>
+							<option value="4" ${item.ch == 4 ? "selected" : ""}>입금대기중</option>
+							<option value="5" ${item.ch == 5 ? "selected" : ""}>입금확인</option>
+							<option value="6" ${item.ch == 6 ? "selected" : ""}>증권 발급</option>
+							<option value="12" ${item.ch == 12 ? "selected" : ""}>수정요청</option>
+						</select>
+					`;
+
+                        rows += `<tr>
+                            <td><a href="#" class="btn-link_1 open-second-modal" data-num="${item.num}">${(page - 1) * itemsPerPage + index + 1}</a></td>
+                            <td><a href="#" class="btn-link_1 open-modal" data-num="${item.num}">${item.school2}</a></td>
+                            <td>${item.school1}</td>
+                            <td class="preiminum">${item.week_total}</td>
+                            <td>${item.school4}</td>
+                            <td>${item.wdate}</td>
+                            <td>${item.certi || item.gabunho || ""}</td>
+                            <td class="preiminum">${formattedPreiminum}</td>
+                            <td class='status-cell '>${insuranceOptions}</td>
+                            <td class='status-cell '>${statusOptions}</td>
+                            <td>${item.school5}</td>
+                            <td><a href="#" class="btn-link_1 upload-modal" data-num="${item.num}">업로드</a></td>
+                            <td>${item.certi ? `<a href="#" class="btn-link_1 open-claim-modal" data-num="${item.num}">클레임</a>` : ''}</td>
+                            <td><input class='mText' type='text' value='${item.memo}' data-num="${item.num}"></td>
+                            <td>${item.manager}</td>
+                        </tr>`;
+                    });
+                }
+
+                tableBody.innerHTML = rows;
+
+                // 페이지네이션 생성
+                renderPagination(page, Math.ceil(response.total / itemsPerPage));
+            })
+            .catch(() => {
+                alert("데이터를 불러오는 중 오류가 발생했습니다.");
+            });
+    }
+
+ function renderPagination(currentPage, totalPages) {
+    const pagination = document.querySelector(".pagination");
+    pagination.innerHTML = ""; // 기존 버튼 삭제
+
+    // 이전 버튼 추가
+    if (currentPage > 1) {
+        pagination.innerHTML += `<a href="#" class="page-link" data-page="${currentPage - 1}">이전</a>`;
+    } else {
+        pagination.innerHTML += `<a href="#" class="disabled">이전</a>`;
+    }
+
+    // 숫자 버튼 추가 (최대 5개 표시)
+    const maxPagesToShow = 5;
+    let startPage = Math.max(1, currentPage - Math.floor(maxPagesToShow / 2));
+    let endPage = Math.min(totalPages, startPage + maxPagesToShow - 1);
+
+    for (let i = startPage; i <= endPage; i++) {
+        pagination.innerHTML += `<a href="#" class="page-link ${i === currentPage ? "active" : ""}" data-page="${i}">${i}</a>`;
+    }
+
+    // 다음 버튼 추가
+    if (currentPage < totalPages) {
+        pagination.innerHTML += `<a href="#" class="page-link" data-page="${currentPage + 1}">다음</a>`;
+    } else {
+        pagination.innerHTML += `<a href="#" class="disabled">다음</a>`;
+    }
+
+    // 페이지 이동 이벤트 추가
+    document.querySelectorAll(".page-link").forEach(link => {
+        link.addEventListener("click", function (e) {
+            e.preventDefault();
+            loadTable(parseInt(this.dataset.page));
+        });
+    });
+}
+
+
+    // 검색 버튼 클릭 이벤트
+document.getElementById("search-btn").addEventListener("click", function (e) {
+	e.preventDefault();
+	searchSchool = document.getElementById("search-school").value.trim();
+	const searchMode = parseInt(document.getElementById("cSelect").value, 10);
+
+	if (!searchSchool) {
+		alert("학교명을 입력하세요");
+		document.getElementById("search-school").focus();
+		return;
+	}
+
+	loadTable(1, searchSchool, searchMode);
+});
+
+// 검색 필드 Enter 및 blur 이벤트
+document.getElementById("search-school").addEventListener("keyup", function (e) {
+	if (e.key === "Enter") {
+		searchSchool = this.value.trim();
+		const searchMode = parseInt(document.getElementById("cSelect").value, 10);
+		if (!searchSchool) {
+			alert("학교명을 입력하세요");
+			this.focus();
+			return;
+		}
+		loadTable(1, searchSchool, searchMode);
+	}
+});
+
+// 메모 업데이트 (blur 이벤트)
+document.addEventListener("keypress", function (e) {
+    if (e.target.classList.contains("mText") && e.key === "Enter") {
+        e.preventDefault(); // 기본 엔터 동작 방지 (폼 제출 방지)
+
+        const memo = e.target.value.trim();
+        const num = e.target.dataset.num;
+
+        if (!memo) {
+            alert("메모를 입력해주세요.");
+            return;
+        }
+
+        fetch(`https://lincinsu.kr/2025/api/question/update_memo.php`, {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: `num=${num}&memo=${encodeURIComponent(memo)}`
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert("메모가 성공적으로 수정되었습니다.");
+            } else {
+                alert("메모 수정 중 오류가 발생했습니다.");
+            }
+        })
+        .catch(() => {
+            alert("메모 업데이트 요청 실패.");
+        });
+    }
+});
+
+
+// 초기 테이블 로드
+loadTable();
+
+//보험사 변동
+document.addEventListener("change", function (e) {
+    // 변경된 요소가insurance-select 클래스인지 확인
+    if (e.target.classList.contains("insurance-select")) {
+        const num = e.target.dataset.id;  // data-id 속성에서 num 값 가져오기
+        const selectedValue = e.target.value;  // 선택된 옵션 값 가져오기
+        
+        // 상태 변경 함수 호출
+        handleInsuranceChange(num, selectedValue);
+    }
+});
+
+// 상태 변경 함수 (num, 선택값 받아서 처리)
+function handleInsuranceChange(num, selectedValue) {
+    fetch(`https://lincinsu.kr/2025/api/question/update_insurance.php`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: `id=${num}&inscompany=${selectedValue}`,
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert("상태가 성공적으로 업데이트되었습니다.");
+        } else {
+            alert("상태 업데이트 중 오류가 발생했습니다.");
+        }
+    })
+    .catch(error => {
+        console.error("상태 업데이트 오류:", error);
+        alert("서버 오류로 인해 상태를 변경할 수 없습니다.");
+    });
+}
+//상태 값 변동
+document.addEventListener("change", function (e) {
+    // 변경된 요소가 status-select 클래스인지 확인
+    if (e.target.classList.contains("status-select")) {
+        const num = e.target.dataset.id;  // data-id 속성에서 num 값 가져오기
+        const selectedValue = e.target.value;  // 선택된 옵션 값 가져오기
+        
+        // 상태 변경 함수 호출
+        handleStatusChange(num, selectedValue);
+    }
+});
+
+// 상태 변경 함수 (num, 선택값 받아서 처리)
+function handleStatusChange(num, selectedValue) {
+    fetch(`https://lincinsu.kr/2025/api/question/update_status.php`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: `id=${num}&ch=${selectedValue}`,
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert("상태가 성공적으로 업데이트되었습니다.");
+        } else {
+            alert("상태 업데이트 중 오류가 발생했습니다.");
+        }
+    })
+    .catch(error => {
+        console.error("상태 업데이트 오류:", error);
+        alert("서버 오류로 인해 상태를 변경할 수 없습니다.");
+    });
+}
+
+document.addEventListener("click", function (e) {
+// 모달 열기
+if (e.target.classList.contains("open-modal")) {
+	e.preventDefault();
+	const num = e.target.dataset.num;
+
+	fetch(`https://lincinsu.kr/2025/api/question/get_questionnaire_details.php?id=${num}`)
+		.then(response => response.json())
+		.then(response => {
+			if (response.success) {
+				document.getElementById("questionwareNum").value = response.data.num;
+				if (response.data.num) {
+					
+					document.getElementById("write_").textContent = "수정";
+				}
+				document.getElementById("school1").value = response.data.school1;
+				document.getElementById("school2").value = response.data.school2;
+				document.getElementById("school3").value = response.data.school3;
+				document.getElementById("school4").value = response.data.school4;
+				document.getElementById("school5").value = response.data.school5;
+				document.querySelector(`input[name="school6"][value="${response.data.school6}"]`).checked = true;
+				document.getElementById("school7").value = response.data.school7;
+				document.getElementById("school8").value = response.data.school8;
+				document.getElementById("school9").value = response.data.school9;
+				document.querySelector(`input[name="plan"][value="${response.data.school9}"]`).checked = true;
+
+				if (response.data.directory == 2) {
+					document.getElementById("daein1_").textContent = "1";
+					document.getElementById("daein2_").textContent = "2";
+				} else {
+					document.getElementById("daein1").textContent = "2";
+					document.getElementById("daein2").textContent = "3";
+				}
+
+				document.getElementById("daein").textContent = response.daeinP;
+				document.getElementById("daemool").textContent = response.daemoolP;
+				document.getElementById("week_total").textContent = response.data.week_total;
+				document.getElementById("totalP").textContent = response.preiminum;
+
+				for (let i = 4; i <= 26; i++) {
+					document.getElementById(`week${i}`).value = response.data[`week${i}`] || "0";
+				}
+
+				document.getElementById("modal").style.display = "block";
+			} else {
+				alert(response.error);
+			}
+		})
+		.catch(() => {
+			alert("데이터 로드 실패.");
+		});
+}
+
+// 모달 닫기 버튼 클릭 시 닫기
+if (e.target.classList.contains("close-modal")) {
+	e.target.closest(".modal").style.display = "none";
+}
+
+// 모달 바깥 영역 클릭 시 닫기
+const modal = document.getElementById("modal");
+if (modal && e.target === modal) {
+	modal.style.display = "none";
+}
+
+
+	// 수정 버튼 클릭
+	if (e.target.id === "write_") {
+		e.preventDefault();
+		document.getElementById("daein").textContent = "";
+		document.getElementById("daemool").textContent = "";
+		document.getElementById("week_total").textContent = "";
+		document.getElementById("totalP").textContent = "";
+
+		const formData = {
+			id: document.getElementById("questionwareNum").value,
+			school1: document.getElementById("school1").value,
+			school2: document.getElementById("school2").value,
+			school3: document.getElementById("school3").value,
+			school4: document.getElementById("school4").value,
+			school5: document.getElementById("school5").value,
+			school6: document.querySelector("input[name='school6']:checked").value,
+			school7: document.getElementById("school7").value,
+			school8: document.getElementById("school8").value,
+			school9: document.getElementById("school9").value,
+			plan: document.querySelector("input[name='plan']:checked").value,
+			totalP: document.getElementById("totalP").textContent.replace(/,/g, ""),
+		};
+
+		for (let i = 4; i <= 26; i++) {
+			formData[`week${i}`] = document.getElementById(`week${i}`).value.replace(/,/g, "");
+		}
+
+		fetch(`https://lincinsu.kr/2025/api/question/update_questionnaire.php`, {
+			method: "POST",
+			headers: { "Content-Type": "application/x-www-form-urlencoded" },
+			body: new URLSearchParams(formData),
+		})
+			.then(response => response.json())
+			.then(response => {
+				if (response.success) {
+					alert("수정되었습니다.");
+					document.getElementById("daein").textContent = response.daeinP;
+					document.getElementById("daemool").textContent = response.daemoolP;
+					document.getElementById("week_total").textContent = response.week_total;
+					document.getElementById("totalP").textContent = response.Preminum;
+				} else {
+					alert(response.error || "수정에 실패했습니다.");
+				}
+			})
+			.catch(() => {
+				alert("수정 요청 중 오류가 발생했습니다.");
+			});
+	}
+
+	// 실적 버튼 클릭
+   if (e.target.id === "performance") {
+		e.preventDefault();
+	/*	document.getElementById("day__").innerHTML = "";
+		document.getElementById("year_").innerHTML = "";
+		document.getElementById("month_").innerHTML = "";
+		document.getElementById("day_list").innerHTML = "";*/
+		document.getElementById("changeP").innerHTML = "";
+
+		perFormance(); // 실적 조회 함수 실행
+		document.getElementById("perModal").style.display = "block";
+	}
+
+	// 실적 모달 닫기
+	if (e.target.classList.contains("close-modal")) {
+		document.getElementById("perModal").style.display = "none";
+	}
+
+	// 실적 모달 외부 클릭 시 닫기
+	if (e.target.id === "perModal") {
+		document.getElementById("perModal").style.display = "none";
+	}
+});
+
+
+document.addEventListener("click", function (event) {
+if (event.target.classList.contains("open-second-modal")) {
+	event.preventDefault();
+	const num = event.target.dataset.num;
+
+	fetch(`https://lincinsu.kr/2025/api/question/get_questionnaire_details.php?id=${num}`)
+		.then(response => response.json())
+		.then(response => {
+			if (response.success) {
+				const modal = document.getElementById("second-modal");
+				document.getElementById("questionwareNum_").value = response.data.num;
+				document.getElementById("school9_").value = response.data.school9;
+				document.getElementById("cNum_").value = response.data.cNum;
+
+				// 전 설계번호 설정
+				document.getElementById("beforegabunho").textContent = response.beforeGabunho ? `전 설계번호: ${response.beforeGabunho}` : "신규";
+
+				// 계약자 정보 설정
+				const fields = ["school1", "school2", "school3", "school4", "school5", "school7", "school8"];
+				fields.forEach(field => {
+					document.getElementById(`school_${field.slice(-1)}`).textContent = response.data[field];
+				});
+
+				// 현장실습 시기
+				const periods = { "1": "1학기", "2": "하계", "3": "2학기", "4": "동계" };
+				document.getElementById("school_6").textContent = periods[response.data.school6] || "알 수 없음";
+
+				// 가입유형
+				document.getElementById("school_9").textContent = response.data.school9 == 1 ? "가입유형 A" : "가입유형 B";
+
+				// 대인/대물 설정
+				const limits = response.data.directory == 2 ? { A: "2 억", B: "3 억" } : { A: "2 억", B: "3 억" };
+				document.getElementById("daein1_").textContent = limits[response.data.school9 == 1 ? "A" : "B"];
+				document.getElementById("daein2_").textContent = limits[response.data.school9 == 1 ? "A" : "B"];
+
+				// 보험료 정보 설정
+				document.getElementById("daein_").textContent = response.daeinP;
+				document.getElementById("daemool_").textContent = response.daemoolP;
+				document.getElementById("totalP_").textContent = response.preiminum;
+
+				// 참여인원 정보 설정
+				let inwons = "";
+				for (let i = 4; i <= 26; i++) {
+					if (response.data[`week${i}`] != 0) {
+						inwons += `<span id="week_${i}">${i} 주</span> <span id="week_inwon${i}">${response.data[`week${i}`]} </span> 명, `;
+					}
+				}
+				inwons += `총인원 : <span id="week_total_"></span>`;
+				document.getElementById("inwon").innerHTML = inwons;
+				document.getElementById("week_total_").textContent = response.data.week_total;
+
+				// 기타 정보 입력
+				document.getElementById("gabunho-input").value = response.data.gabunho;
+				document.getElementById("certi_").value = response.data.certi;
+				document.getElementById("card-number").value = response.cardnum;
+				document.getElementById("card-expiry").value = response.yymm;
+				document.getElementById("bank-name").value = response.bankname;
+				document.getElementById("bank-account").value = response.bank;
+				document.getElementById("damdanga").value = response.damdanga;
+				document.getElementById("damdangat").value = response.damdangat;
+
+				// mem_id 동적 로드
+				fetch(`https://lincinsu.kr/2025/api/question/get_idList.php`)
+					.then(response => response.json())
+					.then(memData => {
+						const select = document.getElementById("mem-id-select");
+						select.innerHTML = "";
+						memData.forEach(item => {
+							const option = document.createElement("option");
+							option.value = item.num;
+							option.textContent = item.mem_id;
+							select.appendChild(option);
+						});
+						const newOption = document.createElement("option");
+						newOption.value = "신규 id";
+						newOption.textContent = "신규ID";
+						select.appendChild(newOption);
+						select.value = response.data.cNum;
+					})
+					.catch(() => alert("mem_id 데이터를 가져오는 데 실패했습니다."));
+
+				// 모달 열기 (fadeIn 효과 적용)
+				fadeIn(modal);
+			} else {
+				alert(response.error);
+			}
+		})
+		.catch(() => alert("두 번째 데이터 로드 실패."));
+  }
+
+    // 모달 닫기
+    if (event.target.classList.contains("close-modal")) {
+        fadeOut(event.target.closest(".modal"));
+    }
+
+    // 모달 외부 클릭 시 닫기
+    if (event.target.classList.contains("modal")) {
+        fadeOut(event.target);
+    }
+});
+
+// ✅ `fadeIn` 함수 (부드럽게 모달 표시)
+function fadeIn(element) {
+    element.style.opacity = 0;
+    element.style.display = "block";
+    let opacity = 0;
+
+    const fadeInterval = setInterval(function () {
+        if (opacity < 1) {
+            opacity += 0.05;
+            element.style.opacity = opacity;
+        } else {
+            clearInterval(fadeInterval);
+        }
+    }, 20);
+}
+
+// ✅ `fadeOut` 함수 (부드럽게 모달 닫기)
+function fadeOut(element) {
+    let opacity = 1;
+
+    const fadeInterval = setInterval(function () {
+        if (opacity > 0) {
+            opacity -= 0.05;
+            element.style.opacity = opacity;
+        } else {
+            clearInterval(fadeInterval);
+            element.style.display = "none";
+        }
+    }, 20);
+}
+//청약 번호 입력
+document.addEventListener("click", function (event) {
+    if (event.target && event.target.id === "gabunho-input") {
+        event.target.addEventListener("keyup", function (e) {
+            if (e.key === "Enter") {
+                const gabunho = event.target.value.trim(); // 가입 설계번호 입력 값
+                const num = document.getElementById("questionwareNum_").value; // questionware num 값
+                const userName = document.getElementById("userName").value;
+
+                if (!gabunho) {
+                    alert("가입 설계번호를 입력하세요.");
+                    return;
+                }
+
+                fetch(`https://lincinsu.kr/2025/api/question/update_gabunho.php`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded",
+                    },
+                    body: `gabunho=${encodeURIComponent(gabunho)}&num=${encodeURIComponent(num)}&userName=${encodeURIComponent(userName)}`,
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert("가입 설계번호가 성공적으로 저장되었습니다.");
+                            // document.getElementById("beforegabunho").textContent = gabunho; // UI 업데이트 (필요시 주석 해제)
+                        } else {
+                            alert("저장 실패: " + (data.error || "알 수 없는 오류"));
+                        }
+                    })
+                    .catch(() => {
+                        alert("가입 설계번호 저장 중 오류가 발생했습니다.");
+                    });
+            }
+        });
+    }
+});
+
+//증권번호 입력
+document.addEventListener("click", function (event) {
+    if (event.target.id === "certi_") {
+        event.target.addEventListener("keyup", function (e) {
+            if (e.key === "Enter") {
+                saveCerti();
+            }
+        });
+
+    }
+});
+function saveCerti() {
+    const certi_ = document.getElementById("certi_").value.trim(); // 입력 값
+    const num = document.getElementById("questionwareNum_").value; // questionware num 값
+    const userName = document.getElementById("userName").value;
+
+    if (!certi_) {
+        alert("증권번호를 입력하세요.");
+        return;
+    }
+
+    fetch(`https://lincinsu.kr/2025/api/question/update_certi_.php`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: `certi_=${encodeURIComponent(certi_)}&num=${encodeURIComponent(num)}&userName=${encodeURIComponent(userName)}`
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert("증권번호가 성공적으로 저장되었습니다.");
+        } else {
+            alert("저장 실패: " + (data.error || "알 수 없는 오류"));
+        }
+    })
+    .catch(() => {
+        alert("증권번호 저장 중 오류가 발생했습니다.");
+    });
+}
+
+// 카드번호 저장
+document.addEventListener("click", function (event) {
+    if (event.target && event.target.id === "card-number") {
+        event.target.addEventListener("keypress", function (e) {
+            if (e.key === "Enter") {
+                saveCardNumber();
+            }
+        });
+    }
+});
+
+function saveCardNumber() {
+    const cardNumberInput = document.getElementById("card-number");
+    if (!cardNumberInput) return; // 요소가 존재하지 않으면 중단
+
+    const cardNumber = cardNumberInput.value.trim();
+    const cNum_ = document.getElementById("cNum_").value;
+
+    if (!cardNumber || !cNum_) {
+        alert("카드 번호와 Num 값을 입력하세요.");
+        return;
+    }
+
+    fetch(`https://lincinsu.kr/2025/api/question/update_cardnum.php`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: `num=${encodeURIComponent(cNum_)}&cardnum=${encodeURIComponent(cardNumber)}`,
+    })
+    .then(response => response.text())
+    .then(data => {
+        alert(data); // 서버 응답 메시지 출력
+    })
+    .catch(() => {
+        alert("카드 번호 저장 중 오류가 발생했습니다.");
+    });
+}
+//유효기간 
+document.addEventListener("click", function (event) {
+    if (event.target && event.target.id === "card-expiry") {
+        event.target.addEventListener("keypress", function (e) {
+            if (e.key === "Enter") {
+                saveCardExpiry();
+            }
+        });
+    }
+});
+
+function saveCardExpiry() {
+    const cardExpiryInput = document.getElementById("card-expiry");
+    if (!cardExpiryInput) return; // 요소가 존재하지 않으면 중단
+
+    const card_expiry = cardExpiryInput.value.trim();
+    const cNum_ = document.getElementById("cNum_").value;
+
+    if (!card_expiry || !cNum_) {
+        alert("카드 유효기간과 Num 값을 입력하세요.");
+        return;
+    }
+
+    fetch(`https://lincinsu.kr/2025/api/question/update_yymm.php`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: `num=${encodeURIComponent(cNum_)}&yymm=${encodeURIComponent(card_expiry)}`,
+    })
+    .then(response => response.text())
+    .then(data => {
+        alert(data); // 서버 응답 메시지 출력
+    })
+    .catch(() => {
+        alert("카드 유효기간 저장 중 오류가 발생했습니다.");
+    });
+}
+//은행
+document.addEventListener("click", function (event) {
+    if (event.target && event.target.id === "bank-name") {
+        event.target.addEventListener("keypress", function (e) {
+            if (e.key === "Enter") {
+                saveBankName();
+            }
+        });
+    }
+});
+
+function saveBankName() {
+    const bankNameInput = document.getElementById("bank-name");
+    if (!bankNameInput) return; // 요소가 존재하지 않으면 중단
+
+    const bank_name = bankNameInput.value.trim();
+    const cNum_ = document.getElementById("cNum_").value;
+
+    if (!bank_name || !cNum_) {
+        alert("은행명과 Num 값을 입력하세요.");
+        return;
+    }
+
+    fetch(`https://lincinsu.kr/2025/api/question/update_bank_name.php`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: `num=${encodeURIComponent(cNum_)}&bankName=${encodeURIComponent(bank_name)}`,
+    })
+    .then(response => response.text())
+    .then(data => {
+        alert(data); // 서버 응답 메시지 출력
+    })
+    .catch(() => {
+        alert("은행명 저장 중 오류가 발생했습니다.");
+    });
+}
+
+
+document.addEventListener("click", function (event) {
+    if (event.target) {
+        if (event.target.id === "bank-account") {
+            event.target.addEventListener("keypress", function (e) {
+                if (e.key === "Enter") saveBankAccount();
+            });
+        }
+        if (event.target.id === "damdanga") {
+            event.target.addEventListener("keypress", function (e) {
+                if (e.key === "Enter") saveDamdanga();
+            });
+        }
+    
+        if (event.target.id === "damdangat") {
+            event.target.addEventListener("click", function () {
+                this.value = this.value.replace(/-/g, ""); // 하이픈 제거
+            });
+        }
+    }
+});
+
+// 🏦 은행계좌 저장
+function saveBankAccount() {
+    const bankAccount = document.getElementById("bank-account").value.trim();
+    const cNum_ = document.getElementById("cNum_").value;
+
+    if (!bankAccount || !cNum_) {
+        alert("은행계좌와 Num 값을 입력하세요.");
+        return;
+    }
+
+    fetch(`https://lincinsu.kr/2025/api/question/update_bank_account.php`, {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: `num=${encodeURIComponent(cNum_)}&bank=${encodeURIComponent(bankAccount)}`,
+    })
+    .then(response => response.text())
+    .then(data => alert(data))
+    .catch(() => alert("은행계좌 저장 중 오류가 발생했습니다."));
+}
+
+// 👤 담당자 저장
+function saveDamdanga() {
+    const damdanga = document.getElementById("damdanga").value.trim();
+    const cNum_ = document.getElementById("cNum_").value;
+
+    if (!damdanga || !cNum_) {
+        alert("담당자 정보와 Num 값을 입력하세요.");
+        return;
+    }
+
+    fetch(`https://lincinsu.kr/2025/api/question/update_damdanga.php`, {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: `num=${encodeURIComponent(cNum_)}&damdanga=${encodeURIComponent(damdanga)}`,
+    })
+    .then(response => response.text())
+    .then(data => alert(data))
+    .catch(() => alert("담당자 정보 저장 중 오류가 발생했습니다."));
+}
+
+// 📞 담당자 연락처 저장
+document.addEventListener("keypress", function (event) {
+    if (event.target.id === "damdangat" && event.key === "Enter") {
+        event.preventDefault(); // 기본 동작 방지 (폼 제출 방지)
+        saveDamdangat();
+    }
+});
+
+// 📞 담당자 연락처 저장 (alert 중복 해결)
+
+// 전화번호 입력 시 자동 하이픈(-) 추가
+document.addEventListener("input", function (event) {
+    if (event.target.id === "damdangat") {
+        let input = event.target.value.replace(/\D/g, ""); // 숫자만 남기기
+
+        if (input.length === 11) {
+            input = input.replace(/(\d{3})(\d{4})(\d{4})/, "$1-$2-$3");
+        } else if (input.length === 10) {
+            input = input.replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3");
+        } else if (input.length === 9) {
+            input = input.replace(/(\d{2})(\d{3})(\d{4})/, "$1-$2-$3");
+        }
+
+        event.target.value = input;
+    }
+});
+function saveDamdangat() {
+    const inputField = document.getElementById("damdangat");
+    
+
+    const cNum_ = document.getElementById("cNum_").value;
+
+    if (!formattedNumber || !cNum_) {
+        alert("연락처와 Num 값을 입력하세요.");
+        return;
+    }
+
+    // fetch 요청 중복 실행 방지
+    fetch(`https://lincinsu.kr/2025/api/question/update_damdangat.php`, {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: `num=${encodeURIComponent(cNum_)}&damdangat=${encodeURIComponent(inputField)}`,
+    })
+    .then(response => response.text())
+    .then(data => {
+        console.log("서버 응답:", data); // 콘솔에서 확인 가능
+        alert("담당자 연락처가 성공적으로 저장되었습니다."); // alert 1번만 실행
+    })
+    .catch(() => alert("담당자 연락처 저장 중 오류가 발생했습니다."));
+}
+
+document.addEventListener("click", function (event) {
+    const target = event.target;
+    const questionwareNum = document.getElementById("questionwareNum_")?.value;
+
+    // 질문서 프린트
+    if (target.id === "print-questionnaire") {
+        if (!questionwareNum) {
+            alert("질문서 번호가 없습니다.");
+            return;
+        }
+        window.open(`https://lincinsu.kr/2014/_pages/php/downExcel/claim2.php?claimNum=${encodeURIComponent(questionwareNum)}`, "_blank");
+    }
+
+    // 청약서 프린트
+    if (target.id === "print-application") {
+        if (!questionwareNum) {
+            alert("질문서 번호가 없습니다.");
+            return;
+        }
+        window.open(`https://lincinsu.kr/2014/_pages/php/downExcel/claim3.php?claimNum=${encodeURIComponent(questionwareNum)}`, "_blank");
+    }
+
+    // 무사고 확인서
+    if (target.id === "no-accident-check") {
+        if (!questionwareNum) {
+            alert("질문서 번호가 없습니다.");
+            return;
+        }
+        window.open(`https://lincinsu.kr/2014/_pages/php/downExcel/claim7.php?claimNum=${encodeURIComponent(questionwareNum)}`, "_blank");
+    }
+
+    // 가입 안내문
+    if (target.id === "send-guide") {
+        if (!questionwareNum) {
+            alert("질문서 번호가 없습니다.");
+            return;
+        }
+        window.open(`https://lincinsu.kr/2014/_pages/php/downExcel/claim9.php?claimNum=${encodeURIComponent(questionwareNum)}`, "_blank");
+    }
+
+    // 아이디, 비번 초기화 메일 전송
+    if (target.id === "send-id-email") {
+        if (!questionwareNum) {
+            alert("질문서 번호가 없습니다.");
+            return;
+        }
+
+        fetch("https://lincinsu.kr/2025/api/email_send.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: `num=${encodeURIComponent(questionwareNum)}`,
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert(data.success ? "성공적 발송 완료!" : "메일 발송 중 오류가 발생했습니다.");
+        })
+        .catch(() => alert("메일 전송 요청 실패."));
+    }
+
+   
+});
+
+// 무사고 확인서 URL 생성 함수
+function question7_mail() {
+    const claimNum = document.getElementById("questionwareNum_")?.value;
+    return `http://lincinsu.kr/2014/_pages/php/downExcel/claim7.php?claimNum=${encodeURIComponent(claimNum)}`;
+}
+//공지사항
+document.addEventListener("change", function (event) {
+    if (event.target.id === "noticeSelect") {
+        const noticeSelect = event.target.value; // 선택된 공지사항 값
+        const emailElement = document.getElementById("school_5");
+        const email = emailElement ? emailElement.innerText.trim() : ""; // null 체크 및 공백 제거
+
+        console.log("선택된 공지사항 값:", noticeSelect); // 디버깅용
+        console.log("이메일 값:", email); // 디버깅용
+
+        if (!email || noticeSelect === "-1") {
+            alert("이메일과 공지사항을 올바르게 선택하세요.");
+            return;
+        }
+
+        if (!confirm(`[${email}] 으로 해당 이메일을 발송하시겠습니까?`)) {
+            return;
+        }
+
+        const templates = {
+            "1": {
+                title: "[한화 현장실습보험] 보험금 청구시 필요서류 안내",
+                content: `<div>안녕하십니까.<br><br>
+							 현장실습보험 문의에 깊이 감사드립니다.<br><br>
+							1. 보험금 청구서(+필수 동의서) 및 문답서 (첨부파일 참고)<br>
+							* 보험금 청구 기간은 최대 1년까지 가능합니다.<br><br>
+							2. 신분증 및 통장사본<br><br>
+							3. 진단서 또는 초진차트<br><br>
+							4. 병원치료비 영수증(계산서)_치료비세부내역서, 약제비 영수증<br><br>
+							5. 실습기관의 현장실습 출석부 사본 또는 실습일지<br><br>
+							6. 학생 학적을 확인할 수 있는 학교 전산 캡처본<br><br>
+							7. 보험금 청구서 밑의 법정대리인의 서명, 가족관계증명서, 보호자 신분증 및 통장사본<br>
+							(고등학생 현장 실습 사고 접수 경우만 해당)<br><br>
+							위 서류들을 구비하셔서 메일 답장으로 부탁드립니다.<br><br>
+							자세한 사항은 현장실습 홈페이지(<a href='http://lincinsu.kr/'>http://lincinsu.kr/</a>)의 보상안내, 공지사항에서도 확인하실 수 있습니다.
+							<br><br>감사합니다.<br><br><hr>
+							<p style='font-size: 8px; color: #00A000;'>이투엘보험대리점</p>
+							<p style='font-size: 8px; color: #00A000;'>현장실습보험지원팀</p>
+							<p style='font-size: 8px; color: #00A000;'>1533-5013</p><br>
+							현장실습보험은 <span style='color: #FB2C10;'>한화손해보험</span>에서 제공합니다.</div>`,
+                attachfile: "./static/lib/attachfile/보험금 청구서,동의서,문답서_2023.pdf",
+            },
+            "2": {
+                title: "[이용안내문] 한화 현장실습 보험 이용 안내문",
+                content: `<div>안녕하십니까.<br><br>
+							현장실습보험 문의에 깊이 감사드립니다.<br><br>
+							현장실습 이용방법이 담긴 안내문 첨부파일로 전달드립니다.<br><br>
+							<a href="http://lincinsu.kr/">현장실습 홈페이지 바로가기</a><br><br>
+							감사합니다.<br><br><hr>
+							<p style='font-size: 8px; color: #00A000;'>이투엘보험대리점</p>
+							<p style='font-size: 8px; color: #00A000;'>현장실습보험지원팀</p>
+							<p style='font-size: 8px; color: #00A000;'>1533-5013</p><br>
+							현장실습보험은 <span style='color: #FB2C10;'>한화손해보험</span>에서 제공합니다.</div>`,
+                attachfile: "./static/lib/attachfile/한화 현장실습 보험 안내 팜플렛.pdf",
+            },
+            "3": {
+                title: "[한화 현장실습보험] 무사고 확인서 요청",
+                content: (() => {
+                    var musagourl = question7_mail();
+                    console.log("무사고 확인서 링크:", musagourl); // 디버깅용
+                    return `<div>
+								안녕하십니까.<br><br>
+								보험 시작일이 설계일보다 앞서 무사고 확인서를 전달드립니다.<br><br>
+								첨부된 파일의 입금일에 입금 또는 카드결제하실 날짜 기입 후<br><br>
+								하단에 명판직인 날인하여 회신 주시면 청약서 발급 후 전달드리겠습니다.<br><br>
+								하기 링크 확인 부탁드립니다.<br><br>
+								<a href='https://www.lincinsu.kr/${musagourl}'>무사고 확인서 링크</a><br><br>
+								감사합니다.<br><br><hr>
+								<p style='font-size: 8px; color: #00A000;'>이투엘보험대리점</p>
+								<p style='font-size: 8px; color: #00A000;'>현장실습보험지원팀</p>
+								<p style='font-size: 8px; color: #00A000;'>1533-5013</p><br>
+								현장실습보험은 <span style='color: #FB2C10;'>한화손해보험</span>에서 제공합니다.
+							</div>`;
+                })(),
+                attachfile: ".",
+            }
+        };
+
+        const selectedTemplate = templates[noticeSelect];
+
+        if (!selectedTemplate) {
+            alert("유효하지 않은 공지사항입니다.");
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append("email", email);
+        formData.append("title", selectedTemplate.title);
+        formData.append("content", selectedTemplate.content);
+        formData.append("attachfile", selectedTemplate.attachfile);
+
+        const url = noticeSelect === "3"
+            ? "https://lincinsu.kr/2025/api/musagoNotice.php"
+            : "https://lincinsu.kr/2025/api/notice.php";
+
+        fetch(url, {
+            method: "POST",
+            body: formData,
+        })
+        .then(response => response.text())
+        .then(data => {
+            console.log("서버 응답:", data); // 디버깅용
+            alert("메일이 성공적으로 발송되었습니다.");
+        })
+        .catch(error => {
+            console.error("메일 전송 오류:", error);
+            alert("메일 전송 중 오류가 발생했습니다.");
+        });
+    }
+});
+//클레임 모달 
+
+document.addEventListener("click", function (event) {
+    if (event.target.classList.contains("open-claim-modal")) {
+        event.preventDefault();
+        const num = event.target.dataset.num;
+        document.getElementById("questionNum__").value = num;
+        const modal = document.querySelector(".claimModal"); // ✅ claimModal로 변경
+
+        if (!modal) {
+            console.error("🚨 claimModal이 존재하지 않습니다.");
+            return;
+        }
+
+        // 기존 데이터 초기화 (모달을 닫았다가 다시 열 때 문제 방지)
+        modal.querySelectorAll("input, textarea").forEach(input => input.value = "");
+        modal.querySelectorAll("span").forEach(span => span.innerText = "");
+
+        fetch(`https://lincinsu.kr/2025/api/question/get_questionnaire_details.php?id=${num}`)
+            .then(response => response.json())
+            .then(response => {
+                if (response.success) {
+                    // 데이터 입력
+                    document.getElementById("certi__").innerText = response.data.certi;
+                    document.getElementById("school_1_").innerText = response.data.school1;
+                    document.getElementById("school_2_").innerText = response.data.school2;
+                    document.getElementById("school_3_").innerText = response.data.school3;
+                    document.getElementById("school_4_").innerText = response.data.school4;
+                    document.getElementById("school_5_").innerText = response.data.school5;
+                    document.getElementById("school_7_").innerText = response.data.school7;
+                    document.getElementById("school_8_").innerText = response.data.school8;
+
+                    // 현장실습 시기 설정
+                    const periods = { "1": "1학기", "2": "하계", "3": "2학기", "4": "동계" };
+                    document.getElementById("school_6_").innerText = periods[response.data.school6] || "알 수 없음";
+
+                    // 가입유형 설정
+                    document.getElementById("school_9_").innerText = response.data.school9 == 1 ? "가입유형 A" : "가입유형 B";
+
+                    // 대인대물 설정
+                    const limits = response.data.directory == 2 ? { A: "2 억", B: "3 억" } : { A: "2 억", B: "3 억" };
+                    document.getElementById("daein1__").innerText = limits[response.data.school9 == 1 ? "A" : "B"];
+                    document.getElementById("daein2__").innerText = limits[response.data.school9 == 1 ? "A" : "B"];
+
+                    document.getElementById("cNum__").value = response.data.cNum;
+
+                    // ✅ 모달이 여러 번 열리는 문제 해결: 항상 처음부터 다시 표시
+                    modal.style.display = "flex";
+
+                } else {
+                    alert(response.error);
+                }
+            })
+            .catch(() => {
+                alert("Claim 로드 실패.");
+            });
+    }
+
+    // 모달 닫기
+    if (event.target.classList.contains("close-modal")) {
+        const modal = event.target.closest(".claimModal"); // ✅ 수정: claimModal 기반으로 닫기
+        if (modal) {
+            modal.style.display = "none";
+        }
+    }
+
+    // 모달 외부 클릭 시 닫기
+    if (event.target.classList.contains("claimModal")) { // ✅ claimModal 기준으로 변경
+        event.target.style.display = "none";
+    }
+});
+
+
+
+//클레임 저장 
+
+document.addEventListener("click", function (event) {
+    if (event.target.id === "claimStore") {
+        event.preventDefault();
+        const certiElement = document.getElementById("certi__");
+        const certi = certiElement ? certiElement.innerHTML.trim() : "";
+        
+        if (!certi) {
+            alert("증권번호가 없습니다. 저장할 수 없습니다.");
+            return;
+        }
+
+        const accidentDescription = document.getElementById("accidentDescription").value.trim();
+        if (!accidentDescription) {
+            alert("사고경위는 필수 입력입니다.");
+            return;
+        }
+
+        // 데이터 수집
+        const claimData = new FormData();
+        claimData.append("school1", document.getElementById("school_1_").innerHTML);
+        claimData.append("qNum", document.getElementById("questionNum__").value);
+        claimData.append("cNum", document.getElementById("cNum__").value);
+        claimData.append("claimNum__", document.getElementById("claimNum__").value);
+        claimData.append("certi", certi);
+        claimData.append("claimNumber", document.getElementById("claimNumber").value);
+        claimData.append("wdate_2", document.getElementById("wdate_2").value);
+        claimData.append("wdate_3", document.getElementById("wdate_3").value);
+        claimData.append("claimAmout", document.getElementById("claimAmout").value.replace(/,/g, ""));
+        claimData.append("student", document.getElementById("student").value);
+        claimData.append("accidentDescription", accidentDescription);
+        claimData.append("manager", document.getElementById("userName__").value);
+        claimData.append("damdanga", document.getElementById("damdanga_").value);
+        claimData.append("damdangat", document.getElementById("damdangat_").value);
+
+        // 데이터 전송
+        fetch(`https://lincinsu.kr/2025/api/claim/claim_store.php`, {
+            method: "POST",
+            body: claimData,
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById("claimNum__").value = data.num;
+                    document.getElementById("claimStore").textContent = "클레임수정";
+                    alert(data.message);
+                } else {
+                    alert("오류 발생: " + (data.error || "알 수 없는 오류"));
+                }
+            })
+            .catch(() => {
+                alert("데이터 저장에 실패했습니다.");
+            });
+    }
+});
+
+// 전화번호 입력 시 자동 하이픈(-) 추가
+document.addEventListener("input", function (event) {
+    if (event.target.id === "damdangat_") {
+        let input = event.target.value.replace(/\D/g, ""); // 숫자만 남기기
+
+        if (input.length === 11) {
+            input = input.replace(/(\d{3})(\d{4})(\d{4})/, "$1-$2-$3");
+        } else if (input.length === 10) {
+            input = input.replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3");
+        } else if (input.length === 9) {
+            input = input.replace(/(\d{2})(\d{3})(\d{4})/, "$1-$2-$3");
+        }
+
+        event.target.value = input;
+    }
+});
+
+// 클릭하면 하이픈 제거
+document.addEventListener("focus", function (event) {
+    if (event.target.id === "damdangat_") {
+        event.target.value = event.target.value.replace(/-/g, "");
+    }
+}, true); // 캡처 단계에서 이벤트 감지
+
+// Flatpickr 적용 (날짜 입력)
+/*
+document.addEventListener("DOMContentLoaded", function () {
+    flatpickr("#wdate_2", { dateFormat: "Y-m-d", allowInput: true });
+    flatpickr("#wdate_3", { dateFormat: "Y-m-d", allowInput: true });
+});*/
+
+document.addEventListener('DOMContentLoaded', function () {
+    // wdate_2 요소에 flatpickr 적용
+    if (document.getElementById("wdate_2")) {
+        flatpickr("#wdate_2", {
+            dateFormat: "Y-m-d", // 날짜 형식 (YYYY-MM-DD)
+            allowInput: true // 직접 입력 허용
+        });
+    }
+	// wdate_2 요소에 flatpickr 적용
+    if (document.getElementById("wdate_3")) {
+        flatpickr("#wdate_3", {
+            dateFormat: "Y-m-d", // 날짜 형식 (YYYY-MM-DD)
+            allowInput: true // 직접 입력 허용
+        });
+    }
+	
+});
+
+// 모달이 열릴 때마다 새롭게 flatpickr 적용
+document.addEventListener("click", function (event) {
+    if (event.target.classList.contains("open-claim-modal")) {
+        setTimeout(() => {
+            if (document.getElementById("wdate_2")) {
+                flatpickr("#wdate_2", {
+                    dateFormat: "Y-m-d",
+                    allowInput: true
+                });
+            }
+			if (document.getElementById("wdate_3")) {
+                flatpickr("#wdate_3", {
+                    dateFormat: "Y-m-d",
+                    allowInput: true
+                });
+            }
+        }, 100);
+    }
+});
+
+
+function perFormance() {
+    console.log("📌 모달 오픈 & 데이터 요청");
+
+    const modal = document.getElementById("perModal");
+   
+
+    createYearMonthSelectors();
+    fetchPerformanceData(); // 현재일 기준 한 달간 실적 조회
+	insertFooterButtons(); // ✅ 모달 푸터 버튼 삽입
+
+    // 이벤트 리스너 추가 (연도 & 월 변경 시 데이터 재조회)
+    document.getElementById("yearSelect").addEventListener("change", fetchSelectedPerformanceData);
+    document.getElementById("monthSelect").addEventListener("change", fetchSelectedPerformanceData);
+}
+
+function insertFooterButtons() {
+    const footerContainer = document.getElementById("changeP");
+
+    // 기존 내용 초기화
+    footerContainer.innerHTML = ""; 
+
+    let ptr = "";
+    ptr += `<button id="downloadExcel" class="p-btn">최근 1년 실적 다운로드</button>`;
+    ptr += `<button id="yearPerformanceBtn" class="p-btn">년별 실적</button>`;
+
+    footerContainer.innerHTML = ptr; // HTML 동적 삽입
+
+    // ✅ DOM이 업데이트될 시간을 주기 위해 setTimeout 사용
+    setTimeout(() => {
+        const yearPerformanceBtn = document.getElementById("yearPerformanceBtn");
+        if (yearPerformanceBtn) {
+            yearPerformanceBtn.addEventListener("click", yearPerFormance_);
+            console.log("📌 '년별 실적' 버튼 이벤트 바인딩 완료!");
+        } else {
+            console.error("🚨 '년별 실적' 버튼을 찾을 수 없습니다!");
+        }
+    }, 50); // 50ms 딜레이 후 실행
+}
+
+
+
+
+// ✅ 연도 및 월 선택 박스 생성
+function createYearMonthSelectors() {
+
+    const yearContainer = document.getElementById("yearSelect_");
+    const monthContainer = document.getElementById("monthSelect_");
+
+    // 현재 날짜 가져오기
+    const today = new Date();
+    const currentYear = today.getFullYear();
+    const currentMonth = today.getMonth() + 1; // JavaScript에서 월은 0부터 시작하므로 +1 필요
+
+    // 연도 선택 동적 생성
+    let yearDropdown = document.createElement("select");
+    yearDropdown.id = "yearSelect";
+    yearDropdown.className = "form-control";
+    yearDropdown.innerHTML = `<option value="-1">년도 선택</option>`;
+
+    for (let i = 0; i < 5; i++) { // 현재 연도부터 5년 전까지
+        let year = currentYear - i;
+        let option = document.createElement("option");
+        option.value = year;
+        option.textContent = year;
+        if (year === currentYear) {
+            option.selected = true; // 현재 연도 기본 선택
+        }
+        yearDropdown.appendChild(option);
+    }
+
+    yearContainer.innerHTML = "";
+    yearContainer.appendChild(yearDropdown);
+
+    // 월 선택 동적 생성
+    let monthDropdown = document.createElement("select");
+    monthDropdown.id = "monthSelect";
+    monthDropdown.className = "form-control";
+    monthDropdown.innerHTML = `<option value="-1">월 선택</option>`;
+
+    for (let i = 1; i <= 12; i++) {
+        let option = document.createElement("option");
+        let monthValue = i < 10 ? `0${i}` : i; // 01, 02 ... 형식 유지
+        option.value = monthValue;
+        option.textContent = `${i}월`;
+        if (i === currentMonth) {
+            option.selected = true; // 현재 월 기본 선택
+        }
+        monthDropdown.appendChild(option);
+    }
+
+    monthContainer.innerHTML = "";
+    monthContainer.appendChild(monthDropdown);
+}
+
+// ✅ 현재일 기준 한 달간 실적 조회
+function fetchPerformanceData() {
+    const today = new Date();
+    const endDate = today.toISOString().split("T")[0]; // 오늘 날짜
+    const startDate = new Date(today.setMonth(today.getMonth() - 1)).toISOString().split("T")[0]; // 1개월 전 날짜
+
+    fetch(`https://lincinsu.kr/2025/api/question/performance_1.php?start=${startDate}&end=${endDate}`)
+        .then(response => response.json())
+        .then(data => {
+            renderTable(data, startDate, endDate); // 데이터와 기간 전달
+        })
+        .catch(error => {
+            console.error("🚨 데이터 로드 오류:", error);
+        });
+}
+
+// ✅ 선택한 연도 및 월 기준 실적 조회
+function fetchSelectedPerformanceData() {
+    const selectedYear = document.getElementById("yearSelect").value;
+    const selectedMonth = document.getElementById("monthSelect").value;
+
+    if (selectedYear === "-1" || selectedMonth === "-1") {
+        return; // 연도 또는 월이 선택되지 않으면 실행 X
+    }
+
+    // 선택한 연도 및 월의 시작일과 종료일 계산
+    const startDate = `${selectedYear}-${selectedMonth}-01`;
+    const endDate = new Date(selectedYear, selectedMonth, 0).toISOString().split("T")[0]; // 선택한 월의 마지막 날짜
+
+    fetch(`https://lincinsu.kr/2025/api/question/performance_1.php?start=${startDate}&end=${endDate}`)
+        .then(response => response.json())
+        .then(data => {
+            renderTable(data, startDate, endDate); // 데이터와 기간 전달
+        })
+        .catch(error => {
+            console.error("🚨 데이터 로드 오류:", error);
+        });
+}
+
+// ✅ 받은 데이터를 테이블에 표시하는 함수
+function renderTable(data, startDate, endDate) {
+    const tableBody = document.querySelector("#performanceTable tbody");
+    const summaryContainer = document.querySelector("#performanceSummary"); // 상단 요약 정보를 표시할 컨테이너
+    tableBody.innerHTML = ""; // 기존 데이터 초기화
+
+    let html = "<tr>"; // 시작 행
+    let totalSum = 0; // 보험료 합계 변수 초기화
+
+    data.forEach((item, index) => {
+        // 날짜와 요일 계산
+        const dayOfWeek = new Date(item.day_).getDay();
+        const weekDays = ["일", "월", "화", "수", "목", "금", "토"];
+
+        let color = "";
+        if (dayOfWeek === 0) color = "style='color:red;'"; // 일요일 빨간색
+        if (dayOfWeek === 6) color = "style='color:blue;'"; // 토요일 파란색
+
+       
+       
+		// 보험료와 건수 표시
+		const daySum = Number(item.day_sum) === 0 ? "" : item.day_sum; // 숫자로 변환 후 비교
+		const gunSu = Number(item.gunsu) === 0 ? "()" : `(${item.gunsu})`; // 숫자로 변환 후 비교
+
+		// 합계 계산
+		if (Number(item.day_sum) !== 0) {
+			totalSum += parseInt(String(item.day_sum).replace(/,/g, ""), 10); // 숫자로 변환 후 합계
+		}
+
+		// 셀 추가
+		html += `
+			<td ${color}>
+				<div>${item.day_} (${weekDays[dayOfWeek]})</div>
+				<div style="text-align: right;">${daySum} ${gunSu}</div>
+			</td>
+		`;
+
+        // 7개 셀이 채워지면 줄 바꿈
+        if ((index + 1) % 7 === 0) {
+            html += "</tr><tr>";
+        }
+    });
+
+    // 마지막 줄의 빈 셀 채우기
+    const remainingCells = data.length % 7;
+    if (remainingCells > 0) {
+        for (let i = 0; i < 7 - remainingCells; i++) {
+            html += "<td></td>";
+        }
+    }
+
+    html += "</tr>"; // 끝 행
+    tableBody.innerHTML = html;
+
+    // 상단 요약 정보 표시
+    summaryContainer.innerHTML = `
+        <div style="text-align: left; font-weight: bold; margin-bottom: 10px;">
+            기간: ${startDate} ~ ${endDate}<br>
+            총 보험료 합계: ${totalSum.toLocaleString()} 원
+        </div>
+    `;
+
+
+}
+
+// ✅ 페이지 로드 시 실행
+window.onload = function() {
+    createYearMonthSelectors();
+};
+
+
+function yearPerFormance_() {
+    console.log("📌 연간 실적 모드 실행");
+    
+    const modal = document.getElementById("perModal");
+    modal.style.display = "flex"; // 모달 표시
+
+    // 기존 모달 내용 초기화
+	document.getElementById("changeP").innerHTML = "";
+    document.querySelector("#performanceTable tbody").innerHTML = "";
+    document.querySelector("#performanceSummary").innerHTML = "";
+
+    // ✅ 연도 및 월 선택 초기화
+    const yearContainer = document.getElementById("yearSelect_");
+    const monthContainer = document.getElementById("monthSelect_");
+    if (yearContainer) yearContainer.innerHTML = "";
+    if (monthContainer) monthContainer.innerHTML = "";
+
+    // ✅ 현재 날짜 가져오기
+    const today = new Date();
+    const currentYear = today.getFullYear();
+
+    // ✅ 연도 선택 드롭다운 생성
+    let yearDropdown = document.createElement("select");
+    yearDropdown.id = "yearSelect";
+    yearDropdown.className = "form-control";
+
+    // 기본 옵션 추가
+    let defaultOption = document.createElement("option");
+    defaultOption.value = "-1";
+    defaultOption.textContent = "년도 선택";
+    yearDropdown.appendChild(defaultOption);
+
+    // 최근 5년 데이터 생성
+    for (let i = 0; i < 5; i++) {
+        let year = currentYear - i;
+        let option = document.createElement("option");
+        option.value = year;
+        option.textContent = `${year}년`;
+        if (year === currentYear) {
+            option.selected = true; // 현재 연도 기본 선택
+        }
+        yearDropdown.appendChild(option);
+    }
+
+    // ✅ 생성된 드롭다운을 연도 컨테이너에 추가
+    if (yearContainer) yearContainer.appendChild(yearDropdown);
+
+    // ✅ 연도 선택 변경 시 데이터 갱신
+    yearDropdown.addEventListener("change", fetchYearlyPerformance);
+
+    // ✅ 기본적으로 현재 연도 데이터 조회
+    fetchYearlyPerformance();
+}
+function fetchYearlyPerformance() {
+    const selectedYear = document.getElementById("yearSelect").value;
+    console.log(`📌 ${selectedYear}년 & ${selectedYear - 1}년 데이터 조회`);
+
+    fetch(`https://lincinsu.kr/2025/api/question/performance_yearly.php?year=${selectedYear}`)
+        .then(response => response.json())
+        .then(data => {
+         //   console.log("📊 조회된 월별 보험료 데이터:", data); // ✅ 데이터 출력
+            renderYearlyTable(data, selectedYear);
+        })
+        .catch(error => {
+            console.error("🚨 연간 데이터 로드 오류:", error);
+        });
+}
+
+
+function renderYearlyTable(data, year) {
+    const tableBody = document.querySelector("#performanceTable tbody");
+    tableBody.innerHTML = ""; // 기존 데이터 초기화
+
+    console.log("📊 조회된 월별 보험료 데이터:", data); // ✅ 원본 데이터 출력
+
+    let totalGunsuYear = 0; // 기준년도 총 건수
+    let totalSumYear = 0; // 기준년도 총 보험료 합계
+    let totalGunsuPrevYear = 0; // 이전년도 총 건수
+    let totalSumPrevYear = 0; // 이전년도 총 보험료 합계
+
+    // ✅ 데이터 필터링 (year 및 month 값이 존재하는 데이터만 사용)
+    let yearData = data.filter(item => item.year && item.month && parseInt(item.year) === parseInt(year));
+    let prevYearData = data.filter(item => item.year && item.month && parseInt(item.year) === parseInt(year) - 1);
+
+    console.log(`📌 ${year}년 필터링된 데이터:`, yearData);
+    console.log(`📌 ${year - 1}년 필터링된 데이터:`, prevYearData);
+
+    let mergedData = [];
+
+    for (let month = 1; month <= 12; month++) {
+        let monthFormatted = month < 10 ? `0${month}` : `${month}`; // "01" ~ "12" 변환 (문자열)
+
+       let yearItem = yearData.find(item => parseInt(item.month) === parseInt(monthFormatted)) || { gunsu: 0, total_sum: 0 };
+			let prevYearItem = prevYearData.find(item => parseInt(item.month) === parseInt(monthFormatted)) || { gunsu: 0, total_sum: 0 };
+
+			console.log(`📌 ${year}-${monthFormatted} 데이터:`, yearItem);
+			console.log(`📌 ${year - 1}-${monthFormatted} 데이터:`, prevYearItem);
+
+			mergedData.push({
+				month: monthFormatted,
+				yearMonth: `${year}-${monthFormatted}`,
+				prevYearMonth: `${year - 1}-${monthFormatted}`,
+				
+				// 건수가 0이면 공백, 그렇지 않으면 숫자로 변환
+				yearGunsu: Number(yearItem.gunsu) === 0 ? "" : yearItem.gunsu, 
+				prevYearGunsu: Number(prevYearItem.gunsu) === 0 ? "" : prevYearItem.gunsu,
+
+				// 보험료가 0이면 공백, 그렇지 않으면 원화 표시
+				yearTotal: Number(yearItem.total_sum) > 0 ? Number(yearItem.total_sum).toLocaleString() + " 원" : "", 
+				prevYearTotal: Number(prevYearItem.total_sum) > 0 ? Number(prevYearItem.total_sum).toLocaleString() + " 원" : ""
+			});
+
+        // ✅ 총합 계산
+        totalGunsuYear += parseInt(yearItem.gunsu) || 0;
+        totalSumYear += parseInt(yearItem.total_sum) || 0;
+        totalGunsuPrevYear += parseInt(prevYearItem.gunsu) || 0;
+        totalSumPrevYear += parseInt(prevYearItem.total_sum) || 0;
+    }
+
+    console.log("📊 최종 mergedData:", mergedData);
+    console.log(`📊 ${year}년 총 건수: ${totalGunsuYear}, 총 보험료: ${totalSumYear.toLocaleString()} 원`);
+    console.log(`📊 ${year - 1}년 총 건수: ${totalGunsuPrevYear}, 총 보험료: ${totalSumPrevYear.toLocaleString()} 원`);
+
+    // ✅ 데이터 테이블에 추가
+    mergedData.forEach(item => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td ><div class='y_month_'>${item.yearMonth}</div></td>
+            <td ><div class='y_month_2'>${item.yearTotal} (${item.yearGunsu}건)</div></td>
+            <td ><div class='y_month_'>${item.prevYearMonth}</div></td>
+            <td ><div class='y_month_2'>${item.prevYearTotal} (${item.prevYearGunsu}건)</div></td>
+        `;
+        tableBody.appendChild(row);
+    });
+
+    // ✅ 최종 합계 행 추가
+    const totalRow = document.createElement("tr");
+    totalRow.innerHTML = `
+        <td><div class='y_month_'><strong>📊 ${year}년 총합계</strong></div></td>
+        <td ><div class='y_month_2'><strong>${totalSumYear ? totalSumYear.toLocaleString() + " 원" : ""} (${totalGunsuYear}건)</strong></div></td>
+        <td><div class='y_month_'><strong>📊 ${year - 1}년 총합계</strong></div></td>
+        <td ><div class='y_month_2'><strong>${totalSumPrevYear ? totalSumPrevYear.toLocaleString() + " 원" : ""} (${totalGunsuPrevYear}건)</strong></div></td>
+    `;
+    tableBody.appendChild(totalRow);
+	insertFooterButtons2();
+}
+
+
+
+
+function insertFooterButtons2() {
+    const footerContainer = document.getElementById("changeP");
+
+    // 기존 내용 초기화
+    footerContainer.innerHTML = ""; 
+
+    let ptr = "";
+    ptr += `<button id="downloadExcel" class="p-btn">최근 1년 실적 다운로드</button>`;
+    ptr += `<button id="monthsBtn" class="p-btn">월별 실적</button>`;
+
+    footerContainer.innerHTML = ptr; // HTML 동적 삽입
+
+    // ✅ DOM이 업데이트될 시간을 주기 위해 setTimeout 사용
+    setTimeout(() => {
+        const monthsBtn = document.getElementById("monthsBtn");  // ✅ 올바른 변수명
+        if (monthsBtn) {  // ✅ 변수명 수정
+            monthsBtn.addEventListener("click", perFormance);
+            console.log("📌 '월별 실적' 버튼 이벤트 바인딩 완료!");
+        } else {
+            console.error("🚨 '월별 실적' 버튼을 찾을 수 없습니다!");
+        }
+    }, 50); // 50ms 딜레이 후 실행
+}
+
+
+document.addEventListener("click", function (event) {
+if (event.target.classList.contains("upload-modal")) {
+	event.preventDefault();
+	const num = event.target.dataset.num;
+	document.getElementById("qNum").value=num;
+	fetch(`https://lincinsu.kr/2025/api/question/get_questionnaire_details.php?id=${num}`)
+		.then(response => response.json())
+		 .then(data => {
+                if (data.success) {
+                    // 데이터를 채움
+                    document.getElementById("uploadModal").style.display = "block";
+                    document.getElementById("cName").innerHTML = data.data.school1;
+                } else {
+                    alert(data.error);
+                }
+            })
+            .catch(() => {
+                alert("데이터 로드 실패.");
+            });
+        
+        // 파일 검색 실행
+        const qnum = document.getElementById("qNum").value;
+		dynamiFileUpload();//파일업로드 동적생성
+        fileSearch(qnum);
+      
+  }
+
+    // 모달 닫기
+    document.querySelectorAll(".close-upmodal").forEach(function (element) {
+        element.addEventListener("click", function () {
+            document.getElementById("uploadModal").style.display = "none";
+        });
+    });
+
+    // 모달 외부를 클릭하면 닫기
+
+	if (event.target.classList.contains("upModal")) { // ✅ upModal 기준으로 변경
+        event.target.style.display = "none";
+    }
+   /* document.getElementById("uploadModal").addEventListener("click", function (e) {
+        if (e.target === this) {
+            this.style.display = "none";
+        }
+    });*/
+	
+	
+}); 
+
+function fileSearch(qnum) {
+    fetch(`https://lincinsu.kr/2025/api/question/get_filelist.php?id=${qnum}`)
+        .then(response => response.json())
+        .then(fileData => {
+            console.log(fileData);
+
+            let rows = "";
+            let i = 1;
+
+            const kindMapping = {
+                1: '카드전표',
+                2: '영수증',
+                3: '기타',
+                4: '청약서',
+                5: '과별인원',
+                6: '보험사사업자등록증',
+                7: '보험증권'
+            };
+
+            fileData.forEach((item) => {
+                const filePath = item.description2;
+                const fileName = filePath.split('/').pop();
+                const kind = kindMapping[item.kind] || '알 수 없음';
+
+                rows += `
+                    <tr>
+                        <td>${i}</td>
+                        <td>${kind}</td>
+                        <td>${item.bunho}</td>
+                        <td><a href="${filePath}" download target="_blank" class="file-link">${fileName}</a></td>
+                        <td>${item.wdate}</td>
+                        <td><button class="dButton" data-num="${item.num}">삭제</button></td>
+                    </tr>
+                `;
+                i++;
+            });
+
+            // 테이블 내용 업데이트
+            document.getElementById("file_list").innerHTML = rows;
+
+            // 동적으로 생성된 삭제 버튼에 이벤트 리스너 추가
+            document.querySelectorAll(".dButton").forEach(button => {
+                button.addEventListener("click", function () {
+                    const fileNum = this.getAttribute("data-num");
+                    deleteFile(fileNum);
+                });
+            });
+        })
+        .catch(error => {
+            alert('파일 데이터를 가져오는 데 실패했습니다.');
+            console.error('Fetch 호출 실패:', error);
+        });
+}
+
+// 파일 삭제 함수
+function deleteFile(fileNum) {
+    if (!confirm("정말 삭제하시겠습니까?")) return;
+
+    fetch(`https://lincinsu.kr/2025/api/question/delete_file.php?id=${fileNum}`)
+        .then(response => response.json())
+        .then(result => {
+            if (result.success) {
+                alert("파일이 삭제되었습니다.");
+                fileSearch(document.getElementById("qNum").value); // 파일 목록 새로고침
+            } else {
+                alert("파일 삭제 실패: " + result.error);
+            }
+        })
+        .catch(error => {
+            alert("파일 삭제 요청 실패");
+            console.error("파일 삭제 오류:", error);
+        });
+}
+
+   
+function uploadFile() {
+    const fileInput = document.getElementById('uploadedFile');
+    const fileType = document.getElementById('fileType').value;
+    const qNum = document.getElementById('qNum').value;
+    const dynamicInput = document.getElementById('dynamicInput') ? document.getElementById('dynamicInput').value : '';
+	const userName = document.getElementById("userName").value;
+    // 파일 선택 확인
+    if (fileInput.files.length === 0) {
+        alert('파일을 선택해주세요.');
+        return;
+    }
+
+    // 청약서(4) 또는 보험증권(7) 업로드 시 번호 입력 필수
+    if ((fileType === '4' || fileType === '7') && dynamicInput.trim() === '') {
+        alert(fileType === '4' ? '설계번호를 입력해주세요.' : '증권번호를 입력해주세요.');
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('file', fileInput.files[0]);
+    formData.append('fileType', fileType);
+    formData.append('qNum', qNum);
+	formData.append('userName', userName);
+
+    // 파일 타입이 청약서(4) 또는 보험증권(7)일 경우 번호 추가
+    if (fileType === '4') {
+        formData.append('designNumber', dynamicInput); // 설계번호 추가
+    } else if (fileType === '7') {
+        formData.append('certificateNumber', dynamicInput); // 증권번호 추가
+    }
+
+    // 파일 업로드 요청
+    fetch(`https://lincinsu.kr/2025/api/question/upload.php`, {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.text())
+    .then(result => {
+        alert('업로드 완료: ' + result);
+        fileSearch(qNum); // 파일 목록 갱신
+    })
+    .catch(error => {
+        alert('업로드 실패.');
+        console.error('파일 업로드 오류:', error);
+    });
+}
+
+
+function dynamiFileUpload() {
+    // 파일 타입 옵션 (동적 데이터)
+    const fileTypes = [
+        { value: "4", text: "청약서" },
+        { value: "1", text: "카드전표" },
+        { value: "2", text: "영수증" },
+        { value: "7", text: "보험증권" },
+        { value: "5", text: "과별인원현황" },
+        { value: "6", text: "보험사사업자등록증" },
+        { value: "3", text: "기타" }
+    ];
+
+    // 1️⃣ 동적으로 `<select>` 요소 생성
+    const fileTypeSelect = document.createElement("select");
+    fileTypeSelect.id = "fileType";
+    fileTypeSelect.classList.add("u_select");
+    fileTypeSelect.name = "fileType";
+
+    // 옵션 추가
+    fileTypes.forEach(optionData => {
+        const option = document.createElement("option");
+        option.value = optionData.value;
+        option.textContent = optionData.text;
+        fileTypeSelect.appendChild(option);
+    });
+
+    // 2️⃣ 동적 입력 필드 컨테이너 생성
+    const dynamicField = document.createElement("div");
+    dynamicField.id = "dynamicField";
+    dynamicField.style.display = "none"; // 기본적으로 숨김
+
+    const dynamicInput = document.createElement("input");
+    dynamicInput.type = "text";
+    dynamicInput.id = "dynamicInput";
+    dynamicInput.name = "dynamicInput";
+    dynamicField.appendChild(dynamicInput);
+
+    // 3️⃣ 파일 업로드 필드 및 버튼 생성
+    const fileInput = document.createElement("input");
+    fileInput.type = "file";
+    fileInput.id = "uploadedFile";
+    fileInput.name = "uploadedFile";
+    fileInput.classList.add("uploadedFile");
+
+    const uploadButton = document.createElement("button");
+    uploadButton.type = "button"; // ✅ 버튼 기본 타입 변경 (submit → button)
+    uploadButton.textContent = "업로드";
+
+    // ✅ `uploadFile()` 실행 추가
+    uploadButton.addEventListener("click", function (event) {
+        event.preventDefault(); // 기본 동작 방지
+        uploadFile(); // 업로드 실행
+    });
+
+    // 4️⃣ 업로드 컨테이너에 추가
+    const uploadContainer = document.querySelector(".upload-container");
+    uploadContainer.innerHTML = ""; // 기존 내용 제거
+    uploadContainer.appendChild(fileTypeSelect);
+    uploadContainer.appendChild(dynamicField);
+    uploadContainer.appendChild(fileInput);
+    uploadContainer.appendChild(uploadButton);
+
+    // 5️⃣ `toggleInputField()` 함수 정의 및 적용
+    function toggleInputField() {
+        const fileType = fileTypeSelect.value;
+
+        if (fileType === "4") {
+            dynamicField.style.display = "block";
+            dynamicInput.placeholder = "설계번호를 입력하세요";
+        } else if (fileType === "7") {
+            dynamicField.style.display = "block";
+            dynamicInput.placeholder = "증권번호를 입력하세요";
+        } else {
+            dynamicField.style.display = "none";
+            dynamicInput.value = ""; // 입력 값 초기화
+        }
+    }
+
+    // 이벤트 리스너 추가
+    fileTypeSelect.addEventListener("change", toggleInputField);
+
+    // 초기 실행
+    toggleInputField();
+}
+
+
+
+
+
+    console.log("✅ question.js 초기화 완료");
+}

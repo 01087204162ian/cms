@@ -1,0 +1,429 @@
+@charset "utf-8";
+
+html {overflow-y:hidden;overflow-x:hidden;}
+body {margin:0 0 0 0;font-family: '돋움',Dotum,Helvetica,sans-serif;
+	  font-size: 12px;line-height: 1.28;color: #333;-webkit-font-smoothing: antialiased;}
+html, body {height: 100%;}
+	  
+body, input, select, button, textarea, h1, h2, h3, h4, h5, h6, table { font:normal 12px/1.5 dotum,"돋음",Arial,AppleGothic,Sans-serif; color:#666; }
+html, body, div, form, input, select, button, textarea, legend, fieldset, h1, h2, h3, h4, h5, h6, ul, ol, dl, li, dt, dd, blockquote, address, p, th, td, caption { margin:0; padding:0; }
+	  
+ul{list-style:none;margin:0;padding:0;}
+a:link{color:#666;text-decoration:none}
+a:visited{color:#3d7ed6;text-decoration:none}
+a:hover,a:active{color:#3d7ed6;text-decoration:none}
+a:focus{color:#2d86b2;text-decoration:none}
+
+/* blind */
+.blind{visibility:hidden;overflow:hidden;position:absolute;width:0;height:0}
+
+/* 팝업 */
+.popup_wrap{position:fixed;width:100%;height:100%;min-height:111704px;z-index:9999;}
+.ly_player{position:fixed;top:50%;left:50%;z-index:120;width:375px;height:590px;margin:-243px 0 0 -235px;background:#fff}
+.cls{display:block;position:absolute;top:10px;right:10px;width:29px;height:29px;background:url(/2014/imgs/btn_cls.png) no-repeat}
+
+/* 개별클레임 */
+.claim2_wrap{position:fixed;width:100%;height:100%;min-height:111704px;z-index:9999;}
+.claim2_player{position:fixed;top:40%;left:50%;z-index:120;width:475px;height:630px;margin:-243px 0 0 -235px;background:#fff}
+.cls{display:block;position:absolute;top:10px;right:10px;width:29px;height:29px;background:url(/2014/imgs/btn_cls.png) no-repeat}
+/* 클레임 */
+.claim_wrap{position:fixed;width:100%;height:100%;min-height:111704px;z-index:9999;}
+.claim_player{position:fixed;top:40%;left:50%;z-index:120;width:475px;height:630px;margin:-243px 0 0 -235px;background:#fff}
+.cls{display:block;position:absolute;top:10px;right:10px;width:29px;height:29px;background:url(/2014/imgs/btn_cls.png) no-repeat}
+/* 배서추가 */
+.endorse_wrap{position:fixed;width:100%;height:100%;min-height:111704px;z-index:9999;}
+.en_player{position:fixed;top:50%;left:30%;z-index:120;width:870px;height:530px;margin:-243px 0 0 -235px;background:#fff}
+.cls{display:block;position:absolute;top:10px;right:10px;width:29px;height:29px;background:url(/2014/imgs/btn_cls.png) no-repeat}
+
+/* 팝업(반 환경설정페이지) */
+.popup_wrap2{position:fixed;width:100%;height:100%;min-height:111704px;z-index:9999;}
+.ly_player2{position:fixed;top:40%;left:30%;z-index:120;width:590px;height:475px;margin:-243px 0 0 -235px;background:#fff}
+.cls2{display:block;position:absolute;top:10px;left:10px;width:29px;height:29px;background:url(/2014/imgs/btn_cls.png) no-repeat}
+
+/* 팝업(게시판) */
+.popup_wrap3{position:fixed;width:100%;height:100%;min-height:111704px;z-index:9999;}
+.ly_player3{position:fixed;top:40%;left:30%;z-index:120;width:590px;height:475px;margin:-243px 0 0 -235px;background:#fff}
+.cls3{display:block;position:absolute;top:10px;left:10px;width:29px;height:29px;background:url(/2014/imgs/btn_cls.png) no-repeat}
+
+/* 보험회사 보험료 페이지  index page 배서 리스트 */
+.insP{position:fixed;width:100%;height:100%;min-height:111704px;z-index:9999;}
+.ins_player{position:fixed;top:40%;left:30%;z-index:120;width:590px;height:475px;margin:-243px 0 0 -235px;background:#fff}
+.cls2{display:block;position:absolute;top:10px;left:10px;width:29px;height:29px;background:url(/2014/imgs/btn_cls.png) no-repeat}
+
+/* 팝업(오브젝트) */
+.popup_wrap_bg{position:fixed;width:100%;height:100%;min-height:111704px;z-index:9990;}
+.popup_wrap3{position:fixed;top:150px;left:400px;width:180px;height:160px;min-height:160px;z-index:9998;}
+.ly_obj{position:fixed;z-index:120;width:180px;height:160px;background:#fff}
+
+/* 셀렉트 박스 모양 버튼 */
+.slt_btn {display:inline-block;text-align:left; padding:0 0 0 9px; cursor:pointer}
+.slt_btn span{display:inline-block; height:20px; width:100%; padding:5px 0 0 0; font-size:12px; line-height:1.4}
+
+
+/* 팝업(반 환경설정페이지) */
+.popup_wrap5{position:fixed;width:100%;height:100%;min-height:111704px;z-index:9999;}
+.ly_player5{position:fixed;top:40%;left:30%;z-index:120;width:590px;height:475px;margin:-243px 0 0 -235px;background:#fff}
+.cls2{display:block;position:absolute;top:10px;left:10px;width:29px;height:29px;background:url(/2014/imgs/btn_cls.png) no-repeat}
+
+
+
+
+/* 보험료추가 */
+.preminum_wrap{position:fixed;width:100%;height:100%;min-height:111704px;z-index:9999;}
+.pr_player{position:fixed;top:50%;left:32%;z-index:120;width:840px;height:540px;margin:-243px 0 0 -235px;background:#fff;}
+.cls{display:block;position:absolute;top:10px;right:10px;width:29px;height:29px;background:url(/2014/imgs/btn_cls.png) no-repeat}
+
+
+/* 대리기사리스트 */
+.deri_List_wrap{position:fixed;width:100%;height:100%;min-height:111704px;z-index:9999;}
+.li_player{position:fixed;top:50%;left:32%;z-index:120;width:850px;height:600px;margin:-243px 0 0 -235px;background:#fff;}
+.cls{display:block;position:absolute;top:10px;right:10px;width:29px;height:29px;background:url(/2014/imgs/btn_cls.png) no-repeat}
+
+
+/* 계약자 피보험자*/
+.pbohem_wrap{position:fixed;width:100%;height:100%;min-height:111704px;z-index:9999;}
+.pbohem_player{position:fixed;top:50%;left:32%;z-index:120;width:850px;height:600px;margin:-243px 0 0 -235px;background:#fff;}
+.cls{display:block;position:absolute;top:10px;right:10px;width:29px;height:29px;background:url(/2014/imgs/btn_cls.png) no-repeat}
+
+/* 대리기사리스트 바탕에서  */
+.deri_List2_wrap{position:fixed;width:100%;height:100%;min-height:111704px;z-index:9999;}
+.li2_player{position:fixed;top:50%;left:32%;z-index:120;width:830px;height:540px;margin:-243px 0 0 -235px;background:#fff;}
+.cls{display:block;position:absolute;top:10px;right:10px;width:29px;height:29px;background:url(/2014/imgs/btn_cls.png) no-repeat}
+/*excell 해지*/
+/* 배서추가 */
+.haeji_deri{position:fixed;width:100%;height:100%;min-height:111704px;z-index:9999;}
+.haeji_player{position:fixed;top:50%;left:32%;z-index:120;width:850px;height:600px;margin:-243px 0 0 -235px;background:#fff;}
+.cls{display:block;position:absolute;top:10px;right:10px;width:29px;height:29px;background:url(/2014/imgs/btn_cls.png) no-repeat}
+
+
+/* 배서추가 */
+.endorse_deri{position:fixed;width:100%;height:100%;min-height:111704px;z-index:9999;}
+.endorse_player{position:fixed;top:50%;left:32%;z-index:120;width:850px;height:600px;margin:-243px 0 0 -235px;background:#fff;}
+.cls{display:block;position:absolute;top:10px;right:10px;width:29px;height:29px;background:url(/2014/imgs/btn_cls.png) no-repeat}
+/* 신규추가 */
+.new_deri{position:fixed;width:100%;height:100%;min-height:111704px;z-index:9999;}
+.new_player{position:fixed;top:50%;left:32%;z-index:120;width:850px;height:600px;margin:-243px 0 0 -235px;background:#fff;}
+.cls{display:block;position:absolute;top:10px;right:10px;width:29px;height:29px;background:url(/2014/imgs/btn_cls.png) no-repeat}
+/* 핸드폰추가 */
+.new_hphone{position:fixed;width:100%;height:100%;min-height:111704px;z-index:9999;}
+.new_hphone_{position:fixed;top:50%;left:32%;z-index:120;width:850px;height:600px;margin:-243px 0 0 -235px;background:#fff;}
+.cls{display:block;position:absolute;top:10px;right:10px;width:29px;height:29px;background:url(/2014/imgs/btn_cls.png) no-repeat}
+
+
+/* email 보험료  배서 화면에서*/
+.email2{position:fixed;width:100%;height:100%;min-height:111704px;z-index:9999;}
+.email2_player{position:fixed;top:50%;left:32%;z-index:120;width:850px;height:600px;margin:-243px 0 0 -235px;background:#fff;}
+.cls{display:block;position:absolute;top:10px;right:10px;width:29px;height:29px;background:url(/2014/imgs/btn_cls.png) no-repeat}
+
+/* 보험회사용 보험료  배서 화면에서*/
+.insP2{position:fixed;width:100%;height:100%;min-height:111704px;z-index:9999;}
+.ins2_player{position:fixed;top:50%;left:32%;z-index:120;width:850px;height:600px;margin:-243px 0 0 -235px;background:#fff;}
+.cls{display:block;position:absolute;top:10px;right:10px;width:29px;height:29px;background:url(/2014/imgs/btn_cls.png) no-repeat}
+
+/* 배서일 전체 변경*/
+.eChange2{position:fixed;width:100%;height:100%;min-height:111704px;z-index:9999;}
+.eChange2_player{position:fixed;top:50%;left:62%;z-index:120;width:420px;height:400px;margin:-243px 0 0 -235px;background:#fff;}
+.cls{display:block;position:absolute;top:10px;right:10px;width:29px;height:29px;background:url(/2014/imgs/btn_cls.png) no-repeat}
+/* 배서일 변경*/
+.eChange{position:fixed;width:100%;height:100%;min-height:111704px;z-index:9999;}
+.eChange_player{position:fixed;top:50%;left:62%;z-index:120;width:420px;height:400px;margin:-243px 0 0 -235px;background:#fff;}
+.cls{display:block;position:absolute;top:10px;right:10px;width:29px;height:29px;background:url(/2014/imgs/btn_cls.png) no-repeat}
+
+/* 보험회사용 보험료  바탕화면에서 부른 1/12 보험료 화면에서 불어오게*/
+.insP3{position:fixed;width:100%;height:100%;min-height:111704px;z-index:9900;}
+.ins3_player{position:fixed;top:50%;left:30%;z-index:120;width:820px;height:520px;margin:-243px 0 0 -235px;background:#fff;}
+
+
+/* 보험회사용 보험료  바탕화면에서 부른 1/12 보험료 화면에서 불어오게*/
+.dambo{position:fixed;width:100%;height:100%;min-height:111704px;z-index:9999;}
+.dambo_player{position:fixed;top:51%;left:30.5%;z-index:120;width:815px;height:510px;margin:-243px 0 0 -235px;background:#fff;}
+/*검색 버튼*/
+.btn-b{
+
+	background-color:#CCCCCC;
+	color: ; 
+	border-bottom: #A1A9B5 1px solid;
+	border-left: #A1A9B5 1px solid; 
+	border-right: #A1A9B5 1px solid;
+	border-top: #A1A9B5 1px solid;
+	font: bold 1em "Lucida Grande", Verdana, Geneva, Lucida, Arial, Helvetica, sans-serif;
+	padding: 3px 5px 4px 5px;
+	font-size:12px;
+	height:26px;
+	width:100px
+
+}
+
+.btn-b2{
+
+	background-color:#CCCCCC;
+	color: ; 
+	border-bottom: #A1A9B5 1px solid;
+	border-left: #A1A9B5 1px solid; 
+	border-right: #A1A9B5 1px solid;
+	border-top: #A1A9B5 1px solid;
+	font: bold 1em "Lucida Grande", Verdana, Geneva, Lucida, Arial, Helvetica, sans-serif;
+	padding: 3px 5px 4px 5px;
+	font-size:12px;
+	height:26px;
+	width:70px;
+	cursor:pointer;
+
+}
+
+.btn-b3{
+
+	background-color:#CCCCCC;
+	color: ; 
+	border-bottom: #A1A9B5 1px solid;
+	border-left: #A1A9B5 1px solid; 
+	border-right: #A1A9B5 1px solid;
+	border-top: #A1A9B5 1px solid;
+	font: bold 1em "Lucida Grande", Verdana, Geneva, Lucida, Arial, Helvetica, sans-serif;
+	padding: 3px 5px 4px 5px;
+	font-size:12px;
+	height:26px;
+	width:50px
+
+}
+.ctn-b{
+
+	background-color:#3d7ed6;
+	color: #FFFFFF; 
+	border-bottom: #A1A9B5 1px solid;
+	border-left: #A1A9B5 1px solid; 
+	border-right: #A1A9B5 1px solid;
+	border-top: #A1A9B5 1px solid;
+	font: bold 1em "Lucida Grande", Verdana, Geneva, Lucida, Arial, Helvetica, sans-serif;
+	padding: 3px 5px 4px 5px;
+	font-size:12px;
+	height:26px;
+	width:100px
+
+}
+.ctn-b3{
+
+	background-color:#A1A9B5;
+	color: #FFFFFF; 
+	border-bottom: #A1A9B5 1px solid;
+	border-left: #A1A9B5 1px solid; 
+	border-right: #A1A9B5 1px solid;
+	border-top: #A1A9B5 1px solid;
+	font: bold 1em "Lucida Grande", Verdana, Geneva, Lucida, Arial, Helvetica, sans-serif;
+	padding: 3px 5px 4px 5px;
+	font-size:12px;
+	height:26px;
+	width:85px
+
+}
+.ctn-b2{
+
+	background-color:#3d7ed6;
+	color: #FFFFFF; 
+	border-bottom: #A1A9B5 1px solid;
+	border-left: #A1A9B5 1px solid; 
+	border-right: #A1A9B5 1px solid;
+	border-top: #A1A9B5 1px solid;
+	font: bold 1em "Lucida Grande", Verdana, Geneva, Lucida, Arial, Helvetica, sans-serif;
+	padding: 3px 5px 4px 5px;
+	font-size:12px;
+	height:26px;
+	width:85px
+
+}
+.endoreseText{
+	border: 1px none #FFFFFF; 
+	width:97%;
+	background-color:#FFFFFF;
+	padding:2 0 0 0; 
+	font-family:돋움,굴림,arial,verdana; 
+	font-size:10pt;
+	height:19px;
+	text-align: center;
+	}
+.fileinput{
+	border: 1px none #FFFFFF; 
+	width:97%;
+	background-color:#FFFFFF;
+	padding:2 0 0 0; 
+	font: bold 1em "Lucida Grande", Verdana, Geneva, Lucida, Arial, Helvetica, sans-serif;
+	font-size:10pt;
+	height:19px;
+	text-align: center;
+	}
+/*sms */
+.sms_wrap{position:fixed;width:100%;height:100%;min-height:111704px;z-index:9999;}
+.sms_player{position:fixed;top:50%;left:32%;z-index:120;width:850px;height:600px;margin:-243px 0 0 -235px;background:#fff;}
+.cls{display:block;position:absolute;top:10px;right:10px;width:29px;height:29px;background:url(/2014/imgs/btn_cls.png) no-repeat}
+/*학번s */
+.stbuho_wrap{position:fixed;width:100%;height:100%;min-height:111704px;z-index:9999;}
+.stbuho_player{position:fixed;top:50%;left:32%;z-index:120;width:850px;height:600px;margin:-243px 0 0 -235px;background:#fff;}
+.cls{display:block;position:absolute;top:10px;right:10px;width:29px;height:29px;background:url(/2014/imgs/btn_cls.png) no-repeat}
+/*id리스트 */
+.id_wrap{position:fixed;width:100%;height:100%;min-height:111704px;z-index:9999;}
+.id_player{position:fixed;top:50%;left:32%;z-index:120;width:850px;height:600px;margin:-243px 0 0 -235px;background:#fff;}
+.cls{display:block;position:absolute;top:10px;right:10px;width:29px;height:29px;background:url(/2014/imgs/btn_cls.png) no-repeat}
+/*id리스트==증권별담당자 */
+.id2_wrap{position:fixed;width:100%;height:100%;min-height:111704px;z-index:9999;}
+.id2_player{position:fixed;top:50%;left:32%;z-index:120;width:850px;height:600px;margin:-243px 0 0 -235px;background:#fff;}
+.cls{display:block;position:absolute;top:10px;right:10px;width:29px;height:29px;background:url(/2014/imgs/btn_cls.png) no-repeat}
+
+
+/*id리스트==새로운아이디 */
+.id3_wrap{position:fixed;width:100%;height:100%;min-height:111704px;z-index:9999;}
+.id3_player{position:fixed;top:50%;left:32%;z-index:120;width:850px;height:600px;margin:-243px 0 0 -235px;background:#fff;}
+.cls{display:block;position:absolute;top:10px;right:10px;width:29px;height:29px;background:url(/2014/imgs/btn_cls.png) no-repeat}
+/*휴일 */
+.ho_wrap{position:fixed;width:100%;height:100%;min-height:111704px;z-index:9999;}
+.ho_player{position:fixed;top:50%;left:32%;z-index:120;width:410px;height:300px;margin:-243px 0 0 -235px;background:#fff;}
+.cls{display:block;position:absolute;top:10px;right:10px;width:29px;height:29px;background:url(/2014/imgs/btn_cls.png) no-repeat}
+
+/* 메모 */
+.memo_wrap{position:fixed;width:100%;height:100%;min-height:111704px;z-index:9999;}
+.memo_player{position:fixed;top:50%;left:32%;z-index:120;width:850px;height:600px;margin:-243px 0 0 -235px;background:#fff;}
+.cls{display:block;position:absolute;top:10px;right:10px;width:29px;height:29px;background:url(/2014/imgs/btn_cls.png) no-repeat}
+/* 지역/지사 */
+.local_wrap{position:fixed;width:100%;height:100%;min-height:111704px;z-index:9999;}
+.local_player{position:fixed;top:50%;left:32%;z-index:120;width:850px;height:600px;margin:-243px 0 0 -235px;background:#fff;}
+.cls{display:block;position:absolute;top:10px;right:10px;width:29px;height:29px;background:url(/2014/imgs/btn_cls.png) no-repeat}
+/*dam */
+.dam_wrap{position:fixed;width:100%;height:100%;min-height:111704px;z-index:9999;}
+.dam_player{position:fixed;top:50%;left:32%;z-index:120;width:850px;height:600px;margin:-243px 0 0 -235px;background:#fff;}
+.cls{display:block;position:absolute;top:10px;right:10px;width:29px;height:29px;background:url(/2014/imgs/btn_cls.png) no-repeat}
+
+/* 인원구성  */
+.gusong_wrap{position:fixed;width:100%;height:100%;min-height:111704px;z-index:9999;}
+.gusong_player{position:fixed;top:50%;left:32%;z-index:120;width:830px;height:540px;margin:-243px 0 0 -235px;background:#fff;}
+.cls{display:block;position:absolute;top:10px;right:10px;width:29px;height:29px;background:url(/2014/imgs/btn_cls.png) no-repeat}
+
+/*대리점 현화 업체 증권인원*/
+.park_wrap{position:fixed;width:100%;height:100%;min-height:111704px;z-index:9999;}
+.park_player{position:fixed;top:50%;left:32%;z-index:120;width:830px;height:540px;margin:-243px 0 0 -235px;background:#fff;}
+.cls{display:block;position:absolute;top:10px;right:10px;width:29px;height:29px;background:url(/2014/imgs/btn_cls.png) no-repeat}
+
+
+
+/*년령구성*/
+.nai_gusong{position:fixed;width:100%;height:100%;min-height:111704px;z-index:9999;}
+.nai_player{position:fixed;top:50%;left:32%;z-index:120;width:560px;height:540px;margin:-243px 0 0 -235px;background:#fff;}
+.cls{display:block;position:absolute;top:10px;right:10px;width:29px;height:29px;background:url(/2014/imgs/btn_cls.png) no-repeat}
+
+#inwon{
+	margin: 10px 10px 10px 10px;
+
+}
+#inwon table { 
+	border-collapse: collapse;
+	width: 100%;
+	font-family: "Century Gothic", "Gill Sans", Arial, sans-serif;
+}
+
+#inwon td,th {
+	text-align: center;
+	border: 1px solid #CCCCCC;
+	padding: 3px 5px 2px 5px;
+	font-size: 1em;
+	height: 24px;
+}
+
+
+.title{
+
+	border: 1px none #FFFFFF; 
+	width:100%;
+	background-color:#FFFFFF;
+	padding:2 0 0 0; 
+	font-family:돋움,굴림,arial,verdana; 
+	font-size:10pt;
+	height:19px;
+	
+
+}
+
+.content{
+
+	border: 1px none #CCCCCC; 
+	width:100%;
+	background-color:#CCCCCC;
+	padding:2 0 0 0; 
+	font-family:돋움,굴림,arial,verdana; 
+	font-size:10pt;
+	
+	
+
+}
+
+.check{
+
+	border: 1px none #FFFFFF; 
+	width:40%;
+	background-color:#FFFFFF;
+	margin:5 0 0 0; 
+
+}
+.stn{//버튼
+	background-color:#CCCCCC;
+    //margin-left: 10px;
+	margin-right: 10px;
+	border-bottom: #A1A9B5 1px solid;
+	border-left: #A1A9B5 1px solid; 
+	border-right: #A1A9B5 1px solid;
+	border-top: #A1A9B5 1px solid;
+	font: bold 1em "Lucida Grande", Verdana, Geneva, Lucida, Arial, Helvetica, sans-serif;
+	padding: 3px 5px 6px 5px;
+	font-size:12px;
+	height:19px;
+	width:50px;
+	cursor:pointer;
+
+}
+
+.stn2{//버튼
+	background-color:#CCCCCC;
+    //margin-left: 10px;
+	margin-right: 10px;
+	border-bottom: #A1A9B5 1px solid;
+	border-left: #A1A9B5 1px solid; 
+	border-right: #A1A9B5 1px solid;
+	border-top: #A1A9B5 1px solid;
+	font: bold 1em "Lucida Grande", Verdana, Geneva, Lucida, Arial, Helvetica, sans-serif;
+	padding: 3px 5px 6px 5px;
+	font-size:12px;
+	height:22px;
+	width:70px;
+	cursor:pointer;
+
+}
+.gtn{//버튼
+	background-color:#CCCCCC;
+    //margin-left: 10px;
+	margin-right: 10px;
+	border-bottom: #A1A9B5 1px solid;
+	border-left: #A1A9B5 1px solid; 
+	border-right: #A1A9B5 1px solid;
+	border-top: #A1A9B5 1px solid;
+	font: bold 1em "Lucida Grande", Verdana, Geneva, Lucida, Arial, Helvetica, sans-serif;
+	padding: 3px 5px 6px 5px;
+	font-size:12px;
+	height:22px;
+	width:70px;
+	cursor:pointer;
+
+}
+
+.gtn2{//버튼
+	background-color:#CCCCCC;
+    margin-left: 10px;
+	//margin-right: 10px;
+	border-bottom: #A1A9B5 1px solid;
+	border-left: #A1A9B5 1px solid; 
+	border-right: #A1A9B5 1px solid;
+	border-top: #A1A9B5 1px solid;
+	font: bold 1em "Lucida Grande", Verdana, Geneva, Lucida, Arial, Helvetica, sans-serif;
+	padding: 3px 5px 6px 5px;
+	font-size:12px;
+	height:22px;
+	width:70px;
+	cursor:pointer;
+
+}

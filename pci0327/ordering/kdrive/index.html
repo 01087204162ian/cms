@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>케이드라이브 - 대리운전 고객불편 접수</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- SweetAlert2 -->
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.12/dist/sweetalert2.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #0066cc;
+            --secondary-color: #ff9900;
+            --bg-light: #f8f9fa;
+            --text-dark: #343a40;
+        }
+        
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        
+        .header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1.5rem 0;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .logo {
+            height: 40px;
+            margin-right: 10px;
+        }
+        
+        .main-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        .claim-form {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .form-section {
+            margin-bottom: 2rem;
+        }
+        
+        .section-title {
+            color: var(--primary-color);
+            font-weight: 600;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .required-field::after {
+            content: "*";
+            color: #dc3545;
+            margin-left: 4px;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .btn-primary:hover {
+            background-color: #0055b3;
+            border-color: #0055b3;
+        }
+        
+        .footer {
+            background-color: #343a40;
+            color: white;
+            padding: 1.5rem 0;
+            margin-top: 3rem;
+        }
+        
+        .footer a {
+            color: white;
+            text-decoration: none;
+        }
+        
+        .footer a:hover {
+            text-decoration: underline;
+        }
+        
+        .loading-spinner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 9999;
+        }
+        
+        .spinner-border {
+            width: 3rem;
+            height: 3rem;
+        }
+        
+        .success-container {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .success-icon {
+            font-size: 4rem;
+            color: #28a745;
+            margin-bottom: 1rem;
+        }
+        
+        .help-text {
+            font-size: 0.875rem;
+            color: #6c757d;
+            margin-top: 0.25rem;
+        }
+        
+        /* 모바일 최적화 */
+        @media (max-width: 768px) {
+            .claim-form {
+                padding: 1.5rem;
+            }
+            
+            .header {
+                padding: 1rem 0;
+            }
+            
+            .logo {
+                height: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 헤더 -->
+    <header class="header">
+        <div class="container">
+            <div class="d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center">
+                    <img src="img/logo_w.svg" alt="케이드라이브 로고" class="logo">
+                    <!--<h1 class="fs-4 mb-0">케이드라이브 대리운전</h1>-->
+                </div>
+                <div>
+                    <a href="tel:1599-0000" class="text-white text-decoration-none">
+                        <i class="fas fa-phone-alt me-1"></i> 1599-0000
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 메인 콘텐츠 -->
+    <div class="main-container">
+        <h2 class="text-center mb-4">고객 불편 접수</h2>
+        <p class="text-center mb-4">
+            대리운전 서비스 이용 중 불편하셨던 점이나 개선이 필요한 사항을 접수해 주세요.<br>
+            고객님의 소중한 의견을 반영하여 최고의 속도로 최선을 다하여 처리하겠습니다.<br>
+			접수하시면 접수 내용은 당사 담당자에게 전달되며, <br>
+			평일 09시~17시 접수는 당일 바로 연락드리겠습니다.<br>
+			이외의 시간은 익일 영업시간에 연락드리겠습니다.
+        </p>
+        
+        <!-- 클레임 접수 폼 -->
+        <div class="claim-form" id="claim-form-container">
+            <form id="claim-form" class="needs-validation" novalidate>
+                <!-- 고객 정보 섹션 -->
+                <div class="form-section">
+                    <h3 class="section-title">
+                        <i class="fas fa-user me-2"></i> 고객 정보
+                    </h3>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="customer-name" class="form-label required-field">이름</label>
+                            <input type="text" class="form-control" id="customer-name" required>
+                            <div class="invalid-feedback">이름을 입력해주세요.</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="customer-phone" class="form-label required-field">연락처</label>
+                            <input type="text" class="form-control" id="customer-phone" placeholder="010-0000-0000" required>
+                            <div class="invalid-feedback">연락처를 입력해주세요.</div>
+                        </div>
+                        <div class="col-12">
+                            <label for="customer-email" class="form-label">이메일</label>
+                            <input type="email" class="form-control" id="customer-email" placeholder="예: example@email.com">
+                            <div class="help-text">이메일 입력 시 처리 결과를 이메일로 받으실 수 있습니다.</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 대리운전 이용 정보 섹션 -->
+                <div class="form-section">
+                    <h3 class="section-title">
+                        <i class="fas fa-car me-2"></i> 대리운전 이용 정보
+                    </h3>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="usage-date" class="form-label ">이용일시</label>
+                            <input type="datetime-local" class="form-control" id="usage-date" >
+                            <div class="invalid-feedback">이용일시를 입력해주세요.</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="receipt-number" class="form-label">접수번호</label>
+                            <input type="text" class="form-control" id="receipt-number" placeholder="예: KD12345678">
+                            <div class="help-text">접수번호를 모르시면 비워두셔도 됩니다.</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="driver-name" class="form-label">기사명</label>
+                            <input type="text" class="form-control" id="driver-name">
+                            <div class="help-text">기사명을 모르시면 비워두셔도 됩니다.</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="driver-phone" class="form-label">기사 연락처</label>
+                            <input type="text" class="form-control" id="driver-phone" placeholder="예: 010-0000-0000">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="start-location" class="form-label ">출발지</label>
+                            <input type="text" class="form-control" id="start-location" >
+                            <div class="invalid-feedback">출발지를 입력해주세요.</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="destination" class="form-label ">도착지</label>
+                            <input type="text" class="form-control" id="destination" >
+                            <div class="invalid-feedback">도착지를 입력해주세요.</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 클레임 내용 섹션 -->
+                <div class="form-section">
+                    <h3 class="section-title">
+                        <i class="fas fa-exclamation-triangle me-2"></i> 클레임 내용
+                    </h3>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="claim-type" class="form-label ">클레임 유형</label>
+                            <select class="form-select" id="claim-type" >
+                                <option value="" selected disabled>선택해주세요</option>
+								<option value="사고처리">사고처리</option>
+								<option value="자기부담금">자기부담금</option>
+                                <option value="기사 태도불량">기사 태도불량</option>
+                                <option value="기사 지각">기사 지각</option>
+                                <option value="운전 불만">운전 서비스 불만</option>
+                                <option value="과금 문제">과금 문제</option>
+                                <option value="차량 파손">차량 파손</option>
+                                <option value="물품 분실">물품 분실</option>
+                                <option value="앱/웹 오류">앱/웹 오류</option>
+                                <option value="기타">기타</option>
+                            </select>
+                            <div class="invalid-feedback">클레임 유형을 선택해주세요.</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="claim-urgency" class="form-label">긴급도</label>
+                            <select class="form-select" id="claim-urgency">
+                                <option value="일반">일반</option>
+                                <option value="긴급">긴급</option>
+                                <option value="매우 긴급">매우 긴급</option>
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <label for="claim-details" class="form-label required-field">상세 내용</label>
+                            <textarea class="form-control" id="claim-details" rows="5" required placeholder="불편하셨던 내용을 자세히 적어주세요."></textarea>
+                            <div class="invalid-feedback">상세 내용을 입력해주세요.</div>
+                        </div>
+                        <div class="col-12">
+                            <label for="claim-request" class="form-label">요청사항</label>
+                            <textarea class="form-control" id="claim-request" rows="3" placeholder="원하시는 조치사항이 있으시면 적어주세요."></textarea>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 개인정보 수집 동의 -->
+                <div class="form-section">
+                    <h3 class="section-title">
+                        <i class="fas fa-shield-alt me-2"></i> 개인정보 수집 동의
+                    </h3>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="privacy-agreement" required>
+                        <label class="form-check-label" for="privacy-agreement">
+                            개인정보 수집 및 이용에 동의합니다. <span class="text-danger">*</span>
+                        </label>
+                        <div class="invalid-feedback">개인정보 수집 및 이용에 동의해주세요.</div>
+                    </div>
+                    <div class="card bg-light mb-3">
+                        <div class="card-body small">
+                            <p class="card-text mb-1">
+                                <strong>■ 수집항목</strong>: 이름, 연락처, 이메일, 이용정보, 클레임 내용
+                            </p>
+                            <p class="card-text mb-1">
+                                <strong>■ 수집목적</strong>: 클레임 접수 및 처리, 고객 응대
+                            </p>
+                            <p class="card-text mb-1">
+                                <strong>■ 보유기간</strong>: 클레임 처리 완료 후 6개월
+                            </p>
+                            <p class="card-text mb-0">
+                                ※ 고객님은 개인정보 수집 및 이용에 대한 동의를 거부할 권리가 있으며, 동의 거부 시 클레임 접수가 제한됩니다.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 제출 버튼 -->
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-primary btn-lg px-5">
+                        <i class="fas fa-paper-plane me-2"></i> 클레임 접수하기
+                    </button>
+                </div>
+            </form>
+        </div>
+        
+        <!-- 성공 메시지 컨테이너 -->
+        <div class="success-container" id="success-container">
+            <div class="success-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h3 class="mb-3">클레임 접수가 완료되었습니다</h3>
+            <p class="mb-4">
+                고객님의 소중한 의견 감사합니다.<br>
+                접수하신 내용은 담당자 확인 후 신속하게 처리하겠습니다.
+            </p>
+            <p class="mb-4">
+                <strong>접수번호: <span id="claim-number">CL-20250515-001</span></strong><br>
+                <span class="text-muted">위 접수번호는 추후 문의 시 필요할 수 있으니 기억해주세요.</span>
+            </p>
+            <div class="mt-4">
+                <button type="button" class="btn btn-primary" id="new-claim-btn">
+                    <i class="fas fa-plus-circle me-2"></i> 새 클레임 접수
+                </button>
+                <a href="index.html" class="btn btn-outline-secondary ms-2">
+                    <i class="fas fa-home me-2"></i> 홈으로
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 푸터 -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 mb-3 mb-md-0">
+                    <h5>케이드라이브 대리운전</h5>
+                    <p class="mb-1">고객센터: 1599-0000 (24시간 운영)</p>
+                    <p class="mb-0">이메일: support@kdrive.co.kr</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <div>
+                        <a href="#" class="me-3">회사소개</a>
+                        <a href="#" class="me-3">이용약관</a>
+                        <a href="#"><strong>개인정보처리방침</strong></a>
+                    </div>
+                    <p class="mt-2 mb-0">© 2025 케이드라이브 대리운전. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 로딩 스피너 -->
+    <div class="loading-spinner" id="loading-spinner" style="display: none;">
+        <div class="spinner-border text-light" role="status">
+            <span class="visually-hidden">처리중...</span>
+        </div>
+    </div>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.12/dist/sweetalert2.all.min.js"></script>
+    
+    <script>
+        // DOM 로드 완료 시 실행
+        document.addEventListener('DOMContentLoaded', function() {
+            // 현재 날짜 및 시간 설정
+            const now = new Date();
+            const dateTimeString = now.toISOString().slice(0, 16); // YYYY-MM-DDTHH:MM 형식
+            document.getElementById('usage-date').value = dateTimeString;
+            
+            // 전화번호 입력 형식 설정
+            setupPhoneInput();
+            
+            // 폼 제출 이벤트 리스너
+            document.getElementById('claim-form').addEventListener('submit', function(event) {
+                event.preventDefault();
+                
+                // 폼 검증
+                if (!this.checkValidity()) {
+                    event.stopPropagation();
+                    this.classList.add('was-validated');
+                    
+                    // 첫 번째 오류 필드로 스크롤
+                    const firstInvalidField = document.querySelector('.form-control:invalid, .form-select:invalid, .form-check-input:invalid');
+                    if (firstInvalidField) {
+                        firstInvalidField.focus();
+                        firstInvalidField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                    
+                    return;
+                }
+                
+                // 폼 데이터 제출
+                submitClaimForm();
+            });
+            
+            // 새 클레임 버튼 이벤트 리스너
+            document.getElementById('new-claim-btn').addEventListener('click', function() {
+                // 폼 리셋
+                document.getElementById('claim-form').reset();
+                
+                // 현재 날짜 및 시간 설정
+                document.getElementById('usage-date').value = dateTimeString;
+                
+                // 폼 검증 상태 초기화
+                document.getElementById('claim-form').classList.remove('was-validated');
+                
+                // 폼 표시, 성공 메시지 숨김
+                document.getElementById('claim-form-container').style.display = 'block';
+                document.getElementById('success-container').style.display = 'none';
+                
+                // 맨 위로 스크롤
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        });
+
+        // 전화번호 입력 형식화 함수
+        function setupPhoneInput() {
+            const phoneInputs = [
+                document.getElementById('customer-phone'),
+                document.getElementById('driver-phone')
+            ];
+            
+            phoneInputs.forEach(phoneInput => {
+                if (phoneInput) {
+                    phoneInput.addEventListener('input', function(e) {
+                        let value = e.target.value.replace(/\D/g, ''); // 숫자만 추출
+                        
+                        // 최대 11자리로 제한
+                        if (value.length > 11) {
+                            value = value.slice(0, 11);
+                        }
+                        
+                        // 형식 적용 (3-4-4)
+                        if (value.length > 7) {
+                            e.target.value = value.slice(0, 3) + '-' + value.slice(3, 7) + '-' + value.slice(7);
+                        } else if (value.length > 3) {
+                            e.target.value = value.slice(0, 3) + '-' + value.slice(3);
+                        } else {
+                            e.target.value = value;
+                        }
+                    });
+                }
+            });
+        }
+
+        // 로딩 표시 함수
+        function showLoading() {
+            document.getElementById('loading-spinner').style.display = 'flex';
+        }
+
+        // 로딩 숨기기 함수
+        function hideLoading() {
+            document.getElementById('loading-spinner').style.display = 'none';
+        }
+		function getCurrentPageSecondFolder() {
+			  // 현재 페이지 URL의 경로 부분 가져오기
+			  const path = window.location.pathname;
+			  
+			  // 경로를 '/'로 나누고 빈 문자열 제거
+			  const folders = path.split('/').filter(Boolean);
+			  
+			  // 두 번째 폴더 반환 (있는 경우)
+			  return folders.length > 1 ? folders[1] : null;
+			}
+
+			// 사용 예시
+			
+        // 클레임 폼 제출 함수
+		
+		function submitClaimForm() {
+			// 로딩 표시
+			showLoading();
+			const secondFolder = getCurrentPageSecondFolder();
+			console.log("현재 페이지의 두 번째 폴더:", secondFolder);
+			// 폼 데이터 수집
+			const formData = new FormData();
+			formData.append('customerName', document.getElementById('customer-name').value);
+			formData.append('customerPhone', document.getElementById('customer-phone').value);
+			formData.append('customerEmail', document.getElementById('customer-email').value);
+			formData.append('usageDate', document.getElementById('usage-date').value);
+			formData.append('receiptNumber', document.getElementById('receipt-number').value);
+			formData.append('driverName', document.getElementById('driver-name').value);
+			formData.append('driverPhone', document.getElementById('driver-phone').value);
+			formData.append('startLocation', document.getElementById('start-location').value);
+			formData.append('destination', document.getElementById('destination').value);
+			formData.append('claimType', document.getElementById('claim-type').value);
+			formData.append('claimUrgency', document.getElementById('claim-urgency').value);
+			formData.append('claimDetails', document.getElementById('claim-details').value);
+			formData.append('claimRequest', document.getElementById('claim-request').value);
+			formData.append('folder', secondFolder); // 두 번째 폴더 이름 추가
+			
+			// API 호출
+			fetch('../../kj/api/customer/kdirve_submit_claim.php', {
+				method: 'POST',
+				body: formData
+			})
+			.then(response => {
+				if (!response.ok) {
+					throw new Error('서버 응답 오류: ' + response.status);
+				}
+				return response.json();
+			})
+			.then(data => {
+				hideLoading();
+				
+				if (data.success) {
+					// 접수번호 표시
+					document.getElementById('claim-number').textContent = data.claimNumber;
+					
+					// 성공 메시지 표시
+					document.getElementById('claim-form-container').style.display = 'none';
+					document.getElementById('success-container').style.display = 'block';
+					
+					// 맨 위로 스크롤
+					window.scrollTo({ top: 0, behavior: 'smooth' });
+				} else {
+					Swal.fire({
+						icon: 'error',
+						title: '오류 발생',
+						text: data.message || '클레임 접수 중 오류가 발생했습니다.',
+						confirmButtonColor: '#0066cc'
+					});
+				}
+			})
+			.catch(error => {
+				console.error('클레임 접수 중 오류 발생:', error);
+				hideLoading();
+				Swal.fire({
+					icon: 'error',
+					title: '오류 발생',
+					text: '클레임 접수 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.',
+					confirmButtonColor: '#0066cc'
+				});
+			});
+			
+			// 테스트용 코드 제거 (실제 서버 연동 시)
+		}
+    </script>
+</body>
+</html>

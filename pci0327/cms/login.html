@@ -1,0 +1,40 @@
+// 로그인 성공 처리
+document.getElementById('loginForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const userid = document.getElementById('userid').value;
+    const password = document.getElementById('password').value;
+
+    console.log('Attempting login with:', { userid }); // 비밀번호는 로깅하지 않음
+
+    fetch('/login.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            userid: userid,
+            password: password
+        })
+    })
+    .then(response => {
+        console.log('Response status:', response.status);
+        return response.json();
+    })
+    .then(data => {
+        console.log('Login response:', data); // 로그인 응답 데이터 확인
+        
+        if (data.success) {
+            console.log('Login successful, user data:', data.user); // 사용자 데이터 확인
+            setLoginSession(data.user);
+            window.location.href = '/cms/index.html';
+        } else {
+            console.error('Login failed:', data.message);
+            alert(data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Login error:', error);
+        alert('로그인 처리 중 오류가 발생했습니다.');
+    });
+}); 

@@ -1,0 +1,1 @@
+<?include '../../2012c/lib/lib_auth.php';?>

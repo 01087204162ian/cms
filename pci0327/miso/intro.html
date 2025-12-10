@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>미소 플랫폼 보험 운영 및 금융소비자보호법 가이드</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            line-height: 1.6;
+            color: #2c3e50;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 30px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .section {
+            background: white;
+            margin-bottom: 25px;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            border-left: 5px solid #667eea;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+        }
+        
+        .section h2 {
+            color: #667eea;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e8ecf4;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .section h3 {
+            color: #34495e;
+            font-size: 1.4rem;
+            margin: 25px 0 15px 0;
+            padding-left: 15px;
+            border-left: 3px solid #3498db;
+        }
+        
+        .section h4 {
+            color: #2c3e50;
+            font-size: 1.2rem;
+            margin: 20px 0 10px 0;
+            font-weight: 600;
+        }
+        
+        .highlight {
+            background: linear-gradient(120deg, #a8edea 0%, #fed6e3 100%);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #3498db;
+        }
+        
+        .risk-table, .insurance-table, .obligation-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.1);
+        }
+        
+        .risk-table th, .insurance-table th, .obligation-table th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        .risk-table td, .insurance-table td, .obligation-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #ecf0f1;
+            vertical-align: top;
+        }
+        
+        .risk-table tr:nth-child(even), .insurance-table tr:nth-child(even), .obligation-table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        .risk-low { color: #27ae60; font-weight: bold; }
+        .risk-medium { color: #f39c12; font-weight: bold; }
+        .risk-high { color: #e74c3c; font-weight: bold; }
+        
+        .flow-diagram {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1.1rem;
+            font-family: 'Courier New', monospace;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .warning {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-left: 4px solid #fdcb6e;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        
+        .warning strong {
+            color: #d63031;
+        }
+        
+        .success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            border-left: 4px solid #00b894;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        
+        .info {
+            background: #d1ecf1;
+            border: 1px solid #bee5eb;
+            border-left: 4px solid #0984e3;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        
+        ul, ol {
+            margin: 15px 0;
+            padding-left: 25px;
+        }
+        
+        li {
+            margin-bottom: 8px;
+            line-height: 1.6;
+        }
+        
+        .number-badge {
+            background: #667eea;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        .conclusion {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-top: 30px;
+        }
+        
+        .conclusion h2 {
+            color: white;
+            border-bottom: 2px solid rgba(255,255,255,0.3);
+            margin-bottom: 20px;
+        }
+        
+        .key-points {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .key-point {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .section {
+                padding: 20px;
+            }
+            
+            .risk-table, .insurance-table, .obligation-table {
+                font-size: 0.9rem;
+            }
+            
+            .risk-table th, .insurance-table th, .obligation-table th,
+            .risk-table td, .insurance-table td, .obligation-table td {
+                padding: 8px;
+            }
+        }
+        
+        .toc {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+        
+        .toc h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            border-left: none;
+            padding-left: 0;
+        }
+        
+        .toc ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .toc li {
+            padding: 8px 0;
+            border-bottom: 1px solid #ecf0f1;
+        }
+        
+        .toc a {
+            color: #2c3e50;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        
+        .toc a:hover {
+            color: #667eea;
+        }
+
+
+		 .floating-menu {
+            position: fixed;
+            top: 50%;
+            right: 30px;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(15px);
+            border-radius: 25px;
+            padding: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+        }
+        
+        .floating-menu-toggle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+        
+        .floating-menu-toggle:hover {
+            transform: rotate(180deg);
+        }
+        
+        .floating-menu-items {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .floating-menu.collapsed .floating-menu-items {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .floating-menu-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 15px;
+            text-decoration: none;
+            color: #333;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+            min-width: 150px;
+        }
+        
+        .floating-menu-item:hover {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+        
+        .floating-menu-item.home {
+            background: linear-gradient(135deg, #00b894, #00a085);
+            color: white;
+        }
+        
+        .scroll-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2rem;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+        
+        .scroll-to-top.visible {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>미소 플랫폼 보험 운영 가이드</h1>
+            <p>금융소비자보호법 적용 및 법적 위험 최소화 방안</p>
+        </div>
+
+        <div class="toc">
+            <h3>📋 목차</h3>
+            <ul>
+                <li><a href="#section1">1. 플랫폼 보험 알선 행위의 정의</a></li>
+                <li><a href="#section2">2. 금융소비자보호법과의 관계</a></li>
+                <li><a href="#section3">3. 보험업법과의 관계</a></li>
+                <li><a href="#section4">4. 케이스별 법적 위험도 분석</a></li>
+                <li><a href="#section5">5. 미소(Miso) 플랫폼 개요</a></li>
+                <li><a href="#section6">6. 미소 플랫폼 전용 보험 운영안</a></li>
+                <li><a href="#section7">7. 법적 위험 최소화 방안</a></li>
+                <li><a href="#section8">8. 실제 분쟁 사례 참고</a></li>
+            </ul>
+        </div>
+
+        <div class="section" id="section1">
+            <h2><span class="number-badge">1</span>플랫폼 보험 알선 행위의 정의</h2>
+            
+            <div class="highlight">
+                <strong>보험 알선 행위</strong>란 보험계약의 체결을 중개하거나 유도하는 행위를 의미합니다.
+            </div>
+
+            <h3>주요 알선 행위 유형</h3>
+            <ul>
+                <li><strong>보험상품 소개 및 추천</strong> - 특정 보험상품의 장점을 강조하여 소개</li>
+                <li><strong>보험료 계산기 제공</strong> - 개인정보를 입력받아 보험료 산출</li>
+                <li><strong>보험 가입을 위한 상담 연결</strong> - 보험설계사나 상담원과 연결</li>
+                <li><strong>제3자 보험사 링크 제공 및 수수료 수취</strong> - 보험사 사이트로 유도 후 수수료 획득</li>
+            </ul>
+        </div>
+
+        <div class="section" id="section2">
+            <h2><span class="number-badge">2</span>금융소비자보호법(금소법)과의 관계</h2>
+            
+            <h3>적용 대상</h3>
+            <ul>
+                <li>보험사 및 보험대리점/중개사</li>
+                <li><strong>플랫폼 운영사</strong> (알선·중개 행위 시)</li>
+            </ul>
+
+            <h3>주요 의무사항</h3>
+            <table class="obligation-table">
+                <thead>
+                    <tr>
+                        <th>의무</th>
+                        <th>내용</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>설명의무</strong></td>
+                        <td>소비자가 이해할 수 있도록 보험상품 설명</td>
+                    </tr>
+                    <tr>
+                        <td><strong>적합성 원칙</strong></td>
+                        <td>소비자에게 부적합한 상품 권유 금지</td>
+                    </tr>
+                    <tr>
+                        <td><strong>부당권유 금지</strong></td>
+                        <td>허위/과장/기만적 권유 금지</td>
+                    </tr>
+                    <tr>
+                        <td><strong>광고 규제</strong></td>
+                        <td>오인·혼동 우려 광고 금지</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section" id="section3">
+            <h2><span class="number-badge">3</span>보험업법과의 관계</h2>
+            
+            <div class="warning">
+                <strong>⚠️ 중요:</strong> 보험업법 제87조에 따라 보험모집은 등록된 자(보험대리점, 중개사 등)만 가능합니다.
+                무자격자가 알선 시 <strong>형사처벌</strong> 또는 행정제재 대상이 됩니다.
+            </div>
+
+            <ul>
+                <li><strong>보험업법 제87조</strong>: 보험모집 자격 제한</li>
+                <li><strong>형사처벌</strong>: 3년 이하 징역 또는 3천만원 이하 벌금</li>
+                <li><strong>행정제재</strong>: 과태료, 업무정지 등</li>
+            </ul>
+        </div>
+
+        <div class="section" id="section4">
+            <h2><span class="number-badge">4</span>케이스별 법적 위험도 분석</h2>
+            
+            <table class="risk-table">
+                <thead>
+                    <tr>
+                        <th>케이스</th>
+                        <th>위험도</th>
+                        <th>주요 고려사항</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>단순 정보 제공</td>
+                        <td class="risk-low">낮음</td>
+                        <td>표현 방식 주의 필요</td>
+                    </tr>
+                    <tr>
+                        <td>보험료 계산기 제공</td>
+                        <td class="risk-medium">중간</td>
+                        <td>보험중개 행위로 해석 가능</td>
+                    </tr>
+                    <tr>
+                        <td>상담 연결/가입 유도</td>
+                        <td class="risk-high">높음</td>
+                        <td>알선 및 모집 행위로 해석</td>
+                    </tr>
+                    <tr>
+                        <td>링크 제공 + 수수료</td>
+                        <td class="risk-high">높음</td>
+                        <td>보험중개자로 간주 가능</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section" id="section5">
+            <h2><span class="number-badge">5</span>미소(Miso) 플랫폼 개요</h2>
+            
+            <h3>서비스 특징</h3>
+            <ul>
+                <li><strong>업종</strong>: 홈클리닝, 이사, 방역, 가전청소 등 O2O 서비스</li>
+                <li><strong>구조</strong>: 고객 ↔ 미소 플랫폼 ↔ 서비스 제공자(클리너, 이사업체 등)</li>
+                <li><strong>운영방식</strong>: 모바일 기반 매칭 플랫폼</li>
+            </ul>
+
+            <h3>보험 연계 필요성</h3>
+            <div class="info">
+                <ul>
+                    <li><strong>공급자 보험</strong>: 서비스 중 발생 가능한 상해, 재물손괴 등</li>
+                    <li><strong>소비자 보장</strong>: 재산 손해, 도난, 파손 등 보상</li>
+                    <li><strong>플랫폼 책임보험</strong>: 중개자로서의 법적 책임 대비</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section" id="section6">
+            <h2><span class="number-badge">6</span>미소 플랫폼 전용 보험 운영안</h2>
+            
+            <h3>기본 구조</h3>
+            <div class="flow-diagram">
+                [미소 플랫폼] → [공급자 가입/수임] → [자동 보험 가입] → [사고 발생시 보상]
+            </div>
+
+            <h3>보험 보장 구성</h3>
+            <table class="insurance-table">
+                <thead>
+                    <tr>
+                        <th>보험 종류</th>
+                        <th>보장 내용</th>
+                        <th>대상</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>영업배상책임보험</strong></td>
+                        <td>소비자 물건 파손, 오염 등</td>
+                        <td>공급자</td>
+                    </tr>
+                    <tr>
+                        <td><strong>상해보험</strong></td>
+                        <td>서비스 중 다친 경우</td>
+                        <td>공급자</td>
+                    </tr>
+                    <tr>
+                        <td><strong>소비자보장</strong></td>
+                        <td>플랫폼 서비스 중 소비자 피해</td>
+                        <td>소비자</td>
+                    </tr>
+                    <tr>
+                        <td><strong>플랫폼배상책임</strong></td>
+                        <td>플랫폼 과실로 인한 책임</td>
+                        <td>미소 플랫폼</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>운영 모델</h3>
+            <ul>
+                <li><strong>계약자</strong>: 미소㈜</li>
+                <li><strong>피보험자</strong>: 공급자 전체 또는 일부</li>
+                <li><strong>보험료</strong>: 미소 전액 부담 또는 공급자 분담</li>
+                <li><strong>사고처리</strong>: 앱/고객센터 → 미소 접수 → 보험사 청구</li>
+            </ul>
+        </div>
+
+        <div class="section" id="section7">
+            <h2><span class="number-badge">7</span>법적 위험 최소화 방안</h2>
+            
+            <h3>안전한 운영 전략</h3>
+            <ol>
+                <li><strong>보험대리점 제휴</strong>: 실제 모집은 제휴사가 담당</li>
+                <li><strong>자체 대리점 등록</strong>: 플랫폼이 보험업법상 자격 취득</li>
+                <li><strong>광고 수익 모델</strong>: 단순 유입 채널 역할만 수행</li>
+                <li><strong>법률 검토</strong>: 모든 문구, 기능, UI/UX 사전 검토</li>
+            </ol>
+
+            <h3>주의사항</h3>
+            <div class="warning">
+                <ul>
+                    <li>보험 가입 <strong>유도나 설명 금지</strong></li>
+                    <li><strong>단체계약 구조</strong> 필수 (계약자: 미소, 피보험자: 공급자)</li>
+                    <li>모든 보험 관련 <strong>문구 및 시스템</strong> 법률 검토 필요</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section" id="section8">
+            <h2><span class="number-badge">8</span>실제 분쟁 사례 참고</h2>
+            
+            <h3>강남언니 사례</h3>
+            <ul>
+                <li>의료기관 소개 및 수수료 수취</li>
+                <li>법원 판결: <strong>불법 의료알선 행위</strong> 인정</li>
+                <li>보험 플랫폼도 동일한 논리 적용 가능</li>
+            </ul>
+
+            <h3>금감원 보험 분쟁</h3>
+            <ul>
+                <li>설명의무 미이행으로 보험금 미지급 분쟁 다수</li>
+                <li>플랫폼 개입 시 <strong>설명의무 위반</strong> 책임 가능성</li>
+            </ul>
+        </div>
+
+        <div class="conclusion">
+            <h2>🎯 결론</h2>
+            
+            <p>플랫폼이 보험과 연계된 서비스를 제공할 때는 <strong>금융소비자보호법</strong>과 <strong>보험업법</strong>의 엄격한 규제를 받습니다. 미소와 같은 O2O 플랫폼이 안전하게 보험 서비스를 운영하려면:</p>
+            
+            <div class="key-points">
+                <div class="key-point">
+                    <h4>1️⃣ 직접 모집 금지</h4>
+                    <p>직접적인 보험 모집이나 설명 행위 금지</p>
+                </div>
+                <div class="key-point">
+                    <h4>2️⃣ 단체보험 구조</h4>
+                    <p>단체보험 구조를 통한 위험 분산</p>
+                </div>
+                <div class="key-point">
+                    <h4>3️⃣ 적법한 제휴</h4>
+                    <p>보험대리점과의 제휴 또는 자체 등록</p>
+                </div>
+                <div class="key-point">
+                    <h4>4️⃣ 사전 검토</h4>
+                    <p>모든 시스템과 문구의 사전 법률 검토</p>
+                </div>
+            </div>
+            
+            <div class="success">
+                <strong>✅ 최종 권고사항:</strong> 이러한 원칙을 준수해야만 법적 위험을 최소화하면서 플랫폼과 이용자 모두를 보호하는 보험 서비스를 제공할 수 있습니다.
+            </div>
+        </div>
+    </div>
+    <div class="floating-menu" id="floatingMenu">
+        <button class="floating-menu-toggle" id="menuToggle">☰</button>
+        <div class="floating-menu-items">
+            <a href="./index.html" class="floating-menu-item home">
+                <span class="floating-menu-icon">🏠</span>
+                <span>메인으로</span>
+            </a>
+            <a href="#section1" class="floating-menu-item">
+                <span class="floating-menu-icon">📋</span>
+                <span>보험 정의</span>
+            </a>
+            <a href="#section2" class="floating-menu-item">
+                <span class="floating-menu-icon">⚖️</span>
+                <span>금소법</span>
+            </a>
+            <a href="#section7" class="floating-menu-item">
+                <span class="floating-menu-icon">🛡️</span>
+                <span>위험 최소화</span>
+            </a>
+        </div>
+    </div>
+    <script>
+        // 부드러운 스크롤 효과
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // 섹션 애니메이션
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // 모든 섹션에 옵저버 적용
+        document.querySelectorAll('.section').forEach(section => {
+            section.style.opacity = '0';
+            section.style.transform = 'translateY(20px)';
+            section.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(section);
+        });
+
+
+		// 메뉴 토글 기능
+        const floatingMenu = document.getElementById('floatingMenu');
+        const menuToggle = document.getElementById('menuToggle');
+        
+        menuToggle.addEventListener('click', function() {
+            floatingMenu.classList.toggle('collapsed');
+            menuToggle.textContent = floatingMenu.classList.contains('collapsed') ? '☰' : '✕';
+        });
+        
+        // 맨 위로 버튼
+        const scrollToTopBtn = document.getElementById('scrollToTop');
+        
+        window.addEventListener('scroll', function() {
+            if (window.pageYOffset > 300) {
+                scrollToTopBtn.classList.add('visible');
+            } else {
+                scrollToTopBtn.classList.remove('visible');
+            }
+        });
+        
+        scrollToTopBtn.addEventListener('click', function() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    </script>
+
+	
+</body>
+</html>

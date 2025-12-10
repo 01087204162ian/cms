@@ -1,0 +1,67 @@
+<!DOCTYPE html> 
+<html> 
+	<head> 
+		<title>대리운전보험관리</title> 
+		<meta charset="euc-kr" /> 	
+		<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no"/>	
+		<link rel="shortcut icon" href="../images/icon.png">
+		<link rel="apple-touch-icon" href="../image/icon.png">
+		<link rel="apple-touch-startup-image" href="../img/startup.png">
+        <meta name="apple-mobile-web-app-capable" content="yes"/>
+        <meta name="apple-mobile-web-app-status-bar-style" content="black" /> 
+        <link rel="stylesheet" href="framework/jquery.mobile-1.1.0.min.css" />
+		<link rel="stylesheet" href="style/style.css" />
+		<!-- action sheet plugin 스타일시트 참조 -->
+		<link rel="stylesheet" href="framework/plugin/actionsheet/jquery.mobile.actionsheet.css" />
+        <script src="framework/jquery-1.7.2.min.js"></script>
+		<script src="app.js"></script>
+		<script language="JavaScript" src="/kibs_admin/jsfile/lib_numcheck.js"></script>
+        <script src="framework/jquery.mobile-1.1.0.min.js"></script>
+		<!-- action sheet plugin 스크립트 참조 -->
+		<script type="text/javascript" src="framework/plugin/actionsheet/jquery.mobile.actionsheet.js"></script>
+   <html>
+	<body>
+		
+		  <div id="loginform" data-role="page" data-theme="a" id='login'>
+
+		  <script type="text/javascript">
+				function login(){
+
+					var uid=$('#uid').attr('value');
+					var password=$('#upassword').attr('value');
+					$.mobile.changePage("login.php?memid="+uid+"&upassword="+password);
+				}
+
+			</script>
+
+
+			<div data-role="header" data-theme="a">
+				<h1>로그인</h1>
+			</div>
+           
+		    <div data-role="content" >
+				<form id="joinForm" method="post" action="#">
+					<div data-role="fieldcontain">
+						<label for="uid">아이디</label>
+						<input type="text" id="uid" name="uid" />
+					</div>
+					<div data-role="fieldcontain">
+						<label for="upassword">비밀번호</label>
+						<input type="password" id="upassword" name="upassword" />
+					</div>
+					<div data-role="fieldcontain">
+					  <center>
+						<input type="button" value="로그인" data-inline="true" data-icon="gear" onclick="login()" />
+					  </center>
+					</div>
+
+				</form>
+
+
+			</div>
+
+		  </div>
+
+		 
+	</body>
+</html>

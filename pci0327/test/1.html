@@ -1,0 +1,27 @@
+<?php
+$pdo = new PDO("mysql:host=localhost;dbname=pcikorea;charset=utf8mb4", "pci0327", "pci@716671");
+$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+$username = "testuser";
+$password = "securepassword"; // 입력받은 비밀번호
+$phone = "01012345678";
+$fullname = "홍길동";
+$level = "user";
+$contact = "contact@example.com";
+
+// 비밀번호 암호화
+$hashedPassword = password_hash($password, PASSWORD_BCRYPT);
+
+$sql = "INSERT INTO users (username, password, phone, fullname, level, contact) VALUES (:username, :password, :phone, :fullname, :level, :contact)";
+$stmt = $pdo->prepare($sql);
+$stmt->execute([
+    ':username' => $username,
+    ':password' => $hashedPassword,
+    ':phone' => $phone,
+    ':fullname' => $fullname,
+    ':level' => $level,
+    ':contact' => $contact
+]);
+
+echo "사용자가 성공적으로 추가되었습니다.";
+?>

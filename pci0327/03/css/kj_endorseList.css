@@ -1,0 +1,2651 @@
+/* ===== 1. 기본 컨테이너 스타일 ===== */
+.kje-list-container {
+    width: 100%;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    padding: 20px;
+    margin-bottom: 30px;
+    font-family: 'Pretendard', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* ===== 2. 헤더 영역 스타일 ===== */
+.kje-list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.kje-left-area, .kje-right-area {
+    display: flex;
+    align-items: center;
+}
+
+/* ===== 3. 검색 영역 스타일 ===== */
+.etc-input2 {
+	width: 100%;
+	padding: 3px 6px;
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	font-size: 12px;
+}
+.kje-search-area {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.kje-search-area select {
+    height: 30px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    padding: 0 12px;
+    font-size: 14px;
+    color: #1e293b;
+    background-color: #ffffff;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+.kje-search-area select:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+.kje-search-area input[type="text"],input[type="date"] {
+    height: 30px;
+   
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    padding: 0 12px;
+    font-size: 14px;
+    color: #1e293b;
+    background-color: #ffffff;
+    outline: none;
+    transition: all 0.2s ease;
+}
+.kje-search-area input[type="text"] {
+    width: 150px;
+   
+}
+.kje-search-area input[type="date"] {
+    width: 120px;
+   
+}
+.kje-search-area input[type="text"]:focus,input[type="date"]:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+/* ===== 4. 버튼 스타일 ===== */
+.kje-search-button {
+    height: 28px;
+    background-color: #8E6C9D;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 0 16px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.kje-search-button:hover {
+    background-color: #2563eb;
+}
+
+.kje-stats-button {
+    height: 30px;
+    background-color: #8E6C9D;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 0 16px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.kje-stats-button:hover {
+    background-color: #475569;
+}
+
+.kje-daeri-button {
+    height: 20px;
+    background-color: #B8860B;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 0 16px;
+    font-size: 12px;
+    font-weight: 200;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.kje-daeri-button:hover {
+    background-color: #475569;
+}
+
+.kje-endorse-button {
+    height: 30px;
+    background-color: #B8860B;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 6px 16px;
+    font-size: 12px;
+    font-weight: 200;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.kje-endorse-button:hover {
+    background-color: #475569;
+}
+
+/* ===== 5. 데이터 테이블 컨테이너 ===== */
+.kje-data-table-container {
+    width: 100%;
+    overflow-x: auto;
+    margin-bottom: 20px;
+    border-radius: 6px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+	 
+}
+
+/* ===== 6. 테이블 기본 스타일 ===== */
+.kje-data-table {
+    width: 100%;
+    min-width: 1200px;
+    border-collapse: collapse;
+    border-spacing: 0;
+    font-size: 13px;
+    margin: 0;
+    padding: 0;
+    border: 1px solid #e9ecef;
+}
+
+/* 테이블 헤더 스타일 */
+.kje-data-table th {
+    background: #8E6C9D; /* pagenation 통일, 통계 버튼  모달 버튼*/
+    color: white;
+    font-weight: 500;
+    padding: 10px 8px;
+    text-align: center;
+    border: 1px solid #ffffff;
+    white-space: nowrap;
+    font-size: 12px;
+}
+
+/* 컬럼별 너비 조정 */
+.kje-data-table .col-num { width: 15px; text-align: center; }
+.kje-data-table .col-business-num { width: 120px; text-align: center; }
+.kje-data-table .col-school { width: 200px; text-align: center; }
+.kje-data-table .col-students { width: 15px; text-align: center; }
+.kje-data-table .col-phone { width: 120px; text-align: center; }
+.kje-data-table .col-date { width: 100px; text-align: center; }
+.kje-data-table .col-policy { width: 120px; text-align: center; }
+.kje-data-table .col-premium { width: 40px; text-align: center; }
+.kje-data-table .col-insurance { width: 100px; text-align: center; }
+.kje-data-table .col-status { width: 120px; text-align: center; }
+.kje-data-table .col-contact { width: 100px; text-align: center; }
+.kje-data-table .col-action { width: 70px; text-align: center; }
+.kje-data-table .col-memo { width: 200px; text-align: center; }
+.kje-data-table .col-manager { width: 50px; text-align: center; }
+
+
+/* kj_gisa.js */
+.kje-data-table .col-1 { width: 15px; text-align: center; }
+.kje-data-table .col-2 { width: 100px; text-align: center; }
+.kje-data-table .col-3 { width: 150px; text-align: center; }
+.kje-data-table .col-4 { width: 200px; text-align: center; }
+.kje-data-table .col-5 { width: 120px; text-align: center; }
+.kje-data-table .col-6 { width: 100px; text-align: center; }
+.kje-data-table .col-7 { width: 160px; text-align: center; }
+.kje-data-table .col-8 { width: 40px; text-align: center; }
+.kje-data-table .col-9 { width: 100px; text-align: center; }
+.kje-data-table .col-10 { width: 140px; text-align: center; }
+.kje-data-table .col-11 { width: 100px; text-align: center; }
+.kje-data-table .col-12 { width: 70px; text-align: center; }
+.kje-data-table .col-13 { width: 200px; text-align: center; }
+.kje-data-table .col-14 { width: 50px; text-align: center; }
+
+
+
+/* 셀 정렬 및 패딩 */
+.kje-data-table td {
+    padding: 2px 4px;
+    border: 1px solid #e9ecef;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: center;
+}
+
+/* 특정 컬럼 정렬 */
+.kje-data-table td.kje-text-left { text-align: left; }
+.kje-data-table td.kje-text-right { text-align: right; }
+.sjTable td.kje-preiminum { text-align: right; }
+.kje-data-table td.kje-preiminum { text-align: right; }
+.kjTable td.kje-preiminum { text-align: right; }'
+.pjTable td.kje-preiminum { text-align: right; }
+
+/* 행 스타일 */
+.sjTable tr:nth-child(even),
+.kje-data-table tr:nth-child(even) { background-color: #f8f9fa; }
+.sjTable tr:hover
+.kje-data-table tr:hover { background-color: #f1f3f5; }
+
+/* 클릭 가능한 셀 스타일 */
+.kje-data-table td.clickable {
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.kje-data-table td.clickable:hover {
+    background-color: #e9ecef;
+    color: #007bff;
+    font-weight: 500;
+}
+
+/* ===== 7. 입력 필드 스타일 ===== */
+/* 메모 입력 필드 스타일 */
+.kje-memo-input {
+    width: 100%;
+    padding: 2px 4px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    font-size: 13px;
+    transition: border-color 0.2s;
+    background-color: transparent;
+}
+
+/* 메모 td 패딩 조정 */
+.kje-data-table td:has(.memo-input) {
+    padding: 0 2px;
+}
+
+/* 행 배경색에 따른 입력 필드 배경색 */
+.kje-data-table tr:nth-child(even) .memo-input {
+    background-color: #f8f9fa;
+}
+
+.kje-data-table tr:nth-child(odd) .memo-input {
+    background-color: #ffffff;
+}
+
+.kje-memo-input:hover {
+    border-color: #adb5bd;
+}
+
+.kje-memo-input:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0,123,255,.1);
+}
+
+/* 보험사와 상태 선택 드롭다운 스타일 */
+.kje-push-status,.kje-status-ch, .kje-insurance-select, .kje-status-select, .kje-status-rate, {
+    width: 100%;
+    padding: 0 8px;
+    border-radius: 4px;
+    font-size: 13px;
+    background-color: transparent;
+    transition: border-color 0.2s;
+}
+
+/* 행 배경색에 따른 select 스타일 */
+.hjTable tr:nth-child(even) .kje-status-ch,
+.sjTable tr:nth-child(even) .kje-status-ch,
+.kje-data-table tr:nth-child(even) .kje-status-ch,
+.kjTable tr:nth-child(even) .kje-push-status,
+.kjTable tr:nth-child(even) .kje-status-ch,
+.kjTable tr:nth-child(even) .kje-status-rate,
+.kje-data-table tr:nth-child(even) .kje-status-rate,
+.kje-data-table tr:nth-child(even) .kje-mText,
+.kje-data-table tr:nth-child(even) .kje-insurance-select,
+.kje-data-table tr:nth-child(even) .kje-status-select {
+    background-color: #f8f9fa;
+    border: 1px solid transparent;
+}
+.hjTable tr:nth-child(odd) .kje-status-ch,
+.sjTable tr:nth-child(odd) .kje-status-ch,
+.kjTable tr:nth-child(odd) .kje-status-ch,
+.kjTable tr:nth-child(odd) .kje-status-rate,
+.kjTable tr:nth-child(odd) .kje-push-status,
+.kje-data-table tr:nth-child(odd) .kje-status-ch,
+.kje-data-table tr:nth-child(odd) .kje-status-rate,
+.kje-data-table tr:nth-child(odd) .kje-mText,
+.kje-data-table tr:nth-child(odd) .kje-insurance-select,
+.kje-data-table tr:nth-child(odd) .kje-status-select {
+    background-color: #ffffff;
+    border: 1px solid transparent;
+}
+
+/* hover 및 focus 효과 */
+.hjTable tr:nth-child(even) .kje-status-ch:hover,
+.sjTable tr:nth-child(even) .kje-status-ch:hover,
+.kje-data-table tr:nth-child(even) .kje-status-ch:hover,
+.kjTable tr:nth-child(even) .kje-status-ch:hover ,
+.kjTable tr:nth-child(even) .kje-status-rate:hover ,
+.kje-data-table tr:nth-child(even) .kje-status-rate:hover,
+.kje-data-table tr:nth-child(even) .kje-mText:hover,
+.kje-data-table tr:nth-child(even) .kje-insurance-select:hover,
+.kje-data-table tr:nth-child(even) .kje-status-select:hover{
+    border-color: #adb5bd;
+	outline: none;
+}
+.hjTable tr:nth-child(odd) .kje-status-ch:focus, 
+.sjTable tr:nth-child(odd) .kje-status-ch:focus, 
+.kje-data-table tr:nth-child(odd) .kje-status-ch:focus, 
+.kjTable tr:nth-child(odd) .kje-push-status:focus,
+.kjTable tr:nth-child(odd) .kje-status-ch:focus,
+.kjTable tr:nth-child(odd) .kje-status-rate:focus ,
+.kje-data-table tr:nth-child(odd) .kje-status-rate:focus,
+.kje-data-table tr:nth-child(odd) .kje-mText:focus,
+.kje-data-table tr:nth-child(odd) .kje-insurance-select:focus,
+.kje-data-table tr:nth-child(odd) .kje-status-selec:focust{
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0,123,255,.1);
+}
+
+/* 링크 버튼 스타일 */
+.kje-btn-link_1 {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 20px;
+    padding: 0 16px;
+    background-color: transparent;
+    color: #333333;
+    font-size: 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.kje-btn-link_1:hover {
+    background-color: rgba(59, 130, 246, 0.05);
+    text-decoration: none;
+}
+
+.kje-btn-link_1:active {
+    background-color: rgba(59, 130, 246, 0.1);
+}
+
+.kje-btn-link_1:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+/* 작은 사이즈 */
+.kje-btn-link_1.kje-btn-sm {
+    height: 30px;
+    padding: 0 12px;
+    font-size: 12px;
+}
+
+/* 큰 사이즈 */
+.kje-btn-link_1.kje-btn-lg {
+    height: 44px;
+    padding: 0 20px;
+    font-size: 16px;
+}
+
+/* 아이콘이 있는 경우 */
+.kje-btn-link_1 .kje-icon {
+    margin-right: 6px;
+}
+
+/* 비활성화 상태 */
+.kje-btn-link_1:disabled,
+.kje-btn-link_1.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* ===== 8. 페이지네이션 스타일 ===== */
+/* ===== 기본 페이지네이션 스타일 ===== */
+.kje-pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4px; /* 버튼 간격 줄이기 */
+    margin-top: 15px; /* 위 여백 줄이기 */
+    flex-wrap: wrap;
+}
+
+/* 공통 페이지네이션 버튼 스타일 */
+.kje-page-link, .kje-disabled {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 10px; /* 패딩 줄이기 */
+    min-width: 32px; /* 최소 너비 줄이기 */
+    border-radius: 6px; /* 사각형 유지 */
+    font-size: 13px; /* 폰트 크기 살짝 줄이기 */
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e2e8f0;
+    background-color: #ffffff;
+    color: #334155;
+}
+
+/* 현재 페이지(active) 스타일 */
+.kje-page-link.active {
+    background-color: #8E6C9D;
+    color: white;
+    font-weight: bold;
+    border: none;
+    padding: 6px 12px; /* 패딩 조정 */
+    box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
+}
+
+/* 이전, 다음 버튼 스타일 */
+.kje-page-link:first-child,
+.kje-page-link:last-child {
+    font-size: 13px;
+    font-weight: bold;
+    background-color: #f3f4f6;
+    border-radius: 6px;
+}
+
+/* 버튼 hover & active 효과 */
+.kje-page-link:hover {
+    background-color: #f1f5f9;
+    transform: scale(1.02);
+}
+
+.kje-page-link:active {
+    background-color: #e2e8f0;/
+    transform: scale(0.98);
+}
+
+/* 비활성화된 버튼 스타일 */
+.kje-disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background-color: #f8f9fa;
+    box-shadow: none;
+    color: #9ca3af;
+}
+
+/* 반응형: 작은 화면(768px 이하)에서는 일부 버튼 크기 조정 */
+@media (max-width: 768px) {
+    .kje-pagination {
+        gap: 3px;
+    }
+
+    .kje-page-link {
+        padding: 5px 8px; /* 더 작은 패딩 */
+        font-size: 12px;
+        min-width: 28px;
+    }
+}
+
+/* 반응형: 모바일(480px 이하)에서는 숫자 버튼 숨기고 이전/다음 버튼만 유지 */
+@media (max-width: 480px) {
+    .kje-pagination {
+        gap: 6px;
+    }
+
+    .kje-page-link:not(:first-child):not(:last-child) {
+        display: none; /* 숫자 버튼 숨김 */
+    }
+
+    .kje-page-link:first-child,
+    .kje-page-link:last-child {
+        font-size: 12px;
+        padding: 6px 10px;
+    }
+}
+
+
+/* ===== 10. 텍스트 입력 박스 스타일 ===== */
+.kje-mText {
+    display: block;
+    width: 100%;
+    height: 24px;
+    padding: 0 12px;
+    font-size: 14px;
+    font-family: 'Pretendard', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: #333333;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.kje-mText:hover {
+    border-color: #9ca3af;
+}
+
+.kje-mText:focus {
+    outline: none;
+    border-color: #4b5563;
+    box-shadow: 0 0 0 2px rgba(75, 85, 99, 0.2);
+}
+
+.kje-mText::placeholder {
+    color: #9ca3af;
+    opacity: 1;
+}
+
+/* 크기 변형 */
+.kje-mText-sm {
+    height: 32px;
+    padding: 0 8px;
+    font-size: 12px;
+}
+
+.kje-mText-lg {
+    height: 44px;
+    padding: 0 16px;
+    font-size: 16px;
+}
+
+/* 상태 */
+.kje-mText.disabled,
+.kje-mText:disabled {
+    background-color: #f3f4f6;
+    border-color: #e5e7eb;
+    color: #9ca3af;
+    cursor: not-allowed;
+}
+
+.kje-mText.error {
+    border-color: #ef4444;
+}
+
+.kje-mText.error:focus {
+    box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2);
+}
+
+/* 아이콘이 있는 입력 필드를 위한 컨테이너 */
+.kje-mText-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.kje-mText-icon-left {
+    position: absolute;
+    left: 10px;
+    color: #6b7280;
+    pointer-events: none;
+}
+
+.kje-mText-icon-right {
+    position: absolute;
+    right: 10px;
+    color: #6b7280;
+    cursor: pointer;
+}
+
+/* 아이콘이 있는 경우 패딩 조정 */
+.kje-mText-has-icon-left {
+    padding-left: 35px;
+}
+
+.kje-mText-has-icon-right {
+    padding-right: 35px;
+}
+
+/* ===== 11. 반응형 스타일 ===== */
+/* 반응형 조정 */
+@media (max-width: 1200px) {
+    .kje-data-table-container {
+        border-radius: 0;
+        box-shadow: none;
+        margin-bottom: 15px;
+        overflow-x: auto;
+    }
+    
+    .kje-data-table {
+        min-width: 800px;
+    }
+    
+    .kje-data-table th, 
+    .kje-data-table td {
+        padding: 8px 6px;
+        font-size: 12px;
+    }
+    
+    .search-area input[type="text"] {
+        width: 180px;
+    }
+}
+
+@media (max-width: 768px) {
+   /* 전체 헤더 영역 */
+    .kje-list-header {
+        display: flex;
+        flex-direction: column; /* 모바일에서 세로 정렬 */
+        gap: 10px; /* 요소 간격 추가 */
+    }
+	/* 왼쪽 영역 (검색) */
+    .kje-left-area {
+        display: flex;
+        flex: 1 1 auto; /* 남는 공간을 차지하도록 설정 */
+    }
+     .kje-search-area {
+        display: flex;
+        flex-wrap: nowrap; /* 가로 한 줄 유지 */
+        width: 100%;
+        gap: 8px;
+    }
+
+    .kje-search-area select {
+        flex: 0 1 20%; /* 최소 크기 유지 */
+        min-width: 80px;
+    }
+
+    .kje-search-area input[type="text"] {
+        flex: 1 1 auto; /* 가능한 넓게 확장 */
+        min-width: 140px;
+    }
+
+    .kje-search-button {
+        flex: 0 1 80px; /* 검색 버튼 크기 제한 */
+    }
+
+    /* 오른쪽 영역 (통계 버튼) */
+    .kje-right-area {
+        display: flex;
+        flex: 0 1 auto; /* 내용에 맞게 크기 조정 */
+    }
+
+    .kje-stats-button {
+        flex: 0 1 100px; /* 크기 제한 */
+        min-width: 80px;
+    }
+    
+    .kje-data-table-container {
+        overflow-x: auto; /* 가로 스크롤 허용 */
+    }
+
+    .kje-data-table {
+        display: block;
+        width: 100%;
+    }
+
+    .kje-data-table thead {
+        display: none; /* 모바일에서는 테이블 헤더 숨김 */
+    }
+
+    .kje-data-table tbody {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .kje-data-table tr {
+        display: flex;
+        flex-wrap: wrap;
+        border: 1px solid #e9ecef;
+        padding: 10px 30px;
+        border-radius: 8px;
+        background-color: #ffffff;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+
+    .kje-data-table td {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        padding: 6px 20px;
+        font-size: 14px;
+        border: none;
+    }
+
+    .kje-data-table td::before {
+        content: attr(data-label); /* 각 셀의 라벨 추가 */
+        font-weight: bold;
+        color: #333;
+        min-width: 120px;
+        display: inline-block;
+    }
+
+    
+    /* 모바일에서는 일부 컬럼 너비 축소 */
+   /* .kje-data-table .col-memo { width: 150px; }
+   /* .kje-data-table .col-school { width: 150px; }*/
+}
+
+@media (max-width: 576px) {
+    .kje-data-table {
+        min-width: 480px;
+    }
+    
+    /* 스크롤 표시기 강화 */
+    .kje-data-table-container::-webkit-scrollbar {
+        height: 6px;
+    }
+    
+    .kje-data-table-container::-webkit-scrollbar-thumb {
+        background-color: #6c757d;
+        border-radius: 3px;
+    }
+    
+    .kje-data-table-container::-webkit-scrollbar-track {
+        background-color: #e9ecef;
+    }
+    
+    .kje-mText, .kje-btn-link_1 {
+        font-size: 13px;
+    }
+}
+
+/* ===== 모바일(480px 이하) 추가 반응형 조정 ===== */
+@media (max-width: 480px) {
+    .kje-data-table tr {
+        flex-direction: column; /* 한 줄에 하나씩 표시 */
+    }
+
+    .kje-data-table td {
+        padding: 4px 8px;
+        font-size: 12px;
+    }
+
+    .kje-data-table td::before {
+        min-width: 100px;
+    }
+}
+
+
+/* 모달 기본 스타일 */
+.DaeriModal {
+    display: none;
+    position: fixed;
+    z-index: 1010;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+/* 모달 콘텐츠 스타일 */
+.DaeriModal-content {
+    background-color: #fff;
+    margin: 5% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 90%;
+    max-width: 1200px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* 닫기 버튼 스타일 */
+.close-q2Modal {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+
+.close-q2Modal:hover,
+.close-q2Modal:focus {
+    color: #000;
+    text-decoration: none;
+}
+
+/* 테이블 스타일 */
+.kjTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    font-size: 12px;
+}
+
+
+.kjTable td {
+    border: 1px solid #ddd;
+    text-align: center;
+	padding: 0px;
+}
+
+
+.kjTable th {
+    border: 1px solid #ddd;
+    text-align: center;
+    background-color: #806A98;
+    color: #fff;
+    font-weight: bold;
+	padding: 8px;
+}
+
+.kjTable tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.kjTable tr:hover {
+    background-color: #f1f1f1;
+}
+
+
+/* 테이블 스타일 */
+.sjTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    font-size: 12px;
+}
+
+
+.sjTable td {
+    border: 1px solid #ddd;
+    text-align: center;
+	padding: 4px 2px;
+}
+
+
+.sjTable th {
+    border: 1px solid #ddd;
+    text-align: center;
+    background-color: #806A98;
+    color: #fff;
+    font-weight: bold;
+	padding: 8px;
+}
+
+.sjTable tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.sjTable tr:hover {
+    background-color: #f1f1f1;
+}
+/* 입력 필드 스타일 */
+.geInput2,
+.geInput {
+    width: 100%;
+    padding: 6px;
+    border: 1px solid #fff;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 14px;
+}
+.geInput2:focus,
+.geInput :focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.geInput2{
+	text-align:center;
+}
+.geInput_p {
+    width: 100%;
+    padding: 6px;
+    border: 1px solid #fff;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 12px;
+	text-align:right
+}
+
+.geInput_p:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.memoInput {
+    width: 100%;
+    padding: 6px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 12px;
+	text-align:right;
+}
+
+.memoInput:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+.memoInput2 {
+    width: 100%;
+    padding: 6px;
+    border: 1px solid #fff;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 12px;
+	text-align:right;
+}
+
+.memoInput2:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+/* 모달 내부 헤더 부분 스타일 */
+#e_ceti_daeriCompany,
+#ceti_daeriCompany {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    display: inline-block;
+}
+
+/* 반응형 스타일 */
+@media screen and (max-width: 768px) {
+    .DaeriModal-content {
+        width: 95%;
+        margin: 10% auto;
+        padding: 15px;
+    }
+    
+    .kjTable {
+        font-size: 12px;
+    }
+    
+    .kjTable th, 
+    .kjTable td {
+        padding: 6px 4px;
+    }
+    
+    .q2Table input[type="text"] {
+        padding: 4px;
+        font-size: 12px;
+    }
+}
+
+
+.kjeilter-container {
+    display: flex;
+    align-items: center; /* 수직 정렬 */
+    gap: 10px; /* 요소 간격 */
+}
+
+.kjeilter-container select {
+    padding: 2px 12px;
+    font-size: 14px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    background-color: #f8fafc;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.kjeilter-container select:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+
+
+/* === ✅ 모달 본문 === */
+.DaeriModal-body {
+    padding: 15px 0;
+    max-height: 50vh;
+    overflow-y: auto;
+}
+.smsModal-body {
+    padding: 15px 0;
+    max-height: 50vh;
+    overflow-y: auto;
+}
+
+/* === ✅ 테이블 스타일 === */
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+}
+
+#performanceTable {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+}
+#performanceTable th {
+    padding: 4px;
+    border: 1px solid #e2e8f0;
+    text-align: center;
+}
+#performanceTable td {
+    padding: 4px;
+    border: 1px solid #e2e8f0;
+    text-align: right;
+}
+
+/* === ✅ 모달 푸터 === */
+.modal-footer {
+    padding: 12px;
+    border-top: 2px solid #e2e8f0;
+    text-align: right;
+}
+
+/* === ✅ 버튼 스타일 === */
+.p-btn {
+    padding: 6px 10px;
+    background-color: #8E6C9D; /* 오렌지 계열 */
+    color: white;
+    font-size: 14px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin: 5px;
+}
+
+.p-btn:hover {
+    background-color: #e65a00;
+}
+
+/* === ✅ 반응형 디자인 === */
+@media (max-width: 768px) {
+    .DaeriModal-content {
+        width: 95%;
+        max-width: 500px;
+    }
+
+    .kjeilter-container {
+        flex-direction: column;
+        gap: 5px;
+    }
+}
+
+@media (max-width: 480px) {
+    .DaeriModal-content {
+        width: 90%;
+        max-width: 400px;
+        padding: 15px;
+    }
+
+    .p-btn {
+        font-size: 12px;
+        padding: 6px 12px;
+    }
+}
+
+
+/* 기본 스타일  현장실습보험 질문서 번호 클릭 모달*/
+.eQ2Modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.eQ2Modal-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 800px;
+    width: 90%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+
+.q2Table {
+    width: 100%;
+    border-collapse: collapse;
+	font-size: 12px;
+    margin-top: 15px;
+	margin-bottom: 15px;
+}
+.q2Table td {
+    border: 1px solid #ddd;
+    padding: 4px;
+    text-align: center;
+}
+.q2Table th {
+    border: 1px solid #ddd;
+    padding: 6px;
+    background: #f4f4f4;
+    text-align: center;
+}
+
+
+
+.button-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 20px;
+}
+
+.q2-btn-primary {
+    padding: 5px 8px;
+    background: #8E6C9D;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+	font-size: 12px;
+}
+
+.q2-btn-primary:hover {
+    background: #0056b3;
+}
+
+/* 반응형 스타일 */
+@media (max-width: 768px) {
+    .eQ2Modal-content {
+        width: 95%;
+        padding: 15px;
+    }
+    
+    .q2Table th, .q2Table td {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    .button-group {
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 480px) {
+    .q2Table th, .q2Table td {
+        font-size: 12px;
+        padding: 6px;
+    }
+    
+    .styled-input, .styled-select {
+        font-size: 14px;
+        padding: 6px;
+    }
+}
+
+/* 질문서 사업자번호 클릭*/
+/* 모달 스타일 */
+.question-modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.question-modal-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 900px;
+    width: 90%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* 테이블 스타일 */
+.info-table {
+    width: 100%;
+    border-collapse: collapse;
+	font-size: 12px;
+    margin-top: 15px;
+	margin-bottom: 15px;
+}
+.info-table td {
+    border: 1px solid #ddd;
+    padding: 0px;
+    text-align: left;
+}
+.info-table th {
+    border: 1px solid #ddd;
+    padding: 2px;
+    background: #f4f4f4;
+    text-align: center;
+}
+
+
+
+/* 입력 필드 스타일 */
+
+.date-input {
+    width: 50%;
+    padding: 4px;
+    margin-top: 1px;
+    border: 1px solid #fff;
+    border-radius: 5px;
+}
+/* 라디오 버튼 스타일 */
+.radio-group {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    align-items: center;
+    height: 24px;
+}
+
+.radio-label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 14px;
+}
+.week-input {
+	width: 100%;
+	padding: 3px 6px;
+	border: 1px solid #fff;
+	text-align: right;
+	border-radius: 3px;
+	font-size: 12px;
+}
+
+.etc-input {
+	width: 100%;
+	padding: 3px 6px;
+	border: 1px solid #fff;
+	border-radius: 3px;
+	font-size: 12px;
+}
+/* 버튼 스타일 */
+.btn-primary {
+    padding: 10px 15px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    width: 100%;
+    display: block;
+    margin-top: 20px;
+}
+
+.btn-primary:hover {
+    background: #0056b3;
+}
+
+/* 반응형 스타일 */
+@media (max-width: 768px) {
+    .question-modal-content {
+        width: 95%;
+        padding: 15px;
+    }
+    
+    .info-table th, .info-table td {
+        font-size: 14px;
+        padding: 8px;
+    }
+    
+    .radio-group {
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 480px) {
+    .info-table th, .info-table td {
+        font-size: 12px;
+        padding: 6px;
+    }
+    
+    .etc-input, .week-input, .date-input {
+        font-size: 14px;
+        padding: 6px;
+    }
+}
+
+/* 업로드 모달 */
+
+.upModal {
+    display: none;
+    position: fixed;
+    z-index: 1001;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.4);
+}
+
+.upModal .modal-content {
+    position: relative;
+    z-index: 1002;
+    background-color: #fefefe;
+    margin: 5% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 800px;
+}
+
+.upload-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 10px 0;
+    padding: 10px;
+    background-color: #ffffff;
+   border: 1px solid #ced4da;
+   
+   
+}
+
+/* 파일 타입 선택 드롭다운 */
+.u_select {
+    min-width: 140px;
+    padding: 5px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 14px;
+    color: #495057;
+    background-color: white;
+    cursor: pointer;
+    transition: border-color 0.15s ease-in-out;
+}
+
+.u_select:hover {
+    border-color: #adb5bd;
+}
+
+/* 동적 입력 필드 */
+#dynamicField {
+    flex: 1;
+}
+
+#dynamicField input {
+    width: 100%;
+    padding: 6px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 14px;
+    color: #495057;
+}
+
+/* 파일 입력 필드 */
+.uploadedFile {
+    flex: 2;
+    padding: 4px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 12px;
+    background-color: white;
+}
+
+/* 업로드 버튼 */
+
+
+
+.uButton{
+	 padding: 6px 20px;
+
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.15s ease-in-out;
+}
+
+.uButton:hover {
+    background-color: #0056b3;
+}
+
+/* 파일 목록 테이블 스타일 개선 */
+.kjeile-table {
+    width: 100%;
+    border-collapse: collapse;
+	font-size: 12px;
+    margin-top: 15px;
+	margin-bottom: 15px;
+}
+.kjeile-table td {
+    border: 1px solid #ddd;
+    padding: 4px;
+    text-align: center;
+}
+.kjeile-table th {
+    border: 1px solid #ddd;
+    padding: 6px;
+    background: #f4f4f4;
+    text-align: center;
+}
+
+
+
+
+/* 삭제 버튼 스타일 */
+.dButton {
+    padding: 6px 12px;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background-color 0.15s ease-in-out;
+}
+
+.dButton:hover {
+    background-color: #c82333;
+}
+
+/* 클레임 모달*/
+/* Base styling for the modal */
+.claimModal {
+    display: none; /* Initially hidden */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.claim-modal-content {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    max-width: 800px;
+    width: 90%;
+    overflow: auto;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+#claim-modal-body {
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+}
+
+.claim-button-container {
+    text-align: right;
+}
+.claim-button-container2 {
+    display: flex;
+    justify-content: space-between; /* 요소들을 양 끝으로 배치 */
+    align-items: center; /* 요소를 수직 중앙 정렬 */
+    width: 100%; /* 부모 컨테이너 너비 */
+    padding: 10px; /* 내부 여백 */
+}
+
+
+#noticeSelect2 {
+    flex: 1; /* 왼쪽 정렬을 유지하면서 크기를 조정 가능 */
+    max-width: 300px; /* 선택박스 최대 너비 제한 */
+}
+
+
+.styled-button {
+    padding: 5px 10px;
+    font-size: 12px;
+    background-color: #8E6C9D;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.styled-button:hover {
+    background-color: #0056b3;
+}
+
+
+.kjeile-table2 {
+    width: 100%;
+    border-collapse: collapse;
+	font-size: 12px;
+    margin-top: 15px;
+	margin-bottom: 15px;
+}
+.kjeile-table2 td {
+    border: 1px solid #ddd;
+    padding: 4px;
+    text-align: left;
+}
+.kjeile-table2 th {
+    border: 1px solid #ddd;
+    padding: 4px;
+    background: #f4f4f4;
+    text-align: center;
+}
+
+
+
+
+/* Flex container for certificate number display */
+#claim-modal-body > div {
+    display: flex;
+    align-items: center;
+    line-height: 1.5;
+}
+
+#certi__ {
+    margin-left: 5px;
+    display: inline-block;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .claim-modal-content {
+        width: 95%;
+        padding: 15px;
+    }
+
+    .kjeile-table2 th, .kjeile-table2 td {
+        font-size: 12px;
+        padding: 8px;
+    }
+
+    .styled-input {
+        font-size: 12px;
+        padding: 8px;
+    }
+
+    .styled-button {
+        font-size: 14px;
+        padding: 8px 15px;
+    }
+
+    .claim-button-container {
+        margin-top: 20px;
+
+    }
+
+    /* Stack the rows for smaller screens */
+    .kjeile-table2 th, .kjeile-table2 td {
+        display: block;
+        width: 100%;
+        text-align: right;
+    }
+
+    .kjeile-table2 td {
+        text-align: left;
+        margin-bottom: 10px;
+    }
+
+    .kjeile-table2 th {
+        font-weight: bold;
+    }
+
+    /* Adjust layout for inputs in smaller screens */
+    .kjeile-table2 tr {
+        display: block;
+    }
+
+    .kjeile-table2 td input {
+        width: 100%;
+        box-sizing: border-box;
+    }
+}
+
+/* For very small screens like mobile phones */
+@media (max-width: 480px) {
+    .claim-modal-content {
+        padding: 10px;
+    }
+
+    .styled-button {
+        width: 100%;
+        padding: 12px;
+        font-size: 16px;
+    }
+
+    .kjeile-table2 th, .kjeile-table2 td {
+        font-size: 11px;
+    }
+
+    .styled-input {
+        padding: 8px;
+        font-size: 12px;
+    }
+}
+
+/*sms 모달스타일
+
+
+
+
+
+/* KJ 보험료 모달 스타일 */
+/* KJ 보험료 모달 스타일 */
+.premiumModal {
+    display: none;
+    position: fixed;
+    z-index: 1010;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+/* 모달 콘텐츠 스타일 */
+.premiumModal-content {
+    background-color: #fff;
+    margin: 0;
+    padding: 20px;
+    border: 1px solid #ddd;
+    width: 700px; /* 고정 너비 700px */
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    position: absolute;
+    left: 50%;
+    top: 80px;
+    transform: translateX(-50%);
+}
+/* 닫기 버튼 스타일 */
+.close-premiumModal {
+    position: absolute;
+    right: 15px;
+    top: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #333;
+    transition: all 0.2s;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    padding: 0;
+    line-height: 1;
+}
+.close-premiumModal:hover {
+    background-color: #e0e0e0;
+    color: #000;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+/* 모달 본문 스타일 */
+#premiumModal-body {
+    padding: 15px 0;
+}
+/* === ✅ 모달 배경 === */
+/* 모달 전체 배경 */
+
+/* 전송 버튼 스타일 */
+.sendSmsBtn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s;
+}
+
+.sendSmsBtn:hover {
+    background-color: #45a049;
+}
+
+/* 라벨 스타일 */
+/*#smsModal-body label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 4px;
+}
+
+.smsModal {
+    display: none;
+    position: fixed;
+    z-index: 1030;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+/* 모달 콘텐츠 스타일 */
+
+/*.smsModal-content {
+    background-color: #fff;
+    margin: 5% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 600px;
+    max-width: 1200px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}*/
+/* Main Modal Container */
+.smsModal {
+  display: none; /* Hidden by default */
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4); /* Black with opacity */
+}
+
+/* Modal Content */
+.smsModal-content {
+  background-color: #fefefe;
+  margin: 10% auto;
+  padding: 20px;
+  border: 1px solid #ddd;
+  width: 80%;
+  max-width: 500px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Modal Body */
+#smsModal-body {
+  padding: 10px;
+}
+
+/* Input Fields */
+.smsInput {
+  width: 100%;
+  padding: 8px;
+  margin: 5px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-family: inherit;
+}
+
+/* Dropdown Select */
+#smskind {
+  width: 100%;
+  padding: 8px;
+  margin: 5px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  background-color: white;
+}
+
+/* Button */
+.sendSmsBtn {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 15px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.sendSmsBtn:hover {
+  background-color: #45a049;
+}
+
+/* GISA Span */
+#gisa {
+  font-weight: bold;
+  font-size: 16px;
+}
+
+/* Labels */
+label {
+  font-weight: bold;
+  color: #333;
+}
+
+/* Show Modal */
+.smsModal.show {
+  display: block;
+}
+
+/* Responsive Adjustments */
+@media screen and (max-width: 600px) {
+  .smsModal-content {
+    width: 95%;
+    margin: 20% auto;
+  }
+}
+/* 배서 모달 */
+.endorseModal {
+    display: none;
+    position: fixed;
+    z-index: 1020;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+/* 모달 콘텐츠 스타일 */
+.endorseModal-content {
+    background-color: #fff;
+    margin: 0;
+    padding: 20px;
+    border: 1px solid #ddd;
+    width: 700px; /* 고정 너비 700px */
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    position: absolute;
+    left: 50%;
+    top: 80px;
+    transform: translateX(-50%);
+}
+/* 닫기 버튼 스타일 */
+.close-newModal,
+.close-endorseModal {
+    position: absolute;
+    right: 15px;
+    top: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #333;
+    transition: all 0.2s;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    padding: 0;
+    line-height: 1;
+}
+close-newModal:hover,
+.close-endorseModal:hover {
+    background-color: #e0e0e0;
+    color: #000;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+/* 모달 본문 스타일 */
+#endorseModal-body {
+    padding: 15px 0;
+}
+
+/* 신규 모달 */
+.newModal {
+    display: none;
+    position: fixed;
+    z-index: 1030;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+/* 모달 콘텐츠 스타일 */
+.newModal-content {
+    background-color: #fff;
+    margin: 0;
+    padding: 20px;
+    border: 1px solid #ddd;
+    width: 700px; /* 고정 너비 700px */
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    position: absolute;
+    left: 50%;
+    top: 80px;
+    transform: translateX(-50%);
+}
+/* 닫기 버튼 스타일 */
+.close-newModal {
+    position: absolute;
+    right: 15px;
+    top: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #333;
+    transition: all 0.2s;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    padding: 0;
+    line-height: 1;
+}
+.close-newModal:hover {
+    background-color: #e0e0e0;
+    color: #000;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+/* 모달 본문 스타일 */
+#newModal-body {
+    padding: 15px 0;
+}
+/* 가번호 스타일 */
+#beforegabunho {
+    font-weight: bold;
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 15px;
+    display: inline-block;
+}
+
+/* 테이블 스타일 */
+/*
+.kjTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.kjTable th, 
+.kjTable td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+}
+
+.kjTable th {
+    background-color: #f8f9fa;
+    color: #333;
+    font-weight: bold;
+}
+
+.kjTable tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.kjTable tr:hover {
+    background-color: #f0f0f0;
+} */
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .DaeriModal-content {
+        width: 95%;
+        margin: 10% auto;
+        padding: 15px;
+    }
+    
+    .kjTable th, 
+    .kjTable td {
+        padding: 8px 5px;
+        font-size: 14px;
+    }
+}
+
+/* 모달 표시 애니메이션 */
+@keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
+
+.preminumModal.show {
+    display: block;
+    animation: fadeIn 0.3s;
+}
+
+.sms-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6.4px 9.6px; /* 20% 줄임 */
+  border-radius: 3.2px; /* 20% 줄임 */
+  background-color: #1a73e8;
+  color: white;
+  border: none;
+  font-size: 10.4px; /* 20% 줄임 */
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2.4px rgba(0, 0, 0, 0.12);
+}
+
+.sms-button:hover {
+  background-color: #0d62d0;
+  box-shadow: 0 1.6px 4px rgba(0, 0, 0, 0.2);
+}
+
+.sms-button:active {
+  transform: translateY(0.8px); /* 20% 줄임 */
+  box-shadow: 0 0.8px 1.6px rgba(0, 0, 0, 0.15);
+}
+
+/* 아이콘만 있는 작은 버튼 버전 */
+.sms-icon-button {
+  width: 28.8px; /* 20% 줄임 */
+  height: 28.8px; /* 20% 줄임 */
+  border-radius: 50%;
+  padding: 0;
+}
+
+/* 아이콘 스타일 */
+.sms-button i,
+.sms-button svg {
+  width: 12.8px; /* 20% 줄임 */
+  height: 12.8px; /* 20% 줄임 */
+  margin-right: 4.8px; /* 20% 줄임 */
+}
+
+.sms-icon-button i,
+.sms-icon-button svg {
+  margin-right: 0;
+}
+
+/* 비활성화 상태 */
+.sms-button:disabled {
+  background-color: #b0c0d0;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* KJ 담당자 모달 스타일 */
+.damdangjaModal {
+    display: none;
+    position: fixed;
+    z-index: 1010;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+/* 모달 콘텐츠 스타일 */
+.damdangjaModal-content {
+    background-color: #fff;
+    margin: 0;
+    padding: 20px;
+    border: 1px solid #ddd;
+    width: 700px; /* 고정 너비 700px */
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    position: absolute;
+    left: 50%;
+    top: 80px;
+    transform: translateX(-50%);
+}
+/* 닫기 버튼 스타일 */
+.close-damdangjaModal {
+    position: absolute;
+    right: 15px;
+    top: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #333;
+    transition: all 0.2s;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    padding: 0;
+    line-height: 1;
+}
+.close-damdangjaModal:hover {
+    background-color: #e0e0e0;
+    color: #000;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+/* 모달 본문 스타일 */
+#damdangjaModal-body {
+    padding: 15px 0;
+}
+
+
+/* KJ id 모달 스타일 */
+
+.idModal {
+    display: none;
+    position: fixed;
+    z-index: 1010;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+/* 모달 콘텐츠 스타일 */
+.idModal-content {
+    background-color: #fff;
+    margin: 0;
+    padding: 20px;
+    border: 1px solid #ddd;
+    width: 700px; /* 고정 너비 700px */
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    position: absolute;
+    left: 50%;
+    top: 80px;
+    transform: translateX(-50%);
+}
+/* 닫기 버튼 스타일 */
+.close-idModal {
+    position: absolute;
+    right: 15px;
+    top: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #333;
+    transition: all 0.2s;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    padding: 0;
+    line-height: 1;
+}
+.close-idModal:hover {
+    background-color: #e0e0e0;
+    color: #000;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+/* 모달 본문 스타일 */
+#idModal-body {
+    padding: 15px 0;
+}
+/*배서기준일 변경 모달*/
+
+
+.dateModal {
+    display: none;
+    position: fixed;
+    z-index: 1010;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+/* 모달 콘텐츠 스타일 */
+.dateModal-content {
+    background-color: #fff;
+    margin: 0;
+    padding: 20px;
+    border: 1px solid #ddd;
+    width: 700px; /* 고정 너비 700px */
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    position: absolute;
+    left: 50%;
+    top: 80px;
+    transform: translateX(-50%);
+}
+/* 닫기 버튼 스타일 */
+.close-dateModal {
+    position: absolute;
+    right: 15px;
+    top: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #333;
+    transition: all 0.2s;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    padding: 0;
+    line-height: 1;
+}
+.close-dateModal:hover {
+    background-color: #e0e0e0;
+    color: #000;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+/* 모달 본문 스타일 */
+#dateModal-body {
+    padding: 15px 0;
+}
+
+
+/*문자리스트  모달*/
+
+
+.smsListModal {
+    display: none;
+    position: fixed;
+    z-index: 2033;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+/* 모달 콘텐츠 스타일 */
+.smsListModal-content {
+    background-color: #fff;
+    margin: 0;
+    padding: 20px;
+    border: 1px solid #ddd;
+    width: 800px; /* 고정 너비 700px */
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    position: absolute;
+    left: 50%;
+    top: 80px;
+    transform: translateX(-50%);
+}
+/* 닫기 버튼 스타일 */
+.close-smsListModal {
+    position: absolute;
+    right: 15px;
+    top: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #333;
+    transition: all 0.2s;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    padding: 0;
+    line-height: 1;
+}
+.close-smsListModal:hover {
+    background-color: #e0e0e0;
+    color: #000;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+/* 모달 본문 스타일 */
+#smsListModal-body {
+    padding: 10px 0;
+}
+.center-align{
+	text-align:center;
+}
+.modal-header{
+	margin-bottom:10px;
+}
+.smodal-header{
+	margin-bottom:5px;
+}
+
+/* ===== 2. 문자리스트 ===== */
+.sms-list-container {
+    width: 100%;
+   /* background-color: #ffffff;*/
+    border-radius: 8px;
+   
+   /* padding: 20px;*/
+    margin-bottom: 20px;
+    font-family: 'Pretendard', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* ===== 2. 헤더 영역 스타일 ===== */
+.sms-list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.sms-left-area, .sms-right-area {
+    display: flex;
+    align-items: center;
+}
+/* ===== 3. 검색 영역 스타일 ===== */
+
+.sms-search-area {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.sms-search-area select {
+    height: 30px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    padding: 0 12px;
+    font-size: 14px;
+    color: #1e293b;
+    background-color: #ffffff;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+.sms-search-area select:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+.sms-search-area input[type="text"],input[type="date"] {
+    height: 30px;
+   
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    padding: 0 12px;
+    font-size: 14px;
+    color: #1e293b;
+    background-color: #ffffff;
+    outline: none;
+    transition: all 0.2s ease;
+}
+.sms-search-area input[type="text"] {
+    width: 240px;
+   
+}
+.sms-search-area input[type="date"] {
+    width: 120px;
+   
+}
+.sms-search-area input[type="text"]:focus,input[type="date"]:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+/* ===== 4. 버튼 스타일 ===== */
+.sms-search-button {
+    height: 28px;
+    background-color: #8E6C9D;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 0 16px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.sms-search-button:hover {
+    background-color: #2563eb;
+}
+
+.sms-stats-button {
+    height: 30px;
+    background-color: #8E6C9D;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 0 16px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.sms-stats-button:hover {
+    background-color: #475569;
+}
+
+/* 일별 배서리스트 모달*/
+.dailyEndoseModal {
+    display: none;
+    position: fixed;
+    z-index: 2033;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+/* 모달 콘텐츠 스타일 */
+.dailyEndoseModal-content {
+    background-color: #fff;
+    margin: 0;
+    padding: 20px;
+    border: 1px solid #ddd;
+    width: 1400px; /* 고정 너비 700px */
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    position: absolute;
+    left: 60%;
+    top: 80px;
+    transform: translateX(-50%);
+}
+/* 닫기 버튼 스타일 */
+.close-dailyEndoseModal {
+    position: absolute;
+    right: 15px;
+    top: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #333;
+    transition: all 0.2s;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    padding: 0;
+    line-height: 1;
+}
+
+/* 모달 본문 스타일 */
+#dailyEndoseModal-body {
+    padding: 10px 0;
+}
+
+/*배서체크*/
+.endorseCheckModal {
+    display: none;
+    position: fixed;
+    z-index: 3033;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+/* 모달 콘텐츠 스타일 */
+.endorseCheckModal-content {
+    background-color: #fff;
+    margin: 0;
+    padding: 20px;
+    border: 1px solid #ddd;
+    width: 400px; /* 고정 너비 400px */
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    position: absolute;
+    left: 0; /* 좌측 상단*/
+    top: 0; /* */
+    transform: none;
+}
+/* 닫기 버튼 스타일 */
+.close-endorseCheckModal {
+    position: absolute;
+    right: 15px;
+    top: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #333;
+    transition: all 0.2s;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    padding: 0;
+    line-height: 1;
+}
+
+/* 모달 본문 스타일 */
+#endorseCheckModal-body {
+    padding: 10px 0;
+}
+
+/* 보고서 스타일 */
+.report-container {
+  padding: 15px;
+  background-color: #f9f9f9;
+  border-radius: 5px;
+}
+
+.report-container h3 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+  font-size: 18px;
+}
+
+.report-section {
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.report-section h4 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  color: #0066cc;
+  font-size: 16px;
+}
+
+.report-section ul {
+  padding-left: 20px;
+  margin-bottom: 10px;
+}
+
+.report-section li {
+  margin-bottom: 5px;
+}
+
+.report-section p {
+  margin: 5px 0;
+}
+
+/* 로딩 표시 */
+#loading {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.7);
+  z-index: 9999;
+  text-align: center;
+}
+
+#loading::after {
+  content: "";
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  margin-top: 45vh;
+  border: 6px solid #f3f3f3;
+  border-top: 6px solid #3498db;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/*배서현황*/
+
+.endorseSituationModal {
+    display: none;
+    position: fixed;
+    z-index: 3033;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+/* 모달 콘텐츠 스타일 */
+.endorseSituationModal-content {
+    background-color: #fff;
+    margin: 0;
+    padding: 20px;
+    border: 1px solid #ddd;
+    width: 900px; /* 고정 너비 400px */
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    position: absolute;
+    left: 50%;
+    top: 80px;
+    transform: translateX(-50%);
+}
+/* 닫기 버튼 스타일 */
+.close-endorseSituationModal {
+    position: absolute;
+    right: 15px;
+    top: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #333;
+    transition: all 0.2s;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    padding: 0;
+    line-height: 1;
+}
+
+/* 모달 본문 스타일 */
+#endorseSituationModal-body {
+    padding: 10px 0;
+}

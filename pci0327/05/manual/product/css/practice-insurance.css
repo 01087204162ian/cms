@@ -1,0 +1,258 @@
+/* 전체 컨테이너 */
+.manual-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    background: #ffffff;
+    min-height: 100vh;
+}
+
+/* 헤더 */
+.manual-header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding: 20px 0;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.manual-header h1 {
+    font-size: 2.5rem;
+    color: #333;
+    margin: 0;
+}
+
+/* 네비게이션 메뉴 */
+.manual-nav {
+    position: sticky;
+    top: 0;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    padding: 1rem;
+    margin-bottom: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    transition: all 0.3s ease;
+}
+
+.manual-nav ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    justify-content: center;
+}
+
+.manual-nav li {
+    margin: 0;
+}
+
+.practice-insurance-nav-link {
+    display: inline-block;
+    padding: 0.8rem 1.2rem;
+    color: #2c3e50;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+}
+
+.practice-insurance-nav-link:hover {
+    background: #e9ecef;
+    transform: translateY(-2px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.practice-insurance-nav-link.active {
+    background: #007bff;
+    color: white;
+    border-color: #0056b3;
+    box-shadow: 0 2px 4px rgba(0, 123, 255, 0.2);
+}
+
+/* 메인 콘텐츠 영역 */
+.manual-content {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* 섹션 스타일 */
+.manual-section {
+    padding: 2rem;
+    margin-bottom: 2rem;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+.manual-section:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.manual-section h2 {
+    color: #2c3e50;
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #e9ecef;
+}
+
+.manual-section h3 {
+    color: #34495e;
+    font-size: 1.4rem;
+    margin: 1.5rem 0 1rem;
+}
+
+.manual-section h4 {
+    color: #2c3e50;
+    font-size: 1.2rem;
+    margin: 1.2rem 0 0.8rem;
+}
+
+/* 서브 섹션 */
+.sub-section {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+}
+
+/* 테이블 스타일 */
+.info-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+    background: #ffffff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.info-table th,
+.info-table td {
+    padding: 1rem;
+    border: 1px solid #e9ecef;
+}
+
+.info-table th {
+    background: #f8f9fa;
+    font-weight: 600;
+    color: #2c3e50;
+    text-align: left;
+    width: 30%;
+}
+
+.info-table tr:hover {
+    background: #f8f9fa;
+}
+
+/* 리스트 */
+.manual-section ol,
+.manual-section ul {
+    padding-left: 1.5rem;
+    margin: 1rem 0;
+}
+
+.manual-section li {
+    margin-bottom: 0.8rem;
+    line-height: 1.6;
+    color: #2c3e50;
+}
+
+/* 메일 템플릿 */
+.mail-template {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 8px;
+    white-space: pre-wrap;
+    font-family: 'Courier New', Courier, monospace;
+    line-height: 1.6;
+    color: #2c3e50;
+    border: 1px solid #e9ecef;
+}
+
+/* 푸터 */
+.manual-footer {
+    text-align: center;
+    padding: 20px 0;
+    margin-top: 50px;
+    border-top: 1px solid #e0e0e0;
+    color: #666;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .manual-container {
+        padding: 1rem;
+    }
+
+    .manual-nav ul {
+        flex-direction: column;
+        gap: 0.3rem;
+    }
+
+    .practice-insurance-nav-link {
+        padding: 0.6rem 1rem;
+        text-align: center;
+    }
+
+    .manual-section {
+        padding: 1.5rem;
+    }
+
+    .info-table th,
+    .info-table td {
+        padding: 0.8rem;
+    }
+
+    .mail-template {
+        padding: 1rem;
+        font-size: 0.9rem;
+    }
+}
+
+/* 애니메이션 효과 */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.manual-section {
+    animation: fadeIn 0.5s ease-out;
+}
+
+/* 스크롤바 스타일링 */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* 스크롤 시 네비게이션 스타일 변경 */
+.manual-nav.scrolled {
+    padding: 0.8rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+} 

@@ -1,0 +1,143 @@
+/* mobile-tables.css 파일을 새로 만들어 추가하거나 기존 CSS 파일에 추가하세요 */
+
+/* 모바일 테이블 스타일 - 특히 중요한 부분 */
+@media (max-width: 767px) {
+  /* 테이블 기본 설정 */
+  .table-mobile-stack.mobile-view {
+    border-collapse: separate;
+    border-spacing: 0 10px;
+    background: transparent;
+    width: 100%;
+  }
+  
+  .table-mobile-stack.mobile-view thead {
+    display: none; /* 헤더 숨기기 */
+  }
+  
+  .table-mobile-stack.mobile-view tbody {
+    display: block;
+    width: 100%;
+  }
+  
+  /* 각 행을 카드 스타일로 표시 */
+  .table-mobile-stack.mobile-view tr {
+    display: block;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    margin-bottom: 15px;
+    position: relative;
+    border: 1px solid #e9ecef;
+  }
+  
+  /* 모든 셀 기본 스타일 */
+  .table-mobile-stack.mobile-view td {
+    display: flex;
+    border: none;
+    padding: 8px 12px;
+    text-align: left;
+    position: relative;
+    align-items: center;
+  }
+  
+  /* data-label 속성을 이용한 레이블 표시 */
+  .table-mobile-stack.mobile-view td:before {
+    content: attr(data-label);
+    width: 90px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: #6c757d;
+    padding-right: 10px;
+  }
+  
+  /* 번호 셀 특별 스타일 */
+  .table-mobile-stack.mobile-view .cell-number {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #f8f9fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 2px solid white;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    font-weight: bold;
+  }
+  
+  .table-mobile-stack.mobile-view .cell-number:before {
+    display: none;
+  }
+  
+  /* 이름 셀 강조 스타일 */
+  .table-mobile-stack.mobile-view .cell-name {
+    font-weight: 600;
+    font-size: 1.1rem;
+    padding-top: 15px;
+    color: #343a40;
+  }
+  
+  /* 상태 셀 스타일 */
+  .table-mobile-stack.mobile-view .cell-status {
+    justify-content: flex-end;
+    padding-bottom: 12px;
+  }
+  
+  /* 정보 셀 스타일 */
+  .table-mobile-stack.mobile-view .cell-info {
+    font-size: 0.9rem;
+    color: #495057;
+    border-bottom: 1px solid #f1f1f1;
+  }
+  
+  /* 테이블 컨테이너 스타일 조정 */
+  .table-fixed-header {
+    max-height: none;
+    overflow-y: visible;
+    border: none;
+  }
+  
+  .table-responsive {
+    border: none;
+    overflow: visible;
+  }
+  
+  /* 빈 데이터 행 특별 스타일 */
+  .empty-data-row {
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+  
+  .empty-data-row td {
+    display: block !important;
+    padding: 20px !important;
+  }
+  
+  .empty-state {
+    text-align: center;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 10px;
+  }
+}
+
+/* 데스크탑 환경에서는 원래 테이블 스타일 유지 */
+@media (min-width: 768px) {
+  .table-mobile-stack {
+    width: 100%;
+  }
+  
+  .table-mobile-stack th,
+  .table-mobile-stack td {
+    text-align: center;
+  }
+  
+  /* 모바일 전용 스타일 초기화 */
+  .table-mobile-stack td:before {
+    display: none;
+  }
+}

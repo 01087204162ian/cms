@@ -1,0 +1,166 @@
+
+
+/* 컬럼별 너비 조정 */
+.policy-thead .col-1 { width: 15px; text-align: center; }
+.policy-thead .col-2 { width: 120px; text-align: center; }
+.policy-thead .col-3 { width: 200px; text-align: center; }
+.policy-thead .col-4 { width: 15px; text-align: center; }
+.policy-thead .col-5 { width: 120px; text-align: center; }
+.policy-thead .col-6 { width: 100px; text-align: center; }
+.policy-thead .col-7 { width: 120px; text-align: center; }
+.policy-thead .col-8 { width: 40px; text-align: center; }
+.policy-thead .col-9 { width: 100px; text-align: center; }
+.policy-thead .col-10 { width: 120px; text-align: center; }
+.policy-thead .col-11 { width: 100px; text-align: center; }
+.policy-thead .col-12 { width: 70px; text-align: center; }
+.policy-thead .col-13 { width: 200px; text-align: center; }
+.policy-thead .col-14 { width: 50px; text-align: center; }
+.policy-thead .col-15 { width: 50px; text-align: center; }
+.policy-thead .col-16 { width: 50px; text-align: center; }
+
+
+/*배서현황*/
+
+.policyNumModal {
+    display: none;
+    position: fixed;
+    z-index: 3033;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+/* 모달 콘텐츠 스타일 */
+.policyNumModal-content {
+    background-color: #fff;
+    margin: 0;
+    padding: 20px;
+    border: 1px solid #ddd;
+    width: 900px; /* 고정 너비 400px */
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    position: absolute;
+    left: 50%;
+    top: 80px;
+    transform: translateX(-50%);
+}
+/* 닫기 버튼 스타일 */
+.close-policyNumModal {
+    position: absolute;
+    right: 15px;
+    top: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #333;
+    transition: all 0.2s;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    padding: 0;
+    line-height: 1;
+}
+
+/* 모달 본문 스타일 */
+#policyNumModal-body {
+    padding: 10px 0;
+}
+
+
+/* 테이블 스타일 */
+.pjTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    font-size: 12px;
+}
+
+
+.pjTable td {
+    border: 1px solid #ddd;
+  	padding: 0pxx;
+}
+.center-align{
+	text-align:center;
+	}
+
+.pjTable th {
+    border: 1px solid #ddd;
+   
+    background-color: #806A98;
+    color: #fff;
+    font-weight: bold;
+	padding: 8px;
+}
+
+.pjTable tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.pjTable tr:hover {
+    background-color: #f1f1f1;
+}
+
+/*보험회사 보험료 입력 모달 */
+.policyPremiumModal {
+    display: none;
+    position: fixed;
+    z-index: 3033;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+/* 모달 콘텐츠 스타일 */
+.policyPremiumModal-content {
+    background-color: #fff;
+    margin: 0;
+    padding: 20px;
+    border: 1px solid #ddd;
+    width: 500px; /* 고정 너비 400px */
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    position: absolute;
+    left: 0; /* 좌측 상단*/
+    top: 0; /* */
+    transform: none;
+}
+/* 닫기 버튼 스타일 */
+.close-policyPremiumModal {
+    position: absolute;
+    right: 15px;
+    top: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #333;
+    transition: all 0.2s;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    padding: 0;
+    line-height: 1;
+}
+
+/* 모달 본문 스타일 */
+#policyPremiumModal-body {
+    padding: 10px 0;
+}
+

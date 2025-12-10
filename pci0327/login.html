@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>로그인</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f5f5;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .login-container {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 400px;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .login-header img {
+            max-width: 150px;
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            position: absolute;
+            top: -10px;
+            left: 10px;
+            background: white;
+            padding: 0 5px;
+            font-size: 12px;
+            color: #555;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #4CAF50;
+            box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.1);
+        }
+
+        .form-group input::placeholder {
+            font-size: 0.9rem;
+            color: #888;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 0.8rem;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .login-btn:hover {
+            background-color: #45a049;
+        }
+
+        .signup-link {
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+
+        .signup-link a {
+            color: #4CAF50;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .signup-link a:hover {
+            text-decoration: underline;
+            color: #388E3C;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-header">
+            <img src="logo_col.png" alt="SIMG Logo">
+        </div>
+        <form id="loginForm" onsubmit="return handleLogin(event)" autocomplete="on">
+            <div class="form-group">
+                <label for="userid">아이디</label>
+                <input 
+                    type="text" 
+                    id="userid" 
+                    name="userid" 
+                    required 
+                    pattern="^[0-9]{4,12}$"
+                    placeholder="숫자 4-12자"
+                    autocomplete="username"
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="password">비밀번호</label>
+                <input 
+                    type="password" 
+                    id="password" 
+                    name="password" 
+                    required
+                    placeholder="비밀번호를 입력하세요"
+                    autocomplete="current-password"
+                >
+            </div>
+
+            <button type="submit" class="login-btn">로그인</button>
+        </form>
+
+        <div class="signup-link">
+            <p>계정이 없으신가요? <a href="signup.html">회원가입</a></p>
+        </div>
+    </div>
+
+    <script>
+        function handleLogin(event) {
+            event.preventDefault();
+            const userid = document.getElementById('userid').value;
+            const password = document.getElementById('password').value;
+
+            fetch('./login.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    userid: userid,
+                    password: password
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // 로그인 성공 시 사용자 정보 저장
+                    localStorage.setItem('userName', data.user.name);
+                    localStorage.setItem('userId', data.user.userid);
+                    localStorage.setItem('userPhone', data.user.phone);
+                    
+                    sessionStorage.setItem('loggedIn', 'true');
+                    sessionStorage.setItem('userName', data.user.name);
+                    sessionStorage.setItem('userId', data.user.userid);
+                    sessionStorage.setItem('userPhone', data.user.phone);
+                    
+                    alert(data.message);
+                    window.location.href = '/cms/';
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('로그인 처리 중 오류가 발생했습니다.');
+            });
+
+            return false;
+        }
+
+        // 로그아웃 함수 추가
+        function logout() {
+            // 로컬스토리지 클리어
+            localStorage.removeItem('userName');
+            localStorage.removeItem('userId');
+            localStorage.removeItem('userPhone');
+            
+            // 세션스토리지 클리어
+            sessionStorage.removeItem('loggedIn');
+            sessionStorage.removeItem('userName');
+            sessionStorage.removeItem('userId');
+            sessionStorage.removeItem('userPhone');
+            
+            // PHP 세션 종료를 위한 요청
+            fetch('./logout.php')
+                .then(() => {
+                    window.location.href = 'admin.html';
+                });
+        }
+    </script>
+</body>
+</html> 

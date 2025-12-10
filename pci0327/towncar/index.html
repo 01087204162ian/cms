@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>쏘카 vs 타운카 비교 분석 보고서</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #2c3e50;
+            background-color: #ffffff;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .document-header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding-bottom: 30px;
+            border-bottom: 3px solid #34495e;
+        }
+        
+        .document-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .document-subtitle {
+            font-size: 1.2rem;
+            color: #7f8c8d;
+            font-weight: 400;
+        }
+        
+        .document-date {
+            font-size: 0.95rem;
+            color: #95a5a6;
+            margin-top: 15px;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+            page-break-inside: avoid;
+        }
+        
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            padding-left: 15px;
+            border-left: 4px solid #3498db;
+        }
+        
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 25px;
+            background-color: #ffffff;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+        
+        .comparison-table th {
+            background-color: #f8f9fa;
+            color: #2c3e50;
+            font-weight: 600;
+            padding: 15px 20px;
+            text-align: left;
+            border: 1px solid #dee2e6;
+            font-size: 1rem;
+        }
+        
+        .comparison-table td {
+            padding: 15px 20px;
+            border: 1px solid #dee2e6;
+            font-size: 0.95rem;
+            vertical-align: top;
+        }
+        
+        .comparison-table tr:nth-child(even) {
+            background-color: #fbfcfd;
+        }
+        
+        .comparison-table tr:hover {
+            background-color: #f1f3f4;
+        }
+        
+        .platform-name {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .socar {
+            color: #e74c3c;
+        }
+        
+        .towncar {
+            color: #3498db;
+        }
+        
+        .highlight-section {
+            background-color: #f8f9fa;
+            border-left: 4px solid #e74c3c;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 0 5px 5px 0;
+        }
+        
+        .highlight-section h3 {
+            color: #e74c3c;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+        }
+        
+        .solution-section {
+            background-color: #f8fff8;
+            border-left: 4px solid #27ae60;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 0 5px 5px 0;
+        }
+        
+        .solution-section h3 {
+            color: #27ae60;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+        }
+        
+        .benefits-section {
+            background-color: #f8f9ff;
+            border-left: 4px solid #3498db;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 0 5px 5px 0;
+        }
+        
+        .document-footer {
+            margin-top: 50px;
+            padding: 30px 0;
+            border-top: 2px solid #ecf0f1;
+            text-align: center;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+        
+        .company-info {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .company-name {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .contact-info {
+            color: #95a5a6;
+        }
+        
+        .bullet-list {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .bullet-list li {
+            margin-bottom: 10px;
+            padding-left: 25px;
+            position: relative;
+        }
+        
+        .bullet-list li:before {
+            content: "•";
+            color: #3498db;
+            font-weight: bold;
+            position: absolute;
+            left: 10px;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            body {
+                padding: 20px 15px;
+            }
+            
+            /* 데스크탑 프린트 버튼 숨기기 */
+            .print-button {
+                display: none;
+            }
+            
+            /* 모바일 프린트 버튼 보이기 - FAB 스타일 */
+            .print-button-mobile {
+                display: flex !important;
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                width: 56px;
+                height: 56px;
+                background-color: #3498db;
+                color: white;
+                border: none;
+                border-radius: 50%;
+                cursor: pointer;
+                font-size: 1.5rem;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
+                transition: all 0.3s ease;
+                z-index: 1000;
+            }
+            
+            .print-button-mobile:hover {
+                background-color: #2980b9;
+                transform: scale(1.1);
+                box-shadow: 0 6px 16px rgba(52, 152, 219, 0.5);
+            }
+            
+            .document-title {
+                font-size: 2rem;
+            }
+            
+            .document-subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .section-title {
+                font-size: 1.2rem;
+            }
+            
+            .comparison-table {
+                font-size: 0.9rem;
+            }
+            
+            .comparison-table th,
+            .comparison-table td {
+                padding: 12px 15px;
+            }
+            
+            .highlight-section,
+            .solution-section,
+            .benefits-section {
+                padding: 15px;
+                margin: 20px 0;
+            }
+            
+            .company-info {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            body {
+                padding: 15px 10px;
+            }
+            
+            /* 모바일 FAB 버튼 크기 조정 */
+            .print-button-mobile {
+                width: 48px !important;
+                height: 48px !important;
+                bottom: 15px;
+                right: 15px;
+                font-size: 1.3rem;
+            }
+            
+            .document-title {
+                font-size: 1.8rem;
+            }
+            
+            .section-title {
+                font-size: 1.1rem;
+                padding-left: 10px;
+            }
+            
+            .comparison-table {
+                font-size: 0.85rem;
+            }
+            
+            .comparison-table th,
+            .comparison-table td {
+                padding: 10px 12px;
+            }
+            
+            .highlight-section,
+            .solution-section,
+            .benefits-section {
+                padding: 12px;
+            }
+        }
+        
+        .print-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(52, 152, 219, 0.3);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .print-button:hover {
+            background-color: #2980b9;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
+        }
+        
+        .print-button-mobile {
+            display: none;
+        }
+        
+        @media print {
+            /* 프린트 버튼 숨기기 */
+            .print-button,
+            .print-button-mobile {
+                display: none !important;
+            }
+            
+            /* 페이지 설정 */
+            @page {
+                margin: 2cm;
+                size: A4;
+            }
+            
+            body {
+                max-width: none;
+                padding: 0;
+                background-color: white !important;
+                color: black !important;
+                font-size: 12pt;
+                line-height: 1.5;
+            }
+            
+            /* 헤더 최적화 */
+            .document-header {
+                margin-bottom: 30px;
+                padding-bottom: 20px;
+                border-bottom: 2pt solid #000;
+            }
+            
+            .document-title {
+                font-size: 18pt;
+                color: black !important;
+            }
+            
+            .document-subtitle {
+                font-size: 14pt;
+                color: #333 !important;
+            }
+            
+            .document-date {
+                font-size: 12pt;
+                color: #666 !important;
+            }
+            
+            /* 섹션 제목 */
+            .section-title {
+                font-size: 14pt;
+                color: black !important;
+                border-left: 3pt solid #000;
+                margin-bottom: 15px;
+                page-break-after: avoid;
+            }
+            
+            /* 테이블 최적화 */
+            .comparison-table {
+                box-shadow: none !important;
+                border: 1pt solid #000 !important;
+                font-size: 11pt;
+                margin-bottom: 20px;
+            }
+            
+            .comparison-table th {
+                background-color: #f0f0f0 !important;
+                color: black !important;
+                border: 1pt solid #000 !important;
+                padding: 8pt 12pt;
+                font-weight: bold;
+            }
+            
+            .comparison-table td {
+                border: 1pt solid #000 !important;
+                padding: 8pt 12pt;
+                background-color: white !important;
+            }
+            
+            .comparison-table tr:nth-child(even) {
+                background-color: #f9f9f9 !important;
+            }
+            
+            /* 브랜드 컬러를 흑백으로 */
+            .platform-name.socar,
+            .platform-name.towncar {
+                color: black !important;
+                font-weight: bold;
+            }
+            
+            /* 하이라이트 섹션들을 프린트용으로 최적화 */
+            .highlight-section {
+                background-color: #f5f5f5 !important;
+                border-left: 3pt solid #000 !important;
+                padding: 12pt;
+                margin: 15pt 0;
+                page-break-inside: avoid;
+            }
+            
+            .highlight-section h3 {
+                color: black !important;
+                font-size: 13pt;
+                margin-bottom: 10pt;
+            }
+            
+            .solution-section {
+                background-color: #f8f8f8 !important;
+                border-left: 3pt solid #000 !important;
+                padding: 12pt;
+                margin: 15pt 0;
+                page-break-inside: avoid;
+            }
+            
+            .solution-section h3 {
+                color: black !important;
+                font-size: 13pt;
+                margin-bottom: 10pt;
+            }
+            
+            .benefits-section {
+                background-color: #f3f3f3 !important;
+                border-left: 3pt solid #000 !important;
+                padding: 12pt;
+                margin: 15pt 0;
+                page-break-inside: avoid;
+            }
+            
+            .benefits-section h3 {
+                color: black !important;
+                font-size: 13pt;
+                margin-bottom: 10pt;
+            }
+            
+            /* 불릿 포인트 */
+            .bullet-list li:before {
+                color: black !important;
+            }
+            
+            /* 페이지 나누기 제어 */
+            .section {
+                page-break-inside: avoid;
+                margin-bottom: 25pt;
+            }
+            
+            /* 고아/과부 제어 */
+            h2, h3 {
+                page-break-after: avoid;
+                orphans: 3;
+                widows: 3;
+            }
+            
+            /* 프린트용 풋터 최적화 */
+            .document-footer {
+                margin-top: 30pt;
+                padding: 20pt 0;
+                border-top: 1pt solid #000;
+                page-break-inside: avoid;
+            }
+            
+            .company-info {
+                color: black !important;
+            }
+            
+            .company-name {
+                color: black !important;
+            }
+            
+            .contact-info {
+                color: #666 !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="print-button" onclick="window.print()">📄 인쇄하기</button>
+    <button class="print-button-mobile" onclick="window.print()">🖨️</button>
+    
+    <header class="document-header">
+        <h1 class="document-title">쏘카 vs 타운카 비교 분석</h1>
+    </header>
+
+    <section class="section">
+        <h2 class="section-title">1. 공급 구조</h2>
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th style="width: 20%;">플랫폼</th>
+                    <th style="width: 80%;">공급 방식</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="platform-name socar">🚗 쏘카</td>
+                    <td>회사가 자기 자본으로 차량을 보유 (Fleet 중심)</td>
+                </tr>
+                <tr>
+                    <td class="platform-name towncar">🚘 타운카</td>
+                    <td>개인이 소유한 차량을 2대까지 등록, 다수 개인 공급자 기반 → 플랫폼은 매칭 역할</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <section class="section">
+        <h2 class="section-title">2. 법적 위치</h2>
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th style="width: 20%;">플랫폼</th>
+                    <th style="width: 80%;">법적 근거</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="platform-name socar">🚗 쏘카</td>
+                    <td>「여객자동차 운수사업법」 제34조 자동차대여사업 (합법)</td>
+                </tr>
+                <tr>
+                    <td class="platform-name towncar">🚘 타운카</td>
+                    <td>규제 샌드박스 특례에 의해 허용, 특례 기간 무한</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <section class="section">
+        <h2 class="section-title">3. 플랫폼 역할</h2>
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th style="width: 20%;">플랫폼</th>
+                    <th style="width: 80%;">역할 및 책임</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="platform-name socar">🚗 쏘카</td>
+                    <td>차량 보유·관리·보험까지 책임지는 자본집약적 운영자</td>
+                </tr>
+                <tr>
+                    <td class="platform-name towncar">🚘 타운카</td>
+                    <td>개인 차량 공급자와 수요자를 연결하는 Aggregator</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <section class="section">
+        <h2 class="section-title">4. 수요자 특성</h2>
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th style="width: 20%;">구분</th>
+                    <th style="width: 80%;">특성</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="platform-name">공통점</td>
+                    <td>차량 소유 대신 이용을 선호하는 공유경제형 수요자</td>
+                </tr>
+                <tr>
+                    <td class="platform-name socar">🚗 쏘카</td>
+                    <td>직접 운전, B2C 대중층</td>
+                </tr>
+                <tr>
+                    <td class="platform-name towncar">🚘 타운카</td>
+                    <td>직접 운전, 공급 분산 구조로 차량 다양성과 지역성 특징</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <section class="section">
+        <h2 class="section-title">5. 보험 구조</h2>
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th style="width: 20%;">플랫폼</th>
+                    <th style="width: 80%;">보험 방식</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="platform-name socar">🚗 쏘카</td>
+                    <td>쏘카 법인이 대여사업용 자동차보험 일괄 가입, 이용자 자동 적용</td>
+                </tr>
+                <tr>
+                    <td class="platform-name towncar">🚘 타운카<br><small>(공급자)</small></td>
+                    <td>개인 공급자가 영업용 자동차보험에 가입, 운전 범위(본인·1+1·가족 한정) → 개인용 보험 구조와 유사<br>
+                    <strong>보험사 입장:</strong> 개인용 리스크를 영업용 요율로 인수 → 손해율 양호 예상</td>
+                </tr>
+                <tr>
+                    <td class="platform-name towncar">🚘 타운카<br><small>(수요자)</small></td>
+                    <td>매칭 후 수요자가 별도로 원데이 자동차보험 가입 필요<br>
+                    <strong>현재 문제점:</strong> 플랫폼 내 자동 가입 불가 → 별도 가입 과정으로 사용자 불편</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <div class="highlight-section">
+        <h3>6. Pain Point (타운카)</h3>
+        <ul class="bullet-list">
+            <li>매칭 순간 수요자 위험을 해결해야 하는데, 플랫폼 내 원데이 자동차보험 가입 불가</li>
+            <li>별도 가입 과정 필요 → 사용자 불편</li>
+        </ul>
+    </div>
+
+    <div class="solution-section">
+        <h3>7. 해결 방향 (제안)</h3>
+        <ul class="bullet-list">
+            <li>매칭 순간 원데이 자동차보험 API 연동으로 자동 가입</li>
+            <li>보험료는 타운카가 이용 서비스 요금과 함께 결제</li>
+            <li>단체형 원데이 자동차보험 필요</li>
+        </ul>
+    </div>
+
+    <div class="benefits-section">
+        <h3>8. 보험사 이득</h3>
+        <ul class="bullet-list">
+            <li>개인용 자동차보험 + 원데이 자동차보험 틈새 시장 선점</li>
+            <li>영업용 요율 적용하면서도 개인용 수준의 리스크 → 손해율 관리 용이</li>
+            <li>새로운 플랫폼 기반 단체형 상품 라인업 확보</li>
+        </ul>
+    </div>
+
+    <footer class="document-footer">
+        <div class="company-info">
+            <span class="company-name">(주)에스아이엠지</span>
+            <span class="contact-info">1877-3006</span>
+        </div>
+        <div style="margin-top: 20px;">
+            <a href="https://pcikorea.com/towncar/index2.html" 
+               target="_blank" 
+               style="color: #3498db; text-decoration: none; font-size: 0.95rem; padding: 8px 16px; border: 1px solid #3498db; border-radius: 5px; transition: all 0.3s ease;"
+               onmouseover="this.style.backgroundColor='#3498db'; this.style.color='white';"
+               onmouseout="this.style.backgroundColor='transparent'; this.style.color='#3498db';">
+                보험 연동 방안 바로가기 →
+            </a>
+        </div>
+    </footer>
+</body>
+</html>

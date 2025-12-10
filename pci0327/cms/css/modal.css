@@ -1,0 +1,131 @@
+
+
+
+.close-btn {
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    font-size: 20px;
+    color: #666;
+    cursor: pointer;
+}
+
+
+
+/* 테이블 스타일 단순화 */
+.modal-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.modal-table th,
+.modal-table td {
+    padding: 2px 6px;
+    border: 1px solid #eee;
+    height: 12px;
+    line-height: 12px;
+}
+
+.modal-table th {
+    background: #f8f9fa;
+    width: 100px;
+    text-align: right;
+}
+
+/* 입력 필드 스타일 단순화 */
+.modal-input {
+    width: 200px;
+    height: 26px;
+    padding: 0 8px;
+    border: 1px solid #fff;
+}
+
+/* 특정 입력 필드 너비 */
+#cardNum_ { width: 140px; }
+#cardExpiry_ { width: 80px; }
+#bankAccount_ { width: 160px; }
+#managerPhone_ { width: 120px; }
+
+/* 입력 필드가 있는 td만 상하 패딩 0으로 설정 */
+.modal-table td:has(input) {
+    padding-top: 0;
+    padding-bottom: 0;
+    height: 26px;
+}
+
+/* 모달 푸터 스타일 */
+.modal-footer {
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+}
+
+.button-group {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.modal-btn {
+    padding: 6px 12px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 13px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.modal-btn:hover {
+    background-color: #f8f9fa;
+}
+
+/* 상세 모달 스타일 */
+#detail-modal .modal-content {
+   
+    max-width: 800px;
+    background: #f8f9fa;
+    padding: 20px;
+}
+
+#detail-modal .modal-header {
+    margin-bottom: 5px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#detail-modal .modal-header h2 {
+    margin: 0;
+    font-size: 14px;
+    color: #333;
+}
+
+#detail-modal .modal-body {
+    background: #fff;
+    padding: 10px;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+#detail-modal .modal-table {
+    margin-bottom: 20px;
+}
+
+#detail-modal .modal-table th {
+    background: #f1f3f5;
+    color: #495057;
+
+}
+#detail-modal .modal-table th,td {
+	padding: 6px 7px;
+    border: 1px solid #eee;
+    line-height: 1.5;
+}
+
+#detail-modal .modal-footer {
+    margin-top: 25px;
+    text-align: right;
+} 

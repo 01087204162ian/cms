@@ -1,0 +1,65 @@
+/* 컨테이너 중앙 로딩 스타일 */
+.kje-loading-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.8);
+  z-index: 1000;
+}
+
+/* 기본 스피너 애니메이션 */
+.kje-spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  border-top-color: #3498db;
+  animation: kje-spin 1s linear infinite;
+}
+
+@keyframes kje-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* 로딩 텍스트 스타일 */
+.kje-loading-text {
+  margin-top: 15px;
+  font-size: 16px;
+  font-weight: 500;
+  color: #333;
+}
+
+/* 점 애니메이션 */
+.kje-loading-dots {
+  display: inline-block;
+  position: relative;
+  width: 20px;
+}
+
+.kje-loading-dots:after {
+  content: '...';
+  animation: kje-loading-dots 1.5s infinite steps(4, end);
+  display: inline-block;
+  width: 0;
+  overflow: hidden;
+}
+
+@keyframes kje-loading-dots {
+  0% { width: 0; }
+  20% { width: 5px; }
+  40% { width: 10px; }
+  60% { width: 15px; }
+  80% { width: 20px; }
+}
+
+/* 컨테이너 스타일 */
+.kje-list-container {
+  position: relative;
+  min-height: 300px;
+}

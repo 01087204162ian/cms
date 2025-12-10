@@ -1,0 +1,302 @@
+/* 테이블 기본 스타일 */
+.data-table {
+    width: 100%;
+    min-width: 1200px;
+    border-collapse: collapse;
+    border-spacing: 0;
+    font-size: 13px;
+    margin: 0;
+    padding: 0;
+    border: 1px solid #e9ecef;  /* 테이블 전체 테두리 추가 */
+}
+
+/* 테이블 헤더 스타일 */
+.data-table th {
+    background: #2c3e50;
+    color: #ffffff;
+    font-weight: 500;
+    padding: 10px 8px;
+    text-align: center;  /* 중앙 정렬로 변경 */
+    border: 1px solid #34495e;  /* 헤더 셀 테두리 추가 */
+    white-space: nowrap;
+    font-size: 12px;
+}
+
+/* 컬럼별 너비 조정 */
+.data-table .col-num { width: 15px; text-align: center; }
+.data-table .col-business-num { width: 120px; text-align: center; }
+.data-table .col-school { width: 200px; text-align: center; }
+.data-table .col-students { width: 15px; text-align: center; }
+.data-table .col-phone { width: 120px; text-align: center; }
+.data-table .col-date { width: 100px; text-align: center; }
+.data-table .col-policy { width: 120px; text-align: center; }
+.data-table .col-premium { width: 40px; text-align: center; }
+.data-table .col-insurance { width: 100px; text-align: center; }
+.data-table .col-status { width: 120px; text-align: center; }
+.data-table .col-contact { width: 100px; text-align: center; }
+.data-table .col-action { width: 70px; text-align: center; }
+.data-table .col-memo { width: 200px; text-align: center; }
+.data-table .col-manager { width: 50px; text-align: center; }
+
+/* 셀 정렬 및 패딩 */
+.data-table td {
+    padding: 2px 4px;  /* 상하 2px, 좌우 8px로 조정 */
+    border: 1px solid #e9ecef;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: center;
+}
+
+/* 특정 컬럼은 다른 정렬이 필요한 경우 */
+.data-table td.text-left {
+    text-align: left;
+}
+
+.data-table td.text-right {
+    text-align: right;
+}
+
+/* 짝수 행 배경색 */
+.data-table tr:nth-child(even) {
+    background-color: #f8f9fa;
+}
+
+/* 행 호버 효과 */
+.data-table tr:hover {
+    background-color: #f1f3f5;
+}
+
+/* 클릭 가능한 셀 스타일 */
+.data-table td.clickable {
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.data-table td.clickable:hover {
+    background-color: #e9ecef;
+    color: #007bff;  /* 파란색으로 변경 */
+    font-weight: 500;  /* 살짝 두껍게 */
+}
+
+/* 메모 입력 필드 스타일 */
+.memo-input {
+    width: 100%;
+    padding: 2px 4px;  /* 상하 패딩 0, 좌우 패딩 8px */
+    border: 1px solid #f8f9fa;
+    border-radius: 4px;
+    font-size: 13px;
+    transition: border-color 0.2s;
+    background-color: transparent;  /* 배경색을 투명하게 설정 */
+}
+
+/* 메모 td 패딩 조정 */
+.data-table td:has(.memo-input) {
+    padding: 0 2px;
+}
+
+/* 짝수 행의 메모 입력 필드 배경색 */
+.data-table tr:nth-child(even) .memo-input {
+    background-color: #f8f9fa;  /* 짝수 행 배경색과 동일하게 */
+}
+
+/* 홀수 행의 메모 입력 필드 배경색 */
+.data-table tr:nth-child(odd) .memo-input {
+    background-color: #ffffff;  /* 홀수 행 배경색과 동일하게 */
+}
+
+.memo-input:hover {
+    border-color: #adb5bd;
+}
+
+.memo-input:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0,123,255,.1);
+}
+
+/* 보험사와 상태 선택 드롭다운 스타일 */
+.insurance-select, .status-select {
+    width: 100%;
+    padding: 0 8px;
+    border-radius: 4px;
+    font-size: 13px;
+    background-color: transparent;
+    transition: border-color 0.2s;
+}
+
+/* 짝수 행의 select 스타일 */
+.data-table tr:nth-child(even) .insurance-select,
+.data-table tr:nth-child(even) .status-select {
+    background-color: #f8f9fa;
+    border: 1px solid #f8f9fa;  /* 짝수 행 배경색과 동일한 테두리 */
+}
+
+/* 홀수 행의 select 스타일 */
+.data-table tr:nth-child(odd) .insurance-select,
+.data-table tr:nth-child(odd) .status-select {
+    background-color: #ffffff;
+    border: 1px solid #ffffff;  /* 홀수 행 배경색과 동일한 테두리 */
+}
+
+/* hover 효과 */
+.insurance-select:hover, .status-select:hover {
+    border-color: #adb5bd;
+}
+
+/* focus 효과 */
+.insurance-select:focus, .status-select:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0,123,255,.1);
+}
+
+/* 클레임 모달 스타일 */
+/*.claimModal {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    overflow-y: auto;
+}
+
+.claimModal .modal-content {
+    background-color: #fefefe;
+    margin: 5% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 90%;
+    max-width: 1000px;
+    border-radius: 5px;
+    position: relative;
+}
+
+.claimModal .modal-header {
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.claimModal .close-btn {
+    position: absolute;
+    right: 20px;
+    top: 10px;
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.claimModal .close-btn:hover {
+    color: #000;
+}
+
+.claimModal .modal-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.claimModal .modal-table th,
+.claimModal .modal-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.claimModal .modal-table th {
+    background-color: #f5f5f5;
+    font-weight: bold;
+    width: 20%;
+}
+
+.claimModal .modal-table td {
+    width: 30%;
+}
+
+.claimModal h2 {
+    margin: 0;
+    font-size: 1.5em;
+    color: #333;
+}*/
+
+/* 업로드 모달 스타일 */
+/*#upload-modal {
+    display: none;
+    position: fixed;
+    z-index: 11000 !important;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    overflow-y: auto;
+}
+
+#upload-modal .modal-content {
+    position: relative;
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 400px;
+    border-radius: 5px;
+    z-index: 11001 !important;
+}
+
+#upload-modal .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+#upload-modal .modal-body {
+    text-align: center;
+    padding: 20px 0;
+}
+
+#upload-modal .modal-footer {
+    text-align: center;
+    padding-top: 20px;
+    gap: 10px;
+    display: flex;
+    justify-content: center;
+}
+
+#upload-modal .btn-confirm,
+#upload-modal .btn-cancel {
+    padding: 8px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin: 0 5px;
+}
+
+#upload-modal .btn-confirm {
+    background-color: #007bff;
+    color: white;
+    border: none;
+}
+
+#upload-modal .btn-cancel {
+    background-color: #6c757d;
+    color: white;
+    border: none;
+}
+
+#upload-modal .close-btn {
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#upload-modal .close-btn:hover {
+    color: #000;
+} */

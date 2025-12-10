@@ -1,0 +1,60 @@
+CREATE TABLE `menu_clients` (
+  `id` int(11) NOT NULL,
+  `menu_1st` varchar(100) DEFAULT NULL,
+  `menu_2nd` varchar(100) DEFAULT NULL,
+  `menu_3rd` varchar(100) DEFAULT NULL,
+  `manual_writer` varchar(50) DEFAULT NULL,
+  `company_id` int(11) DEFAULT NULL,
+  `description` text DEFAULT NULL,
+  `folder` varchar(100) DEFAULT NULL,
+  `is_active` tinyint(1) DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+-- 거래처 테이블
+CREATE TABLE `menu_clients_info` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `menu_client_id` int(11) DEFAULT NULL COMMENT 'menu_clients 테이블 ID',
+  `client_name` varchar(200) NOT NULL COMMENT '거래처명',
+  `business_number` varchar(20) DEFAULT NULL COMMENT '사업자번호',
+  `corporate_number` varchar(20) DEFAULT NULL COMMENT '법인번호',
+  `description` text DEFAULT NULL COMMENT '설명',
+  `our_manager` varchar(100) DEFAULT NULL COMMENT '당사 담당자',
+  `is_active` tinyint(1) DEFAULT 1 COMMENT '활성화 여부',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `business_number` (`business_number`),
+  UNIQUE KEY `corporate_number` (`corporate_number`),
+  KEY `fk_menu_clients_info_menu_client_id` (`menu_client_id`),
+  INDEX `idx_client_name` (`client_name`),
+  INDEX `idx_our_manager` (`our_manager`),
+  CONSTRAINT `fk_menu_clients_info_menu_client_id` FOREIGN KEY (`menu_client_id`) REFERENCES `menu_clients` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='거래처 정보 테이블';
+
+-- 거래처 담당자 테이블
+CREATE TABLE `menu_client_contacts` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `client_id` int(11) NOT NULL COMMENT '거래처 ID',
+  `contact_name` varchar(100) NOT NULL COMMENT '담당자 성명',
+  `phone` varchar(20) DEFAULT NULL COMMENT '연락처',
+  `email` varchar(100) DEFAULT NULL COMMENT '이메일',
+  `description` text DEFAULT NULL COMMENT '설명',
+  `is_active` tinyint(1) DEFAULT 1 COMMENT '활성화 여부',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `fk_menu_client_contacts_client_id` (`client_id`),
+  INDEX `idx_contact_name` (`contact_name`),
+  INDEX `idx_email` (`email`),
+  CONSTRAINT `fk_menu_client_contacts_client_id` FOREIGN KEY (`client_id`) REFERENCES `menu_clients_info` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='거래처 담당자 테이블';
+
+
+-- menu_clients 테이블에 client_id 컬럼 추가 (기존 테이블과 연동)
+ALTER TABLE `menu_clients` 
+ADD COLUMN `client_id` int(11) DEFAULT NULL COMMENT '거래처 ID' AFTER `company_id`,
+ADD KEY `fk_menu_clients_client_id` (`client_id`),
+ADD CONSTRAINT `fk_menu_clients_client_id` FOREIGN KEY (`client_id`) REFERENCES `menu_clients_info` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;

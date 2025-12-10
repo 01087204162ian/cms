@@ -1,0 +1,47 @@
+
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InsurTech CMS</title>
+	<!-- 구글 폰트: Noto Sans KR -->
+	<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/menu.css">
+	<link rel="stylesheet" href="css/styles.css">
+	<!-- Flatpickr CSS -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+	<!-- Flatpickr JS -->
+	<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+</head>
+<body>
+    <button class="menu-toggle" onclick="toggleSidebar()">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 12h18M3 6h18M3 18h18"/>
+        </svg>
+    </button>
+
+    <div class="overlay" onclick="toggleSidebar()"></div>
+
+    <div class="sidebar"  id="sidebar">
+        <!-- 사이드바 -->
+    </div>
+
+    <div class="main-content">
+        <div class="page-header">
+            <h1 class="page-title">관리자 대시보드</h1>
+        </div>
+        <div class="content-area" id="content-container">
+            <!--<div id="content">
+                메인 페이지입니다. 좌측 메뉴에서 원하시는 항목을 선택해주세요.
+            </div>-->
+        </div>
+    </div>
+
+    <script src="js/scripts.js"></script>
+	<script src="js/session.js"></script>
+	<script src="js/datetime.js"></script>
+</body>
+</html>

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>홀인원 보험 - 가입내역</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <!-- CSS 통합: ace.css에 history 관련 스타일이 포함되어 있음 -->
+
+    <link href="css/ace.css" rel="stylesheet">
+</head>
+<body id="history-page">
+    <div class="app-container">
+        <!-- 네비게이션 탭 -->
+        <div class="nav-tabs-container">
+            <ul class="nav-tabs">
+                <li><button id="nav-signup">가입 신청</button></li>
+                <li><button id="nav-claim">보상 신청</button></li>
+                <li><button id="nav-history" class="active">가입내역</button></li>
+                <li><button id="nav-faq">Q&A</button></li>
+                <li><button id="nav-terms">보장 내용</button></li>
+            </ul>
+        </div>
+        
+        <!-- 가입내역 페이지 -->
+        <div class="page-content">
+            <!-- 가입내역 배너 -->
+            <div class="insurance-banner history-banner" role="region" aria-label="가입내역 조회">
+                <!-- 우측 상단 로고 -->
+                <div class="top-right-logo">
+                    <img src="images/db-logo.png" alt="DB손해보험" class="logo-img">
+                </div>
+                
+                <div class="banner-title">가입내역 조회</div>
+                <div class="banner-subtitle">DB 손해보험</div>
+                <div class="banner-amount">홀인원 골프보험</div>
+                
+                <!-- 검색 아이콘 장식 -->
+                <div class="search-decoration">
+                    <div class="search-icon-container">
+                        <div class="search-icon">🔍</div>
+                        <div class="search-circles">
+                            <div class="circle circle-1"></div>
+                            <div class="circle circle-2"></div>
+                            <div class="circle circle-3"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-section">
+                <div class="section-title">
+                    <span class="section-icon">📋</span>
+                    가입내역 조회
+                </div>
+                
+                <!-- 검색 섹션 -->
+                <div class="search-section">
+                    <div class="search-container">
+                        <div class="form-group enhanced">
+                            <label for="search-phone" class="form-label">
+                                <span class="input-icon">📱</span>휴대폰번호 <span class="required">*</span>
+                            </label>
+                            <div class="input-with-icon">
+                                
+                                <input type="tel" class="form-control" id="search-phone" 
+                                       placeholder="010-1234-5678" required 
+                                       maxlength="13" 
+                                       pattern="[0-9]{3}-[0-9]{4}-[0-9]{4}">
+                            </div>
+                            <small class="form-help">가입 시 사용한 휴대폰번호를 입력하세요</small>
+                        </div>
+                        
+                        <button class="submit-button enhanced" id="search-button">
+                            <span class="button-text">조회하기</span>
+                            <span class="button-icon">🔍</span>
+                            <div class="button-loading" style="display: none;">
+                                <div class="loading-spinner"></div>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- 로딩 메시지 -->
+                <div id="loading-message" style="display: none;">
+                    <div class="loading-container">
+                        <div class="loading-spinner large"></div>
+                        <div class="loading-text">가입내역을 조회하고 있습니다...</div>
+                    </div>
+                </div>
+                
+                <!-- 검색 결과 섹션 -->
+                <div id="history-results" class="history-results" style="display: none;">
+                    <div class="history-header">
+                        <div class="history-title">
+                            <span class="title-icon">📋</span>
+                            가입 내역
+                        </div>
+                        <div class="history-count">
+                            총 <span id="history-count-number">0</span>건
+                        </div>
+                    </div>
+                    
+                    <div id="history-list" class="history-list">
+                        <!-- 조회 결과가 여기에 동적으로 추가됩니다 -->
+                    </div>
+                </div>
+                
+                <!-- 검색 결과 없음 -->
+                <div id="no-history" class="no-history" style="display: none;">
+                    <div class="no-history-animation">
+                        <div class="no-history-icon">📋</div>
+                        <div class="search-lines">
+                            <div class="search-line line-1"></div>
+                            <div class="search-line line-2"></div>
+                            <div class="search-line line-3"></div>
+                        </div>
+                    </div>
+                    <div class="no-history-content">
+                        <div class="no-history-text">가입 내역이 없습니다</div>
+                        <div class="no-history-subtext">
+                            입력하신 번호로 가입된 내역을 찾을 수 없습니다<br>
+                            번호를 다시 확인해주시거나 새로 가입해주세요
+                        </div>
+                        <div class="no-history-actions">
+                            <button class="secondary-button" id="try-again-search">
+                                다시 조회하기
+                            </button>
+                            <button class="submit-button" id="go-to-signup-btn">
+                                보험 가입하기
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 상세 정보 모달 -->
+        <div class="popup-overlay" id="detail-popup-overlay">
+            <div class="popup-content large">
+                <div class="popup-header">
+                    <div class="popup-title" id="detail-popup-title">가입 상세 정보</div>
+                    <button class="popup-close" id="detail-popup-close">×</button>
+                </div>
+                <div class="popup-body">
+                    <div id="detail-popup-content">
+                        <!-- 상세 정보가 여기에 표시됩니다 -->
+                    </div>
+                </div>
+                <div class="popup-footer">
+                    <button class="popup-button secondary" id="detail-popup-cancel">닫기</button>
+                    <button class="popup-button primary" id="detail-popup-print">인쇄하기</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 알림 팝업 -->
+        <div class="popup-overlay" id="popup-overlay">
+            <div class="popup-content">
+                <div class="popup-title" id="popup-title">알림</div>
+                <div class="popup-message" id="popup-message">처리가 완료되었습니다.</div>
+                <button class="popup-button" id="popup-button">확인</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 전화번호 자동 포맷팅
+            const phoneInput = document.getElementById('search-phone');
+            if (phoneInput) {
+                phoneInput.addEventListener('input', function(e) {
+                    let value = e.target.value.replace(/[^\d]/g, '');
+                    
+                    if (value.length >= 3 && value.length <= 7) {
+                        value = value.replace(/(\d{3})(\d+)/, '$1-$2');
+                    } else if (value.length >= 8) {
+                        value = value.replace(/(\d{3})(\d{4})(\d+)/, '$1-$2-$3');
+                    }
+                    
+                    e.target.value = value;
+                });
+
+                // 포커스 시 입력 필드 하이라이트
+                phoneInput.addEventListener('focus', function() {
+                    this.classList.add('focused');
+                });
+
+                phoneInput.addEventListener('blur', function() {
+                    this.classList.remove('focused');
+                });
+            }
+
+            // 검색 애니메이션 효과
+            const searchIcon = document.querySelector('.search-icon');
+            if (searchIcon) {
+                setInterval(() => {
+                    searchIcon.style.transform = 'scale(1.1)';
+                    setTimeout(() => {
+                        searchIcon.style.transform = 'scale(1)';
+                    }, 500);
+                }, 3000);
+            }
+
+            // 서클 애니메이션 시작
+            const circles = document.querySelectorAll('.circle');
+            circles.forEach((circle, index) => {
+                circle.style.animationDelay = `${index * 0.3}s`;
+            });
+
+            // 도움말 토글 기능
+            const helpTitle = document.querySelector('.help-title');
+            const helpContent = document.querySelector('.help-content');
+            if (helpTitle && helpContent) {
+                helpTitle.addEventListener('click', function() {
+                    helpContent.classList.toggle('expanded');
+                    const icon = this.querySelector('.help-icon');
+                    icon.textContent = helpContent.classList.contains('expanded') ? '💡' : '💡';
+                });
+            }
+
+            // 키보드 단축키 (Enter로 검색)
+            phoneInput?.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    document.getElementById('search-button')?.click();
+                }
+            });
+        });
+    </script>
+    <script src="js/common.js"></script>
+    <script src="js/history.js"></script>
+</body>
+</html>

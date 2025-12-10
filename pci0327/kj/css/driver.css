@@ -1,0 +1,193 @@
+/* 공통 스타일 */
+.dashboard-card {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  padding: 20px;
+  margin-bottom: 20px;
+  transition: all 0.3s ease;
+}
+
+/* 테이블 스타일 개선 */
+.table {
+  margin-bottom: 0;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.table thead th {
+  background-color: #ffffff;
+  border-bottom: 1px solid #dee2e6;
+  padding: 6px;
+  font-weight: 300;
+  color: #495057;
+  white-space: nowrap;
+}
+
+.table tbody td {
+  padding: 6px;
+  vertical-align: middle;
+  border-top: 1px solid #e9ecef;
+}
+
+/* 페이지네이션 스타일 개선 */
+.pagination {
+  margin-bottom: 0;
+}
+
+.pagination .page-item .page-link {
+  border-radius: 4px;
+  margin: 0 3px;
+  color: #495057;
+  border: 1px solid #dee2e6;
+  transition: all 0.2s;
+}
+
+.pagination .page-item.active .page-link {
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+.pagination .page-item .page-link:hover {
+  background-color: #e9ecef;
+  border-color: #dee2e6;
+}
+
+/* 테이블 반응형 조정 */
+@media (max-width: 991.98px) {
+  .table-responsive {
+    padding-bottom: 5px;
+  }
+  
+  .table th, .table td {
+    padding: 10px 8px;
+    font-size: 14px;
+  }
+}
+
+/* 모바일 카드 뷰 스타일 */
+.mobile-card-view {
+  display: none;
+}
+
+@media (max-width: 767.98px) {
+  .table-responsive {
+    display: none;
+  }
+  
+  .mobile-card-view {
+    display: block;
+  }
+  
+  .driver-card {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+    padding: 15px;
+    margin-bottom: 15px;
+    transition: all 0.2s ease;
+    border-left: 4px solid #007bff;
+  }
+  
+  .driver-card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    transform: translateY(-2px);
+  }
+  
+  .driver-card h6 {
+    border-bottom: 1px solid #e9ecef;
+    padding-bottom: 8px;
+    margin-bottom: 12px;
+    font-weight: 600;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .driver-card h6 small {
+    font-size: 11px;
+    background: #f0f5ff;
+    color: #4a6bdf;
+    padding: 2px 6px;
+    border-radius: 10px;
+  }
+  
+  .driver-card .info-row {
+    display: flex;
+    margin-bottom: 8px;
+    align-items: center;
+  }
+  
+  .driver-card .info-label {
+    font-weight: 500;
+    color: #6c757d;
+    width: 80px;
+    flex-shrink: 0;
+    font-size: 13px;
+  }
+  
+  .driver-card .info-value {
+    flex-grow: 1;
+    font-size: 14px;
+  }
+  
+  .status-normal {
+    color: #28a745;
+    font-weight: 500;
+  }
+  
+  .status-pending {
+    color: #ffc107;
+    font-weight: 500;
+  }
+  
+  .status-canceled {
+    color: #dc3545;
+    font-weight: 500;
+  }
+  
+  /* 모바일에서 선택 상자 스타일 개선 */
+  .mobile-card-view .kje-status-ch {
+    width: 100%;
+    padding: 8px;
+    border-radius: 4px;
+    margin-top: 4px;
+  }
+}
+
+/* 선택 상자 스타일 개선 */
+.kje-status-ch {
+  padding: 3px 4px;
+  border-radius: 4px;
+  border: 1px solid #ced4da;
+  background-color: #fff;
+  font-size: 14px;
+}
+
+/* 로딩 인디케이터 스타일 */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #007bff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

@@ -1,0 +1,550 @@
+<!-- common.js를 먼저 로드 -->
+<script src="/cms/js/common.js"></script>
+<script src="/cms/js/field-practice.js"></script>
+
+<div class="list-container">
+    <!-- 검색 영역 -->
+    <div class="list-header">
+        <div class="left-area">
+            <div class="search-area">
+                <select id="searchType">
+                    <option value="1">정확</option>
+                    <option value="2">포함</option>
+                    <option value="3">증권번호</option>
+                </select>
+                <input type="text" id="searchKeyword" placeholder="검색어를 입력하세요" onkeypress="if(event.key === 'Enter') searchList()">
+                <button class="search-button" onclick="searchList()">검색</button>
+            </div>
+        </div>
+        <div class="right-area">
+            <button class="stats-button" onclick="showStatsModal()">통계</button>
+        </div>
+    </div>
+
+    <!-- 리스트 영역 -->
+    <div class="list-content">
+        <div class="data-table-container">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th class="col-num">No</th>
+                        <th class="col-business-num">사업자번호</th>
+                        <th class="col-school">학교명</th>
+                        <th class="col-students">학생수</th>
+                        <th class="col-phone">연락처</th>
+                        <th class="col-date">신청일</th>
+                        <th class="col-policy">증권번호</th>
+                        <th class="col-premium">보험료</th>
+                        <th class="col-insurance">보험사</th>
+                        <th class="col-status">상태</th>
+                        <th class="col-contact">담당자</th>
+                        <th class="col-action">증권</th>
+                        <th class="col-action">클레임</th>
+                        <th class="col-memo">메모</th>
+                        <th class="col-manager">관리자</th>
+                    </tr>
+                </thead>
+                <tbody id="applicationList">
+                    <!-- 데이터가 여기에 동적으로 로드됨 -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- 페이지네이션 -->
+    <div class="pagination">
+        <button onclick="changePage('prev')" id="prevPage">이전</button>
+        <span id="currentPage">1</span> / <span id="totalPages">1</span>
+        <button onclick="changePage('next')" id="nextPage">다음</button>
+    </div>
+</div>
+
+<style>
+/* main-content 스타일 제거하고 list-container 수정 */
+.list-container {
+    width: 100%;
+    padding: 0;          /* 패딩 제거 */
+    box-sizing: border-box;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 리스트 헤더 수정 */
+.list-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;  /* 상단 정렬로 변경 */
+    padding: 3px 20px;
+    background-color: #f8f9fa;
+    margin: 0;
+    height: 48px;
+    border-radius: 8px;
+}
+
+.left-area {
+    display: flex;
+    align-items: center;     /* 수직 중앙 정렬 */
+}
+
+/* right-area 표시 */
+.right-area {
+    display: flex;  /* none에서 flex로 변경 */
+    align-items: center;
+}
+
+/* 검색 영역 스타일 */
+.search-area {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    transform: translateY(-3px);  /* 위로 3px 이동 */
+}
+
+.search-area select,
+.search-area input {
+    padding: 8px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 13px;
+    height: 35px;
+}
+
+.search-button {
+    padding: 8px 12px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    height: 35px;
+}
+
+.search-button:hover {
+    background: #0056b3;
+}
+
+/* 통계 버튼 스타일 */
+.stats-button {
+    padding: 3px 10px;
+    border-radius: 3px;
+    height: 35px;
+    font-size: 13px;
+    cursor: pointer;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    margin-top: 6px;  /* 상단 여백 추가 */
+}
+
+.stats-button:hover {
+    background-color: #218838;
+}
+
+/* 리스트 컨텐츠 수정 */
+.list-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    margin: 0;  /* 마진 제거 */
+    padding: 0; /* 패딩 제거 */
+}
+
+/* 데이터 테이블 컨테이너 수정 */
+.data-table-container {
+    flex: 1;
+    width: 100%;
+    overflow-x: auto;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+/* 페이지네이션 수정 */
+.pagination {
+    width: 100%;
+    margin: 20px 0;
+}
+
+.pagination button {
+    padding: 5px 15px;
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.pagination button:hover {
+    background-color: #e9ecef;
+}
+
+/* 테이블 기본 스타일 */
+.data-table {
+    width: 100%;
+    min-width: 1200px;
+    border-collapse: collapse;
+    border-spacing: 0;
+    font-size: 13px;
+    margin: 0;
+    padding: 0;
+}
+
+/* 테이블 헤더 스타일 */
+.data-table th {
+    background: #2c3e50;
+    color: #ffffff;
+    font-weight: 500;
+    padding: 10px 8px;
+    text-align: left;
+    border-bottom: 2px solid #34495e;
+    white-space: nowrap;
+    font-size: 12px;
+}
+
+/* 컬럼별 너비 조정 */
+.data-table .col-num { width: 50px; text-align: center; }
+.data-table .col-business-num { width: 120px; }
+.data-table .col-school { width: 180px; }
+.data-table .col-students { width: 70px; text-align: center; }
+.data-table .col-phone { width: 120px; }
+.data-table .col-date { width: 100px; text-align: center; }
+.data-table .col-policy { width: 120px; }
+.data-table .col-premium { width: 100px; text-align: right; }
+.data-table .col-insurance { width: 100px; }
+.data-table .col-status { width: 120px; }
+.data-table .col-contact { width: 100px; }
+.data-table .col-action { width: 70px; text-align: center; }
+.data-table .col-memo { width: 150px; }
+.data-table .col-manager { width: 100px; }
+
+/* 셀 정렬 및 패딩 */
+.data-table td {
+    padding: 8px;
+    border-bottom: 1px solid #e9ecef;
+    white-space: nowrap;  /* 텍스트 줄바꿈 방지 */
+    overflow: hidden;
+    text-overflow: ellipsis;  /* 긴 텍스트 처리 */
+}
+
+/* 짝수 행 배경색 */
+.data-table tr:nth-child(even) {
+    background-color: #f8f9fa;
+}
+
+/* 행 호버 효과 */
+.data-table tr:hover {
+    background-color: #f1f3f5;
+}
+
+/* 셀렉트 박스 스타일 */
+.insurance-select, .status-select {
+    padding: 4px 6px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 13px;
+    width: 100%;
+    background: #fff;
+    cursor: pointer;
+    transition: border-color 0.15s ease-in-out;
+}
+
+.insurance-select:hover, .status-select:hover {
+    border-color: #adb5bd;
+}
+
+.insurance-select:focus, .status-select:focus {
+    border-color: #80bdff;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+}
+
+/* 버튼 스타일 */
+.action-button {
+    padding: 4px 8px;
+    border: none;
+    border-radius: 4px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.upload-button {
+    background: #28a745;
+    color: white;
+}
+
+.upload-button:disabled {
+    background: #6c757d;
+    cursor: not-allowed;
+}
+
+.claim-button {
+    background: #dc3545;
+    color: white;
+}
+
+.action-button:hover:not(:disabled) {
+    opacity: 0.9;
+}
+
+/* 페이지네이션 스타일 */
+.pagination {
+    margin: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.pagination button {
+    padding: 8px 16px;
+    border: 1px solid #dee2e6;
+    background: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.pagination button:hover {
+    background: #e9ecef;
+}
+
+.pagination span {
+    font-size: 14px;
+    color: #495057;
+}
+
+/* 클릭 가능한 셀 스타일 */
+.clickable-cell {
+    cursor: pointer;
+}
+
+.clickable-cell:hover {
+    background-color: #e9ecef;
+}
+
+/* 모달 스타일 */
+#modal-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+    display: none;
+}
+
+#detail-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 0;
+    border-radius: 12px;
+    z-index: 1001;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    width: 95%;
+    max-width: 1000px;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 25px;
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #eee;
+    border-radius: 12px 12px 0 0;
+    flex-shrink: 0;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 20px;  /* 전설계번호와 가입설계번호 사이 간격 */
+}
+
+.header-left h3 {
+    font-size: 16px;
+    color: #1a73e8;
+    font-weight: 500;
+    margin: 0;
+}
+
+#gabunho-display {
+    color: #555;  /* 가입설계번호는 다른 색상으로 구분 */
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;  /* select와 닫기 버튼 사이 간격 */
+}
+
+.styled-select {
+    padding: 5px 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 13px;
+    background-color: #fff;
+    color: #333;
+    min-width: 120px;
+}
+
+.styled-select:focus {
+    border-color: #4dabf7;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(77, 171, 247, 0.1);
+}
+
+.modal-header h3 {
+    font-size: 16px;
+    color: #1a73e8;  /* Google Blue 색상 */
+    font-weight: 500;
+    margin: 0;
+}
+
+.modal-header button {
+    border: none;
+    background: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: #666;
+    padding: 5px;
+    border-radius: 5px;
+    transition: all 0.2s;
+    line-height: 1;
+}
+
+.modal-header button:hover {
+    background-color: #e9ecef;
+    color: #333;
+}
+
+.modal-body {
+    padding: 25px;
+    overflow-y: auto;
+    flex-grow: 1;
+}
+
+/* 모달 테이블 스타일 */
+.modal-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-bottom: 0;  /* 마진 제거 */
+    font-size: 13px;
+}
+
+.modal-table th,
+.modal-table td {
+    padding: 12px 15px;
+    border: 1px solid #eee;
+    line-height: 1.5;
+}
+
+.modal-table th {
+    background-color: #f8f9fa;
+    font-weight: 500;
+    width: 120px;
+    text-align: right;
+    color: #555;
+}
+
+.modal-table td {
+    background-color: #fff;
+}
+
+/* 입력 필드 스타일 */
+.modal-input {
+    width: 100%;
+    padding: 0px 12px;
+    border: 1px solid #fff;
+    border-radius: 6px;
+    font-size: 13px;
+    transition: all 0.2s;
+}
+
+.modal-input:focus {
+    border-color: #4dabf7;
+    box-shadow: 0 0 0 3px rgba(77, 171, 247, 0.1);
+    outline: none;
+}
+
+/* 특정 입력 필드 너비 조정 */
+#cardNum_ {
+    width: 70%;
+}
+
+#cardExpiry_ {
+    width: 25%;
+}
+</style>
+
+
+
+<script>
+// 통계 모달 표시 함수
+window.showStats = async function() {
+    const modal = document.getElementById('stats-modal');
+    modal.style.display = 'block';
+    document.getElementById('modal-container').style.display = 'block';
+    document.getElementById('modal-container').classList.add('active');
+    
+    try {
+        // 통계 데이터 로드
+        const response = await fetch('/cms/api/field-practice/statistics.php');
+        const stats = await response.json();
+        
+        // 통계 데이터 표시
+        document.getElementById('totalStats').innerHTML = `
+            총 신청 건수: ${stats.total}건<br>
+            총 보험료: ${Number(stats.totalPremium).toLocaleString()}원
+        `;
+        
+        document.getElementById('monthStats').innerHTML = `
+            이번 달 신청: ${stats.monthTotal}건<br>
+            이번 달 보험료: ${Number(stats.monthPremium).toLocaleString()}원
+        `;
+        
+        document.getElementById('insuranceStats').innerHTML = `
+            한화: ${stats.hanwha}건<br>
+            메리츠: ${stats.meritz}건
+        `;
+        
+        document.getElementById('statusStats').innerHTML = `
+            접수: ${stats.status1}건<br>
+            보험료 안내중: ${stats.status2}건<br>
+            청약서: ${stats.status3}건<br>
+            입금대기중: ${stats.status4}건<br>
+            입금확인: ${stats.status5}건<br>
+            증권 발급: ${stats.status6}건
+        `;
+        
+    } catch (error) {
+        console.error('통계 데이터 로드 실패:', error);
+        document.querySelectorAll('.stats-value').forEach(el => {
+            el.innerHTML = '데이터 로드 실패';
+        });
+    }
+};
+
+// 통계 모달 닫기 함수
+window.closeStatsModal = function() {
+    const modal = document.getElementById('stats-modal');
+    modal.style.display = 'none';
+    document.getElementById('modal-container').style.display = 'none';
+    document.getElementById('modal-container').classList.remove('active');
+};
+</script> 

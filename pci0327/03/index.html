@@ -1,0 +1,2971 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- 보안 관련 메타 태그 추가 -->
+    
+    <!-- XSS 방어를 위한 CSP 설정 -->
+
+<meta http-equiv="Content-Security-Policy" 
+      content="default-src 'self'; 
+               script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com;
+               connect-src 'self' https://lincinsu.kr https://kjstation.kr;
+               style-src 'self' 'unsafe-inline';
+               img-src 'self' data: https:;
+               font-src 'self' https:;">
+
+
+    <!-- MIME 스니핑 방지 -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    
+    <!-- XSS 필터 활성화 -->
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+    
+    <!-- HTTPS 강제 설정 -->
+    <meta http-equiv="Strict-Transport-Security" content="max-age=31536000; includeSubDomains">
+    <meta charset="UTF-8">
+    <!-- 레퍼러 정책 설정 -->
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+
+	<link rel="stylesheet" href="./css/loading-styles.css">
+	<link rel="stylesheet" href="./css/company.css">
+	<link rel="stylesheet" href="./css/policy.css">
+	<link rel="stylesheet" href="./css/hollinwon.css">
+	<link rel="stylesheet" href="./css/kj_endorseList.css">
+	<link rel="stylesheet" href="./css/kj_mamual.css">
+	<link rel="stylesheet" href="./css/field_practice.css">
+	<link rel="stylesheet" href="./css/field_claim.css">
+	<link rel="stylesheet" href="./css/employee_list1.css">
+    <title>보험대리점 CMS</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Pretendard', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+        
+        :root {
+            --active-color: #3b82f6;
+            --active-bg: #eff6ff;
+            --hover-bg: #f1f5f9;
+            --active-indicator: #3b82f6;
+            --sidebar-width: 280px;
+            --sidebar-collapsed-width: 70px;
+            --header-height: 60px;
+        }
+
+        body {
+            display: flex;
+            min-height: 100vh;
+            background-color: #f8f9fa;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* 햄버거 메뉴 버튼 (모바일용) */
+        .mobile-menu-toggle {
+            display: none;
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            z-index: 1001;
+            background-color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+        }
+
+        /* 오버레이 (모바일에서 사이드바 열릴 때) */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 990;
+        }
+
+        .sidebar {
+            width: var(--sidebar-width);
+            background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+            border-right: 1px solid #e2e8f0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        /* 사이드바 접기/펼치기 버튼 */
+        .sidebar-toggle {
+            position: absolute;
+            top: 10px;
+            right: -12px;
+            background-color: white;
+            border: 1px solid #e2e8f0;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 1002;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar-toggle svg {
+            width: 16px;
+            height: 16px;
+            transition: transform 0.3s ease;
+        }
+
+        /* 접힌 상태의 사이드바 스타일 */
+        body.sidebar-collapsed .sidebar {
+            width: var(--sidebar-collapsed-width);
+        }
+
+        body.sidebar-collapsed .sidebar-toggle svg {
+            transform: rotate(180deg);
+        }
+
+        body.sidebar-collapsed .menu-button-text,
+        body.sidebar-collapsed .user-info,
+        body.sidebar-collapsed .welcome-text,
+        body.sidebar-collapsed .submenu,
+        body.sidebar-collapsed .chevron {
+            display: none;
+        }
+
+        body.sidebar-collapsed .menu-button {
+            justify-content: center;
+            padding: 12px;
+        }
+
+        body.sidebar-collapsed .menu-button-content {
+            justify-content: center;
+        }
+
+        body.sidebar-collapsed .sidebar-header {
+            justify-content: center;
+            padding: 24px 10px;
+        }
+
+        body.sidebar-collapsed .user-avatar {
+            margin: 0;
+        }
+
+        body.sidebar-collapsed .logout-button {
+            justify-content: center;
+            padding: 12px;
+        }
+
+        body.sidebar-collapsed .logout-text {
+            display: none;
+        }
+
+        body.sidebar-collapsed .menu-group-divider {
+            margin: 10px 5px;
+        }
+
+        .sidebar-header {
+            padding: 24px 20px;
+            border-bottom: 1px solid #edf2f7;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            position: relative;
+        }
+
+        .user-avatar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #3b82f6;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .user-info {
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .welcome-text {
+            font-size: 13px;
+            color: #94a3b8;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .user-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1e293b;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .sidebar-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px 0;
+            scroll-behavior: smooth; /* 부드러운 스크롤 추가 */
+        }
+
+        .menu-item {
+            margin-bottom: 2px;
+            position: relative;
+        }
+
+        /* 메뉴 그룹 간 구분선 추가 */
+        .menu-group-divider {
+            height: 1px;
+            background-color: #e2e8f0;
+            margin: 10px 20px;
+            opacity: 0.7;
+        }
+
+        .sidebar-footer {
+            padding: 16px 20px;
+            border-top: 1px solid #edf2f7;
+        }
+
+        .logout-button {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+            padding: 12px 16px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            border-radius: 8px;
+            color: #64748b;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            text-align: left;
+        }
+
+        .logout-button:hover {
+            background-color: #eff6ff;
+            color: #3b82f6;
+        }
+
+        .menu-button {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            padding: 12px 20px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            border-radius: 0;
+            color: #334155;
+            font-size: 14px;
+            font-weight: 500;
+            text-align: left;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .menu-button:hover {
+            background-color: var(--hover-bg);
+        }
+        
+        .menu-button.active {
+            background-color: var(--active-bg);
+            color: var(--active-color);
+            font-weight: 600;
+        }
+        
+        /* 왼쪽에 활성화 표시 바 추가 */
+        .menu-button.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 4px;
+            height: 100%;
+            background-color: var(--active-indicator);
+            border-radius: 0 2px 2px 0;
+        }
+        
+        .menu-button.active .chevron {
+            color: var(--active-color);
+        }
+
+        .menu-button-content {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .submenu {
+            height: 0;
+            overflow: hidden;
+            transition: height 0.3s ease;
+            padding-left: 24px;
+        }
+
+        .submenu.active {
+            height: auto;
+        }
+
+        .submenu-item {
+            border-left: 1px solid #e2e8f0;
+            margin-left: 10px;
+            padding-left: 16px;
+        }
+
+        .submenu-link {
+            display: block;
+            padding: 8px 16px;
+            color: #64748b;
+            text-decoration: none;
+            font-size: 13px;
+            transition: all 0.2s ease;
+            border-radius: 4px;
+            position: relative;
+        }
+
+        .submenu-link:hover {
+            color: var(--active-color);
+            background-color: var(--hover-bg);
+        }
+        
+        .submenu-link.active {
+            color: var(--active-color);
+            background-color: var(--active-bg);
+            font-weight: 500;
+        }
+        
+        /* 세 번째 수준 메뉴 (링크)에 활성화 표시 */
+        .submenu-link.active::before {
+            content: '';
+            position: absolute;
+            left: -16px;
+            top: 0;
+            width: 2px;
+            height: 100%;
+            background-color: var(--active-indicator);
+            border-radius: 0 2px 2px 0;
+        }
+
+        .icon {
+            width: 20px;
+            height: 20px;
+            stroke-width: 2;
+            stroke: currentColor;
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            transition: all 0.2s ease;
+        }
+
+        .chevron {
+            width: 16px;
+            height: 16px;
+            transition: transform 0.2s ease;
+        }
+
+        .rotate {
+            transform: rotate(90deg);
+        }
+
+        .menu-button:hover .icon {
+            transform: scale(1.1);
+            color: var(--active-color);
+        }
+
+        .menu-button.active .icon {
+            color: var(--active-color);
+        }
+
+
+/* 전체 content 영역을 화면에 꽉 차게 설정 */
+
+
+.content {
+    flex: 1;
+ /*   display: flex;*/
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; /* 수직 중앙 정렬 */
+    padding: 0px;
+    width: 100%;
+    min-height: 100vh;
+}
+		/* 본문 콘텐츠 영역 스타일 */
+
+/* 콘텐츠 컨테이너: 중앙 정렬 및 화면 비율 유지 */
+.content-container {
+      flex: 1;
+    width: 100%;
+    /*max-width: 1200px; /* 최대 폭 제한 */
+    padding: 0px;
+    
+   
+    border-radius: 12px;
+  /*  min-height: calc(100vh - 100px); /* 화면 높이에 맞춤 (여백 포함) */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeIn 0.3s forwards;
+}
+
+
+
+
+
+/* 애니메이션 효과 */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 테이블 스타일 */
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+    margin-top: 20px;
+}
+
+.table-container table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table-container th, .table-container td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.table-container th {
+    background: #f1f5f9;
+    font-weight: 600;
+}
+
+.table-container td {
+    background: #ffffff;
+}
+
+/* 버튼 스타일 */
+.button {
+    display: inline-block;
+    padding: 10px 16px;
+    background-color: #3b82f6;
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    text-align: center;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: all 0.2s ease-in-out;
+    margin-top: 12px;
+}
+
+.button:hover {
+    background-color: #2563eb;
+}
+
+/* 반응형 스타일 */
+@media (max-width: 768px) {
+    .content {
+        padding: 16px;
+    }
+
+    .content-container {
+        padding: 16px;
+    }
+
+    .content-container h1 {
+        font-size: 20px;
+    }
+
+    .content-container p {
+        font-size: 14px;
+    }
+}
+
+
+        body.sidebar-collapsed .content {
+            margin-left: calc(var(--sidebar-collapsed-width) - var(--sidebar-width));
+        }
+
+        /* 스크롤바 커스터마이징 */
+        .sidebar-content::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .sidebar-content::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .sidebar-content::-webkit-scrollbar-thumb {
+            background-color: #cbd5e1;
+            border-radius: 4px;
+        }
+        
+        /* 현재 열린 메뉴 표시 */
+        .current-menu-indicator {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: var(--active-color);
+            display: none;
+        }
+        
+        .menu-button.active .current-menu-indicator,
+        .submenu-link.active .current-menu-indicator {
+            display: block;
+        }
+        
+
+
+        
+       
+
+		/* 모바일 헤더 스타일 */
+.mobile-header {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: var(--header-height);
+    background-color: white;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    z-index: 900;
+    padding: 0 20px;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.breadcrumb {
+    display: flex;  /* Flexbox 적용 */
+    align-items: center;
+    font-size: 14px;
+    color: #1e293b;  /* 텍스트 컬러 */
+    padding: 10px 15px;
+    background: #ffffff;  /* 배경 색 */
+    border-bottom: 1px solid #e2e8f0;
+    white-space: nowrap;  /* 줄바꿈 방지 */
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+.breadcrumb span {
+    color: #1e293b;
+    font-weight: 500;
+    margin: 0 4px;
+	
+}
+
+
+        /* 반응형 스타일 */
+        @media (max-width: 991px) {
+            :root {
+                --sidebar-width: 240px;
+            }
+            
+            .content {
+                margin-left: 0;
+            }
+
+            body.sidebar-collapsed .content {
+                margin-left: 0;
+            }
+        }
+        
+        @media (max-width: 767px) {
+            .mobile-header {
+                display: flex;
+            }
+            
+            .mobile-menu-toggle {
+                display: block;
+            }
+            
+            .sidebar {
+                position: fixed;
+                left: -100%;
+                height: 100%;
+                transition: all 0.3s ease;
+                box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            }
+            
+            body.sidebar-open .sidebar {
+                left: 0;
+            }
+            
+            body.sidebar-open .sidebar-overlay {
+                display: block;
+            }
+            
+            .sidebar-toggle {
+                display: none;
+            }
+            
+            .content {
+                padding-top: calc(var(--header-height) + 16px);
+                width: 100%;
+            }
+        }
+
+        .error-message {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 4px;
+            color: white;
+            z-index: 9999;
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        .error-message.error {
+            background-color: #ef4444;
+        }
+        
+        .error-message.warning {
+            background-color: #f59e0b;
+        }
+        
+        .error-message.info {
+            background-color: #3b82f6;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* 태블릿 중간 크기 추가 */
+        @media (max-width: 1200px) {
+            .menu-button-text {
+                font-size: 13px;  // 메뉴 텍스트 크기 축소
+            }
+        }
+
+        /* 작은 모바일 크기 추가 */
+        @media (max-width: 480px) {
+            :root {
+                --sidebar-width: 100%;  // 전체 화면 사이드바
+            }
+            
+            .content {
+                padding: 16px;  // 여백 축소
+            }
+            
+            .mobile-header h1 {
+                font-size: 16px;  // 헤더 텍스트 크기 축소
+            }
+            
+            .submenu-link {
+                padding: 10px 12px;  // 터치 영역 확대
+            }
+        }
+
+        /* 가로 모드 대응 */
+        @media (max-height: 500px) and (orientation: landscape) {
+            .sidebar-content {
+                max-height: calc(100vh - 120px);  // 스크롤 가능한 높이 설정
+                overflow-y: auto;
+            }
+            
+            .sidebar-header {
+                padding: 12px 20px;  // 헤더 높이 축소
+            }
+        }
+
+        /* 고해상도 디스플레이 대응 */
+        @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+            .icon {
+                stroke-width: 1.5;  // 아이콘 선 두께 조정
+            }
+        }
+
+
+
+    </style>
+</head>
+<body>
+    <!-- 모바일 햄버거 메뉴 버튼 -->
+    <button class="mobile-menu-toggle" 
+            aria-label="메뉴 열기" 
+            aria-expanded="false"
+            aria-controls="sidebar">
+        <svg class="icon" aria-hidden="true">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+    </button>
+    
+    <!-- 모바일 헤더 -->
+    <!--<div class="mobile-header">
+        <div class="breadcrumb">
+			 홈> <span id="current-menu">외국인유학생보험</span> > <span id="current-submenu">신청리스트</span>
+		</div>
+    </div> -->
+    
+    <!-- 오버레이 (모바일에서 사이드바 열릴 때) -->
+    <div class="sidebar-overlay"></div>
+
+    <div class="sidebar" role="navigation" aria-label="메인 메뉴">
+        <!-- 사이드바 접기/펼치기 버튼 -->
+        <div class="sidebar-toggle" 
+             role="button" 
+             aria-label="사이드바 접기/펼치기"
+             tabindex="0">
+            <svg aria-hidden="true">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+        </div>
+        
+        <div class="sidebar-header">
+            <div class="user-avatar">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+            </div>
+            <div class="user-info">
+              <!--  <span class="welcome-text">환영합니다</span>
+                <span class="user-name">섹션사용자님</span>-->
+				<span id="userName">로딩중...</span>님 환영합니다!
+				<div id="currentDateTime" class="current-time"></div>
+            </div>
+        </div>
+
+        <div class="sidebar-content">
+            <!-- KJ 대리운전 (1단계로 승격) -->
+            <div class="menu-item">
+                <button class="menu-button" data-target="submenu-kj" 
+                        aria-expanded="false" 
+                        aria-controls="submenu-kj">
+                    <div class="menu-button-content">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M1 10h22"></path>
+                        </svg>
+                        <span class="menu-button-text">KJ대리운전</span>
+                    </div>
+                    <svg class="chevron" aria-hidden="true">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                    <span class="current-menu-indicator"></span>
+                </button>
+
+                <div class="submenu" id="submenu-kj" 
+                     role="menu" 
+                     aria-label="KJ대리운전 하위메뉴">
+                    <div class="submenu-item" role="none">
+                        <a href="#" 
+                           class="submenu-link" 
+                           role="menuitem" 
+                           aria-current="page"
+                           data-name="kj-search">기사찾기</a>
+                        <a href="#" class="submenu-link" data-name="kj-list">배서리스트</a>
+                        <a href="#" class="submenu-link" data-name="kj-company">대리운전회사</a>
+						<a href="#" class="submenu-link" data-name="kj-policy">증권별코드</a>
+						<a href="#" class="submenu-link" data-name="kj-manual">매뉴얼</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DAS 대리운전 (1단계로 승격) -->
+            <div class="menu-item">
+                <button class="menu-button" data-target="submenu-das" 
+                        aria-expanded="false" 
+                        aria-controls="submenu-das">
+                    <div class="menu-button-content">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                            <path d="M21 21v-2a4 4 0 0 0-3-3.85"></path>
+                            <path d="M8 3.13a4 4 0 0 0 0 7.75"></path>
+                            <path d="M3 21v-2a4 4 0 0 1 3-3.85"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                            <path d="M12 14a7 7 0 0 0-7 7"></path>
+                            <path d="M12 14a7 7 0 0 1 7 7"></path>
+                        </svg>
+                        <span class="menu-button-text">DAS대리운전</span>
+                    </div>
+                    <svg class="chevron" aria-hidden="true">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                    <span class="current-menu-indicator"></span>
+                </button>
+
+                <div class="submenu" id="submenu-das" 
+                     role="menu" 
+                     aria-label="DAS대리운전 하위메뉴">
+                    <div class="submenu-item" role="none">
+                        <a href="#" 
+                           class="submenu-link" 
+                           role="menuitem" 
+                           aria-current="page"
+                           data-name="das-search">기사찾기</a>
+                        <a href="#" class="submenu-link" data-name="das-list">배서리스트</a>
+                        <a href="#" class="submenu-link" data-name="das-company">대리운전회사</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="menu-group-divider"></div>
+
+            <!-- 여행자보험 -->
+            <div class="menu-item">
+                <button class="menu-button" data-target="submenu-travel" 
+                        aria-expanded="false" 
+                        aria-controls="submenu-travel">
+                    <div class="menu-button-content">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 2L11 13"></path>
+                            <path d="M22 2l-7 20-4-9-9-4 20-7z"></path>
+                        </svg>
+                        <span class="menu-button-text">여행자보험</span>
+                    </div>
+                    <svg class="chevron" aria-hidden="true">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                    <span class="current-menu-indicator"></span>
+                </button>
+
+                <div class="submenu" id="submenu-travel" 
+                     role="menu" 
+                     aria-label="여행자보험 하위메뉴">
+                    <div class="submenu-item" role="none">
+                        <a href="#" 
+                           class="submenu-link" 
+                           role="menuitem" 
+                           aria-current="page"
+                           data-name="travel-list">신청리스트</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="menu-group-divider"></div>
+
+            <!-- 외국인유학생보험 -->
+            <div class="menu-item">
+                <button class="menu-button" data-target="submenu-foreign" 
+                        aria-expanded="false" 
+                        aria-controls="submenu-foreign">
+                    <div class="menu-button-content">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 21h18"></path>
+                            <path d="M3 10h18"></path>
+                            <path d="M5 6l7-4 7 4"></path>
+                            <path d="M4 10v11"></path>
+                            <path d="M20 10v11"></path>
+                            <path d="M8 14v3"></path>
+                            <path d="M12 14v3"></path>
+                            <path d="M16 14v3"></path>
+                        </svg>
+                        <span class="menu-button-text">외국인유학생보험</span>
+                    </div>
+                    <svg class="chevron" aria-hidden="true">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                    <span class="current-menu-indicator"></span>
+                </button>
+
+                <div class="submenu" id="submenu-foreign" 
+                     role="menu" 
+                     aria-label="외국인유학생보험 하위메뉴">
+                    <div class="submenu-item" role="none">
+                        <a href="#" 
+                           class="submenu-link" 
+                           role="menuitem" 
+                           aria-current="page"
+                           data-name="foreign-list">신청리스트</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="menu-group-divider"></div>
+
+            <!-- 현장실습보험 -->
+            <div class="menu-item">
+                <button class="menu-button" data-target="submenu-field" 
+                        aria-expanded="false" 
+                        aria-controls="submenu-field">
+                    <div class="menu-button-content">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                            <line x1="8" y1="21" x2="16" y2="21"></line>
+                            <line x1="12" y1="17" x2="12" y2="21"></line>
+                        </svg>
+                        <span class="menu-button-text">현장실습보험</span>
+                    </div>
+                    <svg class="chevron" aria-hidden="true">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                    <span class="current-menu-indicator"></span>
+                </button>
+
+                <div class="submenu" id="submenu-field" 
+                     role="menu" 
+                     aria-label="현장실습보험 하위메뉴">
+                    <div class="submenu-item" role="none">
+                        <a href="#" 
+                           class="submenu-link" 
+                           role="menuitem" 
+                           aria-current="page"
+                           data-name="field-list">신청리스트</a>
+                        <a href="#" class="submenu-link" data-name="field-claim">클레임리스트</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="menu-group-divider"></div>
+
+            <!-- 홀인원보험 (새로 추가) -->
+            <div class="menu-item">
+                <button class="menu-button" data-target="submenu-holeinone" 
+                        aria-expanded="false" 
+                        aria-controls="submenu-holeinone">
+                    <div class="menu-button-content">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <circle cx="12" cy="12" r="2"></circle>
+                            <line x1="12" y1="4" x2="12" y2="2"></line>
+                            <line x1="12" y1="22" x2="12" y2="20"></line>
+                            <line x1="20" y1="12" x2="22" y2="12"></line>
+                            <line x1="2" y1="12" x2="4" y2="12"></line>
+                        </svg>
+                        <span class="menu-button-text">홀인원보험</span>
+                    </div>
+                    <svg class="chevron" aria-hidden="true">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                    <span class="current-menu-indicator"></span>
+                </button>
+
+                <div class="submenu" id="submenu-holeinone" 
+                     role="menu" 
+                     aria-label="홀인원보험 하위메뉴">
+                    <div class="submenu-item" role="none">
+                        <a href="#" 
+                           class="submenu-link" 
+                           role="menuitem" 
+                           aria-current="page"
+                           data-name="holeinone-list">리스트</a>
+                        <a href="#" class="submenu-link" data-name="holeinone-claim">클레임</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="menu-group-divider"></div>
+
+            <!-- 직원관리 (메뉴 맨 아래로 이동) -->
+            <div class="menu-item">
+                <button class="menu-button" data-target="submenu-employee" 
+                        aria-expanded="false" 
+                        aria-controls="submenu-employee">
+                    <div class="menu-button-content">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                        <span class="menu-button-text">직원관리</span>
+                    </div>
+                    <svg class="chevron" aria-hidden="true">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                    <span class="current-menu-indicator"></span>
+                </button>
+
+                <div class="submenu" id="submenu-employee" 
+                     role="menu" 
+                     aria-label="직원관리 하위메뉴">
+                    <div class="submenu-item" role="none">
+                        <a href="#" 
+                           class="submenu-link" 
+                           role="menuitem" 
+                           aria-current="page"
+                           data-name="employee-list">직원리스트</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="sidebar-footer">
+            <button class="logout-button" 
+                    aria-label="로그아웃">
+                <svg class="icon" aria-hidden="true">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                    <polyline points="16 17 21 12 16 7"></polyline>
+                    <line x1="21" y1="12" x2="9" y2="12"></line>
+                </svg>
+                <span class="logout-text">로그아웃</span>
+            </button>
+        </div>
+    </div>
+
+   <div class="content" role="main" aria-label="메인 콘텐츠">
+    <!-- 메인 콘텐츠 영역 -->
+	<div id="header-container">
+		<div class="breadcrumb">
+			홈 > <span id="current-menu">외국인유학생보험</span> > <span id="current-submenu">신청리스트</span>
+		</div>
+	</div>
+    <div class="content-container">
+        
+        <div id="page-content">
+            <!-- 좌측 메뉴 선택에 따라 -->
+       </div>
+    </div>
+</div>
+    
+
+    <script>
+
+	 /**
+ * 보험대리점 CMS 시스템 스크립트
+ * 사이드바 메뉴 관리, 세션 처리, 사용자 인터페이스 등의 기능 제공
+ */
+
+// 상수 정의
+const CONFIG = {
+  SESSION_TIMEOUT: 30 * 60 * 1000, // 30분 세션 타임아웃
+  MENU_GROUPS: {
+    'level1': ['submenu-kj', 'submenu-das', 'submenu-travel', 'submenu-foreign', 'submenu-field', 'submenu-employee']
+  },
+  CLOCK_UPDATE_INTERVAL: 60000, // 1분마다 시계 업데이트
+  MAX_RETRIES: 5
+};
+
+// 전역 상태 관리
+const STATE = {
+  sessionTimer: null,
+  activeMenus: {},
+  activeLink: null,
+  retryCount: 0,
+  clockInterval: null
+};
+
+// DOM 로드 완료 시 앱 초기화
+document.addEventListener('DOMContentLoaded', function() {
+  initializeApp();
+});
+
+/**
+ * 유틸리티 함수 모음
+ */
+const Utils = {
+    /**
+     * 디바운스 함수
+     * 연속된 이벤트 발생 시 마지막 이벤트만 실행
+     */
+    debounce: function(func, wait = 300) {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    },
+
+    /**
+     * 쓰로틀 함수
+     * 일정 시간 간격으로 이벤트 실행을 제한
+     */
+    throttle: function(func, limit = 300) {
+        let inThrottle;
+        return function executedFunction(...args) {
+            if (!inThrottle) {
+                func(...args);
+                inThrottle = true;
+                setTimeout(() => {
+                    inThrottle = false;
+                }, limit);
+            }
+        };
+    }
+};
+
+/**
+ * 앱 초기화 함수
+ * 메인 진입점으로 모든 초기화 작업을 조율
+ */
+async function initializeApp() {
+  try {
+    console.log('Initializing app...');
+    
+    // DOM이 완전히 업데이트될 때까지 대기
+    await waitForDomReady();
+    
+    // 세션 체크
+    await checkSession();
+    
+    // 사용자 정보 표시
+    updateUserInfo();
+    
+    // 시계 초기화
+    initClock();
+    
+    // 메뉴 초기화
+    initMenuHandlers();
+    
+    // 사용자 활동 이벤트 리스너 설정
+    setupUserActivityListeners();
+    
+    // 최적화된 이벤트 리스너 설정
+    setupOptimizedEventListeners();
+    
+    console.log('App initialization complete');
+  } catch (error) {
+    console.error('Error initializing app:', error);
+  }
+}
+
+/**
+ * DOM이 준비될 때까지 대기
+ */
+function waitForDomReady() {
+  return new Promise(resolve => setTimeout(resolve, 100));
+}
+
+/**
+ * 특정 DOM 요소가 로드될 때까지 대기하는 함수
+ */
+function waitForElement(selector) {
+  return new Promise(resolve => {
+    if (document.querySelector(selector)) {
+      return resolve(document.querySelector(selector));
+    }
+
+    const observer = new MutationObserver(mutations => {
+      if (document.querySelector(selector)) {
+        observer.disconnect();
+        resolve(document.querySelector(selector));
+      }
+    });
+
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true
+    });
+  });
+}
+
+/**
+ * 에러 처리를 위한 커스텀 에러 클래스
+ */
+class AppError extends Error {
+    constructor(message, code) {
+        super(message);
+        this.name = 'AppError';
+        this.code = code;
+    }
+}
+
+/**
+ * 전역 에러 핸들러
+ */
+window.onerror = function(msg, url, lineNo, columnNo, error) {
+    console.error('Global error:', {
+        message: msg,
+        url: url,
+        lineNo: lineNo,
+        columnNo: columnNo,
+        error: error
+    });
+    
+    // 사용자에게 에러 알림
+    showErrorMessage('시스템 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+    return false;
+};
+
+/**
+ * 비동기 작업을 위한 에러 핸들러
+ */
+window.addEventListener('unhandledrejection', function(event) {
+    console.error('Unhandled promise rejection:', event.reason);
+    showErrorMessage('작업 처리 중 오류가 발생했습니다.');
+});
+
+/**
+ * 에러 메시지 표시 함수
+ */
+function showErrorMessage(message, type = 'error') {
+    // 이미 표시된 에러 메시지가 있다면 제거
+    const existingError = document.querySelector('.error-message');
+    if (existingError) {
+        existingError.remove();
+    }
+    
+    const errorDiv = document.createElement('div');
+    errorDiv.className = `error-message ${type}`;
+    errorDiv.textContent = message;
+    
+    document.body.appendChild(errorDiv);
+    
+    // 3초 후 메시지 자동 제거
+    setTimeout(() => {
+        errorDiv.remove();
+    }, 3000);
+}
+
+/**
+ * API 요청 래퍼 함수
+ */
+async function apiRequest(url, options = {}) {
+    try {
+        const response = await fetch(url, {
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+        
+        if (!response.ok) {
+            throw new AppError(`HTTP error! status: ${response.status}`, response.status);
+        }
+        
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        if (error instanceof AppError) {
+            handleApiError(error);
+        } else {
+            console.error('API request failed:', error);
+            throw new AppError('서버 연결에 실패했습니다.', 500);
+        }
+    }
+}
+
+/**
+ * API 에러 처리 함수
+ */
+function handleApiError(error) {
+    const errorMessages = {
+        400: '잘못된 요청입니다.',
+        401: '로그인이 필요합니다.',
+        403: '접근 권한이 없습니다.',
+        404: '요청한 리소스를 찾을 수 없습니다.',
+        500: '서버 오류가 발생했습니다.',
+        default: '알 수 없는 오류가 발생했습니다.'
+    };
+    
+    const message = errorMessages[error.code] || errorMessages.default;
+    showErrorMessage(message);
+    
+    // 401 에러의 경우 로그인 페이지로 리다이렉트
+    if (error.code === 401) {
+        SessionManager.logout();
+    }
+}
+
+/**
+ * 세션 체크 함수 개선
+ */
+async function checkSession() {
+    try {
+        // 임시로 세션 체크 스킵
+        return true;
+        
+        // const response = await apiRequest('/api/check-session');
+        // if (!response.isValid) {
+        //     throw new AppError('세션이 만료되었습니다.', 401);
+        // }
+    } catch (error) {
+        handleApiError(error);
+    }
+}
+
+/**
+ * 사용자 정보 업데이트 함수 개선
+ */
+async function updateUserInfo() {
+    try {
+        const userInfo = SessionManager.getUserInfo();
+        if (!userInfo.name) {
+            throw new AppError('사용자 정보를 찾을 수 없습니다.', 401);
+        }
+        
+        const userNameElement = document.getElementById('userName');
+        if (!userNameElement) {
+            throw new AppError('사용자 정보 표시 요소를 찾을 수 없습니다.', 500);
+        }
+        
+        userNameElement.textContent = userInfo.name;
+    } catch (error) {
+        handleApiError(error);
+    }
+}
+
+/**
+ * 시계 초기화 함수
+ */
+function initClock() {
+  const dateTimeElement = document.getElementById('currentDateTime');
+  if (dateTimeElement) {
+    console.log('Starting clock...');
+    ClockManager.element = dateTimeElement;
+    ClockManager.start();
+  } else {
+    console.error('Clock element not found');
+  }
+}
+
+/**
+ * 시계 관리 객체
+ */
+const ClockManager = {
+    element: null,
+    timer: null,
+
+    /**
+     * 시간 문자열 생성
+     */
+    getTimeString: function() {
+        const now = new Date();
+        const days = ['일', '월', '화', '수', '목', '금', '토'];
+        
+        return [
+            now.getFullYear(),
+            '-',
+            String(now.getMonth() + 1).padStart(2, '0'),
+            '-',
+            String(now.getDate()).padStart(2, '0'),
+            '(',
+            days[now.getDay()],
+            ') ',
+            String(now.getHours()).padStart(2, '0'),
+            ':',
+            String(now.getMinutes()).padStart(2, '0')
+        ].join('');
+    },
+
+    /**
+     * 시간 업데이트
+     */
+    update: function() {
+        if (!this.element) {
+            this.element = document.getElementById('currentDateTime');
+        }
+        if (this.element) {
+            this.element.textContent = this.getTimeString();
+        }
+    },
+
+    /**
+     * 시계 시작
+     */
+    start: function() {
+        this.stop();
+        this.update();
+        this.timer = setInterval(() => this.update(), CONFIG.CLOCK_UPDATE_INTERVAL);
+    },
+
+    /**
+     * 시계 정지
+     */
+    stop: function() {
+        if (this.timer) {
+            clearInterval(this.timer);
+            this.timer = null;
+        }
+    }
+};
+
+/**
+ * 메뉴 관리 객체
+ */
+const MenuManager = {
+    /**
+     * 메뉴 핸들러 초기화
+     */
+    init: function() {
+        // 메뉴 요소 선택
+        const menuButtons = document.querySelectorAll('.menu-button');
+        const submenuLinks = document.querySelectorAll('.submenu-link');
+        const sidebarToggle = document.querySelector('.sidebar-toggle');
+        const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+        const sidebarOverlay = document.querySelector('.sidebar-overlay');
+        
+        // 사이드바 접기/펼치기
+        if (sidebarToggle) {
+            sidebarToggle.addEventListener('click', this.toggleSidebar);
+        }
+        
+        // 모바일 메뉴 토글
+        if (mobileMenuToggle) {
+            mobileMenuToggle.addEventListener('click', this.toggleMobileMenu);
+        }
+        
+        // 오버레이 클릭 처리
+        if (sidebarOverlay) {
+            sidebarOverlay.addEventListener('click', this.closeMobileMenu);
+        }
+        
+        // 메뉴 버튼 클릭 이벤트
+        menuButtons.forEach(button => {
+            button.addEventListener('click', (e) => this.handleMenuButtonClick(e));
+        });
+        
+        // 서브메뉴 링크 클릭 이벤트
+        submenuLinks.forEach(link => {
+            link.addEventListener('click', (e) => this.handleSubmenuLinkClick(e));
+        });
+        
+        // 저장된 메뉴 상태 복원
+        this.loadMenuState();
+    },
+
+    /**
+     * 사이드바 접기/펼치기
+     */
+    toggleSidebar: function() {
+        document.body.classList.toggle('sidebar-collapsed');
+        localStorage.setItem('sidebarCollapsed', document.body.classList.contains('sidebar-collapsed'));
+    },
+    
+    /**
+     * 모바일 메뉴 열기/닫기
+     */
+    toggleMobileMenu: function() {
+        document.body.classList.toggle('sidebar-open');
+    },
+    
+    /**
+     * 모바일 메뉴 닫기
+     */
+    closeMobileMenu: function() {
+        document.body.classList.remove('sidebar-open');
+    },
+
+    /**
+     * 메뉴 상태 저장
+     */
+    saveMenuState: function() {
+        const state = {
+            activeMenus: STATE.activeMenus,
+            activeLink: STATE.activeLink
+        };
+        sessionStorage.setItem('menuState', JSON.stringify(state));
+    },
+
+    /**
+     * 메뉴 상태 복원
+     */
+    loadMenuState: function() {
+        const savedState = sessionStorage.getItem('menuState');
+        if (!savedState) return;
+
+        const state = JSON.parse(savedState);
+        
+        // 활성화된 메뉴 복원
+        if (state.activeMenus) {
+            Object.entries(state.activeMenus).forEach(([group, menuId]) => {
+                if (menuId) {
+                    const button = document.querySelector(`[data-target="${menuId}"]`);
+                    if (button) {
+                        this.handleMenuButtonClick({ currentTarget: button });
+                    }
+                }
+            });
+        }
+        
+        // 활성화된 링크 복원
+        if (state.activeLink) {
+            const link = document.querySelector(`.submenu-link[data-name="${state.activeLink}"]`);
+            if (link) {
+                this.handleSubmenuLinkClick({ currentTarget: link, preventDefault: () => {} });
+            }
+        }
+    },
+
+    /**
+     * 메뉴 버튼 클릭 처리
+     */
+    handleMenuButtonClick: function(e) {
+        const button = e.currentTarget;
+        const targetId = button.getAttribute('data-target');
+        const submenu = document.getElementById(targetId);
+        const chevron = button.querySelector('.chevron');
+
+        if (!submenu) return;
+
+        // 다른 활성화된 메뉴들 닫기
+        document.querySelectorAll('.menu-button.active').forEach(activeButton => {
+            if (activeButton !== button) {
+                const activeSubmenuId = activeButton.getAttribute('data-target');
+                const activeSubmenu = document.getElementById(activeSubmenuId);
+                if (activeSubmenu) {
+                    activeSubmenu.classList.remove('active');
+                    activeSubmenu.style.height = '0';
+                    activeButton.classList.remove('active');
+                    activeButton.setAttribute('aria-expanded', 'false');
+                    const activeChevron = activeButton.querySelector('.chevron');
+                    activeChevron?.classList.remove('rotate');
+                }
+            }
+        });
+
+        // 현재 메뉴의 상태 토글
+        const isExpanded = submenu.classList.contains('active');
+        button.setAttribute('aria-expanded', !isExpanded);
+
+        // 서브메뉴 토글
+        if (isExpanded) {
+            submenu.classList.remove('active');
+            submenu.style.height = '0';
+            button.classList.remove('active');
+            chevron?.classList.remove('rotate');
+        } else {
+            submenu.classList.add('active');
+            submenu.style.height = submenu.scrollHeight + 'px';
+            button.classList.add('active');
+            chevron?.classList.add('rotate');
+        }
+
+        // 메뉴 상태 저장
+        this.saveMenuState();
+    },
+
+    /**
+     * 서브메뉴 링크 클릭 처리
+     */
+    handleSubmenuLinkClick: function(e) {
+
+		e.preventDefault();
+    const link = e.currentTarget;
+    
+    // 이전 활성화 링크 비활성화
+    document.querySelectorAll('.submenu-link.active').forEach(activeLink => {
+        activeLink.classList.remove('active');
+        activeLink.setAttribute('aria-current', 'false');
+    });
+    
+    // 현재 링크 활성화
+    link.classList.add('active');
+    link.setAttribute('aria-current', 'page');
+    
+    STATE.activeLink = link.getAttribute('data-name');
+    
+    // 부모 메뉴 버튼 찾기
+    const submenuItem = link.closest('.submenu-item');
+    const submenu = submenuItem.closest('.submenu');
+    const menuButton = document.querySelector(`[data-target="${submenu.id}"]`);
+    
+    // 세션 스토리지에 현재 선택된 메뉴와 서브메뉴 저장
+    const menuText = menuButton.querySelector('.menu-button-text').textContent;
+    const submenuText = link.textContent;
+    
+    sessionStorage.setItem("selectedMenu", menuText);
+    sessionStorage.setItem("selectedSubmenu", submenuText);
+    
+    // 페이지 제목 및 콘텐츠 업데이트
+    this.updatePageContent(STATE.activeLink);
+        
+        
+      
+        // 이전 활성화 링크 비활성화
+        document.querySelectorAll('.submenu-link.active').forEach(activeLink => {
+            activeLink.classList.remove('active');
+            activeLink.setAttribute('aria-current', 'false');
+        });
+        
+        // 현재 링크 활성화
+        link.classList.add('active');
+        link.setAttribute('aria-current', 'page');
+
+		
+        STATE.activeLink = link.getAttribute('data-name');
+        
+        // 페이지 제목 및 콘텐츠 업데이트
+        this.updatePageContent(STATE.activeLink);
+        
+        // 모바일에서 메뉴 선택 시 사이드바 닫기
+        if (window.innerWidth <= 767) {
+            this.closeMobileMenu();
+        }
+        
+        // 메뉴 상태 저장
+        this.saveMenuState();
+    },
+
+    /**
+     * 페이지 콘텐츠 업데이트
+
+	 <div class="content" role="main" aria-label="메인 콘텐츠">
+        <!-- 메인 콘텐츠 영역 -->
+        <h1 id="page-title" tabindex="-1">보험대리점 CMS</h1>
+        <div id="page-content">
+            <p>좌측 메뉴에서 원하는 항목을 선택하세요.</p>
+        </div>
+    </div>
+     */
+    updatePageContent: function(linkName) {
+		
+        
+		const currentMenu = document.getElementById("current-menu");
+		const currentSubmenu = document.getElementById("current-submenu");
+		currentMenu.textContent ='';
+    // 세션 스토리지에서 마지막 선택된 메뉴 불러오기 (없으면 기본값 설정)
+    const savedMenu = sessionStorage.getItem("selectedMenu") || "외국인유학생보험";
+    const savedSubmenu = sessionStorage.getItem("selectedSubmenu") || "신청리스트";
+		
+		if (currentMenu) currentMenu.textContent = savedMenu;
+        if (currentSubmenu) currentSubmenu.textContent = savedSubmenu ;
+        this.getPageDataByLinkName(linkName);
+      /*  const pageData = this.getPageDataByLinkName(linkName);
+        
+        if (pageTitle) pageTitle.textContent = pageData.title;
+        if (pageContent) pageContent.innerHTML = pageData.content;
+        if (mobileHeader) mobileHeader.textContent = pageData.title;*/
+
+
+	
+    },
+
+    /**
+     * 링크 이름에 따른 페이지 데이터 반환
+     */
+
+	 getPageDataByLinkName: function(linkName) {
+		console.log( '1426 linkName',linkName);
+		switch(linkName){
+
+			case 'kj-search': 
+				kjSearch(); //js/kj_gisa.js
+			break;
+			case 'kj-list':
+				kj_endorse_search();
+				//kjList();  //js/kj_endorsList.js
+			break;
+			case 'kj-company':
+				kj_company(); //js/kj_company.js
+			break;
+			case 'kj-policy':
+				kj_policy();    //js/kj_policy.js
+			break;
+			case 'kj-manual':
+				kj_manual();    //js/kj_manual.js
+			break;
+			case 'field-list':
+				fieldList();  //js/field_practice.js
+			break;
+			
+			case 'field-claim':
+				fieldClaim(); //js/field_claim.js
+			break;
+			case 'employee-list':
+			   employeeList(); //js/employee_list.js
+			break;
+			case 'holeinone-list':
+			   holeinoneList(); //js/holeinone_list.js
+			break;
+			
+
+		}
+     
+    }
+ 
+};
+
+/**
+ * 메뉴 핸들러 초기화 함수
+ */
+function initMenuHandlers() {
+    MenuManager.init();
+}
+
+/**
+ * 사용자 활동 이벤트 리스너 설정
+ */
+function setupUserActivityListeners() {
+    // 세션 타이머 리셋을 위한 사용자 활동 감지
+    document.addEventListener('mousemove', () => SessionManager.resetTimer());
+    document.addEventListener('keypress', () => SessionManager.resetTimer());
+    document.addEventListener('click', () => SessionManager.resetTimer());
+    
+    // 로그아웃 버튼 이벤트 추가
+    const logoutButton = document.querySelector('.logout-button');
+    if (logoutButton) {
+        logoutButton.addEventListener('click', () => SessionManager.logout());
+    }
+}
+
+/**
+ * 성능 최적화된 이벤트 리스너 설정
+ */
+function setupOptimizedEventListeners() {
+    // 스크롤 이벤트 쓰로틀링 (100ms 간격으로 제한)
+    const throttledScroll = Utils.throttle(() => {
+        // 스크롤 관련 처리
+        const sidebarContent = document.querySelector('.sidebar-content');
+        if (sidebarContent) {
+            // 스크롤 위치에 따른 처리
+            handleScroll(sidebarContent);
+        }
+    }, 100);
+    
+    document.querySelector('.sidebar-content')?.addEventListener('scroll', throttledScroll);
+
+    // 리사이즈 이벤트 디바운싱 (300ms 대기 후 실행)
+    const debouncedResize = Utils.debounce(() => {
+        // 화면 크기 변경 시 처리
+        handleResize();
+    }, 300);
+    
+    window.addEventListener('resize', debouncedResize);
+
+    // 마우스 이동 이벤트 쓰로틀링 (200ms 간격으로 제한)
+    const throttledMouseMove = Utils.throttle(() => {
+        SessionManager.resetTimer();
+    }, 200);
+    
+    document.addEventListener('mousemove', throttledMouseMove);
+
+    // 키보드 입력 이벤트 디바운싱 (200ms 대기 후 실행)
+    const debouncedKeyPress = Utils.debounce(() => {
+        SessionManager.resetTimer();
+    }, 200);
+    
+    document.addEventListener('keypress', debouncedKeyPress);
+}
+
+/**
+ * 세션 관리 객체
+ */
+const SessionManager = {
+    /**
+     * 세션 타이머 초기화
+     */
+    resetTimer: function() {
+        clearTimeout(STATE.sessionTimer);
+        STATE.sessionTimer = setTimeout(() => this.logout(), CONFIG.SESSION_TIMEOUT);
+    },
+
+    /**
+     * 로그아웃 처리
+     */
+    logout: function() {
+        // 스토리지 클리어
+        localStorage.removeItem('userName');
+        localStorage.removeItem('userId');
+        localStorage.removeItem('userPhone');
+        sessionStorage.clear();
+        
+        // 타이머 클리어
+        clearTimeout(STATE.sessionTimer);
+        
+        // PHP 세션 종료를 위한 요청
+        fetch('/logout.php')
+            .then(() => {
+                window.location.href = '/admin.html';
+            })
+            .catch(error => {
+                console.error('Logout error:', error);
+                window.location.href = '/admin.html';
+            });
+    },
+
+    /**
+     * 사용자 정보 설정
+     */
+    setUserInfo: function(userInfo) {
+        if (!userInfo || !userInfo.name) {
+            console.error('Invalid user data:', userInfo);
+            return;
+        }
+
+        try {
+            // 세션스토리지에 저장
+            sessionStorage.setItem('loggedIn', 'true');
+            sessionStorage.setItem('userName', userInfo.name);
+            sessionStorage.setItem('userId', userInfo.userid);
+            sessionStorage.setItem('userPhone', userInfo.phone);
+
+            // 로컬스토리지에도 저장
+            localStorage.setItem('userName', userInfo.name);
+            localStorage.setItem('userId', userInfo.userid);
+            localStorage.setItem('userPhone', userInfo.phone);
+
+            console.log('Session data stored successfully');
+        } catch (error) {
+            console.error('Error setting login session:', error);
+        }
+    },
+
+    /**
+     * 사용자 정보 가져오기
+     */
+    getUserInfo: function() {
+        return {
+            name: sessionStorage.getItem('userName') || localStorage.getItem('userName'),
+            userid: sessionStorage.getItem('userId') || localStorage.getItem('userId'),
+            phone: sessionStorage.getItem('userPhone') || localStorage.getItem('userPhone')
+        };
+    }
+};
+
+/**
+ * 스크롤 핸들러
+ */
+function handleScroll(element) {
+    const { scrollTop, scrollHeight, clientHeight } = element;
+    
+    // 스크롤이 하단에 도달했는지 체크
+    if (scrollTop + clientHeight >= scrollHeight - 50) {
+        // 필요한 경우 추가 콘텐츠 로드
+        console.log('Bottom reached, loading more content if needed');
+    }
+}
+
+/**
+ * 리사이즈 핸들러
+ */
+function handleResize() {
+    // 모바일 메뉴 상태 처리
+    if (window.innerWidth > 767) {
+        document.body.classList.remove('sidebar-open');
+    }
+    
+    // 사이드바 높이 조정
+    adjustSidebarHeight();
+}
+
+/**
+ * 사이드바 높이 조정
+ */
+function adjustSidebarHeight() {
+    const sidebar = document.querySelector('.sidebar');
+    if (sidebar) {
+        sidebar.style.height = `${window.innerHeight}px`;
+    }
+}
+
+// 초기 로드 시 사이드바 높이 조정
+window.addEventListener('load', adjustSidebarHeight);
+
+
+
+
+
+
+
+
+</script>
+<script src="./js/modal.js"></script>
+<script src="./js/loading-system.js"></script>
+<script src="./js/kj_gisa.js" defer></script>
+<script src="./js/kj_endorseList.js" defer></script>
+<script src="./js/kj_company.js" defer></script>
+<script src="./js/kj_policy.js" defer></script>
+<script src="./js/kj_manual.js" defer></script>
+<script src="./js/field_practice.js" defer></script>
+<script src="./js/field_claim.js" defer></script>
+<script src="./js/employee_list.js" defer></script>
+<script src="./js/holeinone_list.js" defer></script>
+
+</div>
+<!-- 현장실습보험 통계모달 -->
+<div id="perModal" class="pModal">
+	<div class="pModal-content">
+		<div class="pModal-header">
+			<div >
+				<div id="performanceSummary"></div> <!-- 기간 및 합계 -->
+			</div>
+			<div class="filter-container">
+				<span id='yearSelect_'></span>
+				<span id='monthSelect_'></span>
+			</div>
+		</div>
+
+		<div class="pModal-body">
+			<div class="table-container">
+				<table id="performanceTable">
+					<tbody></tbody>
+				</table>
+			</div>
+		</div>
+
+		<!-- ✅ 모달 푸터 추가 -->
+		<div class="modal-footer">
+			<span id="changeP"></span>
+		</div>
+	</div>
+</div>
+<!-- 현장실습보험 질문서 통계 모달  끝-->
+
+<!-- 현장실습보험 클레임 통계 모달 시작-->
+<div id="sjModal" class="cModal">
+	<div class="cModal-content">
+		<div class="cModal-header">
+			 <h4 class="c_modal-title">
+				<span id='sjTitle'></span>
+            </h4>
+			<div id="yearContainer1"></div> <!-- 여기서 <select>를 동적으로 생성 -->
+		</div>
+
+		<div class="cModal-body">
+			<div class="c_table-container">
+				<table id="claimTable">
+					<tbody></tbody>
+				</table>
+			</div>
+		</div>
+
+		<!-- ✅ 모달 푸터 추가 -->
+		<div class="cModal-footer">
+			<span id="c_changeP"></span>
+		</div>
+	</div>
+</div>
+
+
+<!-- 현장실습보험 클레임 통계 모달 끝-->
+
+<!-- 현장실습보험 질문서 번호를 클릭했을 때 모달 시작-->
+
+
+<div id="second-modal" class="q2Modal">
+    <div class="q2Modal-content">
+        <!--<button class="close-q2Modal">X</button>-->
+        <div id="second-modal-body">
+            <input type='hidden' id='questionwareNum_'><!-- questionware -->
+            <input type='hidden' id='school9_'>
+            <input type='hidden' id='inscompany_'>
+            <input type='hidden' id='cNum_' /><!-- 아이디 -->
+            
+
+            <!-- 두 번째 모달 내용 -->
+			
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+			    <span id="beforegabunho"></span>
+                <div class="select-container">
+					<select id="mem-id-select" class="styled-select"> </select>
+				</div>
+            </div>
+            <table  class='q2Table'>
+                <tr> 
+                    <th width='20%'>사업자번호</th>
+                    <td width='30%'><span id='school_2'></span></td>
+                    <th width='20%'>계약자</th>
+                    <td width='30%'><span id='school_1'></span></td>
+                </tr>
+                <tr> 
+                    <th>주소</th>
+                    <td colspan='3'><span id='school_3'></span></td>
+                </tr>
+                <tr> 
+                    <th>연락처</th>
+                    <td><span id='school_4'></span></td>
+                    <th>이메일</th>
+                    <td><span id='school_5'></span></td>
+                </tr>
+                <tr> 
+                    <th>시기</th>
+                    <td><span id='school_6'></span></td>
+                    <th>실습기간</th>
+                    <td><span id='school_7'></span>~<span id='school_8'></span></td>
+                </tr>
+                <tr> 
+                    <th>가입유형</th>
+                    <td colspan='3'><span id='school_9'></span> 대인대물 한도<span id='daein1_'></span> 산재초과 대인대물<span id='daein2_'></span></td>
+                </tr>
+                <tr> 
+                    <td colspan='4'><span id='inwon'></span></td>
+                </tr>
+                <tr> 
+                    <td colspan='4'>대인보험료: <span id='daein_'></span> 대물보험료 : <span id='daemool_'></span> 합계보험료 : <span id='totalP_'></span></td>
+                </tr>
+          
+                <tr>
+                    <th>청약번호</th>
+                    <td  >
+                        <input type="text" id="gabunho-input" class="styled-input" placeholder="청약번호를 입력하세요" />
+                    </td>
+                    <th>증권번호</th>
+                    <td  >
+                        <input type="text" id="certi_" class="styled-input" placeholder="증권번호를 입력하세요" />
+                    </td>
+                </tr>
+                <tr>
+                    <th>카드번호</th>
+                    <td ><input type="text" id="card-number" class="styled-input" placeholder="카드번호를 입력하세요" /></td>
+                    <th>유효기간</th>
+                    <td ><input type="text" id="card-expiry" class="styled-input" placeholder="MM/YY" /></td>
+                </tr>
+                <tr>
+                    <th>은행</th>
+                    <td ><input type="text" id="bank-name" class="styled-input" placeholder="은행명을 입력하세요" /></td>
+                    <th>은행계좌</th>
+                    <td ><input type="text" id="bank-account" class="styled-input" placeholder="은행계좌를 입력하세요" /></td>
+                </tr>
+                <tr>
+                    <th>담당자</th>
+                    <td ><input type="text" id="damdanga" class="styled-input" placeholder="담당자 이름을 입력하세요" /></td>
+                    <th>연락처</th>
+                    <td ><input type="text" id="damdangat" class="styled-input" placeholder="담당자 연락처를 입력하세요" /></td>
+                </tr>
+            </table>
+			<div class="button-group">
+				<button id="print-questionnaire" class="q2-btn-primary">질문서 프린트</button>
+				<button id="print-application" class="q2-btn-primary">청약서</button>
+				<button id="send-id-email" class="q2-btn-primary">아이디,비번초기화 메일</button>
+				<button id="no-accident-check" class="q2-btn-primary">무사고 확인서</button>
+				<button id="send-guide" class="q2-btn-primary">가입안내문</button>
+				<select id="noticeSelect" class="q2-btn-primary">
+					<option value="-1">공지사항</option>
+					<option value="1">[보험금 청구] 보험금 청구시 필요서류 안내</option>
+					<option value="2">[이용안내문] 한화 현장실습 보험 이용 안내문</option>
+					<option value="3">[무사고 확인서 메일]</option>
+				</select>
+			</div>
+           
+        </div>
+    </div>
+</div>
+
+<!-- 현장실습보험 질문서 번호를 클릭했을 때 모달 시작-->
+
+<!-- 현장실습보험 사업자번호 클릭 모달 시작-->
+<div id="q_3_Modal" class="question-modal">
+    <div class="question-modal-content">
+        <!--<button class="question-close-modal">X</button>-->
+
+		<div id="question-modal-body">
+			<!-- 계약자 정보 -->
+			<input type='hidden' id='questionwareNum'><!--questonware-->
+			<input type='hidden' id='school9'>
+			<input type='hidden' id='inscompany'>
+			<h5>1. 계약자 정보</h5>
+			<table class="info-table">
+				<tr>
+					<th width='20%'>사업자번호</th>
+					<td width='30%'><input class='etc-input' type="text" id="school2" ></td>
+					<th width='20%'>계약자</th>
+					<td width='30%'><input class='etc-input' type="text" id="school1" ></td>
+				</tr>
+				<tr>
+					<th>주소</th>
+					<td colspan="3"><textarea class='etc-input'  id="school3" rows="2" ></textarea></td>
+				</tr>
+				<tr>
+					<th>연락처</th>
+					<td><input class='etc-input'  type="text" id="school4" ></td>
+					<th>이메일</th>
+					<td><input class='etc-input'  type="text" id="school5" ></td>
+				</tr>
+			</table>
+
+			<!-- 현장실습 관련 사항 -->
+			<h5>2. 현장실습 관련 사항</h5>
+			<table class="info-table">
+				<tr>
+					<th width='20%'>현장실습시기</th>
+					<td width='80%'>
+					   <div class="radio-group">
+							<label class="radio-label"><input type="radio" name="school6" value="1"> 1학기</label>
+							<label class="radio-label"><input type="radio" name="school6" value="2"> 하계계절</label>
+							<label class="radio-label"><input type="radio" name="school6" value="3"> 2학기</label>
+							<label class="radio-label"><input type="radio" name="school6" value="4"> 동계계절</label>
+						</div>
+
+					</td>
+				</tr>
+				<tr>
+					<th>실습기간(보험기간)</th>
+					<td>
+						<div style="display: flex; align-items: center; justify-content: center; gap: 10px;">
+                            <input type="date" id="school7" class="date-input etc-input" style="width: 120px;">
+                            <span>~</span>
+                            <input type="date" id="school8" class="date-input etc-input" style="width: 120px;">
+                        </div>
+					</td>
+				</tr>
+			</table>
+			<h5>3. 가입유형</h5>
+			<table class="info-table">
+
+			  <tr>
+				<th width='20%' rowspan='2'>보장내용</th>
+				
+				<th width='80%' colspan='2'>가입유형선택</th>
+			  </tr>
+				<tr>
+				 <th><div class="radio-group"><label class="radio-label"><input type="radio" class='plan' name='plan' value="1"> PLAN A</label></div></th>
+				
+				<th><div class="radio-group"><label class="radio-label"><input type="radio" class='plan' name='plan' value="2"> PLAN B</label></div></th>
+			  </tr>
+			   <tr>
+				<th>대인 및 대물 보상 </th>
+				<td style="text-align: center;">1사고당 <span id='daein1'></span>억원</td><!--2-->
+				<td style="text-align: center;">1사고당 <span id='daein2'></span>억원</td><!--3-->
+			  </tr>
+			   <tr>
+				<th>산재보험 초과 <br>사용자배상 </th>
+				<td style="text-align: center;">1사고당 <span id='daein3'></span>억원</td><!--2-->
+				<td style="text-align: center;">1사고당 <span id='daein4'></span>억원</td><!--3-->
+			  </tr>
+			  <tr>
+				<th>배상책임 자기부담금 </th>
+				<td style="text-align: center;">1십만원</td>
+				<td style="text-align: center;">1십만원</td>
+			  </tr>
+			  <tr>
+				<th>실습 중 치료비 </th>
+				<td style="text-align: center;">1인당 및 1사고당 : 1천만원</td>
+				<td style="text-align: center;">1인당 및 1사고당 : 1천만원</td>
+			  </tr>
+
+			</table>
+			<!-- 참여인원 -->
+			<h5>4. 실습기간 별 참여인원</h5>
+			<table class="info-table">
+				<tr>
+					<th width='20%'>실습기간</th>
+					<th width='30%'>참여인원</th>
+					<th width='20%'>실습기간</th>
+					<th width='30%' >참여인원</th>
+				</tr>
+
+				<tr>
+					<th>4주</th>
+					<td><input  type="text" class="week-input" id="week4" onchange="calculateTotal()" ></td>
+					<th class='walign'>16주</th>
+					<td ><input class="week-input" type="text" id="week16"onchange="calculateTotal()" ></td>
+				</tr>
+				<tr>
+					<th>5주</th>
+					<td><input  type="text" class="week-input" id="week5" onchange="calculateTotal()"></td>
+					<th>17주</th>
+					<td ><input class="week-input" type="text" id="week17" onchange="calculateTotal()"></td>
+				</tr>
+				<tr>
+					<th>6주</th>
+					<td><input  type="text" class="week-input" id="week6" onchange="calculateTotal()"></td>
+					<th>18주</th>
+					<td ><input class="week-input" type="text" id="week18" onchange="calculateTotal()"></td>
+				</tr>
+				<tr>
+					<th>7주</th>
+					<td><input  type="text" class="week-input" id="week7" onchange="calculateTotal()"></td>
+					<th>19주</th>
+					<td ><input class="week-input" type="text" id="week19" onchange="calculateTotal()"></td>
+				</tr>
+				<tr>
+					<th>8주</th>
+					<td><input  type="text" class="week-input" id="week8" onchange="calculateTotal()"></td>
+					<th>20주</th>
+					<td ><input class="week-input" type="text" id="week20" onchange="calculateTotal()"></td>
+				</tr>
+				<tr>
+					<th>9주</th>
+					<td><input  type="text" class="week-input" id="week9" onchange="calculateTotal()"></td>
+					<th>21주</th>
+					<td ><input class="week-input" type="text" id="week21" onchange="calculateTotal()"></td>
+				</tr>
+				<tr>
+					<th>10주</th>
+					<td><input  type="text" class="week-input" id="week10" onchange="calculateTotal()"></td>
+					<th>22주</th>
+					<td><input class="week-input" type="text" id="week22"  onchange="calculateTotal()"></td>
+				</tr>
+				<tr>
+					<th>11주</th>
+					<td><input  type="text" class="week-input" id="week11" onchange="calculateTotal()"></td>
+					<th>23주</th>
+					<td ><input class="week-input" type="text" id="week23" onchange="calculateTotal()"></td>
+				</tr>
+				<tr>
+					<th>12주</th>
+					<td><input  type="text" class="week-input" id="week12" onchange="calculateTotal()"></td>
+					<th>24주</th>
+					<td ><input class="week-input" type="text" id="week24" onchange="calculateTotal()"></td>
+				</tr>
+				<tr>
+					<th>13주</th>
+					<td><input  type="text" class="week-input" id="week13" onchange="calculateTotal()"></td>
+					<th>25주</th>
+					<td colspan='2'><input class="week-input" type="text" id="week25" onchange="calculateTotal()"></td>
+				</tr>
+				<tr>
+					<th>14주</th>
+					<td><input  type="text" class="week-input" id="week14" onchange="calculateTotal()"></td>
+					<th>26주</th>
+					<td ><input class="week-input" type="text" id="week26" onchange="calculateTotal()"></td>
+				</tr>
+				<tr>
+					<th>15주</th>
+					<td><input  type="text" class="week-input" id="week15" onchange="calculateTotal()"></td>
+					<th></td>
+					<th></td>
+				</tr>
+				<tr>
+				<th >인원 계 <span id='week_total'></span> 명</th>
+				<td style="text-align: right;">대인보험료<span id='daein'></span></td>
+				<td style="text-align: right;">대물보험료<span id='daemool'></span></td>
+				<td style="text-align: right;">합계보험료<span id='totalP'></span></td>
+
+			  </tr>
+			  <tr>
+				<td colspan='4'><button type="submit" id="write_" class="btn btn-primary"><i class="fas fa-check"></i> 작성완료</button></td>
+			  </tr>
+			</table>
+		</div>
+	</div>
+</div>
+<!-- 현장실습번호 사업자번호 클릭 모달 끝-->
+
+<!-- upload 모달 시작-->
+<!-- 파일 업로드 모달 -->
+<div id="uploadModal" class="upModal">
+    <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+            <span id="cName">파일 업로드</span>
+			
+        </div>
+        <input type="hidden" id="qNum" />
+
+        <!-- Modal Body -->
+        
+            <div class="upload-container">
+                <!-- 파일 타입 선택 -->
+                
+            </div>
+        
+
+        <!-- 파일 목록 테이블 -->
+        <div>
+            <table class="file-table">
+
+                <thead id='fileThead'>
+                    
+                </thead>
+                <tbody id="file_list"></tbody>
+            </table>
+        </div>
+
+        <!-- Modal Footer -->
+        <div class="modal-footer">파일 업로드를 완료하세요.</div>
+    </div>
+</div>
+
+<!-- upload 모달 끝-->
+
+<!--claim 모달-->
+
+<!-- 
+1. 클레임 버튼 (questions.php)
+	- 클릭 시: 
+		$('#third-modal').fadeIn(); 실행 (JS 파일: lincModal.js)
+	- 백엔드 요청:
+		url: '_db/get_questionnaire_details.php'
+	- 동작 방식:
+		questionnaire 테이블에서 num 값을 이용하여 계약자 정보를 호출
+		클레임 관련 정보를 저장 및 업데이트
+2. 번호 클릭 (claimList2.php)
+	- 클릭 시: 
+		$('#third-modal').fadeIn(); 실행 (JS 파일: c_q_modal.js)
+	- 백엔드 요청: 
+		url: '_db/claim/get_claim_details.php'
+	- 동작 방식:
+		claim 테이블의 num 값을 이용하여 클레임 정보를 호출
+		questionnaire 테이블의 certi 값을 참조하여 계약자 번호를 가져옴
+3. 클레임 저장 (claimStore 버튼)
+	- 클릭 시: 
+		클레임 정보 저장 (claimEtc.js) 
+		 questions.php 저장은 cNum 저장 또는 업데이트 가능
+		 claimList2.php 업데이트 
+-->
+<div id="third-modal" class="claimModal">
+    <div class="claim-modal-content">
+        
+        <div id="claim-modal-body">
+            <input type='hidden' id='claimNum__'><!-- claimList Table 의 num   -->
+			<input type='hidden' id='questionNum__'><!-- questionnaire Table num -->
+			<input type='hidden' id='cNum__'><!-- 2014Costmer Table num -->
+            <!-- 두 번째 모달 내용 -->
+            <div class="claim-button-container2">
+				 <div>증권번호 : <span id="certi__" > </span> </div>
+				 <select id="noticeSelect2" class="styled-button">
+				   <option value="-1">공지사항</option>
+					<option value="1">[보험금 청구] 보험금 청구시 필요서류 안내</option>
+					<option value="2">[이용안내문] 한화 현장실습 보험 이용 안내문</option>
+					<option value="3">[무사고 확인서 메일]</option>
+				</select>		
+					
+            </div>
+            <table class="file-table2">
+                <tr> 
+                    <th width='20%'>사업자번호</th>
+                    <td width='30%'><span id='school_2_'></span></td>
+                    <th width='20%'>계약자</th>
+                    <td width='30%'><span id='school_1_'></span></td>
+					
+                    
+                </tr>
+                <tr> 
+                    <th>주소</th>
+                    <td colspan='3'><span id='school_3_'></span></td>
+                </tr>
+
+                <tr> 
+                    <th>시기</th>
+                    <td><span id='school_6_'></span></td>
+                    <th>실습기간</th>
+                    <td><span id='school_7_'></span>~<span id='school_8_'></span></th>
+				</tr>
+					<th>연락처</th>
+                    <td><span id='school_4_'></span></td>
+					<th>이메일</th>
+                    <td><span id='school_5_'></span></td>
+                </tr>
+                <tr> 
+                    <th>가입유형</th>
+                    <td colspan='3'><span id='school_9_'></span> 대인대물 한도<span id='daein1__'></span> 산재초과 대인대물<span id='daein2__'></span></td>
+                </tr>
+				 
+				 <tr>
+                    <th>학생</th>
+                    <td ><input type="text" id="student" class="styled-input" placeholder="학생명을 입력하세요" /></td>
+					<td  colspan='2'></td>
+				</tr>
+                <tr>
+                    <th>사고일자</th>
+                    <td  >
+                        <input type="date" id="wdate_3" class="styled-input" placeholder="사고일자 입력하세요" />
+                    </td>
+                    <th>사고접수번호</th>
+                    <td  >
+                        <input type="text" id="claimNumber" class="styled-input" placeholder="사고 접수번호를 입력하세요" />
+                    </td>
+					
+                </tr>
+			
+               
+				<tr>
+					<th>보험금지급일</th>
+                    <td ><input type="date" id="wdate_2" class="styled-input" placeholder="보험금 지급일 입력하세요" /></td>
+                    <th >보험금</th>
+                    <td ><input type="text" id="claimAmout" class="styled-input right-align" placeholder="보험금" /></td>
+                </tr>
+               
+				 <tr>
+                    <th >사고경위</th>
+                    <td colspan='3'><textarea id="accidentDescription" class="styled-input" placeholder="사고경위를 입력하세요" rows="4" maxlength="500"></textarea></td>
+                </tr>
+                <tr>
+                    <th >담당자</th>
+                    <td ><input type="text" id="damdanga_" class="styled-input" placeholder="담당자 이름을 입력하세요" /></td>
+                    <th>연락처</th>
+                    <td ><input type="text" id="damdangat_" class="styled-input" placeholder="숫자만 입력하세요" /></td>
+                </tr>
+				<tr>
+					<td  colspan='4'>
+						<div class="claim-button-container"> 
+								<button type="button" id="claimStore" class="styled-button">클레임 저장</button>
+						</div>
+					</td>
+				</tr>
+            </table>
+
+            <!-- 추가 버튼 -->
+			
+        </div>
+    </div>
+</div>
+<!-- 클레임 모달 끝-->
+
+
+<!--KJ 대리운전 배서 -->
+
+<div id="kj-endose1-modal" class="eQ2Modal">
+    <div class="eQ2Modal-content">
+        <!--<button class="close-q2Modal">X</button>-->
+        <div id="kj-endose1-modal-body">
+			
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+			    <span id="beforegabunho"></span>
+            </div>
+            <table  class='kjTable'>
+				<tr> 
+                    <th width='16%'>대리운전회사</th>
+                    <th width='12%'>대표자</th>
+					<th width='12%'>연락처</th>
+					<th width='12%'>담당자</th>
+					<th width='12%'>담당자</th>
+					<td width='36%' colspan='3'><input type='text' id='d_hphone' class='geInput2' oninput="formatPhoneNumber(this)"> </td>
+					
+                </tr>
+                <tr> 
+                    <td ><span id='daeri_1'></span></td>
+                    <td ><span id='daeri_2'></span></td>
+					<td ><span id='daeri_3'></span></td>
+					<td ><span id='daeri_4'></span></td>
+					<td ><span id='daeri_5'></span></td>
+					<td colspan='3' rowspan='2'><textarea id='smsContents' class='geInput2' rows="3" style="width:100%;"></textarea></td>
+					
+                </tr>
+				<tr> 
+                    <th>증권번호</th>
+                    <th>보험기간</th>
+					<th>납입방식</th>
+					<th>보험회사</th>
+					<th>정기납입일</th>
+					
+                </tr>
+				<tr> 
+                    <td ><span id='daeri_9'></span></td>
+                    <td ><span id='daeri_10'></span></td>
+					<td ><span id='daeri_11'></span></td>
+					<td ><span id='daeri_12'></span></td>
+					<td ><span id='daeri_13'></span></td>
+					<td colspan='3'><button class="kje-daeri-button" onclick="smsE_send()" >문자발송</button></td>
+					
+                </tr>
+                
+            </table>
+			<div class='right-align'><span id='gijun2'></span><span id='gijun'></span></div>
+			<table  class='kjTable'>
+			  
+			  <thead>
+			   <tr>
+			    <th>순번</th>
+				<th>성명</th>
+				<th>주민번호</th>
+				<th>증권종류</th>
+				<th>사유</th>
+				<th>요율</th>
+				<th>상태</th>				
+				<th>처리유무</th>
+				 <th>월보험료</th>
+				<th>c_preminum</th>
+			  </tr>
+			 </thead>
+			 <tbody id='e_list'></tbody>
+			 
+		 </table> 
+		  
+        </div>
+    </div>
+</div>
+<!--KJ 대리운전 회사 -->
+<div id="kj-DaeriCompany-modal" class="DaeriModal">
+    <div class="DaeriModal-content">
+        <!--<button class="close-q2Modal">X</button>-->
+        <div id="DaeriModal-body">
+			
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+			    <span id="daeri_company"></span>
+                
+            </div>
+             <div id='d_companyInfo'></div> <!-- 대리운전회사 정보-->
+
+			<div id='e_CeritList'></div><!-- 대리운전회사 보험증권 정보-->
+			 
+        </div>
+    </div>
+</div>
+<!--영업담당자 모달-->
+
+<div id="kj-damdangja-modal" class="damdangjaModal">
+    <div class="damdangjaModal-content">
+        <button class="close-damdangjaModal" aria-label="닫기">X</button>
+        <div id="damdangjaModal-body">
+            <div class="modal-header">
+                <span id="damdangja_daeriCompany"></span>
+            </div>
+            <table  class='kjTable'>
+			  <thead>
+			   <tr>
+			    <th>순번</th>
+				<th>성명</th>
+				<th>id</th>
+				<th>선택</th>
+				<th>통장</th>
+			  </tr>
+			 </thead>
+			 <tbody id='damdangja_list'></tbody>
+		 </table>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- 배서기준일 변경 모달 -->
+<div id="kj-date-modal" class="dateModal">
+    <div class="dateModal-content">
+        <button class="close-dateModal" aria-label="닫기">X</button>
+        <div id="dateModal-body">
+            <div class="modal-header">
+                <span id="date_daeriCompany"></span>
+            </div>
+            <table class='kjTable'>
+                <thead>
+                    <tr>
+                        <th width='50%'>변경 전 배서 기준일</th>
+                        <th width='50%'>변경 후 배서 기준일</th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><input type='date'  id='before_endorseDay'></td> 
+                        <td><input type='date'  id='after_endorseDay'></td>
+                        
+                    </tr>
+					
+                </tbody>
+            </table>
+
+			<div class='center-align'><span id='endorseChange'></span></div>
+        </div>
+    </div>
+</div>
+<!-- 일별 배서리스트 -->
+<div id="kj-dailyEndose-modal" class="dailyEndoseModal">
+    <div class="dailyEndoseModal-content">
+        <!--<button class="close-dailyEndoseModal" aria-label="닫기">X</button>-->
+        <div id="dailyEndoseModal-body">
+            <div class="modal-header">
+                <span id="dailyEndose_daeriCompany"></span>
+            </div>
+            <table class='sjTable'>
+                <thead>
+                    <tr>
+                        <th width='3%'>번호</th>
+                        <th width='5%'>성명</th>
+						<th width='8%'>주민번호</th>
+						<th width='8%'>핸드폰</th>
+						<th width='5%'>상태</th>
+						<th width='8%'>증권번호</th>
+						<th width='5%'>증권성격</th>
+						<th width='5%'>보험회사</th>
+						<th width='10%'>대리운전회사</th>
+						<th width='10%'>회사폰</th>
+						<th width='5%'>요율</th>
+						<th width='5%'>월보험료</th>
+						<th width='5%'>c_premium</th>
+						<th width='6%'>처리자</th>
+						<th width='17%'>wdate</th>
+                     </tr>
+                </thead>
+                <tbody id='m_dailyEndose'></tbody>
+            </table>
+
+			
+        </div>
+    </div>
+</div>
+
+<!--검토 -->
+<div id="kj-endorseCheck-modal" class="endorseCheckModal">
+    <div class="endorseCheckModal-content">
+        <button class="close-endorseCheckModal" aria-label="닫기">X</button>
+        <div id="endorseCheckModal-body">
+            <div class="modal-header">
+                <span id="endorseCheck_daeriCompany"></span>
+            </div>
+            <div id='m_endorseCheck'></div>
+        </div>
+    </div>
+</div>
+<!--현황 -->
+<div id="kj-endorseSituation-modal" class="endorseSituationModal">
+    <div class="endorseSituationModal-content">
+      <!--  <button class="close-endorseSituationModal" aria-label="닫기">X</button>-->
+        <div id="endorseSituationModal-body">
+            <div class="modal-header">
+                <span id="endorseSituation_daeriCompany"></span>
+            </div>
+            <div id='m_endorseSituation'></div>
+        </div>
+    </div>
+</div>
+<!-- 배서기준일 변경 모달 -->
+<div id="kj-smsList-modal" class="smsListModal">
+    <div class="smsListModal-content">
+        <button class="close-smsListModal" aria-label="닫기">X</button>
+        <div id="smsListModal-body">
+            <div class="modal-header">
+                <span id="smsList_daeriCompany"></span>
+            </div>
+            <table class='sjTable'>
+                <thead>
+                    <tr>
+                        <th width='6%'>번호</th>
+                        <th width='20%'>발송일</th>
+						<th width='58%'>문자내용</th>
+						<th width='16%'>핸드폰번호</th>
+                     </tr>
+                </thead>
+                <tbody id='m_smsList'></tbody>
+            </table>
+
+			<div id='sms-pagination'></div>
+
+			
+        </div>
+    </div>
+</div>
+<!--대리운전 회사 아이디 ,비밀번호 -->
+
+<div id="kj-id-modal" class="idModal">
+    <div class="idModal-content">
+        <button class="close-idModal" aria-label="닫기">X</button>
+        <div id="idModal-body">
+            <div class="modal-header">
+                <span id="id_daeriCompany"></span><!-- id Table num-->
+            </div>
+            <table  class='kjTable'>
+			  <thead>
+			   <tr>
+			    <th width='10%'>담당자</th>
+				<th width='20%'>id</th>
+				<th width='20%'>핸드폰번호</th>
+				<th width='15%'>읽기전용</th>
+				<th width='20%'>비번</th>
+				<th width='15%'>허용여부</th>
+			  </tr>
+			 </thead>
+			 <tbody id='id_list'></tbody>
+		 </table>
+		 <div id='idExplain' ></div><div id='idExplain2' ></div>
+        </div>
+    </div>
+</div>
+
+
+<!--sms 문자 -->
+<div id="kj-sms-modal" class="smsModal">
+    <div class="smsModal-content">
+        
+        <div id="smsModal-body">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+                <span id="gisa">222</span>
+            </div>
+			<div style="margin-bottom: 10px;">
+              
+               <!-- <span id='sendDate'></span><span id='sendList'></span>-->
+            </div>
+			<div style="margin-bottom: 10px;">
+				 <select id="smskind">
+					<option value="-1">선택</option>
+					<option value="1">주민번호 입력요청</option>
+					<option value="2">확인 </option>
+					<option value="3">확인 </option>
+					<option value="4">확인 </option>
+					<option value="5">확인 </option>
+				</select>  
+			</div>
+            <div style="margin-bottom: 10px;">
+                <label for="smsReceiver">수신번호:</label>
+                <input type="text" id="smsReceiver" class="smsInput" placeholder="숫자만 입력 (예: 01012345678)">
+            </div>
+
+            <div style="margin-bottom: 10px;">
+                <label for="smsMessage" id='sendDate'></label>
+                <textarea id="smsMessage" class="smsInput" rows="5" placeholder="보낼 문자 내용을 입력하세요" style="width: 100%;"></textarea>
+            </div>
+
+            <div style="text-align: right;">
+                <button class="sendSmsBtn" onclick="sendSms()">문자 전송</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!-- KJ 보험료 모달 (600px 고정 너비) -->
+<div id="kj-premium-modal" class="premiumModal">
+    <div class="premiumModal-content">
+        <button class="close-premiumModal" aria-label="닫기">X</button>
+        <div id="premiumModal-body">
+            <div class="modal-header">
+				<input type='hidden' id='p_Cnum'>
+                <span id="ceti_daeriCompany"></span>
+            </div>
+            <table class="kjTable">
+			   <thead>
+			   <tr>
+                    <th rowspan='2'>순번</th>
+                    <th colspan='2'>나이</th>
+                    <th colspan='3'>월보험료</th>
+                    <th colspan='3'>10회분납</th>
+                </tr>
+                <tr>
+
+                    <th>시작</th>
+                    <th>끝</th>
+                    <th>월기본</th>
+                    <th>월특약</th>
+                    <th>합계</th>
+                    <th>년기본</th>
+                    <th>년특약</th>
+                    <th>년계</th>
+                </tr>
+			  </thead>
+
+			  <tbody id='premiumList'></tbody>
+
+				 
+
+                <!-- 여기에 데이터 행이 추가될 것입니다 -->
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<!-- KJ 배서 모달 (600px 고정 너비) -->
+<div id="kj-endorse-modal" class="endorseModal">
+    <div class="endorseModal-content">
+        <button class="close-endorseModal" aria-label="닫기">X</button>
+        <div id="endorseModal-body">
+            <div class="modal-header">
+				<input type='hidden' id='e_Cnum'>
+                <span id="e_ceti_daeriCompany"></span>
+				
+            </div>
+            <table class="kjTable">
+
+			   <thead>
+			   <tr> 
+			     <th  colspan='2'>배서기준일</th>
+				<th ><input type='date' id='endorseDay'></th>
+			   </tr>
+			   <tr>
+                    <th width='10%'>순번</th>
+                    <th width='20%'>성명</th>
+                    <th width='30%'>주민번호</th>
+                    <th width='30%'>핸드폰번호</th>
+					<th width='10%'>증권성격</th>
+                </tr>
+                
+			  </thead>
+
+			  <tbody id='kj_endorseList'></tbody>
+
+				 
+
+                <!-- 여기에 데이터 행이 추가될 것입니다 -->
+            </table>
+        </div>
+    </div>
+</div>
+<!--
+<!-- KJ 신규 모달 (600px 고정 너비) -->
+<div id="kj-new-modal" class="newModal">
+    <div class="newModal-content">
+        <button class="close-newModal" aria-label="닫기">X</button>
+        <div id="newModal-body">
+            <div class="modal-header">
+				<input type='hidden' id='new_Cnum'>
+                <span id="new_ceti_daeriCompany"></span>
+            </div>
+            <table class="kjTable">
+			   <thead>
+			   <tr> 
+			     <th  colspan='2'>신규 기준일</th>
+				<th ><input type='date' id='newDay'></th>
+			   </tr>
+			   <tr>
+                    <th width='10%'>순번</th>
+                    <th width='20%'>성명</th>
+                    <th width='30%'>주민번호</th>
+                    <th width='30%'>핸드폰번호</th>
+					<th width='10%'>증권성격</th>
+                </tr>
+                
+			  </thead>
+
+			  <tbody id='kj_newList'></tbody>
+
+				 
+
+                <!-- 여기에 데이터 행이 추가될 것입니다 -->
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- 증권별코드 -->
+<div id="policyNum-modal" class="policyNumModal">
+    <div class="policyNumModal-content">
+      <!--  <button class="close-policyNumModal" aria-label="닫기">X</button>-->
+        <div id="policyNumModal-body">
+            <div class="modal-header">
+                <span id="policyNum_daeriCompany"></span>
+            </div>
+            <div id='m_policyNum'></div>
+			<div id='Insurance_premium_statistics'></div>
+        </div>
+    </div>
+</div>
+
+<!-- 대리기사리스트 -->
+<div id="gisaList-modal" class="gisaListModal">
+    <div class="gisaListModal-content">
+      <!--  <button class="close-gisaListModal" aria-label="닫기">X</button>-->
+        <div id="gisaListModal-body">
+            <div class="modal-header">
+                <span id="gisaList_daeriCompany"></span>
+            </div>
+            <div id='m_gisaList'></div>
+        </div>
+    </div>
+</div>
+<!-- 정산 -->
+<div id="adjustment-modal" class="adjustmentModal">
+    <div class="adjustmentModal-content">
+      <!--  <button class="close-adjustmentModal" aria-label="닫기">X</button>-->
+        <div id="adjustmentModal-body">
+            <div class="modal-header">
+                <span id="adjustment_daeriCompany"></span>
+            </div>
+            <div id='m_adjustment'></div>
+        </div>
+    </div>
+</div>
+<!--월 배서리스트 검토용 -->
+<div id="adjustmentMothly-modal" class="adjustmentMothlyModal">
+    <div class="adjustmentMothlyModal-content">
+        <button class="close-adjustmentMothlyModal" aria-label="닫기">X</button>
+        <div id="adjustmentMothlyModal-body">
+            <div class="modal-header">
+                <span id="adjustmentMothly_daeriCompany"></span>
+            </div>
+            <div id='m_adjustmentMothly'></div>
+        </div>
+    </div>
+</div>
+<!--정산리스트  -->
+<div id="settlementMothly-modal" class="settlementMothlyModal">
+    <div class="settlementMothlyModal-content">
+        <button class="close-settlementMothlyModal" aria-label="닫기">X</button>
+		 <div class="modal-header">
+                <span id="settlementMothly_daeriCompany"></span>
+            </div>
+        <div id="settlementMothlyModal-body">
+           
+            <div id='m_settlementMothly'></div>
+        </div>
+    </div>
+</div>
+<!-- 보험증권별 보험료 모달 (600px 고정 너비) -->
+<div id="po-premium-modal" class="policyPremiumModal">
+    <div class="policyPremiumModal-content">
+        <button class="close-policyPremiumModal" aria-label="닫기">X</button>
+        <div id="policyPremiumModal-body">
+            <div class="modal-header">
+				<input type='hidden' id='po_Cnum'>
+                <span id="po_ceti_daeriCompany"></span>
+            </div>
+            <table class="kjTable">
+			   <thead>
+			   <tr>
+                    <th rowspan='2'>순번</th>
+                    <th colspan='2'>나이</th>
+
+                    <th colspan='3'>10회분납</th>
+                </tr>
+                <tr>
+
+                    <th>시작</th>
+                    <th>끝</th>
+                    <th>년기본</th>
+                    <th>년특약</th>
+                    <th>년계</th>
+                </tr>
+			  </thead>
+
+			  <tbody id='policyPremiumList'></tbody>
+
+				 
+
+                <!-- 여기에 데이터 행이 추가될 것입니다 -->
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<!--홀인원 보험 -->
+
+
+<div id="hollinwon-modal" class="hollinwonModal">
+    <div class="hollinwonModal-content">
+       <button class="close-hollinwonModal" aria-label="닫기">X</button>
+        <div id="hollinwonModal-body">
+            <div class="modal-header">
+                <span id="hollinwon_daeriCompany"></span>
+            </div>
+            <div id='m_hollinwon'></div>
+			
+        </div>
+    </div>
+</div>
+
+
+<div id="dambo-modal" class="damboModal">
+    <div class="damboModal-content">
+       <button class="close-damboModal" aria-label="닫기">X</button>
+        <div id="damboModal-body">
+            <div class="modal-header">
+                <span id="dambo_daeriCompany"></span>
+            </div>
+            <div id='m_dambo'></div>
+			
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>

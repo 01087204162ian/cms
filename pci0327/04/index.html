@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VIP 골프보험 가입</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+  <!-- Step 1: Intro -->
+  <div class="max-w-md mx-auto bg-white p-6 mt-10 rounded-2xl shadow">
+    <h1 class="text-xl font-bold text-center mb-4">🎩 VIP 전용 골프보험</h1>
+    <ul class="text-sm mb-6 list-disc list-inside text-gray-700">
+      <li>홀인원 100만원 보장</li>
+      <li>상해사고 최대 5천만원 보장</li>
+    </ul>
+    <button class="w-full bg-blue-600 text-white py-2 rounded-xl" onclick="goToPhoneStep()">시작하기</button>
+  </div>
+
+  <!-- Step 2: Phone Verification -->
+  <div id="step-phone" class="max-w-md mx-auto bg-white p-6 mt-6 rounded-2xl shadow hidden">
+    <label class="block mb-2 text-sm text-gray-700">휴대폰 번호</label>
+    <input type="text" id="phoneNumber" placeholder="010-1234-5678" class="w-full border p-2 rounded-xl mb-4" />
+    <button class="w-full bg-blue-600 text-white py-2 rounded-xl" onclick="verifyPhone()">본인 인증하기</button>
+    <p id="verifyMsg" class="text-sm text-green-600 mt-2 hidden">✅ 인증 완료</p>
+  </div>
+
+  <!-- Step 3: Insurance Form -->
+  <div id="step-form" class="max-w-md mx-auto bg-white p-6 mt-6 rounded-2xl shadow hidden">
+    <label class="block mb-1 text-sm text-gray-700">이름</label>
+    <input type="text" id="name" class="w-full border p-2 rounded-xl mb-2" value="" />
+
+    <label class="block mb-1 text-sm text-gray-700">생년월일</label>
+    <input type="text" id="dob" class="w-full border p-2 rounded-xl mb-2" value="" />
+
+    <label class="block mb-1 text-sm text-gray-700">라운딩 예정일</label>
+    <select id="roundDate" class="w-full border p-2 rounded-xl mb-4">
+      <option>2025.04.25</option>
+      <option>2025.04.26</option>
+    </select>
+
+    <label class="block mb-1 text-sm text-gray-700">약관 동의</label>
+    <div class="mb-4">
+      <label class="inline-flex items-center"><input type="checkbox" id="agree1" class="mr-2" /> 이용약관 동의 (필수)</label><br />
+      <label class="inline-flex items-center"><input type="checkbox" id="agree2" class="mr-2" /> 개인정보 수집 동의 (필수)</label>
+    </div>
+    <button class="w-full bg-green-600 text-white py-2 rounded-xl" onclick="submitApplication()">보험가입 완료</button>
+  </div>
+
+  <!-- Step 4: Complete -->
+  <div id="step-complete" class="max-w-md mx-auto bg-white p-6 mt-6 rounded-2xl shadow text-center hidden">
+    <h2 class="text-lg font-bold text-green-600">✅ 가입 완료</h2>
+    <p id="confirmDate" class="text-sm mt-2"></p>
+    <a href="#" class="text-blue-600 text-sm underline mt-2 inline-block">보장내용 확인하기</a>
+    <button class="w-full mt-4 bg-gray-800 text-white py-2 rounded-xl">보험가입 필증 다운로드</button>
+  </div>
+
+  <script>
+    function goToPhoneStep() {
+      document.getElementById("step-phone").classList.remove("hidden");
+    }
+
+    function verifyPhone() {
+      const phone = document.getElementById("phoneNumber").value;
+      if (!/^01[016789]-\d{3,4}-\d{4}$/.test(phone)) {
+        alert("휴대폰 번호를 정확히 입력하세요.");
+        return;
+      }
+      // 모의 인증 처리
+      document.getElementById("verifyMsg").classList.remove("hidden");
+      setTimeout(() => {
+        document.getElementById("step-form").classList.remove("hidden");
+        document.getElementById("name").value = "홍길동";
+        document.getElementById("dob").value = "1990.01.01";
+      }, 500);
+    }
+
+    function submitApplication() {
+      const name = document.getElementById("name").value;
+      const dob = document.getElementById("dob").value;
+      const date = document.getElementById("roundDate").value;
+      const agree1 = document.getElementById("agree1").checked;
+      const agree2 = document.getElementById("agree2").checked;
+
+      if (!agree1 || !agree2) {
+        alert("모든 약관에 동의해주세요.");
+        return;
+      }
+
+      // API 호출 예시 (모의)
+      fetch("https://api.simg.kr/vip-insurance/apply", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          name, dob, date, phone: document.getElementById("phoneNumber").value
+        })
+      })
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById("step-complete").classList.remove("hidden");
+        document.getElementById("confirmDate").innerText = `보험기간: ${date} [1일간]`;
+      })
+      .catch(() => alert("가입 처리 중 오류가 발생했습니다."));
+    }
+  </script>
+</body>
+</html>

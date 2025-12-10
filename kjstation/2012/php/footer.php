@@ -1,0 +1,1 @@
+<img src="/newAdmin/images/logo.gif" width="60" height="32">Copyright 1999, kibs.co.kr

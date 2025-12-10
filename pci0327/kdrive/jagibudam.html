@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>케이드라이브 사고 접수 시스템</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .form-container {
+            padding: 40px;
+        }
+
+        .form-section {
+            margin-bottom: 35px;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-title::before {
+            content: "📋";
+            margin-right: 10px;
+            font-size: 1.5rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            font-weight: 600;
+            color: #34495e;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+
+        .required {
+            color: #e74c3c;
+        }
+
+        input, select, textarea {
+            padding: 12px 15px;
+            border: 2px solid #e1e8ed;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            transform: translateY(-1px);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .datetime-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .contact-info {
+            background: #e8f4f8;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #b8daff;
+        }
+
+        .contact-info h4 {
+            color: #0056b3;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        .submit-section {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e1e8ed;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .validation-message {
+            color: #e74c3c;
+            font-size: 0.85rem;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #c3e6cb;
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .datetime-group {
+                grid-template-columns: 1fr;
+            }
+            
+            .container {
+                margin: 10px;
+            }
+            
+            .form-container {
+                padding: 20px;
+            }
+        }
+
+        .loading {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚗 사고 접수 시스템</h1>
+            <p>신속하고 정확한 사고 처리를 위해 정보를 입력해주세요</p>
+        </div>
+
+        <div class="form-container">
+            <div class="success-message" id="successMessage">
+                ✅ 사고 접수가 완료되었습니다. 담당자가 빠른 시일 내에 연락드리겠습니다.
+            </div>
+
+            <form id="accidentForm">
+                <!-- 고객 정보 섹션 -->
+                <div class="form-section">
+                    <h3 class="section-title">고객 정보</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="customerName">고객명 <span class="required">*</span></label>
+                            <input type="text" id="customerName" name="customerName" required>
+                            <div class="validation-message" id="customerNameError">고객명을 입력해주세요.</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="customerPhone">연락처 <span class="required">*</span></label>
+                            <input type="tel" id="customerPhone" name="customerPhone" placeholder="010-0000-0000" required>
+                            <div class="validation-message" id="customerPhoneError">올바른 연락처를 입력해주세요.</div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="customerEmail">이메일</label>
+                            <input type="email" id="customerEmail" name="customerEmail" placeholder="example@email.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="callId">콜 ID</label>
+                            <input type="text" id="callId" name="callId" placeholder="케이드라이브 콜 번호">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 사고 정보 섹션 -->
+                <div class="form-section">
+                    <h3 class="section-title">사고 정보</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="accidentDate">사고 발생일 <span class="required">*</span></label>
+                            <input type="date" id="accidentDate" name="accidentDate" required>
+                            <div class="validation-message" id="accidentDateError">사고 발생일을 선택해주세요.</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="accidentTime">사고 발생시간 <span class="required">*</span></label>
+                            <input type="time" id="accidentTime" name="accidentTime" required>
+                            <div class="validation-message" id="accidentTimeError">사고 발생시간을 선택해주세요.</div>
+                        </div>
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="accidentLocation">사고 발생 장소 <span class="required">*</span></label>
+                        <input type="text" id="accidentLocation" name="accidentLocation" placeholder="서울시 강남구 테헤란로 123" required>
+                        <div class="validation-message" id="accidentLocationError">사고 발생 장소를 입력해주세요.</div>
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="accidentDescription">사고 상황 설명</label>
+                        <textarea id="accidentDescription" name="accidentDescription" placeholder="사고 경위 및 상황을 자세히 설명해주세요..."></textarea>
+                    </div>
+                </div>
+
+                <!-- 차량 정보 섹션 -->
+                <div class="form-section">
+                    <h3 class="section-title">차량 정보</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="carBrand">차량 브랜드 <span class="required">*</span></label>
+                            <select id="carBrand" name="carBrand" required>
+                                <option value="">선택해주세요</option>
+                                <option value="현대">현대</option>
+                                <option value="기아">기아</option>
+                                <option value="제네시스">제네시스</option>
+                                <option value="BMW">BMW</option>
+                                <option value="벤츠">벤츠</option>
+                                <option value="아우디">아우디</option>
+                                <option value="렉서스">렉서스</option>
+                                <option value="토요타">토요타</option>
+                                <option value="혼다">혼다</option>
+                                <option value="기타">기타</option>
+                            </select>
+                            <div class="validation-message" id="carBrandError">차량 브랜드를 선택해주세요.</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="carModel">차량 모델 <span class="required">*</span></label>
+                            <input type="text" id="carModel" name="carModel" placeholder="그랜저, 소나타 등" required>
+                            <div class="validation-message" id="carModelError">차량 모델을 입력해주세요.</div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="carNumber">차량 번호 <span class="required">*</span></label>
+                            <input type="text" id="carNumber" name="carNumber" placeholder="12가3456" required>
+                            <div class="validation-message" id="carNumberError">차량 번호를 입력해주세요.</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="carYear">연식</label>
+                            <input type="number" id="carYear" name="carYear" min="1990" max="2025" placeholder="2023">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 기사 정보 섹션 -->
+                <div class="form-section">
+                    <h3 class="section-title">기사 정보</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="driverName">기사명</label>
+                            <input type="text" id="driverName" name="driverName" placeholder="알고 있는 경우 입력">
+                        </div>
+                        <div class="form-group">
+                            <label for="driverPhone">기사 연락처</label>
+                            <input type="tel" id="driverPhone" name="driverPhone" placeholder="010-0000-0000">
+                        </div>
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="driverLicense">기사 면허번호</label>
+                        <input type="text" id="driverLicense" name="driverLicense" placeholder="알고 있는 경우 입력">
+                    </div>
+                </div>
+
+                <!-- 수주사 정보 섹션 -->
+                <div class="form-section">
+                    <h3 class="section-title">수주사 정보</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="contractorName">수주사명</label>
+                            <input type="text" id="contractorName" name="contractorName" placeholder="대리운전 업체명">
+                        </div>
+                        <div class="form-group">
+                            <label for="contractorPhone">수주사 연락처</label>
+                            <input type="tel" id="contractorPhone" name="contractorPhone" placeholder="02-0000-0000">
+                        </div>
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="contractorManager">수주사 담당자</label>
+                        <input type="text" id="contractorManager" name="contractorManager" placeholder="담당자명 (알고 있는 경우)">
+                    </div>
+                </div>
+				<!-- 추가 요청사항 섹션 -->
+                <div class="form-section">
+                    <h3 class="section-title">추가 요청사항</h3>
+                    <div class="form-group full-width">
+                        <label for="additionalRequest">추가 요청사항 또는 특이사항</label>
+                        <textarea id="additionalRequest" name="additionalRequest" placeholder="보험 처리, 렌터카 요청, 기타 문의사항 등을 자유롭게 작성해주세요..."></textarea>
+                    </div>
+                </div>
+
+                <!-- 연락처 안내 -->
+                <div class="contact-info">
+                    <h4>📞 긴급 연락처</h4>
+                    <p><strong>케이드라이브 고객센터:</strong> 1588-0000 (24시간 운영)</p>
+                    <p><strong>사고 처리 담당:</strong> 070-0000-0000</p>
+                </div>
+              
+
+                <!-- 제출 버튼 -->
+                <div class="submit-section">
+                    <button type="submit" class="submit-btn" id="submitBtn">
+                        📋 사고 접수하기
+                    </button>
+                    <div class="loading" id="loading">
+                        <div class="spinner"></div>
+                        <span>접수 중...</span>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // 폼 요소들
+        const form = document.getElementById('accidentForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const loading = document.getElementById('loading');
+        const successMessage = document.getElementById('successMessage');
+
+        // 전화번호 자동 포맷팅
+        function formatPhoneNumber(input) {
+            const value = input.value.replace(/\D/g, '');
+            let formattedValue = '';
+            
+            if (value.length <= 3) {
+                formattedValue = value;
+            } else if (value.length <= 7) {
+                formattedValue = value.slice(0, 3) + '-' + value.slice(3);
+            } else {
+                formattedValue = value.slice(0, 3) + '-' + value.slice(3, 7) + '-' + value.slice(7, 11);
+            }
+            
+            input.value = formattedValue;
+        }
+
+        // 전화번호 입력 필드에 이벤트 리스너 추가
+        document.getElementById('customerPhone').addEventListener('input', function() {
+            formatPhoneNumber(this);
+        });
+
+        document.getElementById('driverPhone').addEventListener('input', function() {
+            formatPhoneNumber(this);
+        });
+
+        // 오늘 날짜를 기본값으로 설정
+        document.getElementById('accidentDate').valueAsDate = new Date();
+
+        // 유효성 검사 함수
+        function validateForm() {
+            let isValid = true;
+            const requiredFields = [
+                'customerName', 'customerPhone', 'accidentDate', 
+                'accidentTime', 'accidentLocation', 'carBrand', 
+                'carModel', 'carNumber'
+            ];
+
+            // 모든 에러 메시지 숨기기
+            document.querySelectorAll('.validation-message').forEach(msg => {
+                msg.style.display = 'none';
+            });
+
+            // 필수 필드 검사
+            requiredFields.forEach(fieldId => {
+                const field = document.getElementById(fieldId);
+                const errorMsg = document.getElementById(fieldId + 'Error');
+                
+                if (!field.value.trim()) {
+                    errorMsg.style.display = 'block';
+                    field.style.borderColor = '#e74c3c';
+                    isValid = false;
+                } else {
+                    field.style.borderColor = '#e1e8ed';
+                }
+            });
+
+            // 전화번호 형식 검사
+            const phonePattern = /^\d{3}-\d{4}-\d{4}$/;
+            const customerPhone = document.getElementById('customerPhone');
+            
+            if (customerPhone.value && !phonePattern.test(customerPhone.value)) {
+                document.getElementById('customerPhoneError').style.display = 'block';
+                customerPhone.style.borderColor = '#e74c3c';
+                isValid = false;
+            }
+
+            // 이메일 형식 검사
+            const email = document.getElementById('customerEmail');
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            
+            if (email.value && !emailPattern.test(email.value)) {
+                email.style.borderColor = '#e74c3c';
+                isValid = false;
+            }
+
+            return isValid;
+        }
+
+        // 폼 제출 처리
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (!validateForm()) {
+                return;
+            }
+
+            // 제출 버튼 비활성화 및 로딩 표시
+            submitBtn.style.display = 'none';
+            loading.style.display = 'flex';
+
+            // 폼 데이터 수집
+            const formData = new FormData(form);
+            const data = {};
+            
+            for (let [key, value] of formData.entries()) {
+                data[key] = value;
+            }
+
+            // 시뮬레이션: 실제로는 서버로 데이터 전송
+            setTimeout(() => {
+                console.log('접수된 사고 정보:', data);
+                
+                // 성공 메시지 표시
+                successMessage.style.display = 'block';
+                
+                // 폼 초기화
+                form.reset();
+                document.getElementById('accidentDate').valueAsDate = new Date();
+                
+                // 버튼 상태 복원
+                submitBtn.style.display = 'inline-block';
+                loading.style.display = 'none';
+                
+                // 페이지 상단으로 스크롤
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                
+                // 5초 후 성공 메시지 숨기기
+                setTimeout(() => {
+                    successMessage.style.display = 'none';
+                }, 5000);
+                
+            }, 2000);
+        });
+
+        // 실시간 유효성 검사
+        document.querySelectorAll('input, select, textarea').forEach(field => {
+            field.addEventListener('blur', function() {
+                if (this.hasAttribute('required') && !this.value.trim()) {
+                    this.style.borderColor = '#e74c3c';
+                } else {
+                    this.style.borderColor = '#e1e8ed';
+                }
+            });
+
+            field.addEventListener('input', function() {
+                if (this.style.borderColor === 'rgb(231, 76, 60)') {
+                    this.style.borderColor = '#e1e8ed';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

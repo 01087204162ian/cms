@@ -1,0 +1,622 @@
+<!-- 통계 모달 -->
+<div id="stats-modal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <div id="performanceSummary"></div>
+            <div class="filter-container">
+                <span id='yearSelect_'></span>
+                <span id='monthSelect_'></span>
+            </div>
+            <button onclick="modalManager.closeModal('stats-modal')" class="close-btn">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="table-container">
+                <table id="performanceTable">
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <span id="changeP"></span>
+        </div>
+    </div>
+</div>
+
+<!-- 상세 정보 모달 -->
+<div id="detail-modal" class="modal">
+    <div class="modal-content">
+        <!-- 닫기 버튼 수정 -->
+        <span class="close-btn" onclick="closeModal()">×</span>
+        
+        <!-- 히든 필드 -->
+        <input type="hidden" id="questionwareNum_">
+        <input type="hidden" id="school9_">
+        <input type="hidden" id="cNum_">
+        
+        <div class="modal-header">
+            <div class="header-left">
+                <h3 id="beforegabunho"></h3>
+            </div>
+            <div class="header-right">
+                <select id="mem-id-select" class="styled-select"></select>
+            </div>
+        </div>
+        <div class="modal-body">
+            <table class="modal-table">
+                <tbody>
+                    <!-- 계약자 정보 필드 -->
+                    <tr>
+                        <th width="20%">학교명</th>
+                        <td width="30%" id="school_1"></td>
+                        <th width="20%">사업자번호</th>
+                        <td width="30%" id="school_2"></td>
+                    </tr>
+                    <tr>
+                        <th>주소</th>
+                        <td id="school_3" colspan="3"></td>
+                    </tr>
+                    <tr>
+                        <th>이메일</th>
+                        <td id="school_4"></td>
+                        <th>담당자</th>
+                        <td id="school_5"></td>
+                    </tr>
+                    <tr>
+                        <th>실습시기</th>
+                        <td id="school_6"></td>
+                        <th>가입유형</th>
+                        <td id="school_9"></td>
+                    </tr>
+                    <tr>
+                        <th>보험기간</th>
+                        <td colspan="3">
+                            <span id="school_7"></span> ~ <span id="school_8"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>대인/대물 한도</th>
+                        <td colspan="3">
+                            대인: <span id="daein1_"></span>
+                            대물: <span id="daein2_"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>참여인원</th>
+                        <td colspan="3" id="inwon"></td>
+                    </tr>
+                    <tr>
+                        <th>보험료 정보</th>
+                        <td colspan="3">
+                            대인: <span id="daein_"></span>,
+                            대물: <span id="daemool_"></span>,
+                            총액: <span id="totalP_"></span>
+                        </td>
+                    </tr>
+                    <!-- 입력 필드들 -->
+                    <tr>
+                        <th>청약번호</th>
+                        <td>
+                            <input type="text" 
+                                   id="gabunho_" 
+                                   class="modal-input"
+                                   onkeyup="handleGabunhoEnter(event)">
+                        </td>
+                        <th>증권번호</th>
+                        <td>
+                            <input type="text" 
+                                   id="certi_" 
+                                   class="modal-input"
+                                   onkeyup="handleCertiEnter(event)">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>카드번호</th>
+                        <td>
+                            <input type="text" 
+                                   id="cardNum_" 
+                                   class="modal-input" 
+                                   style="width: 90%"
+                                   onkeyup="handleCardNumberEnter(event)">
+                        </td>
+                        <th>카드유효기간</th>
+                        <td>
+                            <input type="text" 
+                                   id="cardExpiry_" 
+                                   class="modal-input" 
+                                   style="width: 90%"
+                                   placeholder="MM/YY"
+                                   onkeyup="handleCardExpiryEnter(event)">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>은행</th>
+                        <td>
+                            <input type="text" 
+                                   id="bank_" 
+                                   class="modal-input"
+                                   onkeyup="handleBankNameEnter(event)">
+                        </td>
+                        <th>은행계좌</th>
+                        <td>
+                            <input type="text" 
+                                   id="bankAccount_" 
+                                   class="modal-input"
+                                   onkeyup="handleBankAccountEnter(event)">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>담당자</th>
+                        <td>
+                            <input type="text" 
+                                   id="manager_" 
+                                   class="modal-input"
+                                   onkeyup="handleManagerEnter(event)">
+                        </td>
+                        <th>연락처</th>
+                        <td>
+                            <input type="text" 
+                                   id="managerPhone_" 
+                                   class="modal-input" 
+                                   placeholder="010-0000-0000"
+                                   onkeyup="handleManagerPhoneEnter(event)"
+                                   oninput="formatPhoneNumber(event)">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- 버튼 영역 추가 -->
+        <div class="modal-footer">
+            <div class="button-group">
+                <button onclick="handleDocument('question')" class="modal-btn">질문서</button>
+                <button onclick="handleDocument('contract')" class="modal-btn">청약서</button>
+                <button onclick="handleDocument('resetIdPw')" class="modal-btn">아이디/비번초기화</button>
+                <button onclick="handleDocument('safetyMail')" class="modal-btn">무사고확인서</button>
+                <button onclick="handleDocument('guide')" class="modal-btn">가입안내문</button>
+                <select id="noticeSelect" class="modal-btn">
+                    <option value="-1">공지사항</option>
+                    <option value="1">[보험금 청구] 보험금 청구시 필요서류 안내</option>
+                    <option value="2">[이용안내문] 한화 현장실습 보험 이용 안내문</option>
+                    <option value="3">[무사고 확인서 메일]</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 수정 모달 -->
+<div id="edit-modal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn" onclick="Modal.hide('edit-modal')">&times;</span>
+        <div class="modal-header">
+            <h2>정보 수정</h2>
+        </div>
+        <div class="modal-body" id="edit-content">
+            <!-- 수정 폼이 여기에 동적으로 로드됨 -->
+        </div>
+        <div class="modal-footer">
+            <button onclick="saveEdit()" class="btn-save">저장</button>
+            <button onclick="Modal.hide('edit-modal')" class="btn-cancel">취소</button>
+        </div>
+    </div>
+</div>
+
+<!-- 확인 모달 -->
+<div id="confirm-modal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>확인</h2>
+        </div>
+        <div class="modal-body" id="confirm-content">
+            <!-- 확인 메시지가 여기에 동적으로 로드됨 -->
+        </div>
+        <div class="modal-footer">
+            <button onclick="confirmAction()" class="btn-confirm">확인</button>
+            <button onclick="Modal.hide('confirm-modal')" class="btn-cancel">취소</button>
+        </div>
+    </div>
+</div>
+
+<!-- 비즈니스 모달 -->
+<div id="business-modal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>상세 정보</h2>
+            <span class="close" onclick="closeModal()">&times;</span>
+        </div>
+        <div class="modal-body">
+            <!-- 히든 필드 -->
+            <input type='hidden' id='questionwareNum'>
+            <input type='hidden' id='school9'>
+            <input type='hidden' id='inscompany'>
+
+            <!-- 1. 계약자 정보 -->
+            <h5>1. 계약자 정보</h5>
+            <table>
+                <tr>
+                    <th width='20%'>사업자번호</th>
+                    <td width='30%'><input class='etc-input' type="text" id="school2"></td>
+                    <th width='20%'>계약자</th>
+                    <td width='30%'><input class='etc-input' type="text" id="school1"></td>
+                </tr>
+                <tr>
+                    <th>주소</th>
+                    <td colspan="3"><textarea class='etc-input' id="school3" rows="2"></textarea></td>
+                </tr>
+                <tr>
+                    <th>연락처</th>
+                    <td><input class='etc-input' type="text" id="school4"></td>
+                    <th>이메일</th>
+                    <td><input class='etc-input' type="text" id="school5"></td>
+                </tr>
+            </table>
+
+            <!-- 2. 현장실습 관련 사항 -->
+            <h5>2. 현장실습 관련 사항</h5>
+            <table class="info-table">
+                <tr>
+                    <th width='20%'>현장실습시기</th>
+                    <td width='80%'>
+                        <div class="radio-group">
+                            <label class="radio-label"><input type="radio" name="school6" value="1"> 1학기</label>
+                            <label class="radio-label"><input type="radio" name="school6" value="2"> 하계계절</label>
+                            <label class="radio-label"><input type="radio" name="school6" value="3"> 2학기</label>
+                            <label class="radio-label"><input type="radio" name="school6" value="4"> 동계계절</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>실습기간(보험기간)</th>
+                    <td>
+                        <div style="display: flex; align-items: center; justify-content: center; gap: 10px;">
+                            <input type="date" id="school7" class="date-input etc-input" style="width: 120px;">
+                            <span>~</span>
+                            <input type="date" id="school8" class="date-input etc-input" style="width: 120px;">
+                        </div>
+                    </td>
+                </tr>
+            </table>
+
+            <!-- 3. 가입유형 -->
+            <h5>3. 가입유형</h5>
+            <table>
+                <tr>
+                    <th width='20%' rowspan='2'>보장내용</th>
+                    <th width='80%' colspan='2'>가입유형선택</th>
+                </tr>
+                <tr>
+                    <th width='40%'><div class="radio-group"><label class="radio-label"><input type="radio" class='plan' name='plan' value="1"> PLAN A</label></div></th>
+                    <th width='40%'><div class="radio-group"><label class="radio-label"><input type="radio" class='plan' name='plan' value="2"> PLAN B</label></div></th>
+                </tr>
+                <tr>
+                    <th>대인 및 대물 보상</th>
+                    <td style="text-align: center;">1사고당 <span id='daein1'>2</span>억원</td>
+                    <td style="text-align: center;">1사고당 <span id='daein2'>3</span>억원</td>
+                </tr>
+                <tr>
+                    <th>산재보험 초과 사용자배상</th>
+                    <td style="text-align: center;">1사고당 <span id='daein3'>2</span>억원</td>
+                    <td style="text-align: center;">1사고당 <span id='daein4'>3</span>억원</td>
+                </tr>
+            </table>
+
+            <!-- 4. 실습기간 별 참여인원 -->
+            <h5>4. 실습기간 별 참여인원</h5>
+            <table>
+                <tr>
+                    <th width='20%'>실습기간</th>
+                    <th width='30%'>참여인원</th>
+                    <th width='20%'>실습기간</th>
+                    <th width='30%'>참여인원</th>
+                </tr>
+                <tbody id="weekRows">
+                    <!-- 주차별 행이 동적으로 추가됨 -->
+                </tbody>
+                <tr>
+                    <td class='right-align'>인원 <span id='week_total'></span> 명</td>
+                    <td class='right-align'>대인<span id='daein'></span></td>
+                    <th class='right-align'>대물<span id='daemool'></span></th>
+                    <td class='right-align'>보험료<span id='totalP'></span></td>
+                </tr>
+                <tr>
+                    <td colspan='4'>
+                        <button type="submit" id="write_" class="btn btn-primary">작성</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- 클레임 모달 -->
+<div id="claim-modal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>증권번호 :<span id="certi__"></span></h2>
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+        </div>
+        <div class="modal-body">
+            <!-- 히든 필드 -->
+			<input type='hidden' id='claimNum__'><!-- claim Table ㅜㅕㅡ -->
+			<input type='hidden' id='questionNum__'><!-- questionnaire Table num -->
+           
+			<input type='hidden' id='cNum__'><!-- 2014Costmer Table num -->
+           
+            
+            <table class="modal-table">
+                <tr>
+                    <th width="20%">학교명</th>
+                    <td width="30%" id="school_1_"></td>
+                    <th width="20%">사업자번호</th>
+                    <td width="30%" id="school_2_"></td>
+                </tr>
+                <tr>
+                    <th>주소</th>
+                    <td id="school_3_" colspan='3'></td>
+                </tr>
+                <tr>
+                    <th>연락처</th>
+                    <td id="school_4_"></td>
+                    <th>이메일</th>
+                    <td id="school_5_"></td>
+                </tr>
+                <tr>
+                    <th>실습시기</th>
+                    <td id="school_6_"></td>
+                    <th>가입유형</th>
+                    <td id="school_9_"></td>
+                </tr>
+                <tr>
+                    <th>보험기간</th>
+                    <td colspan="3">
+                        <span id="school_7_"></span> ~ <span id="school_8_"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>대인/대물 한도</th>
+                    <td colspan="3">
+                        대인: <span id="daein1__"></span>
+                        대물: <span id="daein2__"></span>
+                    </td>
+                </tr>
+
+				<tr>
+					<td colspan='4'>
+						<div class="claim-button-container">
+							<button type="button" id="claimStore" class="styled-button">클레임 저장</button>
+						</div>
+					</td>
+				</tr>
+				 <tr>
+                    <th>학생</th>
+                    <td ><input type="text" id="student" class="styled-input" placeholder="학생명을 입력하세요" /></td>
+					<td  colspan='2'></td>
+				</tr>
+                <tr>
+                    <th>사고일자</th>
+                    <td  >
+                        <input type="date" id="wdate_3" class="date-input etc-input" placeholder="사고일자 입력하세요" />
+                    </td>
+                    <th>사고접수번호</th>
+                    <td  >
+                        <input type="text" id="claimNumber" class="styled-input" placeholder="사고 접수번호를 입력하세요" />
+                    </td>
+					
+                </tr>
+			
+               
+				<tr>
+					<th>보험금지급일</th>
+                    <td ><input type="date" id="wdate_2" class="date-input etc-input" placeholder="보험금 지급일 입력하세요" /></td>
+                    <th >보험금</th>
+                    <td ><input type="text" id="claimAmout" class="styled-input right-align" placeholder="보험금" /></td>
+                </tr>
+               
+				 <tr>
+                    <th >사고경위</th>
+                    <td colspan='3'><textarea id="accidentDescription" class="styled-input" placeholder="사고경위를 입력하세요" rows="4" maxlength="500"></textarea></td>
+                </tr>
+                <tr>
+                    <th >담당자</th>
+                    <td ><input type="text" id="damdanga_" class="styled-input" placeholder="담당자 이름을 입력하세요" /></td>
+                    <th>연락처</th>
+                    <td ><input type="text" id="damdangat_" class="styled-input"  placeholder="010-0000-0000" oninput="formatPhoneNumber(event)"></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+<!-- 알림 모달 -->
+<div id="alert-modal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>알림</h2>
+        </div>
+        <div class="modal-body" id="alert-content">
+            <!-- 알림 메시지가 여기에 동적으로 로드됨 -->
+        </div>
+        <div class="modal-footer">
+            <button onclick="Modal.hide('alert-modal')" class="btn-confirm">확인</button>
+        </div>
+    </div>
+</div>
+
+<!-- 파일 업로드 모달 -->
+<div id="uploadModal" class="modal upModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <div class="school-info">
+                <p><span id="cName"></span><span id="bunho"></span></p>
+            </div>
+            <span class="close-upmodal">&times;</span>
+        </div>
+        <div class="modal-body">
+            
+            <div class="upload-container">
+                <!-- 동적으로 생성될 파일 업로드 UI -->
+            </div>
+            <div class="file-list-container">
+                <table class="file-table">
+                    <thead id="file_list1"></thead>
+                    <tbody id="file_list"></tbody>
+                </table>
+            </div>
+        </div>
+        <input type="hidden" id="qNum" name="qNum">
+    </div>
+</div>
+
+<!-- 업로드 모달 스타일 -->
+<style>
+.upModal {
+    display: none;
+    position: fixed;
+    z-index: 1001;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.4);
+}
+
+.upModal .modal-content {
+    position: relative;
+    z-index: 1002;
+    background-color: #fefefe;
+    margin: 5% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 800px;
+}
+
+.upload-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 10px 0;
+    padding: 10px;
+    background-color: #ffffff;
+   border: 1px solid #ced4da;
+   
+   
+}
+
+/* 파일 타입 선택 드롭다운 */
+.u_select {
+    min-width: 140px;
+    padding: 5px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 14px;
+    color: #495057;
+    background-color: white;
+    cursor: pointer;
+    transition: border-color 0.15s ease-in-out;
+}
+
+.u_select:hover {
+    border-color: #adb5bd;
+}
+
+/* 동적 입력 필드 */
+#dynamicField {
+    flex: 1;
+}
+
+#dynamicField input {
+    width: 100%;
+    padding: 6px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 14px;
+    color: #495057;
+}
+
+/* 파일 입력 필드 */
+.uploadedFile {
+    flex: 2;
+    padding: 4px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 12px;
+    background-color: white;
+}
+
+/* 업로드 버튼 */
+
+
+
+.uButton{
+	 padding: 6px 20px;
+
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.15s ease-in-out;
+}
+
+.uButton:hover {
+    background-color: #0056b3;
+}
+
+/* 파일 목록 테이블 스타일 개선 */
+.file-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-top: 20px;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.file-table th,
+.file-table td {
+    padding: 12px;
+    border: 1px solid #dee2e6;
+    font-size: 14px;
+}
+.file-table td {
+     text-align:center;
+}
+.file-table th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    color: #495057;
+}
+
+.file-table tr:last-child td {
+    border-bottom: none;
+}
+
+/* 삭제 버튼 스타일 */
+.dButton {
+    padding: 6px 12px;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background-color 0.15s ease-in-out;
+}
+
+.dButton:hover {
+    background-color: #c82333;
+}
+</style>
+
+<script>
+    // DOM이 로드된 후 이벤트 핸들러 연결
+    document.addEventListener('DOMContentLoaded', function() {
+        const managerInput = document.getElementById('manager_');
+        if (managerInput) {
+            managerInput.addEventListener('keyup', handleManagerEnter);
+        }
+    });
+</script> 

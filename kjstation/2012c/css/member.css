@@ -1,0 +1,66 @@
+/* BASIC */
+body {
+	 FONT-SIZE: 9pt;
+	font-family: "Lucida Grande", Verdana, Geneva, Lucida, Arial, Helvetica, sans-serif;
+	margin: 20px;
+}
+
+h1, h2, h3, p, ul {
+	padding: 0;
+	margin: 0;
+}
+
+/*table °ü·Ã*********************'
+*********************************/
+#newUnjeon table
+ { 
+	border-collapse: collapse;
+	width: 100%;
+	font-family: "Century Gothic", "Gill Sans", Arial, sans-serif;
+}
+#popUpMain caption,
+#newMain caption,
+#main caption {
+	text-align: right;
+	font-size: 1em;
+}
+#newUnjeon td,th
+ {
+	text-align: center;
+	border: 1px solid #CCCCCC;
+	padding: 3px 5px 2px 5px;
+	font-size: 1em;
+	height: 24px;
+}
+#newUnjeon th {
+background: url(../../sj/images/th_bg.png) no-repeat left top;
+	color: white;
+
+	text-align: center;
+	border-color: #14556b;
+}
+.textareO{
+	border: 1px none #f9f8f0; 
+	width:96%;
+	background-color:#f9f8f0;
+	padding:2 0 0 0; 
+	font-family:µ¸¿ò,±¼¸²,arial,verdana; 
+	font-size:10pt;
+	height:19px;
+	text-align: center;
+	}
+
+.btn-b{
+	background-color:#ffffff; 
+	color: ; 
+	border: #A1A9B5 1px solid;
+	text-align: center;
+	padding: 1px 5px 10px 5px;
+	font-family:µ¸¿ò,±¼¸²,arial,verdana;
+	font-size:9pt;
+	height:20px
+	}
+
+
+
+

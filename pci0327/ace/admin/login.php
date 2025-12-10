@@ -1,0 +1,86 @@
+<?php
+session_start();
+header("Content-Type: application/json; charset=utf-8");
+require_once '../../../api/config/db_config.php';
+require_once "../../../kj/api/kjDaeri/php/encryption.php";
+
+// 응답 함수
+function sendResponse($success, $message, $data = null) {
+    echo json_encode([
+        'success' => $success,
+        'message' => $message,
+        'data' => $data
+    ], JSON_UNESCAPED_UNICODE);
+    exit;
+}
+
+// POST 요청만 허용
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    sendResponse(false, '잘못된 요청 방식입니다.');
+}
+
+// 입력값 검증
+$id = trim($_POST['id'] ?? '');
+$password = trim($_POST['password'] ?? '');
+
+if (empty($id) || empty($password)) {
+    sendResponse(false, '아이디와 비밀번호를 모두 입력해주세요.');
+}
+
+try {
+    // 데이터베이스 연결
+    $conn = getDbConnection();
+    
+    // clients 테이블에서 manager_email과 manager_phone으로 사용자 조회
+    $stmt = $conn->prepare("
+        SELECT id, name, manager_name, total_quota 
+        FROM clients 
+        WHERE manager_email = ? AND manager_phone = ?
+    ");
+    
+    $stmt->bind_param("ss", $id, $password);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    
+    if ($result->num_rows === 1) {
+        // 로그인 성공
+        $user = $result->fetch_assoc();
+        
+        // 세션에 사용자 정보 저장
+        $_SESSION['client_id'] = $user['id'];
+        $_SESSION['client_name'] = $user['name'];
+        $_SESSION['manager_name'] = $user['manager_name'];
+        $_SESSION['total_quota'] = $user['total_quota'];
+        $_SESSION['login_time'] = time();
+        
+        // 로그인 로그 기록 (선택사항)
+        $log_stmt = $conn->prepare("
+            INSERT INTO login_logs (client_id, login_ip, login_time) 
+            VALUES (?, ?, NOW())
+        ");
+        if ($log_stmt) {
+            $client_ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
+            $log_stmt->bind_param("is", $user['id'], $client_ip);
+            $log_stmt->execute();
+            $log_stmt->close();
+        }
+        
+        sendResponse(true, '로그인 성공', [
+            'client_name' => $user['name'],
+            'manager_name' => $user['manager_name']
+        ]);
+        
+    } else {
+        // 로그인 실패
+        sendResponse(false, '아이디 또는 비밀번호가 올바르지 않습니다.');
+    }
+    
+    $stmt->close();
+    $conn->close();
+    
+} catch (Exception $e) {
+    // 에러 로그 기록
+    error_log("Login Error: " . $e->getMessage());
+    sendResponse(false, '로그인 처리 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+}
+?>

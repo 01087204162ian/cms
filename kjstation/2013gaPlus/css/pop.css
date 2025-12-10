@@ -1,0 +1,56 @@
+dl #memo{
+	margin:0;
+	padding:0;
+	border:0;		
+	
+}
+
+dl{
+	margin:0;
+	padding:0;
+	border:0;		
+	background:#252422;
+	width:100%;
+	
+}
+dt{
+	line-height:35px;
+	font-size:large;
+	text-indent:3em;
+	font-weight:bold;
+	color:white;
+	height:35px;
+	background:url("../../jquery/Chapter03/03/images/background.jpg")
+}
+dt.over{
+	background:url("../../jquery/Chapter03/03/images/background-over.jpg");
+	cursor:pointer;
+}
+dt.selected{
+	background:url("../../jquery/Chapter03/03/images/background_selected.jpg");
+	cursor:default;
+	color:black;
+}
+dd{
+	margin:0;
+	height:350px;
+	background:#D4D0C8;
+}
+dd p{
+	text-indent:1em;
+	padding:20px;
+}
+div #first{
+	width:880px;
+	height:300px;
+	background:#ffffff;
+	display:none;
+	
+}
+div #memo{
+	width:880px;
+	height:300px;
+	background:#ffffff;
+	display:none;
+	
+}

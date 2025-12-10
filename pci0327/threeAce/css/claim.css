@@ -1,0 +1,957 @@
+/* 단계별 보상 신청 프로세스 CSS */
+
+/* 단계 표시기 */
+.claim-steps {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    margin: 0 20px;
+    background: #f8f9fa;
+    border-radius: 12px;
+    margin-bottom: 20px;
+}
+
+.step-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.step-number {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #e0e0e0;
+    color: #999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 16px;
+    margin-bottom: 8px;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.step-text {
+    font-size: 12px;
+    color: #666;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.step-item.active .step-number {
+    background: #1976d2;
+    color: white;
+    border-color: #1976d2;
+    box-shadow: 0 0 0 4px rgba(25, 118, 210, 0.2);
+}
+
+.step-item.active .step-text {
+    color: #1976d2;
+    font-weight: 600;
+}
+
+.step-item.completed .step-number {
+    background: #4caf50;
+    color: white;
+    border-color: #4caf50;
+}
+
+.step-item.completed .step-text {
+    color: #4caf50;
+}
+
+.step-item.completed .step-number::after {
+    content: "✓";
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.step-connector {
+    width: 60px;
+    height: 2px;
+    background: #e0e0e0;
+    margin: 0 10px;
+    margin-bottom: 30px;
+    transition: background-color 0.3s ease;
+}
+
+.step-item.completed + .step-connector {
+    background: #4caf50;
+}
+
+/* 단계 콘텐츠 */
+.claim-step-content {
+    display: none;
+    animation: fadeInUp 0.5s ease-out;
+}
+
+.claim-step-content.active {
+    display: block;
+}
+
+/* 단계 배지 */
+.step-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #1976d2, #1565c0);
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-right: 10px;
+    letter-spacing: 0.5px;
+}
+
+/* 1단계: 가입 확인 스타일 */
+.step-description {
+    background: #f0f8ff;
+    border-left: 4px solid #1976d2;
+    padding: 15px 20px;
+    margin-bottom: 25px;
+    border-radius: 0 8px 8px 0;
+}
+
+.step-description p {
+    margin: 0 0 8px 0;
+    color: #37474f;
+    line-height: 1.5;
+}
+
+.step-description p:last-child {
+    margin-bottom: 0;
+}
+
+.verification-section {
+    margin-bottom: 30px;
+}
+
+.verification-result {
+    margin-top: 25px;
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid #e0e0e0;
+    background: #fafafa;
+}
+
+.verification-content {
+    text-align: center;
+}
+
+.result-icon {
+    font-size: 48px;
+    margin-bottom: 15px;
+}
+
+.result-icon.success {
+    color: #4caf50;
+}
+
+.result-icon.failed {
+    color: #f44336;
+}
+
+.result-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.verification-content.success .result-title {
+    color: #2e7d32;
+}
+
+.verification-content.failed .result-title {
+    color: #d32f2f;
+}
+
+.result-message {
+    color: #666;
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+.signup-details {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px 0;
+    text-align: left;
+    border: 1px solid #e8f5e8;
+}
+
+.signup-detail-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.signup-detail-item:last-child {
+    border-bottom: none;
+}
+
+.signup-detail-item .detail-label {
+    font-weight: 500;
+    color: #555;
+}
+
+.signup-detail-item .detail-value {
+    color: #333;
+    font-weight: 600;
+}
+
+.next-step-button {
+    background: linear-gradient(135deg, #4caf50, #45a049);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 15px;
+}
+
+.next-step-button:hover {
+    background: linear-gradient(135deg, #45a049, #3d8b40);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+}
+
+.failed-actions {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.secondary-button {
+    background: #f5f5f5;
+    color: #666;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.secondary-button:hover {
+    background: #eee;
+    color: #333;
+}
+
+/* 2단계: 서류 안내 스타일 */
+.document-guide {
+    background: white;
+}
+
+.guide-intro {
+    background: #fff8e1;
+    border: 1px solid #ffcc02;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 25px;
+}
+
+.guide-intro p {
+    margin: 0 0 10px 0;
+    color: #e65100;
+    line-height: 1.5;
+}
+
+.guide-intro p:last-child {
+    margin-bottom: 0;
+}
+
+.highlight {
+    font-weight: 600;
+    color: #d84315 !important;
+}
+
+.required-documents {
+    margin-bottom: 30px;
+}
+
+.document-item {
+    background: #fafafa;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    display: flex;
+    gap: 15px;
+    transition: all 0.3s ease;
+}
+
+.document-item:hover {
+    background: #f5f5f5;
+    border-color: #ccc;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.document-item.optional {
+    border-style: dashed;
+    opacity: 0.9;
+}
+
+.doc-icon {
+    font-size: 32px;
+    margin-top: 5px;
+}
+
+.doc-content {
+    flex: 1;
+}
+
+.doc-content h3 {
+    margin: 0 0 15px 0;
+    color: #333;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.doc-requirements {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 15px 0;
+}
+
+.doc-requirements li {
+    padding: 5px 0;
+    color: #555;
+    font-size: 14px;
+    line-height: 1.4;
+    position: relative;
+    padding-left: 15px;
+}
+
+.doc-requirements li::before {
+    content: "•";
+    color: #1976d2;
+    font-weight: bold;
+    position: absolute;
+    left: 0;
+}
+
+.doc-example,
+.doc-note {
+    background: rgba(25, 118, 210, 0.1);
+    border-left: 3px solid #1976d2;
+    padding: 10px 15px;
+    border-radius: 0 6px 6px 0;
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+.example-label,
+.note-label {
+    font-weight: 600;
+    color: #1976d2;
+}
+
+.guide-tips {
+    background: #f0f8ff;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 30px;
+}
+
+.guide-tips h3 {
+    margin: 0 0 15px 0;
+    color: #1976d2;
+    font-size: 16px;
+}
+
+.tip-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+.tip-item {
+    background: white;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #e3f2fd;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.tip-item strong {
+    color: #1976d2;
+}
+
+/* 3단계: 신청서 작성 스타일 */
+.confirmed-info {
+    background: linear-gradient(135deg, #e8f5e8, #f1f8e9);
+    border: 1px solid #c8e6c9;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 25px;
+}
+
+.info-header h3 {
+    margin: 0 0 15px 0;
+    color: #2e7d32;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+}
+
+.info-item {
+    background: rgba(255, 255, 255, 0.8);
+    padding: 10px 15px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.info-label {
+    font-weight: 500;
+    color: #555;
+    font-size: 14px;
+}
+
+.info-value {
+    font-weight: 600;
+    color: #333;
+    font-size: 14px;
+}
+
+.holeinone-info-section,
+.upload-section,
+.additional-info-section {
+    margin-bottom: 30px;
+    padding-bottom: 25px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.holeinone-info-section:last-of-type,
+.upload-section:last-of-type,
+.additional-info-section:last-of-type {
+    border-bottom: none;
+}
+
+.holeinone-info-section h3,
+.upload-section h3,
+.additional-info-section h3 {
+    margin: 0 0 20px 0;
+    color: #333;
+    font-size: 18px;
+    font-weight: 600;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #1976d2;
+}
+
+/* 향상된 파일 업로드 (3단계용) */
+.file-requirement {
+    font-size: 11px;
+    color: #999;
+    margin-top: 4px;
+}
+
+.additional-files {
+    margin-top: 20px;
+}
+
+.add-file-button {
+    background: none;
+    border: 2px dashed #ccc;
+    border-radius: 8px;
+    padding: 15px 20px;
+    width: 100%;
+    color: #666;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.add-file-button:hover {
+    border-color: #1976d2;
+    color: #1976d2;
+    background: #f3f8ff;
+}
+
+.additional-file-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 15px;
+    padding: 10px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+}
+
+.file-upload-box.additional {
+    flex: 1;
+    height: 60px;
+    min-height: 60px;
+}
+
+.remove-file-button {
+    background: #f44336;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease;
+}
+
+.remove-file-button:hover {
+    background: #d32f2f;
+}
+
+/* 단계 액션 버튼 */
+.step-actions {
+    display: flex;
+    gap: 15px;
+    justify-content: space-between;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #f0f0f0;
+}
+
+.submit-button.final {
+    background: linear-gradient(135deg, #f44336, #d32f2f);
+    min-width: 200px;
+}
+
+.submit-button.final:hover:not(:disabled) {
+    background: linear-gradient(135deg, #d32f2f, #c62828);
+    box-shadow: 0 6px 20px rgba(244, 67, 54, 0.3);
+}
+
+/* 확인 모달 향상 */
+.final-confirmation {
+    text-align: left;
+    max-width: 500px;
+}
+
+.final-confirmation h3 {
+    margin: 0 0 20px 0;
+    color: #333;
+    text-align: center;
+}
+
+.confirmation-section {
+    margin-bottom: 20px;
+    padding: 15px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    border-left: 4px solid #1976d2;
+}
+
+.confirmation-section h4 {
+    margin: 0 0 12px 0;
+    color: #1976d2;
+    font-size: 16px;
+}
+
+.confirmation-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.confirmation-item:last-child {
+    border-bottom: none;
+}
+
+.confirmation-item .label {
+    font-weight: 500;
+    color: #666;
+    min-width: 100px;
+}
+
+.confirmation-item .value {
+    color: #333;
+    font-weight: 600;
+    text-align: right;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .claim-steps {
+        padding: 15px 10px;
+        margin: 0 15px 15px;
+    }
+    
+    .step-number {
+        width: 35px;
+        height: 35px;
+        font-size: 14px;
+    }
+    
+    .step-text {
+        font-size: 11px;
+    }
+    
+    .step-connector {
+        width: 40px;
+        margin: 0 5px;
+        margin-bottom: 25px;
+    }
+    
+    .document-item {
+        flex-direction: column;
+        gap: 10px;
+        padding: 15px;
+    }
+    
+    .doc-icon {
+        font-size: 24px;
+        margin-top: 0;
+        text-align: center;
+    }
+    
+    .tip-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+    
+    .info-grid {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+    
+    .step-actions {
+        flex-direction: column;
+    }
+    
+    .submit-button.final {
+        min-width: auto;
+    }
+}
+
+@media (max-width: 480px) {
+    .claim-steps {
+        padding: 12px 8px;
+        margin: 0 10px 12px;
+    }
+    
+    .step-number {
+        width: 30px;
+        height: 30px;
+        font-size: 12px;
+    }
+    
+    .step-text {
+        font-size: 10px;
+    }
+    
+    .step-connector {
+        width: 30px;
+        margin-bottom: 20px;
+    }
+    
+    .step-badge {
+        font-size: 10px;
+        padding: 3px 8px;
+    }
+    
+    .document-item {
+        padding: 12px;
+    }
+    
+    .doc-content h3 {
+        font-size: 16px;
+    }
+    
+    .confirmed-info {
+        padding: 15px;
+    }
+    
+    .info-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+    }
+}
+
+/* 애니메이션 */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 접근성 개선 */
+.step-item:focus-within {
+    outline: 2px solid #1976d2;
+    outline-offset: 4px;
+    border-radius: 8px;
+}
+
+.next-step-button:focus,
+.secondary-button:focus,
+.add-file-button:focus {
+    outline: 2px solid #1976d2;
+    outline-offset: 2px;
+}
+
+/* 추가 스타일 - 기존 CSS와 조화 */
+.file-upload-box.enhanced.uploaded .file-upload-text {
+    color: #2e7d32;
+}
+
+.file-upload-box.enhanced.uploaded .file-upload-hint {
+    color: #4caf50;
+}
+
+/* 로딩 상태 버튼 효과 */
+.submit-button.enhanced:disabled {
+    background: linear-gradient(135deg, #ccc 0%, #999 100%);
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.verification-step.loading .step-title {
+    background: linear-gradient(90deg, #1976d2, #42a5f5, #1976d2);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+/* 성공/실패 상태 애니메이션 */
+.verification-content.success {
+    animation: successPulse 0.6s ease-out;
+}
+
+.verification-content.failed {
+    animation: failedShake 0.6s ease-out;
+}
+
+@keyframes successPulse {
+    0% {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes failedShake {
+    0%, 100% {
+        transform: translateX(0);
+    }
+    10%, 30%, 50%, 70%, 90% {
+        transform: translateX(-5px);
+    }
+    20%, 40%, 60%, 80% {
+        transform: translateX(5px);
+    }
+}
+
+/* 진행률 바 스타일 개선 */
+.upload-progress {
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    border: 1px solid #e1e8ed;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.progress-bar {
+    background: #f0f0f0;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.progress-fill {
+    background: linear-gradient(90deg, #4caf50, #8bc34a, #4caf50);
+    background-size: 200% 100%;
+    animation: progressFlow 2s linear infinite;
+}
+
+@keyframes progressFlow {
+    0% {
+        background-position: -200% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+/* 폼 필드 상태 개선 */
+.form-control.success {
+    border-color: #4caf50;
+    background-color: #f8fff8;
+    box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.1);
+}
+
+.form-control.error {
+    border-color: #f44336;
+    background-color: #fff5f5;
+    box-shadow: 0 0 0 2px rgba(244, 67, 54, 0.1);
+}
+
+/* 텍스트 영역 특별 스타일 */
+textarea.form-control {
+    resize: vertical;
+    min-height: 80px;
+    font-family: inherit;
+    line-height: 1.5;
+}
+
+textarea.form-control:focus {
+    min-height: 120px;
+    transition: min-height 0.3s ease;
+}
+
+/* 체크박스 개선 */
+.checkbox-container.enhanced input[type="checkbox"]:checked {
+    background-color: #1976d2;
+    border-color: #1976d2;
+}
+
+.checkbox-container.enhanced input[type="checkbox"]:checked::after {
+    background-color: white;
+    background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='m13.854 3.646-10 10-.708-.708 10-10z'/%3e%3cpath d='m6.5 10.293 6.646-6.647.708.708-7 7z'/%3e%3c/svg%3e");
+    background-size: 12px;
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 16px;
+    height: 16px;
+    border-radius: 3px;
+}
+
+/* 드래그 앤 드롭 효과 */
+.file-upload-box.enhanced.dragover {
+    border-color: #1976d2;
+    background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+    transform: scale(1.02);
+    box-shadow: 0 8px 25px rgba(25, 118, 210, 0.2);
+}
+
+/* 툴팁 스타일 */
+.tooltip {
+    position: relative;
+    cursor: help;
+}
+
+.tooltip::before {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    z-index: 1000;
+}
+
+.tooltip:hover::before {
+    opacity: 1;
+}
+
+/* 모바일 터치 개선 */
+@media (hover: none) and (pointer: coarse) {
+    .file-upload-box.enhanced {
+        min-height: 80px;
+    }
+    
+    .step-actions {
+        padding-bottom: 20px;
+    }
+    
+    .secondary-button,
+    .next-step-button,
+    .submit-button.enhanced {
+        min-height: 48px;
+    }
+}
+
+/* 다크 모드 대응 (선택사항) */
+@media (prefers-color-scheme: dark) {
+    .document-item {
+        background: #2a2a2a;
+        border-color: #404040;
+        color: #e0e0e0;
+    }
+    
+    .doc-content h3 {
+        color: #ffffff;
+    }
+    
+    .confirmed-info {
+        background: linear-gradient(135deg, #1b5e20, #2e7d32);
+        border-color: #4caf50;
+    }
+    
+    .info-item {
+        background: rgba(255, 255, 255, 0.1);
+        color: #e0e0e0;
+    }
+}
+
+/* 인쇄 스타일 */
+@media print {
+    .claim-steps,
+    .step-actions,
+    .file-upload-container,
+    .upload-section {
+        display: none;
+    }
+    
+    .claim-step-content {
+        display: block !important;
+        page-break-inside: avoid;
+    }
+    
+    .confirmation-section {
+        page-break-inside: avoid;
+        margin-bottom: 20px;
+    }
+}

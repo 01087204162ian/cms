@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>미소 플랫폼 보험료 산출 분석</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header h1 {
+            color: white;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .header p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.1rem;
+        }
+        
+        .rfp-info {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .rfp-info h3 {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+        }
+        
+        .rfp-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .rfp-detail {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 12px;
+            border-radius: 8px;
+            backdrop-filter: blur(5px);
+        }
+        
+        .section-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .section-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .section-title {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin: -10px -10px 20px -10px;
+            font-size: 1.4rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .data-item {
+            background: #f8f9ff;
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid #667eea;
+            transition: transform 0.2s ease;
+        }
+        
+        .data-item:hover {
+            transform: translateX(5px);
+            background: #e8f0fe;
+        }
+        
+        .data-label {
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+        
+        .data-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        
+        .data-desc {
+            font-size: 0.85rem;
+            color: #666;
+        }
+        
+        .calculation-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .calculation-table th {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px 12px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .calculation-table td {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+            text-align: center;
+            vertical-align: middle;
+        }
+        
+        .calculation-table tr:nth-child(even) {
+            background-color: #f8f9ff;
+        }
+        
+        .calculation-table tr:hover {
+            background-color: #e8f0fe;
+        }
+        
+        /* 위험도별 배경색 - 개별 셀에 적용 */
+        .risk-high-cell { 
+            background-color: #ffebee !important; 
+            color: #c62828; 
+            font-weight: 600;
+        }
+        .risk-medium-cell { 
+            background-color: #fff3e0 !important; 
+            color: #ef6c00; 
+            font-weight: 600;
+        }
+        .risk-low-cell { 
+            background-color: #e8f5e8 !important; 
+            color: #2e7d32; 
+            font-weight: 600;
+        }
+        
+        /* 서비스 분야 셀 스타일 */
+        .service-category {
+            background: #f0f4ff !important;
+            font-weight: bold;
+            color: #4a5568;
+            border-right: 3px solid #667eea;
+        }
+        
+        .example-box {
+            background: linear-gradient(135deg, #dcedc1, #a8e6cf);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 5px solid #00b894;
+        }
+        
+        .example-title {
+            color: #00a085;
+            font-weight: 600;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+        
+        .calculation-steps {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+        }
+        
+        .calculation-step {
+            margin: 10px 0;
+            padding: 8px 0;
+            border-bottom: 1px dashed #ddd;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .calculation-step:last-child {
+            border-bottom: none;
+            font-weight: bold;
+            color: #00a085;
+        }
+        
+        .factors-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .factor-card {
+            background: #f8f9ff;
+            border-radius: 12px;
+            padding: 20px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .factor-title {
+            color: #667eea;
+            font-weight: 600;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+        
+        .factor-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .factor-list li {
+            margin: 8px 0;
+            padding: 8px 12px;
+            background: white;
+            border-radius: 6px;
+            border-left: 3px solid #667eea;
+            font-size: 0.9rem;
+        }
+        
+        .summary-box {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .summary-box h3 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+        
+        .summary-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .summary-stat {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            backdrop-filter: blur(5px);
+        }
+        
+        .summary-stat .value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            display: block;
+        }
+        
+        .summary-stat .label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        .chart-container {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .chart-title {
+            text-align: center;
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+        }
+        
+        .chart-bar {
+            display: flex;
+            align-items: center;
+            margin: 15px 0;
+        }
+        
+        .chart-label {
+            width: 120px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        .chart-progress {
+            flex: 1;
+            height: 25px;
+            background: #e3f2fd;
+            border-radius: 12px;
+            margin: 0 15px;
+            overflow: hidden;
+        }
+        
+        .chart-fill {
+            height: 100%;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 12px;
+            transition: width 0.8s ease;
+        }
+        
+        .chart-value {
+            width: 80px;
+            text-align: right;
+            font-weight: 600;
+            color: #667eea;
+        }
+        
+        /* 플로팅 메뉴 스타일 */
+        .floating-menu {
+            position: fixed;
+            top: 50%;
+            right: 30px;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(15px);
+            border-radius: 25px;
+            padding: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .floating-menu:hover {
+            transform: translateY(-50%) scale(1.05);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .floating-menu-toggle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .floating-menu-toggle:hover {
+            background: linear-gradient(135deg, #5a6fd8, #6a4190);
+            transform: rotate(180deg);
+        }
+        
+        .floating-menu-items {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            opacity: 1;
+            transition: all 0.3s ease;
+        }
+        
+        .floating-menu.collapsed .floating-menu-items {
+            opacity: 0;
+            transform: translateY(-20px);
+            pointer-events: none;
+        }
+        
+        .floating-menu-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 15px;
+            text-decoration: none;
+            color: #333;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.8);
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            font-weight: 500;
+            min-width: 180px;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+        }
+        
+        .floating-menu-item:hover {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            transform: translateX(-5px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .floating-menu-item.home {
+            background: linear-gradient(135deg, #00b894, #00a085);
+            color: white;
+        }
+        
+        .floating-menu-item.home:hover {
+            background: linear-gradient(135deg, #019975, #008f7a);
+        }
+        
+        .floating-menu-item.process {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+        }
+        
+        .floating-menu-item.process:hover {
+            background: linear-gradient(135deg, #ff5252, #e53e3e);
+        }
+        
+        .floating-menu-icon {
+            font-size: 1.2rem;
+            width: 20px;
+            text-align: center;
+        }
+        
+        /* 스크롤 투 탑 버튼 */
+        .scroll-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            z-index: 999;
+        }
+        
+        .scroll-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .scroll-to-top:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .data-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .calculation-table {
+                font-size: 0.8rem;
+            }
+            
+            .calculation-table th,
+            .calculation-table td {
+                padding: 8px 6px;
+            }
+            
+            .floating-menu {
+                right: 15px;
+                padding: 10px;
+            }
+            
+            .floating-menu-toggle {
+                width: 50px;
+                height: 50px;
+                font-size: 1.3rem;
+            }
+            
+            .floating-menu-item {
+                min-width: 150px;
+                padding: 10px 12px;
+                font-size: 0.85rem;
+            }
+            
+            .scroll-to-top {
+                right: 15px;
+                bottom: 90px;
+                width: 45px;
+                height: 45px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🧮 미소 플랫폼 보험료 산출 분석</h1>
+            <p>RFP 기반 데이터 분석 및 보험료 산정 모델</p>
+        </div>
+        
+      <!--  <div class="rfp-info">
+            <h3>📋 RFP 기본 정보</h3>
+            <div class="rfp-details">
+                <div class="rfp-detail">
+                    <strong>발신:</strong> 미소
+                </div>
+                <div class="rfp-detail">
+                    <strong>발신일:</strong> 2025년 8월 04일
+                </div>
+                <div class="rfp-detail">
+                    <strong>회신 기한:</strong> 2025년 8월 18일
+                </div>
+                <div class="rfp-detail">
+                    <strong>문의:</strong> 김두연 (010-9572-8851)
+                </div>
+            </div>
+        </div>-->
+        
+        <div class="section-card">
+            <div class="section-title">
+                <span>📊</span>
+                기본 데이터 분석
+            </div>
+            
+            <div class="data-grid">
+                <div class="data-item">
+                    <div class="data-label">월 주문 건수</div>
+                    <div class="data-value">33,000건</div>
+                    <div class="data-desc">2025년 7월 기준</div>
+                </div>
+                <div class="data-item">
+                    <div class="data-label">연간 예상 주문</div>
+                    <div class="data-value">396,000건</div>
+                    <div class="data-desc">월 평균 × 12개월</div>
+                </div>
+                <div class="data-item">
+                    <div class="data-label">누적 거래액</div>
+                    <div class="data-value">1조 5천억원</div>
+                    <div class="data-desc">플랫폼 전체 누적</div>
+                </div>
+                <div class="data-item">
+                    <div class="data-label">현재 손해율</div>
+                    <div class="data-value">62.18%</div>
+                    <div class="data-desc">2024년 기준 (안정화)</div>
+                </div>
+            </div>
+            
+            <div class="chart-container">
+                <div class="chart-title">미소 손해율 개선 현황 (2018-2024)</div>
+                <div class="chart-bar">
+                    <div class="chart-label">2018년</div>
+                    <div class="chart-progress">
+                        <div class="chart-fill" style="width: 100%; background: #f44336;"></div>
+                    </div>
+                    <div class="chart-value">236.01%</div>
+                </div>
+                <div class="chart-bar">
+                    <div class="chart-label">2020년</div>
+                    <div class="chart-progress">
+                        <div class="chart-fill" style="width: 44%; background: #ff9800;"></div>
+                    </div>
+                    <div class="chart-value">104.41%</div>
+                </div>
+                <div class="chart-bar">
+                    <div class="chart-label">2021년</div>
+                    <div class="chart-progress">
+                        <div class="chart-fill" style="width: 26%; background: #4caf50;"></div>
+                    </div>
+                    <div class="chart-value">60.96%</div>
+                </div>
+                <div class="chart-bar">
+                    <div class="chart-label">2024년</div>
+                    <div class="chart-progress">
+                        <div class="chart-fill" style="width: 26%; background: #4caf50;"></div>
+                    </div>
+                    <div class="chart-value">62.18%</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section-card">
+            <div class="section-title">
+                <span>💰</span>
+                서비스 유형별 보험료 산정 (고도화)
+            </div>
+            
+            <div class="table-wrapper">
+                <table class="calculation-table enhanced-table">
+                    <thead>
+                        <tr>
+                            <th>서비스 분야</th>
+                            <th>세부 서비스</th>
+                            <th>위험도</th>
+                            <th>서비스금액</th>
+                            <th>기본 요율</th>
+                            <th>최저보험료</th>
+                            <th>최고 요율</th>
+                            <th>최고보험료</th>
+                            <th>주요 리스크 요인</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td rowspan="4" class="service-category"><strong>생활 청소</strong><br>(홈 케어)</td>
+                            <td>가사도우미</td>
+                            <td class="risk-low-cell">낮음</td>
+                            <td class="price-range">5-15만원</td>
+                            <td class="rate-column">0.2-0.3%</td>
+                            <td class="price-column">100원</td>
+                            <td class="rate-column">0.5%</td>
+                            <td class="price-column">750원</td>
+                            <td>소형 가전/소품 파손</td>
+                        </tr>
+                        <tr>
+                            <td>사무실 청소</td>
+                            <td class="risk-low-cell">낮음</td>
+                            <td class="price-range">10-30만원</td>
+                            <td class="rate-column">0.2-0.3%</td>
+                            <td class="price-column">200원</td>
+                            <td class="rate-column">0.5%</td>
+                            <td class="price-column">1,500원</td>
+                            <td>사무용품 손상</td>
+                        </tr>
+                        <tr>
+                            <td>가전 청소</td>
+                            <td class="risk-medium-cell">중간</td>
+                            <td class="price-range">15-50만원</td>
+                            <td class="rate-column">0.4-0.6%</td>
+                            <td class="price-column">600원</td>
+                            <td class="rate-column">0.8%</td>
+                            <td class="price-column">4,000원</td>
+                            <td>세탁기, 에어컨 등 고가 가전</td>
+                        </tr>
+                        <tr>
+                            <td>방문 손세차</td>
+                            <td class="risk-medium-cell">중간</td>
+                            <td class="price-range">8-25만원</td>
+                            <td class="rate-column">0.3-0.5%</td>
+                            <td class="price-column">240원</td>
+                            <td class="rate-column">0.7%</td>
+                            <td class="price-column">1,750원</td>
+                            <td>차량 스크래치, 내장재 손상</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="3" class="service-category"><strong>이사 및<br>이사청소</strong></td>
+                            <td>이사청소/입주청소</td>
+                            <td class="risk-medium-cell">중간</td>
+                            <td class="price-range">20-80만원</td>
+                            <td class="rate-column">0.3-0.5%</td>
+                            <td class="price-column">600원</td>
+                            <td class="rate-column">0.8%</td>
+                            <td class="price-column">6,400원</td>
+                            <td>가전/가구 손상 리스크</td>
+                        </tr>
+                        <tr>
+                            <td>원룸/소형이사</td>
+                            <td class="risk-high-cell">높음</td>
+                            <td class="price-range">30-120만원</td>
+                            <td class="rate-column">0.5-0.8%</td>
+                            <td class="price-column">1,500원</td>
+                            <td class="rate-column">1.2%</td>
+                            <td class="price-column">14,400원</td>
+                            <td>운반 중 가전/가구 파손</td>
+                        </tr>
+                        <tr>
+                            <td>포장/반포장/일반이사</td>
+                            <td class="risk-high-cell">높음</td>
+                            <td class="price-range">80-500만원</td>
+                            <td class="rate-column">0.6-1.0%</td>
+                            <td class="price-column">4,800원</td>
+                            <td class="rate-column">1.5%</td>
+                            <td class="price-column">75,000원</td>
+                            <td>고가 가전, 가구 대량 운반</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="2" class="service-category"><strong>인테리어 및<br>설비 시공</strong></td>
+                            <td>인테리어 공사</td>
+                            <td class="risk-high-cell">높음</td>
+                            <td class="price-range">100-1000만원</td>
+                            <td class="rate-column">0.7-1.2%</td>
+                            <td class="price-column">7,000원</td>
+                            <td class="rate-column">2.0%</td>
+                            <td class="price-column">200,000원</td>
+                            <td>시공 오류, 기존 시설 손상</td>
+                        </tr>
+                        <tr>
+                            <td>전기·수도·가스 설치</td>
+                            <td class="risk-medium-cell">중간</td>
+                            <td class="price-range">20-200만원</td>
+                            <td class="rate-column">0.4-0.7%</td>
+                            <td class="price-column">800원</td>
+                            <td class="rate-column">1.0%</td>
+                            <td class="price-column">20,000원</td>
+                            <td>누수, 화재, 가스누출</td>
+                        </tr>
+                        <tr>
+                            <td class="service-category"><strong>정리수납</strong></td>
+                            <td>정리수납 컨설팅</td>
+                            <td class="risk-low-cell">낮음</td>
+                            <td class="price-range">8-30만원</td>
+                            <td class="rate-column">0.2-0.3%</td>
+                            <td class="price-column">160원</td>
+                            <td class="rate-column">0.4%</td>
+                            <td class="price-column">1,200원</td>
+                            <td>상대적 저위험</td>
+                        </tr>
+                        <tr>
+                            <td class="service-category"><strong>전문/특수<br>청소</strong></td>
+                            <td>폐기물/방역/복구 청소</td>
+                            <td class="risk-high-cell">높음</td>
+                            <td class="price-range">50-300만원</td>
+                            <td class="rate-column">0.8-1.5%</td>
+                            <td class="price-column">4,000원</td>
+                            <td class="rate-column">2.5%</td>
+                            <td class="price-column">75,000원</td>
+                            <td>화학물질, 특수장비 사용</td>
+                        </tr>
+                        <tr>
+                            <td class="service-category"><strong>운송 서비스</strong></td>
+                            <td>용달/화물 운송</td>
+                            <td class="risk-high-cell">높음</td>
+                            <td class="price-range">10-100만원</td>
+                            <td class="rate-column">0.6-1.0%</td>
+                            <td class="price-column">600원</td>
+                            <td class="rate-column">1.5%</td>
+                            <td class="price-column">15,000원</td>
+                            <td>운송 중 파손 리스크</td>
+                        </tr>
+                        <tr>
+                            <td class="service-category"><strong>기타 서비스</strong></td>
+                            <td>인터넷/TV 가입</td>
+                            <td class="risk-low-cell">낮음</td>
+                            <td class="price-range">3-10만원</td>
+                            <td class="rate-column">0.1-0.2%</td>
+                            <td class="price-column">30원</td>
+                            <td class="rate-column">0.3%</td>
+                            <td class="price-column">300원</td>
+                            <td>배선 작업시 소형 손상</td>
+                        </tr>
+                        <tr>
+                            <td class="service-category"><strong>렌탈 서비스</strong></td>
+                            <td>가전 렌탈</td>
+                            <td class="risk-high-cell">높음</td>
+                            <td class="price-range">월 5-50만원</td>
+                            <td class="rate-column">0.5-0.8%</td>
+                            <td class="price-column">250원</td>
+                            <td class="rate-column">1.2%</td>
+                            <td class="price-column">6,000원</td>
+                            <td>렌탈 제품 분실/파손</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- 보험료 계산 범례 -->
+            <div class="calculation-legend">
+                <h4>💡 보험료 산출 기준</h4>
+                <div class="legend-grid">
+                    <div class="legend-item">
+                        <span class="legend-color low-risk"></span>
+                        <strong>저위험:</strong> 기본 요율 0.1-0.3%
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-color medium-risk"></span>
+                        <strong>중위험:</strong> 기본 요율 0.3-0.8%
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-color high-risk"></span>
+                        <strong>고위험:</strong> 기본 요율 0.8-2.5%
+                    </div>
+                </div>
+                <div class="calculation-note">
+                    <p><strong>참고:</strong> 최고 요율은 파트너 등급, 지역, 계절적 요인 등을 반영한 최대 적용 요율입니다.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section-card">
+            <div class="section-title">
+                <span>🔢</span>
+                건별 보험료 산출 예시
+            </div>
+            
+            <div class="example-box">
+                <div class="example-title">🏠 이사청소 서비스 (150만원)</div>
+                <div class="calculation-steps">
+                    <div class="calculation-step">서비스 금액: 1,500,000원</div>
+                    <div class="calculation-step">적용 요율: 0.4%</div>
+                    <div class="calculation-step">계산: 1,500,000원 × 0.4%</div>
+                    <div class="calculation-step">파트너 부담 보험료: 6,000원</div>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <div class="example-title">🔧 인테리어 공사 서비스 (300만원)</div>
+                <div class="calculation-steps">
+                    <div class="calculation-step">서비스 금액: 3,000,000원</div>
+                    <div class="calculation-step">적용 요율: 0.9%</div>
+                    <div class="calculation-step">계산: 3,000,000원 × 0.9%</div>
+                    <div class="calculation-step">파트너 부담 보험료: 27,000원</div>
+                </div>
+            </div>
+            
+            <div class="example-box">
+                <div class="example-title">🧹 가사도우미 서비스 (8만원)</div>
+                <div class="calculation-steps">
+                    <div class="calculation-step">서비스 금액: 80,000원</div>
+                    <div class="calculation-step">적용 요율: 0.25%</div>
+                    <div class="calculation-step">계산: 80,000원 × 0.25%</div>
+                    <div class="calculation-step">파트너 부담 보험료: 200원</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section-card">
+            <div class="section-title">
+                <span>🎯</span>
+                위험도 조정 팩터
+            </div>
+            
+            <div class="factors-grid">
+                <div class="factor-card">
+                    <div class="factor-title">👥 파트너 등급별 할인/할증</div>
+                    <ul class="factor-list">
+                        <li>S등급: -20% (사고 이력 우수)</li>
+                        <li>A등급: -10%</li>
+                        <li>B등급: 기본 요율</li>
+                        <li>C등급: +20% (신규/사고 이력)</li>
+                    </ul>
+                </div>
+                
+                <div class="factor-card">
+                    <div class="factor-title">🗺️ 지역별 조정</div>
+                    <ul class="factor-list">
+                        <li>서울/수도권: 기본 요율</li>
+                        <li>광역시: -5%</li>
+                        <li>기타 지역: -10%</li>
+                    </ul>
+                </div>
+                
+                <div class="factor-card">
+                    <div class="factor-title">💵 서비스 금액별 구간</div>
+                    <ul class="factor-list">
+                        <li>100만원 미만: +10% (소액 다빈도)</li>
+                        <li>100-500만원: 기본 요율</li>
+                        <li>500만원 이상: -5% (대형 서비스)</li>
+                    </ul>
+                </div>
+                
+                <div class="factor-card">
+                    <div class="factor-title">🔨 서비스 유형별 추가 고려사항</div>
+                    <ul class="factor-list">
+                        <li>인테리어 공사: 기존 시설 손상 위험 +15%</li>
+                        <li>전문 청소: 화학물질 사용 +10%</li>
+                        <li>가전 렌탈: 장기 계약 리스크 -5%</li>
+                        <li>정기 서비스: 신뢰도 높음 -10%</li>
+                    </ul>
+                </div>
+                
+                <div class="factor-card">
+                    <div class="factor-title">⚠️ 리스크 관리</div>
+                    <ul class="factor-list">
+                        <li>목표 손해율: 60-70%</li>
+                        <li>기본 한도: 500만원</li>
+                        <li>보수 한도: 300만원</li>
+                        <li>자기부담금: 10만원</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="summary-box">
+            <h3>📈 연간 예상 보험료 수입</h3>
+            <div class="summary-stats">
+                <div class="summary-stat">
+                    <span class="value">396,000건</span>
+                    <span class="label">연간 주문</span>
+                </div>
+                <div class="summary-stat">
+                    <span class="value">100만원</span>
+                    <span class="label">평균 서비스 금액</span>
+                </div>
+                <div class="summary-stat">
+                    <span class="value">0.4%</span>
+                    <span class="label">평균 보험료율</span>
+                </div>
+                <div class="summary-stat">
+                    <span class="value">15.8억원</span>
+                    <span class="label">예상 연간 보험료</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section-card">
+            <div class="section-title">
+                <span>🔄</span>
+                정산 방식 및 추가 고려사항
+            </div>
+            
+            <div class="factors-grid">
+                <div class="factor-card">
+                    <div class="factor-title">💳 정산 방식</div>
+                    <ul class="factor-list">
+                        <li><strong>건별 실시간:</strong> 매칭 완료 시 즉시 차감</li>
+                        <li><strong>월단위 집계:</strong> 월말 일괄 정산</li>
+                        <li><strong>자동 연동:</strong> 미소 플랫폼 결제 시스템</li>
+                    </ul>
+                </div>
+                
+                <div class="factor-card">
+                    <div class="factor-title">🛡️ 보장 범위</div>
+                    <ul class="factor-list">
+                        <li>재산 피해 (TV, 모니터 등)</li>
+                        <li>상해 보험 (고객/파트너)</li>
+                        <li>배상 책임</li>
+                        <li>면책: 고의/중과실, 불가항력</li>
+                    </ul>
+                </div>
+                
+                <div class="factor-card">
+                    <div class="factor-title">📊 데이터 활용</div>
+                    <ul class="factor-list">
+                        <li>미소 축적 데이터 기반 요율 정교화</li>
+                        <li>반기별 손해율 검토 후 조정</li>
+                        <li>서비스별 사고 패턴 분석</li>
+                        <li>지역별 리스크 특성 반영</li>
+                    </ul>
+                </div>
+                
+                <div class="factor-card">
+                    <div class="factor-title">🤝 전략적 파트너십</div>
+                    <ul class="factor-list">
+                        <li>미소 브랜드 가치 상승</li>
+                        <li>고객 신뢰도 증대</li>
+                        <li>보험사 신규 시장 진출</li>
+                        <li>윈-윈 구조 구축</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 플로팅 메뉴 -->
+    <div class="floating-menu" id="floatingMenu">
+        <button class="floating-menu-toggle" id="menuToggle">☰</button>
+        <div class="floating-menu-items">
+            <a href="./index.html" class="floating-menu-item home">
+                <span class="floating-menu-icon">🏠</span>
+                <span>메인으로</span>
+            </a>
+            <a href="2.html" class="floating-menu-item process">
+                <span class="floating-menu-icon">⚙️</span>
+                <span>운영 프로세스</span>
+            </a>
+            <a href="#" class="floating-menu-item" onclick="scrollToSection('기본 데이터 분석')">
+                <span class="floating-menu-icon">📊</span>
+                <span>데이터 분석</span>
+            </a>
+            <a href="#" class="floating-menu-item" onclick="scrollToSection('서비스 유형별 보험료 산정')">
+                <span class="floating-menu-icon">💰</span>
+                <span>보험료 산정</span>
+            </a>
+            <a href="#" class="floating-menu-item" onclick="scrollToSection('연간 예상 보험료 수입')">
+                <span class="floating-menu-icon">📈</span>
+                <span>수입 예상</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- 스크롤 투 탑 버튼 -->
+    <button class="scroll-to-top" id="scrollToTop">↑</button>
+
+    <script>
+        // 플로팅 메뉴 토글
+        const floatingMenu = document.getElementById('floatingMenu');
+        const menuToggle = document.getElementById('menuToggle');
+
+        menuToggle.addEventListener('click', function() {
+            floatingMenu.classList.toggle('collapsed');
+            menuToggle.textContent = floatingMenu.classList.contains('collapsed') ? '☰' : '✕';
+        });
+
+        // 스크롤 투 탑 기능
+        const scrollToTopBtn = document.getElementById('scrollToTop');
+
+        window.addEventListener('scroll', function() {
+            if (window.pageYOffset > 300) {
+                scrollToTopBtn.classList.add('visible');
+            } else {
+                scrollToTopBtn.classList.remove('visible');
+            }
+        });
+
+        scrollToTopBtn.addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // 섹션으로 스크롤하는 함수
+        function scrollToSection(sectionTitle) {
+            const sections = document.querySelectorAll('.section-title, .summary-box h3');
+            let targetSection = null;
+
+            sections.forEach(section => {
+                if (section.textContent.includes(sectionTitle) || section.querySelector('span') && section.querySelector('span').nextSibling.textContent.includes(sectionTitle)) {
+                    targetSection = section.closest('.section-card, .summary-box');
+                }
+            });
+
+            if (targetSection) {
+                targetSection.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        }
+
+        // 페이지 로드 시 애니메이션
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.section-card, .summary-box');
+            
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            cards.forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(card);
+            });
+
+            // 차트 애니메이션
+            const chartFills = document.querySelectorAll('.chart-fill');
+            chartFills.forEach(fill => {
+                const width = fill.style.width;
+                fill.style.width = '0%';
+                setTimeout(() => {
+                    fill.style.width = width;
+                }, 500);
+            });
+        });
+
+        // 키보드 단축키
+        document.addEventListener('keydown', function(event) {
+            // ESC 키로 메뉴 닫기
+            if (event.key === 'Escape') {
+                floatingMenu.classList.add('collapsed');
+                menuToggle.textContent = '☰';
+            }
+            
+            // Home 키로 맨 위로
+            if (event.key === 'Home') {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            }
+        });
+    </script>
+</body>
+</html>

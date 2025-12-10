@@ -1,0 +1,82 @@
+-- 홀인원 보험 신청 테이블
+CREATE TABLE holeinone_applications (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    coupon_number VARCHAR(20) NOT NULL COMMENT '쿠폰 번호',
+    applicant_name TEXT NOT NULL COMMENT '신청자 이름 (암호화)',
+    applicant_phone TEXT NOT NULL COMMENT '신청자 전화번호 (암호화)',
+    golf_course VARCHAR(100) NOT NULL COMMENT '골프장 이름',
+    tee_time DATETIME NOT NULL COMMENT '티오프 시간',
+    terms_agreed TINYINT(1) NOT NULL DEFAULT 0 COMMENT '약관 동의 여부',
+    unique_hash VARCHAR(64) NOT NULL COMMENT '고유 해시값',
+    status ENUM('pending', 'approved', 'rejected') NOT NULL DEFAULT 'pending' COMMENT '신청 상태',
+    created_at DATETIME NOT NULL COMMENT '생성 시간',
+    updated_at DATETIME NULL COMMENT '업데이트 시간',
+    INDEX idx_coupon (coupon_number),
+    INDEX idx_hash (unique_hash),
+    INDEX idx_status (status)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- 동반자 정보 테이블
+CREATE TABLE holeinone_companions (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    application_id INT NOT NULL COMMENT '신청 ID',
+    companion_name TEXT NOT NULL COMMENT '동반자 이름 (암호화)',
+    companion_phone TEXT NOT NULL COMMENT '동반자 전화번호 (암호화)',
+    created_at DATETIME NOT NULL COMMENT '생성 시간',
+    FOREIGN KEY (application_id) REFERENCES holeinone_applications(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- 쿠폰 번호 관리 테이블 (선택 사항)
+CREATE TABLE `holeinone_coupons` (
+  `id` int(11) NOT NULL,
+  `client_id` int(11) NOT NULL COMMENT '고객사 ID',
+  `coupon_number` varchar(20) NOT NULL COMMENT '쿠폰 번호',
+  `is_used` tinyint(1) NOT NULL DEFAULT 0 COMMENT '사용 여부',
+  `used_count` int(11) NOT NULL DEFAULT 0 COMMENT '사용 횟수',
+  `used_at` datetime DEFAULT NULL COMMENT '사용 시간',
+  `created_at` datetime NOT NULL COMMENT '생성 시간'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE `holeinone_coupon_usage` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `coupon_id` int(11) NOT NULL COMMENT '쿠폰 ID (holeinone_coupons.id 참조)',
+  `user_name` varchar(100) DEFAULT NULL COMMENT '사용자 이름',
+  `user_phone` varchar(20) DEFAULT NULL COMMENT '사용자 전화번호',
+  `user_email` varchar(100) DEFAULT NULL COMMENT '사용자 이메일',
+  `golf_course_name` varchar(200) DEFAULT NULL COMMENT '골프장명',
+  `golf_course_hole` varchar(10) DEFAULT NULL COMMENT '홀 번호 (예: 1번홀)',
+  `usage_date` datetime NOT NULL COMMENT '사용 일시',
+  `ip_address` varchar(45) DEFAULT NULL COMMENT '사용자 IP',
+  `user_agent` text DEFAULT NULL COMMENT '브라우저 정보',
+  `notes` text DEFAULT NULL COMMENT '특이사항',
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '기록 생성시간',
+  
+  PRIMARY KEY (`id`),
+  KEY `idx_coupon_id` (`coupon_id`),
+  KEY `idx_usage_date` (`usage_date`),
+  KEY `idx_user_phone` (`user_phone`),
+  
+  FOREIGN KEY (`coupon_id`) REFERENCES `holeinone_coupons`(`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='홀인원 쿠폰 사용 이력';
+Reading cookie in cross-site context may be impacted on Chrome
+Cookies with the SameSite=None; Secure and not Partitioned attributes that operate in cross-site contexts are third-party cookies. Chrome is moving towards a new experience that allows users to choose to browse without third-party cookies.
+
+Learn more from the linked article about preparing your site to avoid potential breakage.
+
+쿠키 2개
+이름	도메인 & 경로
+__cf_bm	.pixabay.com/
+_cfuvid	.pixabay.com/
+자세히 알아보기: Chrome의 서드 파티 쿠키 처리 관련 변경사항
+
+
+project/
+├── index.html                 (메인 페이지)
+├── js/
+│   └── validateCoupon.js     (쿠폰 검증 로직)
+├── api/
+│   ├── config/
+│   │   └── db_config.php     (데이터베이스 설정)
+│   └── customer/
+│       ├── validateCoupon.php (쿠폰 검증 API)
+│       └── applyAce.php      (가입 신청 API)

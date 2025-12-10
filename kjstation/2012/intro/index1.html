@@ -1,0 +1,90 @@
+<?include '../../2012/lib/lib_auth.php';?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=euc-kr" />
+	<title><?=$titleName?></title>
+	<link href="../css/sj.css" rel="stylesheet" type="text/css" />
+	<link href="../../sj/calendar/dhtmlgoodies_calendar/dhtmlgoodies_calendar.css" rel="stylesheet" type="text/css" />
+	<script src="../../sj/calendar/dhtmlgoodies_calendar/dhtmlgoodies_calendar.js" type="text/javascript"></script>
+	<script src="../../sj/js/smsAjax.js" type="text/javascript"></script><!--SmsAjax-->
+	<script src="../js/create.js" type="text/javascript"></script><!--ajax-->	
+	<script src="./js/IntroAjax1.js" type="text/javascript"></script><!--ajax-->
+</head>
+<?$redirectURL='DMM_System'?>
+<body id="ssangyong">
+<div id="wrapper">
+	<div id="banner"><? include "../php/idname.php"?></div>
+	<div id="mainNav"><? include "../php/nav.php";?><!--메인 메뉴--></div>
+	<div id="contentWrapper"> 
+		<div id="main">
+		  <form>
+			  <div id="serchPart">
+				  
+				  <input type="text" id='endorseDay' value="<?=$now_time?>" readonly name="endorseDay"  size='10' maxlength='10' /><img class="calendar" src="/sj/images/calendar.gif" onclick="displayCalendar(document.forms[0].endorseDay,'yyyy-mm-dd',this)"  />
+			      대리기사 성명
+				  <input type='text' id='s_contents'  size='16' maxlength='16' >
+				  <img class="searchButton" src="/sj/images/search.gif" align='absmiddle' onfocus='blur()' onClick="serch()" />
+				 <input type="button" class="btn-b" style="cursor:hand;width:80;"  value="Memo"  onFocus='this.blur()' onClick="order()">
+			   </div><!-- serchPart 끝-->
+
+
+			   <div id="listPart" >
+					  <input type='hidden' id='page' />
+					<table>
+					 <caption>기사리스트</caption>
+					  <thead>
+					  <tr>
+						<td width='3%'>번호</td>
+						<td width='9%'>성명</td>
+						<td width='12%'>주민번호</td>
+						<td width='10%'>상태</td>
+						<td width='10%'>탁송</td>
+						<td width='12%'>대리운전회사</td>
+						<td width='5%'>보험회사</td>
+						<td width='15%'>증권번호</td>
+						<td width='9%'>등록일</td>
+						<td width='9%'>해지일</td>
+						
+					</tr>
+					</thead>
+					<tbody class="scrollingContent">
+					<? for($j=0;$j<20;$j++){?>
+					 <tr>
+						<td onMouseOver="this.style.backgroundColor='#EFF4F8'; style.cursor='hand'" onMouseOut="this.style.backgroundColor=''" >
+						  <span id='bunho<?=$j?>' >&nbsp;</span>
+						  <input type='hidden' id='num<?=$j?>'>
+						  
+						</td>
+						<td><span id='A2a<?=$j?>' >&nbsp;</span></td>
+						<td><span id='A3a<?=$j?>'>&nbsp;</span></td>
+						<td><span id='A4a<?=$j?>'>&nbsp;</span></td>
+						<td><span id='A5a<?=$j?>'>&nbsp;</span></td>
+						<td><span id='A6a<?=$j?>'>&nbsp;</span><input type='hidden' id='cNum<?=$j?>'></td><!--대리컴퍼티-->
+						<td><span id='A8a<?=$j?>'>&nbsp;</span></td><!--보힘회사-->
+						<td onMouseOver="this.style.backgroundColor='#EFF4F8'; style.cursor='hand'" onMouseOut="this.style.backgroundColor=''"><span id='A9a<?=$j?>' >&nbsp;</span><input type='hidden' id='iNum<?=$j?>'></td><!--증권번호-->
+						<td><span id='A10a<?=$j?>'>&nbsp;</span></td>
+						<td><span id='A11a<?=$j?>'>&nbsp;</span><input type='hidden' id='pNum<?=$j?>'></td><!---->
+						
+					</tr>
+					<?}?>
+					</tbody>
+					</table>
+					<div id="paging"><span id='sql2'>&nbsp;</span><span id='sql3'>&nbsp;</span></div>
+					</form>
+				</div>
+				<div id="first">
+					<div id="sidebar"><? include "../php/leftmenu.php";?><!--좌측메뉴--></div>
+					<div id="chubbGeneral"><? include "../php/general.php";?><!--기본등록--></div>
+				</div>
+  
+				
+		    </div><!--main끝-->
+			<div id="adverts"><? include "../php/rightmenu.php"?><!--우측 핸드폰메뉴--></div>
+       </div><!--contentWrapper 끝-->
+	
+  <p id="copyright"><? include "../php/footer.php";?></p>
+</div><!--wrapper 끝-->
+
+</body>
+</html>

@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>현장실습보험 매뉴얼</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="header-container">
+        <header class="header">
+        <div class="container">
+            <!-- 사용자 정보 섹션 - 좌측 -->
+            <div class="user-info-section">
+                <div class="user-info">
+                    <span id="userName">로딩중...</span>님 환영합니다!
+                    <div id="currentDateTime" class="current-time"></div>
+                </div>
+            </div>
+            
+            <!-- 로고 - 중앙 -->
+            <h1 class="logo">
+                <i class="fas fa-shield-alt"></i>
+                현장실습보험 매뉴얼
+            </h1>
+            
+            <!-- 액션 버튼 - 우측 -->
+            <div class="header-actions">
+                <a href="/05/manual/product/index.html" class="action-btn home-btn">
+                    <i class="fas fa-home"></i>
+                </a>
+                <button class="action-btn logout-btn" onclick="SessionManager.logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+                <button class="action-btn print-btn" onclick="window.print()">
+                    <i class="fas fa-print"></i>
+                </button>
+            </div>
+			
+        </div>
+    </header>
+
+        <nav class="nav" id="nav">
+            <div class="container">
+                <ul class="nav-list">
+                    <li><a href="#info" class="nav-link">기본정보</a></li>
+                    <li><a href="#inquiry" class="nav-link">가입문의</a></li>
+                    <li><a href="#quote" class="nav-link">견적확인</a></li>
+                    <li><a href="#contract" class="nav-link">청약서발행</a></li>
+                    <li><a href="#documents" class="nav-link">서류회신</a></li>
+                    <li><a href="#payment" class="nav-link">결제</a></li>
+                    <li><a href="#insurance" class="nav-link">증권발행</a></li>
+                    <li><a href="#accident" class="nav-link">사고접수</a></li>
+                    <li><a href="#special" class="nav-link">특이사항</a></li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+
+    <main class="main">
+        <div class="container">
+            <!-- 기본정보 섹션 -->
+            <section id="info" class="section">
+                <h2 class="section-title">
+                    <i class="fas fa-info-circle"></i>
+                    기본정보
+                </h2>
+                <div class="card-grid">
+                    <div class="info-card">
+                        <h3><i class="fas fa-file-contract"></i> 상품 정보</h3>
+                        <div class="info-item">
+                            <span class="label">상품명:</span>
+                            <span class="value">영문배상책임보험</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">보험사:</span>
+                            <span class="value">한화손해보험</span>
+                        </div>
+                    </div>
+
+                    <div class="info-card" id="loginInfoCard">
+                        <h3>
+                            <i class="fas fa-user-shield"></i> 로그인 정보
+                            <button class="edit-btn" id="editLoginBtn" title="편집">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        </h3>
+                        <div class="info-item">
+                            <span class="label">아이디:</span>
+                            <span class="value" id="loginId">로딩 중...</span>
+                            <input type="text" class="edit-input" id="editLoginId" style="display: none;">
+                        </div>
+                        <div class="info-item">
+                            <span class="label">비밀번호:</span>
+                            <span class="value password" id="loginPassword">로딩 중...</span>
+                            <input type="password" class="edit-input" id="editLoginPassword" style="display: none;">
+                        </div>
+                        <div class="info-item">
+                            <span class="label">인증번호:</span>
+                            <span class="value" id="loginAuthCode">로딩 중...</span>
+                            <input type="text" class="edit-input" id="editLoginAuthCode" style="display: none;">
+                        </div>
+                        <div class="edit-actions" id="loginEditActions" style="display: none;">
+                            <button class="save-btn" id="saveLoginBtn">
+                                <i class="fas fa-save"></i> 저장
+                            </button>
+                            <button class="cancel-btn" id="cancelLoginBtn">
+                                <i class="fas fa-times"></i> 취소
+                            </button>
+                        </div>
+                        <div class="loading" id="loginLoading" style="display: none;">
+                            <i class="fas fa-spinner fa-spin"></i> 저장 중...
+                        </div>
+                    </div>
+
+                    <div class="info-card">
+                        <h3><i class="fas fa-cog"></i> 관리자 정보</h3>
+                        <div class="admin-section">
+                            <h4>당사 어드민</h4>
+                            <div class="info-item">
+                                <span class="label">아이디:</span>
+                                <span class="value">kibs0327</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label">비밀번호:</span>
+                                <span class="value password">sj@5587383</span>
+                            </div>
+                        </div>
+                        <div class="admin-section">
+                            <h4>선생님 어드민</h4>
+                            <div class="info-item">
+                                <span class="label">아이디&비밀번호:</span>
+                                <span class="value">학교별 상이함</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="info-card">
+                        <h3><i class="fas fa-table"></i> 관리 도구</h3>
+                        <div class="info-item">
+                            <span class="label">관리 시트:</span>
+                            <span class="value">현장실습보험 구글시트</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 가입문의 안내 섹션 -->
+            <section id="inquiry" class="section">
+                <h2 class="section-title">
+                    <i class="fas fa-envelope"></i>
+                    가입문의 안내
+                </h2>
+                <div class="process-card">
+                    <h3>처리 방법</h3>
+                    <p>메일 주소를 받아서 아래의 양식을 보내주기</p>
+                    
+                    <div class="email-template">
+                        <h4><i class="fas fa-mail-bulk"></i> 메일 양식</h4>
+                        <div class="template-content">
+                            <div class="template-header">
+                                <strong>제목: [현장실습보험] 가입관련 문의 안내</strong>
+                            </div>
+                            <div class="template-body">
+                                <p>안녕하세요 선생님,<br>
+                                이투엘 한이슬입니다.</p>
+                                
+                                <p>상품소개, 가입안내 및 문의사항 확인이 가능한 사이트 주소를 안내드립니다.</p>
+                                
+                                <p><strong>현장실습보험 사이트</strong></p>
+                                
+                                <p>위의 링크로 들어가셔서 해당하는 플랜에 (대학교/고등학교)<br>
+                                맞춰 견적의뢰 부탁드립니다.</p>
+                                
+                                <p>추가 문의사항은 언제든지 편하게 연락 부탁드립니다.<br>
+                                감사합니다!</p>
+                                
+                                <div class="contact-info">
+                                    <p><strong>현장실습보험지원팀 연락처</strong><br>
+                                    Office: 070-7813-1675<br>
+                                    E-mail: lincinsu@simg.kr</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 견적확인 섹션 -->
+            <section id="quote" class="section">
+                <h2 class="section-title">
+                    <i class="fas fa-calculator"></i>
+                    견적확인
+                </h2>
+                <div class="steps-container">
+                    <div class="step-card">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h3>메일 확인</h3>
+                            <p><strong>주의사항:</strong> 견적 신청과 수정 요청 확인하기</p>
+                            <p>메일 읽음 처리</p>
+                        </div>
+                    </div>
+
+                    <div class="step-card">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h3>학교 검색</h3>
+                            <p>견적 신청 학교명 검색 창 입력 후 학교명 앞 숫자 클릭 진행</p>
+                        </div>
+                    </div>
+
+                    <div class="step-card">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h3>아이디 확인</h3>
+                            <p>아이디 부여 여부 확인 후 진행</p>
+                            <ul>
+                                <li>ID만들기 클릭</li>
+                                <li>ID: 이메일 ID</li>
+                                <li>PW: 전화번호 뒤*2</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 청약서발행 섹션 -->
+            <section id="contract" class="section">
+                <h2 class="section-title">
+                    <i class="fas fa-file-signature"></i>
+                    청약서발행
+                </h2>
+                <div class="detailed-steps">
+                    <div class="step-item">
+                        <span class="step-num">1</span>
+                        <p>한화손보 로그인 (이투엘 코드)</p>
+                    </div>
+                    <div class="step-item">
+                        <span class="step-num">2</span>
+                        <p>통합가입설계조회</p>
+                    </div>
+                    <div class="step-item">
+                        <span class="step-num">3</span>
+                        <p>구분: 설계번호 or 증권번호 (사업자번호 동일 계약건 확인필수)</p>
+                    </div>
+                    <div class="step-item">
+                        <span class="step-num">4</span>
+                        <p>파란색 숫자 클릭 >> 하단 설계복사 클릭</p>
+                    </div>
+                    <div class="step-item">
+                        <span class="step-num">5</span>
+                        <p>신청기간 기입 (어드민 시작일 ~ 어드민 종기일 +1일 00시)</p>
+                    </div>
+                    <div class="step-item">
+                        <span class="step-num">6</span>
+                        <p>계약관계자 클릭</p>
+                    </div>
+                    <div class="step-item">
+                        <span class="step-num">7</span>
+                        <p>하단 피보험자에 학교명, 피보험자 관계자 "뒤" 설정 후 [현장실습 참가자 및 실습기관] 기입 후 저장</p>
+                    </div>
+                    <div class="step-item">
+                        <span class="step-num">8</span>
+                        <p>계약 기본사항 저장 클릭</p>
+                    </div>
+                    <div class="step-item">
+                        <span class="step-num">9</span>
+                        <p>하단 소재지 확인 후 물건명 확인 (교육부고시 고등학생 or 대학생 현장실습 활동)</p>
+                    </div>
+                    <div class="step-item">
+                        <span class="step-num">10</span>
+                        <p>목적물 내역 (이전에 있던 내용 확인)</p>
+                    </div>
+                    
+                    <div class="subsection">
+                        <h4><i class="fas fa-users"></i> 대인/대물의 경우</h4>
+                        <p>업종분류 옆 돋보기 클릭 >> 대학교/고등학교 선택 후 주수 선택 >> 목적물명: 대학생 or 고등학생현장실습 >> 담보 내용 n주 >> 인원수 적용 >> 담보설정 3번째 구내치료비 "1사고당" 인지 확인 >> 적용 끝나면 하단의 수정 클릭 >> 타 주수에 다른 인원이 있을 경우 그대로 진행 후 하단의 신규등록 클릭</p>
+                    </div>
+
+                    <div class="subsection">
+                        <h4><i class="fas fa-balance-scale"></i> 배상책임의 경우</h4>
+                        <p>대인/대물의 경우와 동일하나 차이점은 담보 내용에 추가 워딩 기재</p>
+                        <p><strong>담보 내용:</strong> n주 (현장실습 기관에 한함) *괄호까지 필수 기재</p>
+                    </div>
+
+                    <div class="step-item">
+                        <span class="step-num">13</span>
+                        <p>워딩 클릭 >> 증권 출력 체크 >> 2번째 칸에 워딩 양식 입력</p>
+                    </div>
+                    <div class="step-item">
+                        <span class="step-num">14</span>
+                        <p>보험료 계산 >> 설계 완료 >> 청약 >> 출력물 >> 청약서 선택 후 회사용만 저장</p>
+                    </div>
+                    <div class="step-item">
+                        <span class="step-num">15</span>
+                        <p>어드민 자료보기 >> 청약서 업로드 >> 설계번호 입력 >> 인수심사번호 아무 숫자나 입력</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 서류회신 섹션 -->
+            <section id="documents" class="section">
+                <h2 class="section-title">
+                    <i class="fas fa-file-upload"></i>
+                    서류회신
+                </h2>
+                <div class="document-requirements">
+                    <h3><i class="fas fa-clipboard-list"></i> 학교에서 회신 받아야 할 파일</h3>
+                    <div class="requirement-list">
+                        <div class="requirement-item">
+                            <i class="fas fa-stamp"></i>
+                            <span>청약서 직인 날인본</span>
+                        </div>
+                        <div class="requirement-item">
+                            <i class="fas fa-question-circle"></i>
+                            <span>질문서 직인 날인본</span>
+                        </div>
+                        <div class="requirement-item">
+                            <i class="fas fa-file-excel"></i>
+                            <span>학과별 인원 (엑셀파일 >> PDF 변환필요)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="upload-process">
+                    <h3><i class="fas fa-upload"></i> 업로드 과정</h3>
+                    <div class="process-steps">
+                        <div class="process-step">
+                            <span class="step-number">1</span>
+                            <p>어드민 자료보기 >> 학과별 인원 업로드</p>
+                        </div>
+                        <div class="process-step">
+                            <span class="step-number">2</span>
+                            <p>통합계약설계조회 >> 해당 설계번호 조회 >> 화특업무스캔 >> 3가지 파일 업로드</p>
+                        </div>
+                        <div class="process-step">
+                            <span class="step-number">3</span>
+                            <p>인식 안되는 파일은 더블 클릭 후 인식교정 >> 위에서 2개만 있음 선택 >> 이미지 전송</p>
+                        </div>
+                        <div class="process-step">
+                            <span class="step-number">4</span>
+                            <p>어드민 비고 스캔 기재 (보험료가 보험 시작일이 지나 입금되는 경우, 무사고확인서 첨부)</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 결제 섹션 -->
+            <section id="payment" class="section">
+                <h2 class="section-title">
+                    <i class="fas fa-credit-card"></i>
+                    결제
+                </h2>
+                
+                <div class="payment-methods">
+                    <div class="payment-method">
+                        <h3><i class="fas fa-credit-card"></i> 신용카드 결제</h3>
+                        <div class="payment-steps">
+                            <p>신용카드승인 >> 사업자번호(계약자) >> 카드번호 >> 유효기간 >> 금액 >> 취급자명(3456877) >> 본인/타인 >> 승인 >> 카드매출전표 출력 >> 어드민 비고 카드 기재 >> 자료보기 카드매출전표 업로드</p>
+                            <div class="note">
+                                <p><strong>참고사항:</strong></p>
+                                <ul>
+                                    <li>학교법인카드: 본인 선택</li>
+                                    <li>타인명의카드: 타인 선택</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="payment-method">
+                        <h3><i class="fas fa-undo"></i> 카드 해제 요청</h3>
+                        <div class="cancel-options">
+                            <div class="cancel-option">
+                                <h4>학교법인 카드의 경우</h4>
+                                <p>김영 선임님께 단체명/설계번호/금액 카드해제 요청</p>
+                            </div>
+                            <div class="cancel-option">
+                                <h4>타인명의 카드의 경우</h4>
+                                <p>김영 선임님께 단체명/설계번호/금액 카드해제와 수납 요청</p>
+                                <p><strong>추가로:</strong> 3개월 이내 발급된 재직증명서 같이 첨부 필수</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="payment-method">
+                        <h3><i class="fas fa-university"></i> 가상계좌 발급 방법</h3>
+                        <div class="virtual-account-steps">
+                            <p>통합가입설계조회 >> 해당 학교 설계번호/증권번호 조회 >> 설계화면 하단 가상계좌 클릭 >> 희망은행 가상계좌 출력 후 저장 >> 메일로 전달</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 증권발행 섹션 -->
+            <section id="insurance" class="section">
+                <h2 class="section-title">
+                    <i class="fas fa-certificate"></i>
+                    증권발행
+                </h2>
+                
+                <div class="insurance-process">
+                    <h3><i class="fas fa-list-ol"></i> 발행 과정</h3>
+                    <div class="insurance-steps">
+                        <div class="insurance-step">
+                            <span class="step-number">1</span>
+                            <div class="step-content">
+                                <p>가입설계조회 >> 설계번호 입력 >> 청약 >> 미수납자금통합 조회 >> 결제일시확인 >> 수납구분: 원수/영수증미발행 >> 결제일시입력 >> 청약 >> 공정거래 체크리스트(아니오4번/예1번) >> 포털비밀번호 입력 후 확인 >> 청약 >> 원수수납 >> 보종군: 일반보험 >> 조회 >> 해당 건 선택 >> 입금조회 >> 카드 or 예금 조회 >> 일치 금액 선택 >> 차액 0원 확인 후 >> 수납</p>
+                            </div>
+                        </div>
+                        <div class="insurance-step">
+                            <span class="step-number">2</span>
+                            <div class="step-content">
+                                <p>출력물 관리 >> 증권(가상계좌입금은 납입증명서 추가) 발급 >> 증권번호 복사 >> 어드민 업로드 >> 증권번호입력 >> 어드민 비고 증권발행 입력</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 사고접수 섹션 -->
+            <section id="accident" class="section">
+                <h2 class="section-title">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    사고접수
+                </h2>
+                
+                <div class="accident-process">
+                    <div class="accident-step">
+                        <h3><i class="fas fa-file-medical"></i> 보험금 청구 서류 안내</h3>
+                        <p>어드민 >> 전달받으실 이메일 주소 확인 >> 메일공지 >> 보험금 청구 서류 클릭</p>
+                    </div>
+
+                    <div class="accident-step">
+                        <h3><i class="fas fa-check-circle"></i> 회신 서류 확인하기</h3>
+                        <div class="document-checklist">
+                            <div class="checklist-item">
+                                <i class="fas fa-file-contract"></i>
+                                <span>보험금 청구서 및 문답서</span>
+                            </div>
+                            <div class="checklist-item">
+                                <i class="fas fa-id-card"></i>
+                                <span>신분증 및 통장사본</span>
+                            </div>
+                            <div class="checklist-item">
+                                <i class="fas fa-file-medical"></i>
+                                <span>진단서(진료확인서)</span>
+                            </div>
+                            <div class="checklist-item">
+                                <i class="fas fa-receipt"></i>
+                                <span>병원치료비 영수증(계산서), 약제비 영수증</span>
+                            </div>
+                            <div class="checklist-item">
+                                <i class="fas fa-list-alt"></i>
+                                <span>치료비 세부내역서</span>
+                            </div>
+                            <div class="checklist-item">
+                                <i class="fas fa-journal-whills"></i>
+                                <span>현장실습일지</span>
+                            </div>
+                            <div class="checklist-item">
+                                <i class="fas fa-desktop"></i>
+                                <span>대학교 현장실습 담당자 선생님의 해당 학생 전산화면 캡처본</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accident-step">
+                        <h3><i class="fas fa-paper-plane"></i> 보험사 접수하기</h3>
+                        <div class="submission-info">
+                            <h4>제출 정보</h4>
+                            <div class="contact-details">
+                                <p><strong>받는 사람:</strong> 김진환 실장님 &lt;s14052101@solomonadj.com&gt;</p>
+                                <p><strong>참조:</strong> 장인하, 한이슬, 최단비, 전선양</p>
+                            </div>
+                            
+                            <div class="email-template">
+                                <h4>메일 내용</h4>
+                                <div class="template-content">
+                                    <p>안녕하세요 실장님!<br>
+                                    이투엘 한이슬 입니다.</p>
+                                    
+                                    <p>학교명 학생명 학생 보험금 청구 서류 전달드립니다.</p>
+                                    
+                                    <div class="form-fields">
+                                        <p><strong>증권번호:</strong> [입력필요]</p>
+                                        <p><strong>사고일시:</strong> [입력필요]</p>
+                                        <p><strong>사고경위:</strong> [입력필요]</p>
+                                        <p><strong>사고장소:</strong> [입력필요]</p>
+                                    </div>
+                                    
+                                    <p>확인 부탁드립니다.<br>
+                                    감사합니다!</p>
+                                    
+                                    <p>(명함)</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accident-step">
+                        <h3><i class="fas fa-table"></i> 시트 기재</h3>
+                        <p>현장실습 보험금청구 양식 맞춰 기재</p>
+                    </div>
+
+                    <div class="accident-step">
+                        <h3><i class="fas fa-search"></i> 접수 후 진행상황 확인</h3>
+                        <p>통합사고조회 >> 증권번호/사고번호 입력 >> 조회 >> 시트 최신화</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 특이사항 섹션 -->
+            <section id="special" class="section">
+                <h2 class="section-title">
+                    <i class="fas fa-star"></i>
+                    특이사항
+                </h2>
+                
+                <div class="special-cases">
+                    <div class="special-case">
+                        <h3><i class="fas fa-exchange-alt"></i> 결제방법 변경 문의</h3>
+                        <p>아래의 사항 회신 받아 김영 선임님께 카드변경 요청하기</p>
+                        <div class="change-info">
+                            <div class="info-section">
+                                <h4>기존:</h4>
+                                <p>카드번호, 유효기간, 승인번호, 결제일, 금액</p>
+                            </div>
+                            <div class="info-section">
+                                <h4>변경:</h4>
+                                <p>카드번호, 유효기간</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="special-case">
+                        <h3><i class="fas fa-question-circle"></i> 보험금청구 가능여부 문의</h3>
+                        <div class="claim-options">
+                            <div class="claim-option possible">
+                                <i class="fas fa-check"></i>
+                                <span>학생의 배상책임 (대인/대물) 가능</span>
+                            </div>
+                            <div class="claim-option possible">
+                                <i class="fas fa-check"></i>
+                                <span>학생의 출퇴근길 사고 가능</span>
+                            </div>
+                            <div class="claim-option not-possible">
+                                <i class="fas fa-times"></i>
+                                <span>학생의 물건 불가능</span>
+                            </div>
+                            <div class="claim-option not-possible">
+                                <i class="fas fa-times"></i>
+                                <span>자동차와 관련된 사고 불가능</span>
+                            </div>
+                            <div class="claim-option consultation">
+                                <i class="fas fa-phone"></i>
+                                <span>애매한 것들은 김진환 실장님께 유선 문의 진행</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="special-case">
+                        <h3><i class="fas fa-ban"></i> 보험계약취소 및 환불 문의</h3>
+                        <p class="cancellation-policy">원칙적으로 천재지변이 아닌 이상 보험이 시작되면 불가능</p>
+                    </div>
+                </div>
+
+                <div class="suggestions">
+                    <h3><i class="fas fa-lightbulb"></i> 추가 의견</h3>
+                    <div class="suggestion">
+                        <p>학과별인원을 엑셀 파일로 받고 PDF로 변환하여 업로드하는 데에 시간이 많이 소요되어 프로그램에 학교명/과/학생 수 기입하면 관리자가 바로 PDF 저장 가능하도록 하면 편리할 것 같습니다.</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 현장실습보험 매뉴얼. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <button class="scroll-top" id="scrollTop">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+    <script src="../../js/basic.js"></script>
+    <script src="script.js"></script>
+    <script src="login-manager.js"></script>
+
+    <style>
+        /* 헤더 액션 버튼 스타일 */
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .action-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 8px;
+            background: var(--light-color);
+            color: var(--dark-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .action-btn:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .action-btn i {
+            font-size: 1.1rem;
+        }
+
+        .print-btn {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .print-btn:hover {
+            background: #1976d2;
+            color: white;
+        }
+
+        .home-btn {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .home-btn:hover {
+            background: #2e7d32;
+            color: white;
+        }
+
+        .logout-btn {
+            background: #ffebee;
+            color: #c62828;
+        }
+
+        .logout-btn:hover {
+            background: #c62828;
+            color: white;
+        }
+
+        @media print {
+            .header-actions {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-actions {
+                gap: 0.5rem;
+            }
+
+            .action-btn {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.8rem;
+            }
+
+            .action-btn span {
+                display: none;
+            }
+
+            .action-btn i {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</body>
+</html> 

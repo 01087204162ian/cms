@@ -1,0 +1,78 @@
+<div class="user-profile">
+	<h5 class="welcome-text" id="userNameDisplay">
+	    <h3><span id="userName">로딩중...</span>님 환영합니다!</h3>
+		<div id="currentDateTime" class="current-time"></div>
+	</h5>
+	
+</div>
+
+<div class="menu-group">
+	<div class="menu-item">
+		<button class="menu-button" onclick="toggleMenu(this)">
+			현장실습보험
+			<svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+				<path d="M6 9l6 6 6-6"/>
+			</svg>
+		</button>
+		<div class="submenu">
+			<a href="#" class="submenu-item" onclick="selectMenu(this, '현장실습보험', 'question')">질문서</a>
+			<a href="#" class="submenu-item" onclick="selectMenu(this, '현장실습보험', 'claim')">사고리스트</a>
+		</div>
+	</div>
+
+	<div class="menu-item">
+		<button class="menu-button" onclick="toggleMenu(this)">
+			kj대리운전보험
+			<svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+				<path d="M6 9l6 6 6-6"/>
+			</svg>
+		</button>
+		<div class="submenu">
+			<a href="#" class="submenu-item" onclick="selectMenu(this, 'kj대리운전보험', '기사찾기')">기사찾기</a>
+			<a href="#" class="submenu-item" onclick="selectMenu(this, 'kj대리운전보험', '배서리스트')">배서리스트</a>
+			<a href="#" class="submenu-item" onclick="selectMenu(this, 'kj대리운전보험', '대리운전회사')">대리운전회사</a>
+			<a href="#" class="submenu-item" onclick="selectMenu(this, 'kj대리운전보험', '통계')">통계</a>
+		</div>
+	</div>
+
+	<div class="menu-item">
+		<button class="menu-button" onclick="toggleMenu(this)">
+			das대리운전보험
+			<svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+				<path d="M6 9l6 6 6-6"/>
+			</svg>
+		</button>
+		<div class="submenu">
+			<a href="#" class="submenu-item" onclick="selectMenu(this, 'das대리운전보험', '기사찾기')">기사찾기</a>
+			<a href="#" class="submenu-item" onclick="selectMenu(this, 'das대리운전보험', '배서리스트')">배서리스트</a>
+			<a href="#" class="submenu-item" onclick="selectMenu(this, 'das대리운전보험', '대리운전회사')">대리운전회사</a>
+			<a href="#" class="submenu-item" onclick="selectMenu(this, 'das대리운전보험', '통계')">통계</a>
+		</div>
+	</div>
+
+	<div class="menu-item">
+		<button class="menu-button" onclick="toggleMenu(this)">
+			여행자보험
+			<svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+				<path d="M6 9l6 6 6-6"/>
+			</svg>
+		</button>
+		<div class="submenu">
+			<a href="#" class="submenu-item" onclick="selectMenu(this, '여행자보험', '리스트')">리스트</a>
+		</div>
+	</div>
+
+	<div class="menu-item">
+		<button class="menu-button" onclick="toggleMenu(this)">
+			직원관리
+			<svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+				<path d="M6 9l6 6 6-6"/>
+			</svg>
+		</button>
+		<div class="submenu">
+			<a href="#" class="submenu-item"  onclick="selectMenu(this, '직원관리', 'employeeList')">직원리스트</a>
+		</div>
+	</div>
+</div>
+
+<button class="logout-button">로그아웃</button>

@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원가입</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f5f5;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .signup-container {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 500px;
+        }
+
+        .signup-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            position: absolute;
+            top: -10px;
+            left: 10px;
+            background: white;
+            padding: 0 5px;
+            font-size: 12px;
+            color: #555;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #4CAF50;
+            box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.1);
+        }
+
+        .form-group .error-message {
+            color: #f44336;
+            font-size: 0.8rem;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .password-strength {
+            font-size: 0.8rem;
+            margin-top: 5px;
+            padding-left: 10px;
+        }
+
+        .signup-btn {
+            width: 100%;
+            padding: 0.8rem;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .signup-btn:hover {
+            background-color: #45a049;
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+
+        .login-link a {
+            color: #4CAF50;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="signup-container">
+        <div class="signup-header">
+            <h2>회원가입</h2>
+        </div>
+        
+       <form id="signupForm" onsubmit="return handleSignup(event)" autocomplete="on">
+				<div class="form-group">
+					<label for="name">이름</label>
+					<input type="text" id="name" name="name" required maxlength="50" autocomplete="name">
+					<div class="error-message" id="name-error"></div>
+				</div>
+
+				<div class="form-group">
+					<label for="userid">아이디 (4-12자리 영문/숫자)</label>
+					<input type="text" id="userid" name="userid" required pattern="^[a-zA-Z0-9]{4,12}$" autocomplete="username">
+					<div class="error-message" id="userid-error"></div>
+				</div>
+
+				<div class="form-group">
+					<label for="email">이메일</label>
+					<input type="email" id="email" name="email" required autocomplete="email">
+					<div class="error-message" id="email-error"></div>
+				</div>
+
+				<div class="form-group">
+					<label for="password">비밀번호</label>
+					<input type="password" id="password" name="password" required placeholder="8자 이상, 대/소문자, 숫자, 특수문자 포함" autocomplete="new-password">
+					<div class="password-strength" id="password-strength"></div>
+					<div class="error-message" id="password-error"></div>
+				</div>
+
+				<div class="form-group">
+					<label for="confirm-password">비밀번호 확인</label>
+					<input type="password" id="confirm-password" name="confirm-password" required autocomplete="new-password">
+					<div class="error-message" id="confirm-password-error"></div>
+				</div>
+
+				<div class="form-group">
+					<label for="phone">전화번호 (010-0000-0000)</label>
+					<input type="tel" id="phone" name="phone" required pattern="010-[0-9]{4}-[0-9]{4}" autocomplete="tel">
+					<div class="error-message" id="phone-error"></div>
+				</div>
+
+				<button type="submit" class="signup-btn">가입하기</button>
+			</form>
+
+    </div>
+
+    <script>
+        function handleSignup(event) {
+            event.preventDefault();
+
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+
+            if (password !== confirmPassword) {
+                document.getElementById('confirm-password-error').textContent = "비밀번호가 일치하지 않습니다.";
+                document.getElementById('confirm-password-error').style.display = 'block';
+                return false;
+            }
+
+            const formData = {
+                name: document.getElementById('name').value,
+                userid: document.getElementById('userid').value,
+                email: document.getElementById('email').value,
+                password: password,
+                phone: document.getElementById('phone').value
+            };
+
+            document.querySelectorAll('.error-message').forEach(el => {
+                el.style.display = 'none';
+                el.textContent = '';
+            });
+			console.log('폼 데이터:', formData);
+            fetch('./register.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message);
+                    window.location.href = 'sj.html';
+                } else {
+                    Object.keys(data.errors).forEach(field => {
+                        const errorElement = document.getElementById(`${field}-error`);
+                        if (errorElement) {
+                            errorElement.textContent = data.errors[field];
+                            errorElement.style.display = 'block';
+                        }
+                    });
+                }
+            })
+            .catch(error => {
+                alert('회원가입 처리 중 오류가 발생했습니다.');
+            });
+
+            return false;
+        }
+
+        document.getElementById('phone').addEventListener('blur', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length === 11) {
+                e.target.value = value.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3');
+            }
+        });
+    </script>
+</body>
+</html>

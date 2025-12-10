@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>대리운전 보험 CMS - 대시보드</title>
+  <!-- Bootstrap CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- FontAwesome CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="./css/basic.css">
+  <link rel="stylesheet" href="./css/modal.css">
+  <link rel="stylesheet" href="./css/driver.css">
+  <link rel="stylesheet" href="./css/sms.css">
+
+</head>
+<body>
+  <!-- 세션 타임아웃 표시 -->
+  <div id="sessionTimerDisplay" class="session-timer">
+    <i class="fas fa-clock me-1"></i> <span id="sessionTimeRemaining">30:00</span> 후 자동 로그아웃
+  </div>
+  
+  <!-- 사이드바 -->
+  <div class="sidebar" id="sidebar">
+    <div class="logo">
+      <h4><small id="userCompany">회사정보</small></h4>
+    </div>
+    <div class="user-panel p-3 mb-3">
+      <div class="text-white mb-2">
+        <span class="fw-bold" id="userName"></span> 님 반갑습니다.
+      </div>
+      <div class="user-info">
+        <div class="text-white">
+          <div>배서기준일: <span id="endorsementDate">0000-00-00</span></div>
+        </div>
+      </div>
+    </div>
+    <hr class="mx-3 my-2 bg-light opacity-25">
+    <ul class="nav flex-column">
+      <!-- 홈 -->
+      <li class="nav-item">
+        <a href="#home" class="nav-link active" data-bs-toggle="tab">
+          <i class="fas fa-home"></i> 증권정보
+        </a>
+      </li>
+      <!-- 기사찾기 -->
+      <li class="nav-item">
+        <a href="#driver-search" class="nav-link" data-bs-toggle="tab">
+          <i class="fas fa-search"></i> 기사찾기
+        </a>
+      </li>
+      <!-- 문자리스트 -->
+      <li class="nav-item">
+        <a href="#sms-list" class="nav-link" data-bs-toggle="tab">
+          <i class="fas fa-comment"></i> 문자리스트
+        </a>
+      </li>
+      <!-- 로그아웃 -->
+      <li class="nav-item mt-4">
+        <a href="#" class="nav-link" onclick="logout()">
+          <i class="fas fa-sign-out-alt"></i> 로그아웃
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <!-- 메인 콘텐츠 -->
+  <div class="content">
+    <div class="top-bar">
+      <button class="mobile-toggle" id="sidebarToggle">
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="page-title">
+        <h5 class="m-0" id="currentPageTitle">증권정보</h5>
+      </div>
+    </div>
+
+    <div class="tab-content">
+      <!-- 홈 탭 -->
+      <div class="tab-pane fade show active" id="home">
+
+        <!-- 동적 카드가 추가될 컨테이너 -->
+        <div class="row" id="dynamicCardContainer">
+          <!-- 로딩 상태 개선 -->
+          <div class="col-12 text-center py-5" id="loading-state">
+            <div class="loading-content">
+              <div class="loading-spinner mb-3"></div>
+              <div class="text-muted">증권 정보를 불러오는 중...</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 진행 중인 배서 및 진행 완료 배서 섹션 -->
+        <div class="row">
+          <!-- 모바일에서 숨김 처리 추가 -->
+          <div class="col-lg-6 mb-4 d-none d-md-block">
+            <div class="dashboard-card">
+              <h5 class="mb-3 d-flex justify-content-between align-items-center">
+                진행 중인 배서
+                <span class="badge bg-primary" id="ongoing-count">0건</span>
+              </h5>
+              <div class="table-responsive table-fixed-header">
+                <table class="table table-hover table-mobile-stack">
+                  <thead>
+                    <tr>
+                      <th>번호</th>
+                      <th>성명</th>
+                      <th>주민번호</th>
+                      <th>핸드폰</th>
+                      <th>보험사</th>
+                      <th>증권번호</th>
+                      <th>증권성격</th>
+                      <th>상태</th>
+                    </tr>
+                  </thead>
+                  <tbody id='enderose_list_01'>
+                    <!-- home_data_endorse.php return data 동적으로 표시 -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+
+          <!-- 모바일 카드 뷰 (작은 화면에서만 표시) -->
+          <div class="mobile-card-view d-md-none">
+            <div id="driver_cards_enderose_list_01_container">
+              <!-- 모바일 카드가 여기에 동적으로 추가됨 -->
+            </div>
+          </div>
+          <!-- 모바일에서만 보이는 구분선 추가 -->
+          <div class="mobile-space-divider d-md-none my-4"></div>
+
+
+          <div class="col-lg-6 mb-4 d-none d-md-block">
+            <div class="dashboard-card">
+              <h5 class="mb-3 d-flex justify-content-between align-items-center">
+                진행 완료 배서
+                <span class="badge bg-success" id="completed-count">0건</span>
+              </h5>
+              <div class="table-responsive table-fixed-header">
+                <table class="table table-hover table-mobile-stack">
+                  <thead>
+                    <tr>
+                      <th>번호</th>
+                      <th>성명</th>
+                      <th>주민번호</th>
+                      <th>핸드폰</th>
+                      <th>증권번호</th>
+                      <th>상태</th>
+                    </tr>
+                  </thead>
+                  <tbody id='enderose_list_02'>
+                    <!-- home_data_endorse_after.php return data 동적으로 표시 -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- 완료된 배서 모바일 카드 뷰 (필요한 경우 추가) -->
+          <div class="mobile-card-view d-md-none">
+            <div id="driver_cards_enderose_list_02_container">
+              <!-- 모바일 카드가 여기에 동적으로 추가됨 -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 대리운전 - 기사찾기 탭 -->
+      <div class="tab-pane fade" id="driver-search">
+        
+        <div class="dashboard-card mb-4">
+          <form class="row g-3" id="driver-search-form">
+            <div class="col-12 d-flex flex-wrap align-items-center gap-2">
+              <div class="input-group" style="max-width: 400px;">
+                <input type="text" class="form-control" id="driver-search-name" placeholder="기사 이름을 입력하세요" onkeypress="if(event.key === 'Enter') { driverSearch() ; return false; }" autocomplete="off" >
+                <button class="btn btn-primary d-flex align-items-center" id="driver-search-btn">
+				  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search me-1" viewBox="0 0 16 16">
+					<path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+				  </svg>
+				  검색
+				</button>
+              </div>
+              <div id="driver-search-count" class="ms-auto text-muted" style="display: none;">
+                총 <span id="driver-total-count">0</span>명의 기사가 검색되었습니다.
+              </div>
+            </div>
+          </form>
+        </div>
+        
+        <div class="dashboard-card">
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th width='10%'>순번</th>
+                  <th width='10%'>성명</th>
+                  <th width='10%'>주민번호</th>
+                  <th width='10%'>상태</th>
+                  <th width='10%'>증권의종류</th>
+                  <th width='10%'>보험사</th>
+                  <th width='10%'>증권번호</th>
+                  <th width='20%'>할인할증</th>
+                  <th width='10%'>핸드폰번호</th>
+                </tr>
+              </thead>
+              <tbody id='driver_list_01'>
+                <!-- driver_data.php return data 동적으로 표시 -->
+              </tbody>
+            </table>
+          </div>
+          <!-- 페이지네이션 컨테이너 -->
+          <div id="pagination-container" class="mt-3 d-flex justify-content-center">
+            <ul id="pagination" class="pagination"></ul>
+          </div>
+        </div>
+        
+        <!-- 모바일 카드 뷰 (작은 화면에서만 표시) -->
+        <div class="mobile-card-view d-md-none">
+          <div id="driver_cards_container">
+            <!-- 모바일 카드가 여기에 동적으로 추가됨 -->
+          </div>
+          <!-- 모바일용 페이지네이션 -->
+          <div id="mobile-pagination-container" class="mt-3 d-flex justify-content-center">
+            <ul id="mobile-pagination" class="pagination pagination-sm"></ul>
+          </div>
+        </div>
+      </div>
+      
+     <!-- 문자리스트 탭 -->
+		<div class="tab-pane fade" id="sms-list">
+		  <div class="dashboard-card mb-4">
+			<form class="row g-3" id="sms-search-form">
+			  <div class="col-12 d-flex flex-wrap align-items-center gap-2">
+				<div class="input-group" style="max-width: 400px;">
+				  <input type="text" class="form-control" id="sms-search-name" placeholder="기사 이름을 입력하세요" onkeypress="if(event.key === 'Enter') { sms(1); return false; }" autocomplete="off">
+				  <button class="btn btn-primary d-flex align-items-center" type="submit" id="sms-search-btn">
+					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search me-1" viewBox="0 0 16 16">
+					  <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+					</svg>
+					검색
+				  </button>
+				</div>
+				<div id="driver-search-count" class="ms-auto text-muted" style="display: none;">
+				  총 <span id="sms-total-count">0</span>개의 메시지가 검색되었습니다.
+				</div>
+			  </div>
+			</form>
+		  </div>
+		  
+		  <div class="dashboard-card">
+			<div class="table-responsive">
+			  <table class="table table-hover">
+				<thead>
+				  <tr>
+					<th width='10%'>순번</th>
+					<th width='10%'>수신번호</th>
+					<th width='70%'>메시지</th>
+					<th width='10%'>발송시간</th>
+				  </tr>
+				</thead>
+				<tbody id='sms_list_01'>
+				  <!-- sms_data.php return data 동적으로 표시 -->
+				</tbody>
+			  </table>
+			</div>
+			<!-- 페이지네이션 컨테이너 -->
+			<div id="pagination-container-sms" class="mt-3 d-flex justify-content-center">
+			  <ul id="pagination-sms" class="pagination"></ul>
+			</div>
+		  </div>
+		  
+		  <!-- 모바일 카드 뷰 (작은 화면에서만 표시) -->
+		  <div class="mobile-card-view d-md-none">
+			<div id="sms_cards_container">
+			  <!-- 모바일 카드가 여기에 동적으로 추가됨 -->
+			</div>
+			<!-- 모바일용 페이지네이션 -->
+			<div id="mobile-pagination-container-sms" class="mt-3 d-flex justify-content-center">
+			  <ul id="mobile-pagination-sms" class="pagination pagination-sm"></ul>
+			</div>
+		  </div>
+		</div>
+
+    </div>
+  </div>
+
+  <!-- 모달 창 -->
+  <div id="subscription-modal" class="subscriptionModal">
+    <div class="subscriptionModal-content">
+      <button class="close-subscriptionModal" aria-label="닫기">X</button>
+      <div id="subscriptionModal-body">
+        <div class="modal-header">
+          <span id="subscription_daeriCompany"></span>
+        </div>
+        <div id='m_subscription'></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- 탭 초기화 스크립트 -->
+  <script src="js/tab-init.js"></script>
+  <!-- 반응형 테이블 초기화 스크립트 추가 -->
+  <script src="js/responsive-tables.js"></script>
+  <!-- 커스텀 스크립트 -->
+  <script src="./js/modal.js"></script>
+  <script src="js/loading.js"></script>
+  <script src="js/basic.js"></script>
+  <script src="js/home.js"></script>
+  <script src="js/driverSearch.js"></script>
+  <script src="js/sms.js"></script>
+  <script src="js/sago.js"></script>
+  <script src="js/readId.js"></script>
+  
+  <!-- 배서기준일 표시를 위한 스크립트 -->
+  <script>
+    // 페이지 로드 시 배서기준일 표시
+    document.addEventListener('DOMContentLoaded', function() {
+      // calculateEndorsementDate 함수 호출 (home.js에 정의됨)
+      const endorsementDate = calculateEndorsementDate();
+      
+      // 상단 배서기준일 표시 업데이트
+      const dateElement = document.getElementById('endorsementDate');
+      if (dateElement) {
+        dateElement.textContent = endorsementDate;
+      }
+    });
+
+
+   
+// 페이지 로드 시 실행
+document.addEventListener('DOMContentLoaded', function() {
+  // 쿠키 값 확인
+  const cNum = getCookie('cNum');
+  
+  // cNum이 653인 경우에만 메뉴 추가
+  if (cNum === '653') {
+    // 사이드바 메뉴 목록 찾기
+    const sidebarMenu = document.querySelector('.sidebar .nav.flex-column');
+    
+    // 사고관리 메뉴 생성
+    const readOnlyMenuItem = document.createElement('li');
+    readOnlyMenuItem.className = 'nav-item';
+    readOnlyMenuItem.innerHTML = `
+      <a href="#read-only" class="nav-link" data-bs-toggle="tab">
+        <i class="fas fa-file-alt"></i> 사고관리
+      </a>
+    `;
+    
+    // 읽기전용 ID 메뉴 생성 (사고관리와 동일한 패턴)
+    const idMenuItem = document.createElement('li');
+    idMenuItem.className = 'nav-item';
+    idMenuItem.innerHTML = `
+      <a href="#id-management" class="nav-link" data-bs-toggle="tab">
+        <i class="fas fa-book"></i> 읽기전용 ID 
+      </a>
+    `;
+    
+    // 메뉴 추가 - 로그아웃 메뉴 바로 위에 삽입
+    const logoutMenuItem = document.querySelector('.sidebar .nav.flex-column li:last-child');
+    sidebarMenu.insertBefore(readOnlyMenuItem, logoutMenuItem);
+    sidebarMenu.insertBefore(idMenuItem, logoutMenuItem);
+    
+    // 사고관리 탭 콘텐츠 생성
+    const tabContent = document.querySelector('.tab-content');
+    const readOnlyTab = document.createElement('div');
+    readOnlyTab.className = 'tab-pane fade';
+    readOnlyTab.id = 'read-only';
+    readOnlyTab.innerHTML = `
+      <div class="dashboard-card">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h5 class="mb-0">사고관리 문서</h5>
+          <button type="button" class="btn btn-primary" id="btn-report-accident" onClick="sagoRegister()">사고접수</button>
+        </div>
+        
+        <div class="dashboard-card">
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th width='5%'>순번</th>
+                  <th width='10%'>고객성명</th>
+                  <th width='10%'>고객연락처</th>
+                  <th width='10%'>이메일</th>
+                  <th width='10%'>이용시간</th>
+                  <th width='5%'>출발지</th>
+                  <th width='5%'>도착지</th>
+                  <th width='15%'>상세내용</th>
+                  <th width='15%'>요청사항</th>
+                  <th width='10%'>긴급도</th>
+                  <th width='5%'>상세보기</th>
+                </tr>
+              </thead>
+              <tbody id='sago_list_01'>
+                <!-- sago_data.php return data 동적으로 표시 -->
+              </tbody>
+            </table>
+          </div>
+          <!-- 페이지네이션 컨테이너 -->
+          <div id="pagination-container-sago" class="mt-3 d-flex justify-content-center">
+            <ul id="pagination-sago" class="pagination"></ul>
+          </div>
+        </div>
+        
+        <!-- 모바일 카드 뷰 (작은 화면에서만 표시) -->
+        <div class="mobile-card-view d-md-none">
+          <div id="sago_cards_container">
+            <!-- 모바일 카드가 여기에 동적으로 추가됨 -->
+          </div>
+          <!-- 모바일용 페이지네이션 -->
+          <div id="mobile-pagination-container-sago" class="mt-3 d-flex justify-content-center">
+            <ul id="mobile-pagination-sago" class="pagination pagination-sm"></ul>
+          </div>
+        </div>
+        
+        <div id="read-only-content">
+          <!-- 여기에 읽기 전용 콘텐츠가 추가됩니다 -->
+        </div>
+      </div>
+    `;
+    
+    // 읽기전용 ID 탭 콘텐츠 생성
+    const idTab = document.createElement('div');
+    idTab.className = 'tab-pane fade';
+    idTab.id = 'id-management';
+    idTab.innerHTML = `
+      <div class="dashboard-card">
+        <!-- 총 개수 표시 영역 -->
+        <div class="dashboard-card mb-4">
+          <div class="text-muted">
+            총 <span id="id-total-count">0</span>개의 ID가 등록되어 있습니다.
+          </div>
+        </div>
+        
+        <!-- 데스크톱 테이블 뷰 -->
+        <div class="dashboard-card d-none d-md-block">
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th width='12%'>순번</th>
+                  <th width='20%'>ID</th>
+                  <th width='18%'>사용자명</th>
+                  <th width='18%'>핸드폰</th>
+                  <th width='16%'>읽기전용</th>
+                  <th width='16%'>비번</th>
+                  <th width='12%'>허용여부</th>
+                </tr>
+              </thead>
+              <tbody id='id-list'>
+                <!-- 동적으로 표시 -->
+              </tbody>
+            </table>
+          </div>
+          <!-- 페이지네이션 컨테이너 -->
+          <div id="pagination-container-id" class="mt-3 d-flex justify-content-center">
+            <ul id="pagination-id" class="pagination"></ul>
+          </div>
+        </div>
+        
+        <!-- 모바일 카드 뷰 (작은 화면에서만 표시) -->
+        <div class="mobile-card-view d-md-none">
+          <div id="id-cards-container">
+            <!-- 모바일 카드가 여기에 동적으로 추가됨 -->
+          </div>
+          <!-- 모바일용 페이지네이션 -->
+          <div id="mobile-pagination-container-id" class="mt-3 d-flex justify-content-center">
+            <ul id="mobile-pagination-id" class="pagination pagination-sm"></ul>
+          </div>
+        </div>
+      </div>
+    `;
+    
+    // 탭들을 DOM에 추가
+    tabContent.appendChild(readOnlyTab);
+    tabContent.appendChild(idTab);
+    
+    // 사고접수 버튼에 이벤트 리스너 추가
+    document.getElementById('btn-report-accident').addEventListener('click', function() {
+      console.log('사고접수 버튼이 클릭되었습니다.');
+      // 여기에 사고접수 관련 기능 구현
+    });
+    
+    // 중요: 새로 추가된 탭들에 이벤트 리스너 연결
+    if (typeof window.initializeAccidentManagementTab === 'function') {
+      window.initializeAccidentManagementTab();
+    }
+    
+    if (typeof window.initializeIdManagementTab === 'function') {
+      window.initializeIdManagementTab();
+    }
+  }
+});
+
+    // 모든 탭에 이벤트 리스너 등록
+    document.querySelectorAll('a[href^="#"]').forEach(tabLink => {
+        const href = tabLink.getAttribute('href');
+        if (href && href !== '#') {
+            attachTabEventListener(tabLink);
+        }
+    });
+
+
+// 페이지 로드 후 모든 탭 확인
+window.onload = function() {
+    console.log('=== 탭 상태 확인 ===');
+    
+    const tabs = document.querySelectorAll('a[href^="#"]');
+    console.log('전체 탭 수:', tabs.length);
+    
+    tabs.forEach(tab => {
+        const href = tab.getAttribute('href');
+        console.log('탭:', href, '리스너:', tab.dataset.listenerAttached);
+    });
+    
+    // id-management 탭 특별 확인
+    const idTab = document.querySelector('a[href="#id-management"]');
+    if (idTab) {
+        console.log('id-management 탭 찾음!');
+    } else {
+        console.log('id-management 탭 없음!');
+    }
+};
+
+  </script>
+</body>
+</html>

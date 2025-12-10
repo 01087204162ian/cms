@@ -1,0 +1,134 @@
+-- 한글 메뉴 구조를 위한 정규화된 MySQL 테이블들
+-- UTF8MB4 문자셋을 사용하여 한글 완벽 지원
+
+-- 업체 테이블 (companies)
+CREATE TABLE companies (
+    company_id INT AUTO_INCREMENT PRIMARY KEY,
+    company_name VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL UNIQUE,
+    company_code VARCHAR(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+    contact_info VARCHAR(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+    address TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+    phone VARCHAR(20),
+    email VARCHAR(100),
+    status ENUM('active', 'inactive') DEFAULT 'active',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_company_name (company_name),
+    INDEX idx_company_code (company_code)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- 메뉴 구조 테이블 (menu_structure)
+CREATE TABLE menu_structure (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    menu_1st VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+    menu_2nd VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+    menu_3rd VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+    manual_writer VARCHAR(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+    company_id INT NULL,
+    description TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (company_id) REFERENCES companies(company_id) ON DELETE SET NULL ON UPDATE CASCADE,
+    INDEX idx_menu_1st (menu_1st),
+    INDEX idx_manual_writer (manual_writer),
+    INDEX idx_company_id (company_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+
+-- 메뉴 구조 데이터 삽입
+INSERT INTO menu_structure (menu_1st, menu_2nd, menu_3rd, manual_writer, company_id) VALUES
+('대리운전', '연간단체보험', NULL, '김윤서', NULL),
+('대리운전', '개인보험', NULL, '김희문', NULL),
+('대리운전', '콜당보험', NULL, '윤홍준', NULL),
+('대리운전', '엄브렐라', NULL, '김희문', NULL),
+('시간제', '이륜차', NULL, '송성일', (SELECT company_id FROM companies WHERE company_name = '타요타')),
+('시간제', '배민커넥트', NULL, '김태훈', (SELECT company_id FROM companies WHERE company_name = '배민')),
+('시간제', '현대해상', NULL, '김태훈', (SELECT company_id FROM companies WHERE company_name = '현대해상')),
+('자동차', '시간제', NULL, NULL, NULL),
+('자동차', NULL, NULL, '김희문', NULL),
+('공유모빌리티', 'PUMP', NULL, '김희문', (SELECT company_id FROM companies WHERE company_name = 'PUMP')),
+('공유모빌리티', '알파카', NULL, '김희문', (SELECT company_id FROM companies WHERE company_name = '알파카')),
+('공유모빌리티', 'KM', NULL, '김희문', (SELECT company_id FROM companies WHERE company_name = 'KM')),
+('배민pm', NULL, NULL, NULL, (SELECT company_id FROM companies WHERE company_name = '배민')),
+('영업배상', '개인정보배상책임', NULL, '최단비', NULL),
+('영업배상', '크레소티', NULL, '박소영', (SELECT company_id FROM companies WHERE company_name = '크레소티')),
+('영업배상', '행사주체자배상책임', NULL, '김윤서', NULL),
+('영업배상', '현장실습', NULL, '한이슬', NULL),
+('주차장', '주차장', NULL, '명승현', NULL),
+('적재물', '적재물배상책임', NULL, '송성일', NULL),
+('여행자보험', '단체국내여행', NULL, '황보현', NULL),
+('여행자보험', '해외여행', NULL, '최단비', NULL),
+('여행자보험', '외국인유학생', NULL, '김태훈', NULL),
+('일반보험', '택시안심보험', NULL, '김윤서', NULL),
+('일반보험', '콜마너케어풀러스', NULL, '김태훈', NULL),
+('일반보험', '로지케어풀러스', NULL, NULL, NULL),
+('화재보험', NULL, NULL, NULL, NULL);
+
+-- 조회 쿼리 예시들
+-- 1. 전체 메뉴 구조와 업체 정보 조회 (JOIN 사용)
+SELECT 
+    ms.id AS 번호,
+    COALESCE(ms.menu_1st, '') AS '1차메뉴',
+    COALESCE(ms.menu_2nd, '') AS '2차메뉴',
+    COALESCE(ms.menu_3rd, '') AS '3차메뉴',
+    COALESCE(ms.manual_writer, '') AS '매뉴얼작성담당자',
+    COALESCE(c.company_name, '') AS '업체'
+FROM menu_structure ms
+LEFT JOIN companies c ON ms.company_id = c.company_id
+WHERE ms.is_active = TRUE
+ORDER BY ms.id;
+
+-- 2. 업체별 메뉴 현황 조회
+SELECT 
+    c.company_name AS '업체명',
+    COUNT(ms.id) AS '메뉴수',
+    GROUP_CONCAT(DISTINCT ms.manual_writer ORDER BY ms.manual_writer SEPARATOR ', ') AS '담당자들'
+FROM companies c
+LEFT JOIN menu_structure ms ON c.company_id = ms.company_id AND ms.is_active = TRUE
+GROUP BY c.company_id, c.company_name
+ORDER BY c.company_name;
+
+-- 3. 특정 업체의 메뉴 조회
+SELECT 
+    ms.id,
+    ms.menu_1st,
+    ms.menu_2nd,
+    ms.menu_3rd,
+    ms.manual_writer,
+    c.company_name
+FROM menu_structure ms
+JOIN companies c ON ms.company_id = c.company_id
+WHERE c.company_name = '타요타';
+
+-- 4. 담당자별 메뉴와 관련 업체 조회
+SELECT 
+    ms.manual_writer AS '담당자',
+    COUNT(ms.id) AS '담당메뉴수',
+    GROUP_CONCAT(DISTINCT c.company_name ORDER BY c.company_name SEPARATOR ', ') AS '관련업체'
+FROM menu_structure ms
+LEFT JOIN companies c ON ms.company_id = c.company_id
+WHERE ms.manual_writer IS NOT NULL AND ms.is_active = TRUE
+GROUP BY ms.manual_writer
+ORDER BY ms.manual_writer;
+
+-- 5. 1차 메뉴별 통계
+SELECT 
+    ms.menu_1st AS '1차메뉴',
+    COUNT(ms.id) AS '하위메뉴수',
+    COUNT(DISTINCT ms.company_id) AS '연관업체수',
+    COUNT(DISTINCT ms.manual_writer) AS '담당자수'
+FROM menu_structure ms
+WHERE ms.menu_1st IS NOT NULL AND ms.is_active = TRUE
+GROUP BY ms.menu_1st
+ORDER BY ms.menu_1st;
+
+-- 6. 새로운 업체 추가 예시
+-- INSERT INTO companies (company_name, company_code, contact_info) 
+-- VALUES ('새로운업체', 'NEW001', '연락처 정보');
+
+-- 7. 새로운 메뉴 추가 예시 (업체 연결)
+-- INSERT INTO menu_structure (menu_1st, menu_2nd, manual_writer, company_id)
+-- VALUES ('새메뉴', '새하위메뉴', '담당자명', 
+--         (SELECT company_id FROM companies WHERE company_name = '업체명'));

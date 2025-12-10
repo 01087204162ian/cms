@@ -1,0 +1,1252 @@
+
+
+        
+		/* 검색 섹션 스타일 */
+/* Search Section Styles */
+
+.search-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 2px;
+    border-radius: 8px;
+}
+
+.search-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Input and Select Styles */
+.custom-select {
+    padding: 4px 6px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    color: #333;
+}
+
+#search-school {
+    padding: 4px 6px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    width: 250px;
+    font-size: 0.9rem;
+}
+.status-select-employee,
+.insurance-select,
+.status-select {
+    padding: 1px 1px;
+    border: 1px solid #fff;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    color: #495057;
+    background-color: white;
+    min-width: 100px;
+    cursor: pointer;
+    transition: border-color 0.2s;
+}
+.status-select-employee:focus,
+.insurance-select:focus,
+.status-select:focus {
+    border-color: #2b4c8a;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(43, 76, 138, 0.1);
+}
+.status-select-employee:option,
+.insurance-select option,
+.status-select option {
+    padding: 8px;
+}
+
+.mText {
+    padding: 2px 2px;
+    border: 1px solid #fff;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    width: 100%;
+    transition: all 0.2s ease;
+}
+
+.mText:focus {
+    border-color: #ffffff;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(43, 76, 138, 0.1);
+}
+
+.mText::placeholder {
+    color: #adb5bd;
+}
+
+/* Button Styles */
+.button-group {
+    display: flex;
+    gap: 10px;
+}
+
+.searchBtn {
+    padding: 3px 6px;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #2b4c8a, #506ea8);
+    color: white;
+    font-size: 0.8rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.searchBtn:hover {
+    background: linear-gradient(135deg, #1f3a6e, #3e5a9d);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.searchBtn:active {
+    transform: translateY(0);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+}
+
+.btn1 {
+    padding: 4px 8px;
+    border: none;
+    border-radius: 4px;
+    background-color: #cccc;
+    color: white;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.2s;
+}
+
+.btn1:hover {
+    background-color: #1e3a6e;
+}
+
+.btn-link_1 {
+    padding: 2px 6px;
+    border: none;
+    border-radius: 6px;
+    background: linear-gradient(135deg, #6c757d, #495057);
+    color: white;
+    font-size: 0.7rem;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.btn-link_1:hover {
+    background: linear-gradient(135deg, #5a6268, #343a40);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+}
+
+.btn-link_1:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.btn-link_1 i {
+    font-size: 1.1rem;
+}
+
+/* Table Styles */
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+    margin-top: 0px;
+    -webkit-overflow-scrolling: touch;
+    position: relative;
+    background: linear-gradient(to right, white 30%, rgba(255, 255, 255, 0)),
+                linear-gradient(to left, white 30%, rgba(255, 255, 255, 0)) 100% 0;
+    background-size: 50px 100%;
+    background-repeat: no-repeat;
+    background-attachment: local, local;
+}
+
+#questionnaire-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #ffffff;
+    box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+    text-align: center;
+    min-width: 1200px; /* 최소 너비 설정 */
+}
+
+
+
+/* 상태 셀 내부 요소 스타일링을 위한 공간 */
+#questionnaire-table td.status-cell > *{
+    padding: 0px;
+    width: 100%;
+    height: 100%;
+    display: inline-block;
+}
+
+
+
+#questionnaire-table th,
+#questionnaire-table td {
+    border: 1px solid #ddd;
+    font-size: 12px;
+    color: #333;
+}
+
+#questionnaire-table td {
+    padding: 4px;
+}
+
+#questionnaire-table th {
+    background-color: #4c7399;
+    color: white;
+    text-align: center;
+    padding: 8px;
+}
+
+#questionnaire-table tr:nth-child(even) {
+    background-color: #f8f9fa;
+}
+
+#questionnaire-table tr:hover {
+    background-color: #eaf2ff;
+    transition: background-color 0.3s ease-in-out;
+}
+
+/* Pagination Styles */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    margin-top: 20px;
+}
+
+.pagination a {
+    display: inline-block;
+    padding: 4px 8px;
+    margin: 0 3px;
+    text-decoration: none;
+    color: #007bff;
+    border: 1px solid #007bff;
+    border-radius: 4px;
+    transition: all 0.3s ease-in-out;
+    font-size: 12px;
+}
+
+.pagination a:hover {
+    background-color: #007bff;
+    color: white;
+}
+
+.pagination a.active {
+    background-color: #34495e;
+    color: white;
+    font-weight: bold;
+    border-color: #2c3e50;
+}
+
+.pagination a.disabled {
+    color: #ccc;
+    border-color: #ccc;
+    pointer-events: none;
+}
+
+/* Utility Classes */
+.preiminum {
+    text-align: right;
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+    .table-container {
+        margin: 0 -15px;
+        padding: 0 15px;
+        background: 
+            linear-gradient(to right, white 30%, rgba(255, 255, 255, 0)),
+            linear-gradient(to left, white 30%, rgba(255, 255, 255, 0)) 100% 0;
+        background-size: 40px 100%;
+        background-repeat: no-repeat;
+        background-attachment: local, local;
+    }
+
+    #questionnaire-table th,
+    #questionnaire-table td {
+        font-size: 11px;
+        padding: 3px;
+    }
+
+    .pagination {
+        flex-wrap: wrap;
+        gap: 3px;
+    }
+
+    .pagination a {
+        padding: 3px 6px;
+        font-size: 11px;
+        margin: 0 1px;
+    }
+    .search-section {
+        flex-direction: column;
+        gap: 15px;
+        align-items: stretch;
+    }
+
+    .button-group {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .btn1 {
+        flex: 1;
+        min-width: 80px;
+        max-width: 120px;
+        font-size: 0.8rem;
+        padding: 6px 4px;
+    }
+	.status-select-employee,
+    .insurance-select,
+    .status-select {
+        width: 100%;
+        font-size: 0.85rem;
+    }
+    
+    .mText {
+        font-size: 0.9rem;
+        padding: 6px 10px;
+    }
+    
+    .date-input {
+        width: 120px;
+        font-size: 0.85rem;
+        padding: 6px 10px;
+    }
+}
+
+/* 모달 기본 스타일 */
+.question-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    overflow-y: auto;
+}
+
+.question-modal-content {
+    position: relative;
+    background-color: white;
+    margin: 30px auto;
+    padding: 30px;
+    width: 90%;
+    max-width: 1200px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* 모달 내부 스타일 */
+#modal-body {
+    padding: 20px;
+}
+
+#modal-body h5 {
+    color: #2b4c8a;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 25px 0 15px 0;
+}
+
+/* 테이블 스타일 */
+#modal-body table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    background-color: white;
+}
+
+#modal-body th {
+    background-color: #f8f9fa;
+    padding: 6px;
+    font-weight: 500;
+    color: #495057;
+    border: 1px solid #dee2e6;
+    text-align: center;
+}
+
+#modal-body td {
+    padding: 6px;
+    border: 1px solid #dee2e6;
+	text-align:center;
+}
+
+/* 입력 필드 스타일 */
+.etc-input {
+    width: 100%;
+    padding: 2px 6px;
+    border: 1px solid #fff;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    transition: border-color 0.2s ease;
+}
+
+.etc-input:focus {
+    border-color: #2b4c8a;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(43, 76, 138, 0.1);
+}
+
+textarea.etc-input {
+    resize: vertical;
+    min-height: 60px;
+}
+.date-input {
+   width: 150px;
+   padding: 4px 6px;
+   margin: 0 5px;
+   font-size: 0.9rem;
+   border: 1px solid #fff;
+   border-radius: 4px;
+   text-align: center;
+   transition: all 0.2s ease;
+}
+
+.date-input:focus {
+   border-color: #2b4c8a;
+   outline: none;
+   box-shadow: 0 0 0 2px rgba(43, 76, 138, 0.1);
+}
+
+
+/* 라디오 버튼 그룹 스타일 */
+.radio-group {
+   display: flex;
+   justify-content: center;
+   gap: 20px;
+   padding: 5px 0;
+}
+
+.radio-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+}
+
+.radio-label input[type="radio"] {
+    margin: 0;
+}
+
+/* 주차별 입력 필드 스타일 */
+.week-input {
+    width: 100%;
+    padding: 4px;
+    border: 1px solid #fff;
+    border-radius: 4px;
+    text-align: right;
+}
+
+/* 정렬 클래스 */
+.right-align {
+    text-align: right;
+}
+
+.walign {
+    text-align: center;
+}
+
+
+
+/* 반응형 스타일 */
+@media (max-width: 768px) {
+    .question-modal-content {
+        margin: 15px auto;
+        padding: 20px;
+    }
+
+    #modal-body table {
+        font-size: 0.9rem;
+    }
+
+    .radio-group {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .etc-input,
+    .week-input {
+        font-size: 0.9rem;
+        padding: 6px 8px;
+    }
+}
+
+/*두번째 모달*/
+/* 모달 기본 스타일 */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    overflow-y: auto;
+}
+
+.modal-content {
+    position: relative;
+    background-color: white;
+    margin: 30px auto;
+    padding: 30px;
+    width: 90%;
+    max-width: 1000px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* 셀렉트 박스 스타일 */
+.select-container {
+    margin-bottom: 20px;
+}
+
+.styled-select {
+    padding: 4px 6px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    color: #333;
+    background-color: white;
+    min-width: 200px;
+}
+
+/* 테이블 스타일 */
+#second-modal-body table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    background-color: white;
+}
+
+#second-modal-body td {
+    padding: 6px;
+    border: 1px solid #dee2e6;
+	text-align:center;
+	font-size:0.8rem;
+}
+
+#second-modal-body th {
+    background-color: #f8f9fa;
+	border: 1px solid #dee2e6;
+    text-align:center;
+    color: #495057;
+	font-size:0.8rem;
+    
+}
+.styled-select2 {
+    padding: 4px 6px;
+    border: 1px solid #fff;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    color: #333;
+    background-color: white;
+    min-width: 200px;
+}
+
+
+
+
+/* 버튼 그룹 스타일 */
+.button-group {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.btn-primary {
+    background-color: #2b4c8a;
+    color: white;
+    padding: 7px 8px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: background-color 0.2s;
+    flex: 1;
+    min-width: 150px;
+    text-align: center;
+}
+
+.btn-primary:hover {
+    background-color: #1e3a6e;
+}
+
+/* 공지사항 셀렉트 박스 스타일 */
+#noticeSelect {
+    background-color: #2b4c8a;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    flex: 1;
+    min-width: 200px;
+}
+
+#noticeSelect option {
+    background-color: white;
+    color: #333;
+    padding: 8px;
+}
+
+/* 스팬 텍스트 스타일 */
+#second-modal-body span {
+    color: #495057;
+    font-size: 0.95rem;
+}
+
+/* 반응형 스타일 */
+@media (max-width: 768px) {
+    .modal-content {
+        margin: 15px auto;
+        padding: 20px;
+    }
+
+    .button-group {
+        flex-direction: column;
+    }
+
+    .btn-primary,
+    #noticeSelect {
+        width: 100%;
+        min-width: auto;
+    }
+
+    #second-modal-body td {
+        padding: 8px;
+        font-size: 0.9rem;
+    }
+
+    .styled-input {
+        font-size: 0.9rem;
+        padding: 6px 8px;
+    }
+}
+
+
+/* 실적 모달 스타일 */
+.pModal {
+   display: none;
+   position: fixed;
+   top: 0;
+   left: 0;
+   width: 100%;
+   height: 100%;
+   background-color: rgba(0, 0, 0, 0.5);
+   z-index: 1000;
+   overflow-y: auto;
+}
+
+.pModal-content {
+   position: relative;
+   background-color: white;
+   margin: 30px auto;
+   padding: 25px;
+   width: 90%;
+   max-width: 900px;
+   border-radius: 12px;
+   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* 헤더 영역 */
+.pModal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ddd; /* 경계선 두께 감소 */
+    padding-bottom: 5px; /* padding 줄임 */
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px; /* 마진 축소 */
+}
+
+
+#performanceSummary {
+    text-align: right; /* 우측 정렬 */
+    font-size: 16px; /* 글자 크기 */
+    font-weight: bold; /* 글자 굵기 */
+    color: #333; /* 글자 색상 */
+    margin-right: 10px; /* 테이블과 간격 */
+}
+.filter-container {
+    display: flex;
+    gap: 10px;
+    margin: 10px 0;
+}
+
+
+
+
+ 
+.filter-container button {
+    padding: 5px;
+    font-size: 14px;
+}
+
+
+
+.filter-container span {
+   display: inline-block;
+}
+
+/* 선택 박스 공통 스타일 */
+#yearContainer1 select,
+#yearContainer select,
+.filter-container select {
+   padding: 4px 6px;
+   border: 1px solid #ddd;
+   border-radius: 4px;
+   font-size: 0.8rem;
+   color: #333;
+   background-color: white;
+   min-width: 120px;
+}
+
+/* 테이블 영역 */
+.pModal-body {
+   padding: 10px 0;
+}
+
+#performanceTable {
+   width: 100%;
+   border-collapse: collapse;
+   margin-top: 5px;
+}
+
+#performanceTable th {
+   background-color: #f8f9fa;
+   padding: 8px;
+   text-align: left;
+   font-weight: 500;
+   color: #495057;
+   border-bottom: 2px solid #dee2e6;
+}
+
+#performanceTable td {
+   padding: 6px;
+   border-bottom: 1px solid #dee2e6;
+   color: #495057;
+}
+
+#performanceTable tbody tr:hover {
+   background-color: #f8f9fa;
+}
+/*
+#performanceTable td div {
+    text-align: right;
+}*/
+.y_month_{/*년 실적 월*/
+    text-align: center;
+}
+.y_month_2{/*년 실적 */
+    text-align: right;
+}
+.p-btn {
+    display: inline-block;
+    padding: 5px 10px;
+    font-size: 12px;
+    font-weight: bold;
+	margin-left:2px;
+    color: #ffffff;
+    background: linear-gradient(135deg, #007bff, #0056b3); /* 파란색 그라디언트 */
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    text-align: center;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.p-btn:hover {
+    background: linear-gradient(135deg, #0056b3, #003d80); /* hover 시 진한 파랑 */
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3);
+    transform: scale(1.05);
+}
+
+.p-btn:active {
+    background: linear-gradient(135deg, #004080, #002b5e); /* 클릭 시 더 어두운 파랑 */
+    box-shadow: inset 0px 2px 6px rgba(0, 0, 0, 0.3);
+    transform: scale(0.98);
+}
+/* 푸터 영역 */
+
+/* 모달 푸터 */
+.modal-footer {
+   padding: 15px 25px;
+  
+   color: #666;
+   font-size: 0.9rem;
+   text-align: right;
+   
+   border-radius: 0 0 12px 12px;
+}
+#changeP {
+   color: #495057;
+   font-size: 0.95rem;
+}
+
+/* 반응형 스타일 */
+@media (max-width: 768px) {
+   .pModal-content {
+       margin: 15px auto;
+       padding: 20px;
+   }
+
+   .filter-container {
+       flex-direction: column;
+       gap: 10px;
+   }
+
+   .filter-container select {
+       width: 100%;
+   }
+
+   #performanceTable {
+       font-size: 0.9rem;
+   }
+
+   #performanceTable td,
+   #performanceTable th {
+       padding: 8px;
+   }
+}
+
+/* 업로드 모달 스타일 */
+.upModal {
+   display: none;
+   position: fixed;
+   top: 0;
+   left: 0;
+   width: 100%;
+   height: 100%;
+   background-color: rgba(0, 0, 0, 0.5);
+   z-index: 1000;
+   overflow-y: auto;
+}
+
+.upModal .modal-content {
+   position: relative;
+   background-color: white;
+   margin: 30px auto;
+   width: 90%;
+   max-width: 900px;
+   border-radius: 12px;
+   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* 모달 헤더 */
+.modal-header {
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   padding: 10px 25px;
+   border-bottom: 1px solid #e9ecef;
+   
+   border-radius: 12px 12px 0 0;
+}
+
+#cName {
+   font-size: 1.2rem;
+   font-weight: 600;
+   color: #2b4c8a;
+}
+
+.close-upmodal {
+   background: none;
+   border: none;
+   font-size: 1.2rem;
+   color: #666;
+   cursor: pointer;
+   padding: 5px;
+   transition: color 0.2s;
+}
+
+.close-upmodal:hover {
+   color: #333;
+}
+/* 모달 헤더 */
+#uploadModal .modal-header {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    text-align: center;
+    color: #333;
+}
+/* 업로드 컨테이너 */
+#uploadModal .upload-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+}
+
+/* 선택 필드 */
+#uploadModal .upload-container select {
+    width: 20%;
+    padding: 6px;
+    border-radius: 5px;
+}
+
+/* 동적 입력 필드 */
+#dynamicField input[type="text"] {
+    max-width: 350px;
+    padding: 8px;
+    font-size: 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+/* 파일 업로드 필드 */
+#uploadModal .upload-container input[type="file"] {
+    flex: 1.5;
+}
+
+/* 업로드 버튼 */
+button[type="submit"],
+#uploadModal .upload-container button {
+    width: 15%;
+    padding: 5px 8px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button[type="submit"]:hover,
+#uploadModal .upload-container button:hover {
+    background-color: #0056b3;
+}
+
+/* 파일 테이블 */
+.file-table2,
+.file-table {
+   width: 100%;
+   border-collapse: collapse;
+   margin: 20px 0;
+}
+.file-table2,
+.file-table th {
+   background-color: #f8f9fa;
+   padding: 12px 15px;
+   text-align: left;
+   font-weight: 500;
+   color: #495057;
+   border-bottom: 2px solid #dee2e6;
+   font-size: 0.95rem;
+   text-align:center;
+}
+.file-table2,
+.file-table td {
+   padding: 12px 15px;
+   border-bottom: 1px solid #dee2e6;
+   color: #495057;
+   font-size: 0.9rem;
+   text-align:center;
+}
+.file-table2,
+.file-table tbody tr:hover {
+   background-color: #f8f9fa;
+}
+
+/* 테이블 열 너비 조정 */
+.file-table th:nth-child(1) { width: 8%; text-align:center;}  /* 순번 */
+.file-table th:nth-child(2) { width: 15%; text-align:center;} /* 파일의종류 */
+.file-table th:nth-child(3) { width: 20%; text-align:center;} /* 설계/증권번호 */
+.file-table th:nth-child(4) { width: 25%; text-align:center;} /* 파일명 */
+.file-table th:nth-child(5) { width: 20%; text-align:center;} /* 입력일자 */
+.file-table th:nth-child(6) { width: 12%; text-align:center;} /* 기타 */
+
+/* 테이블 열 너비 조정 */
+.file-table2 th:nth-child(1) { width: 20%; text-align:center;}  /* 사업자 */
+.file-table2 th:nth-child(2) { width: 30%; text-align:center;} /**/
+.file-table2 th:nth-child(3) { width: 20%; text-align:center;} /* 계약자 */
+.file-table2 th:nth-child(4) { width: 30%; text-align:center;} /*  */
+
+/* 삭제 버튼 스타일 */
+.dButton {
+    background-color: rgba(220, 53, 69, 0.8); /* 빨간색에 약간의 투명도 추가 */
+    color: white; /* 흰색 글자 */
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease, opacity 0.3s ease; /* 부드러운 전환 효과 */
+    opacity: 0.9; /* 기본적으로 약간 투명하게 */
+}
+
+.dButton:hover {
+    background-color: rgba(176, 42, 55, 0.9); /* 호버 시 더 어두운 빨간색 */
+    opacity: 1; /* 호버 시 완전히 불투명하게 */
+}
+
+/* 애니메이션 */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+/* 파일 링크 스타일 */
+.file-link {
+    color: #6c757d; /* 기본 색상: 중간 회색 */
+    text-decoration: none; /* 밑줄 제거 */
+    font-weight: 500; /* 중간 두께의 글자 */
+    transition: color 0.3s ease, text-shadow 0.3s ease; /* 색상 및 그림자 전환 효과 */
+}
+
+.file-link:hover {
+    color: #495057; /* 호버 시 더 진한 회색 */
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); /* 부드러운 그림자 추가 */
+    text-decoration: underline; /* 호버 시 밑줄 추가 */
+}
+
+
+/* 반응형 스타일 */
+@media (max-width: 768px) {
+   .upModal .modal-content {
+       margin: 15px auto;
+   }
+
+   .modal-header {
+       padding: 15px 20px;
+   }
+
+   .file-table {
+       display: block;
+       overflow-x: auto;
+   }
+
+   .file-table th,
+   .file-table td {
+       padding: 10px;
+       font-size: 0.85rem;
+	   
+   }
+
+   /* 모바일에서는 열 너비 자동 조정 */
+   .file-table th,
+   .file-table td {
+       white-space: nowrap;
+   }
+}
+
+/* 클레임 모달 스타일 */
+.k_1_claimModal,
+.claimModal {
+   display: none;
+   position: fixed;
+   top: 0;
+   left: 0;
+   width: 100%;
+   height: 100%;
+   background-color: rgba(0, 0, 0, 0.5);
+   z-index: 1000;
+   overflow-y: auto;
+}
+.k_1_claimModal .modal-content,
+.claimModal .modal-content {
+   position: relative;
+   background-color: white;
+   margin: 30px auto;
+   padding: 25px;
+   width: 90%;
+   max-width: 1000px;
+   border-radius: 12px;
+   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* 증권번호 표시 영역 */
+#certi__ {
+   font-weight: 500;
+   color: #2b4c8a;
+   margin-left: 10px;
+}
+
+/* 테이블 스타일 */
+.file-table2,
+.file-table {
+   width: 100%;
+   border-collapse: collapse;
+   margin: 20px 0;
+}
+.file-table2 th,
+.file-table th {
+   padding: 12px 15px;
+   text-align: left;
+   font-weight: 500;
+   color: #495057;
+   border: 1px solid #dee2e6;
+}
+.file-table2 td,
+.file-table td {
+   padding: 12px 15px;
+   border: 1px solid #dee2e6;
+   color: #495057;
+}
+
+/* 버튼을 감싸는 컨테이너 정렬 */
+.claim-button-container {
+    display: flex;
+    justify-content: flex-end; /* 우측 끝 정렬 */
+    padding-top: 10px;
+}
+
+.styled-button {
+   background-color: #2b4c8a;
+   color: white;
+   padding: 10px 20px;
+   border: none;
+   border-radius: 4px;
+   cursor: pointer;
+   font-size: 0.95rem;
+   transition: background-color 0.2s;
+   min-width: 150px;
+}
+
+.styled-button:hover {
+   background-color: #1e3a6e;
+}
+
+
+
+
+/* 입력 필드 스타일 */
+.styled-input {
+   width: 100%;
+   padding: 4px 6px;
+   border: 1px solid #fff;
+   border-radius: 4px;
+   font-size: 0.8rem;
+   transition: all 0.2s ease;
+}
+
+.styled-input:focus {
+   border-color: #fff;
+   outline: none;
+   box-shadow: 0 0 0 2px rgba(43, 76, 138, 0.1);
+}
+
+.styled-input::placeholder {
+   color: #adb5bd;
+}
+
+/* 텍스트영역 특별 스타일 */
+textarea.styled-input {
+   resize: vertical;
+   min-height: 100px;
+}
+
+/* 정렬 클래스 */
+.right-align {
+   text-align: right;
+}
+
+.btd {
+   background-color: #f8f9fa;
+}
+
+/* 반응형 스타일 */
+@media (max-width: 768px) {
+   .claimModal .modal-content {
+       margin: 15px auto;
+       padding: 20px;
+   }
+   .file-table2,
+   .file-table {
+       font-size: 0.9rem;
+   }
+   .file-table2 th,
+   .file-table2 td,
+   .file-table th,
+   .file-table td {
+       padding: 10px;
+   }
+
+   .styled-input {
+       font-size: 0.9rem;
+       padding: 6px 8px;
+   }
+
+   .styled-button {
+       width: 100%;
+       margin: 5px 0;
+   }
+}
+#claimTableTable {
+   width: 100%;
+   border-collapse: collapse;
+   margin-top: 5px;
+}
+
+/* 테이블 열 너비 조정 */
+#claimTable th:nth-child(1) { width: 18%; text-align:center;}  /* 년월 */
+#claimTable th:nth-child(2) { width: 6%; text-align:center;} /* 접수건*/
+#claimTable th:nth-child(3) { width: 6%; text-align:center;} /* 미결 */
+#claimTable th:nth-child(4) { width: 6%; text-align:center;} /* 종결 */
+#claimTable th:nth-child(5) { width: 6%; text-align:center;} /* 면책 */
+#claimTable th:nth-child(6) { width: 6%; text-align:center;} /* 취소 */
+#claimTable th:nth-child(7) { width: 6%; text-align:center;} /* 계 */
+#claimTable th:nth-child(8) { width: 16%; text-align:center;} /* 종결보험료 */
+#claimTable th:nth-child(9) { width: 15%; text-align:center;} /* 보험료 */
+#claimTable th:nth-child(10) { width: 15%; text-align:center;} /* 손해율 */
+/* Table 전체 스타일 */
+
+
+
+#claimTable th {
+   background-color: #f8f9fa;
+   padding: 8px;
+   text-align: left;
+   font-weight: 500;
+   color: #495057;
+   border-bottom: 1px solid #dee2e6;
+}
+
+#claimTable td {
+   padding: 6px;
+   border-bottom: 1px solid #dee2e6;
+   border-right: 1px solid #dee2e6;
+   color: #495057;
+   text-align:right;
+}
+
+
+.claimTh{
+  text-align:center;
+  }
+
+

@@ -1,0 +1,1494 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- 보안 관련 메타 태그 추가 -->
+    
+    <!-- XSS 방어를 위한 CSP 설정 -->
+
+<meta http-equiv="Content-Security-Policy" 
+      content="default-src 'self'; 
+               script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com;
+               connect-src 'self' https://silbo.kr https://lincinsu.kr https://kjstation.kr;
+               style-src 'self' 'unsafe-inline';
+               img-src 'self' data: https:;
+               font-src 'self' https:;">
+
+
+    <!-- MIME 스니핑 방지 -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    
+    <!-- XSS 필터 활성화 -->
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+    
+    <!-- HTTPS 강제 설정 -->
+    <meta http-equiv="Strict-Transport-Security" content="max-age=31536000; includeSubDomains">
+    <meta charset="UTF-8">
+    <!-- 레퍼러 정책 설정 -->
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+	<link rel="stylesheet" href="./css/basic.css">
+	<link rel="stylesheet" href="./css/loading-styles.css">
+	<link rel="stylesheet" href="./css/company.css">
+	<link rel="stylesheet" href="./css/policy.css">
+	<link rel="stylesheet" href="./css/hollinwon.css">
+	<link rel="stylesheet" href="./css/kj_endorseList.css">
+	<link rel="stylesheet" href="./css/kj_mamual.css">
+	<link rel="stylesheet" href="./css/field_practice.css">
+	<link rel="stylesheet" href="./css/field_claim.css">
+	<link rel="stylesheet" href="./css/employee_list1.css">
+	<link rel="stylesheet" href="./css/cord_practice.css">
+    <title>보험대리점 CMS</title>
+    <style>
+        .manual-button {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            padding: 12px;
+            background: none;
+            border: none;
+            color: #000000;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-bottom: 8px;
+        }
+
+        .manual-button:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .manual-button .icon {
+            width: 20px;
+            height: 20px;
+            margin-right: 12px;
+        }
+
+        .manual-text {
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 모바일 햄버거 메뉴 버튼 -->
+    <button class="mobile-menu-toggle" 
+            aria-label="메뉴 열기" 
+            aria-expanded="false"
+            aria-controls="sidebar">
+        <svg class="icon" aria-hidden="true">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+    </button>
+    
+    <!-- 모바일 헤더 -->
+    <!--<div class="mobile-header">
+        <div class="breadcrumb">
+			 홈> <span id="current-menu">외국인유학생보험</span> > <span id="current-submenu">신청리스트</span>
+		</div>
+    </div> -->
+    
+    <!-- 오버레이 (모바일에서 사이드바 열릴 때) -->
+    <div class="sidebar-overlay"></div>
+
+    <div class="sidebar" role="navigation" aria-label="메인 메뉴">
+        <!-- 사이드바 접기/펼치기 버튼 -->
+        <div class="sidebar-toggle" 
+             role="button" 
+             aria-label="사이드바 접기/펼치기"
+             tabindex="0">
+            <svg aria-hidden="true">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+        </div>
+        
+        <div class="sidebar-header">
+            <div class="user-avatar">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+            </div>
+            <div class="user-info">
+              <!--  <span class="welcome-text">환영합니다</span>
+                <span class="user-name">섹션사용자님</span>-->
+				<span id="userName">로딩중...</span>님 환영합니다!
+				<div id="currentDateTime" class="current-time"></div>
+            </div>
+        </div>
+
+        <div class="sidebar-content">
+            <!-- KJ 대리운전 (1단계로 승격) -->
+            <div class="menu-item">
+                <button class="menu-button" data-target="submenu-kj" 
+                        aria-expanded="false" 
+                        aria-controls="submenu-kj">
+                    <div class="menu-button-content">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M1 10h22"></path>
+                        </svg>
+                        <span class="menu-button-text">KJ대리운전</span>
+                    </div>
+                    <svg class="chevron" aria-hidden="true">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                    <span class="current-menu-indicator"></span>
+                </button>
+
+                <div class="submenu" id="submenu-kj" 
+                     role="menu" 
+                     aria-label="KJ대리운전 하위메뉴">
+                    <div class="submenu-item" role="none">
+                        <a href="#" 
+                           class="submenu-link" 
+                           role="menuitem" 
+                           aria-current="page"
+                           data-name="kj-search">기사찾기</a>
+                        <a href="#" class="submenu-link" data-name="kj-list">배서리스트</a>
+                        <a href="#" class="submenu-link" data-name="kj-company">대리운전회사</a>
+						<a href="#" class="submenu-link" data-name="kj-policy">증권별코드</a>
+						<a href="#" class="submenu-link" data-name="kj-person"> 개인보험</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DAS 대리운전 (1단계로 승격) -->
+            <div class="menu-item">
+                <button class="menu-button" data-target="submenu-das" 
+                        aria-expanded="false" 
+                        aria-controls="submenu-das">
+                    <div class="menu-button-content">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                            <path d="M21 21v-2a4 4 0 0 0-3-3.85"></path>
+                            <path d="M8 3.13a4 4 0 0 0 0 7.75"></path>
+                            <path d="M3 21v-2a4 4 0 0 1 3-3.85"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                            <path d="M12 14a7 7 0 0 0-7 7"></path>
+                            <path d="M12 14a7 7 0 0 1 7 7"></path>
+                        </svg>
+                        <span class="menu-button-text">DAS대리운전</span>
+                    </div>
+                    <svg class="chevron" aria-hidden="true">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                    <span class="current-menu-indicator"></span>
+                </button>
+
+                <div class="submenu" id="submenu-das" 
+                     role="menu" 
+                     aria-label="DAS대리운전 하위메뉴">
+                    <div class="submenu-item" role="none">
+                        <a href="#" 
+                           class="submenu-link" 
+                           role="menuitem" 
+                           aria-current="page"
+                           data-name="das-search">기사찾기</a>
+                        <a href="#" class="submenu-link" data-name="das-list">배서리스트</a>
+                        <a href="#" class="submenu-link" data-name="das-company">대리운전회사</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="menu-group-divider"></div>
+
+            <!-- 여행자보험 -->
+            <div class="menu-item">
+                <button class="menu-button" data-target="submenu-travel" 
+                        aria-expanded="false" 
+                        aria-controls="submenu-travel">
+                    <div class="menu-button-content">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 2L11 13"></path>
+                            <path d="M22 2l-7 20-4-9-9-4 20-7z"></path>
+                        </svg>
+                        <span class="menu-button-text">여행자보험</span>
+                    </div>
+                    <svg class="chevron" aria-hidden="true">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                    <span class="current-menu-indicator"></span>
+                </button>
+
+                <div class="submenu" id="submenu-travel" 
+                     role="menu" 
+                     aria-label="여행자보험 하위메뉴">
+                    <div class="submenu-item" role="none">
+                        <a href="#" 
+                           class="submenu-link" 
+                           role="menuitem" 
+                           aria-current="page"
+                           data-name="travel-list">신청리스트</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="menu-group-divider"></div>
+
+            <!-- 외국인유학생보험 -->
+            <div class="menu-item">
+                <button class="menu-button" data-target="submenu-foreign" 
+                        aria-expanded="false" 
+                        aria-controls="submenu-foreign">
+                    <div class="menu-button-content">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 21h18"></path>
+                            <path d="M3 10h18"></path>
+                            <path d="M5 6l7-4 7 4"></path>
+                            <path d="M4 10v11"></path>
+                            <path d="M20 10v11"></path>
+                            <path d="M8 14v3"></path>
+                            <path d="M12 14v3"></path>
+                            <path d="M16 14v3"></path>
+                        </svg>
+                        <span class="menu-button-text">외국인유학생보험</span>
+                    </div>
+                    <svg class="chevron" aria-hidden="true">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                    <span class="current-menu-indicator"></span>
+                </button>
+
+                <div class="submenu" id="submenu-foreign" 
+                     role="menu" 
+                     aria-label="외국인유학생보험 하위메뉴">
+                    <div class="submenu-item" role="none">
+                        <a href="#" 
+                           class="submenu-link" 
+                           role="menuitem" 
+                           aria-current="page"
+                           data-name="foreign-list">신청리스트</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="menu-group-divider"></div>
+
+            <!-- 현장실습보험 -->
+            <div class="menu-item">
+                <button class="menu-button" data-target="submenu-field" 
+                        aria-expanded="false" 
+                        aria-controls="submenu-field">
+                    <div class="menu-button-content">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                            <line x1="8" y1="21" x2="16" y2="21"></line>
+                            <line x1="12" y1="17" x2="12" y2="21"></line>
+                        </svg>
+                        <span class="menu-button-text">현장실습보험</span>
+                    </div>
+                    <svg class="chevron" aria-hidden="true">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                    <span class="current-menu-indicator"></span>
+                </button>
+
+                <div class="submenu" id="submenu-field" 
+                     role="menu" 
+                     aria-label="현장실습보험 하위메뉴">
+                    <div class="submenu-item" role="none">
+                        <a href="#" 
+                           class="submenu-link" 
+                           role="menuitem" 
+                           aria-current="page"
+                           data-name="field-list">신청리스트</a>
+                        <a href="#" class="submenu-link" data-name="field-claim">클레임리스트</a>
+                    </div>
+					
+                </div>
+            </div>
+
+            <div class="menu-group-divider"></div>
+
+            <!-- 홀인원보험 (새로 추가) -->
+            <div class="menu-item">
+                <button class="menu-button" data-target="submenu-holeinone" 
+                        aria-expanded="false" 
+                        aria-controls="submenu-holeinone">
+                    <div class="menu-button-content">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <circle cx="12" cy="12" r="2"></circle>
+                            <line x1="12" y1="4" x2="12" y2="2"></line>
+                            <line x1="12" y1="22" x2="12" y2="20"></line>
+                            <line x1="20" y1="12" x2="22" y2="12"></line>
+                            <line x1="2" y1="12" x2="4" y2="12"></line>
+                        </svg>
+                        <span class="menu-button-text">홀인원보험</span>
+                    </div>
+                    <svg class="chevron" aria-hidden="true">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                    <span class="current-menu-indicator"></span>
+                </button>
+
+                <div class="submenu" id="submenu-holeinone" 
+                     role="menu" 
+                     aria-label="홀인원보험 하위메뉴">
+                    <div class="submenu-item" role="none">
+                        <a href="#" 
+                           class="submenu-link" 
+                           role="menuitem" 
+                           aria-current="page"
+                           data-name="holeinone-list">리스트</a>
+                        <a href="#" class="submenu-link" data-name="holeinone-claim">클레임</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="menu-group-divider"></div>
+
+            <!-- 직원관리 (메뉴 맨 아래로 이동) -->
+            <div class="menu-item">
+                <button class="menu-button" data-target="submenu-employee" 
+                        aria-expanded="false" 
+                        aria-controls="submenu-employee">
+                    <div class="menu-button-content">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                        <span class="menu-button-text">직원관리</span>
+                    </div>
+                    <svg class="chevron" aria-hidden="true">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                    <span class="current-menu-indicator"></span>
+                </button>
+
+                <div class="submenu" id="submenu-employee" 
+                     role="menu" 
+                     aria-label="직원관리 하위메뉴">
+                    <div class="submenu-item" role="none">
+                        <a href="#" 
+                           class="submenu-link" 
+                           role="menuitem" 
+                           aria-current="page"
+                           data-name="employee-list">직원리스트</a>
+						   <a href="#" class="submenu-link" data-name="cord-list">코드리스트</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="sidebar-footer">
+            <button class="manual-button" 
+                    aria-label="매뉴얼"
+                    onclick="window.open('./manual/product/index.html', '_blank')">
+                <svg class="icon" aria-hidden="true">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                    <polyline points="10 9 9 9 8 9"></polyline>
+                </svg>
+                <span class="manual-text">매뉴얼</span>
+            </button>
+            <button class="logout-button" 
+                    aria-label="로그아웃">
+                <svg class="icon" aria-hidden="true">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                    <polyline points="16 17 21 12 16 7"></polyline>
+                    <line x1="21" y1="12" x2="9" y2="12"></line>
+                </svg>
+                <span class="logout-text">로그아웃</span>
+            </button>
+        </div>
+    </div>
+
+   <div class="content" role="main" aria-label="메인 콘텐츠">
+    <!-- 메인 콘텐츠 영역 -->
+	<div id="header-container">
+		<div class="breadcrumb">
+			홈 > <span id="current-menu">외국인유학생보험</span> > <span id="current-submenu">신청리스트</span>
+		</div>
+	</div>
+    <div class="content-container">
+        
+        <div id="page-content">
+            <!-- 좌측 메뉴 선택에 따라 -->
+       </div>
+    </div>
+</div>
+    
+
+<script src="./js/basic.js" defer></script>
+<script src="./js/modal.js" defer></script>
+<script src="./js/loading-system.js" defer></script>
+<script src="./js/kj_gisa.js" defer></script>
+<script src="./js/kj_endorseList.js" defer></script>
+<script src="./js/kj_company.js" defer></script>
+<script src="./js/kj_policy.js" defer></script>
+<script src="./js/kj_person.js" defer></script>
+
+<script src="./js/field_practice.js" defer></script>
+<script src="./js/field_claim.js" defer></script>
+<script src="./js/cord_list.js" defer></script>
+<script src="./js/employee_list.js" defer></script>
+<script src="./js/holeinone_list.js" defer></script>
+
+</div>
+<!-- 현장실습보험 통계모달 -->
+<div id="perModal" class="pModal">
+	<div class="pModal-content">
+		<div class="pModal-header">
+			<div >
+				<div id="performanceSummary"></div> <!-- 기간 및 합계 -->
+			</div>
+			<div class="filter-container">
+				<span id='yearSelect_'></span>
+				<span id='monthSelect_'></span>
+			</div>
+		</div>
+
+		<div class="pModal-body">
+			<div class="table-container">
+				<table id="performanceTable">
+					<tbody></tbody>
+				</table>
+			</div>
+		</div>
+
+		<!-- ✅ 모달 푸터 추가 -->
+		<div class="modal-footer">
+			<span id="changeP"></span>
+		</div>
+	</div>
+</div>
+<!-- 현장실습보험 질문서 통계 모달  끝-->
+
+<!-- 현장실습보험 클레임 통계 모달 시작-->
+<div id="sjModal" class="cModal">
+	<div class="cModal-content">
+		<div class="cModal-header">
+			 <h4 class="c_modal-title">
+				<span id='sjTitle'></span>
+            </h4>
+			<div id="yearContainer1"></div> <!-- 여기서 <select>를 동적으로 생성 -->
+		</div>
+
+		<div class="cModal-body">
+			<div class="c_table-container">
+				<table id="claimTable">
+					<tbody></tbody>
+				</table>
+			</div>
+		</div>
+
+		<!-- ✅ 모달 푸터 추가 -->
+		<div class="cModal-footer">
+			<span id="c_changeP"></span>
+		</div>
+	</div>
+</div>
+
+
+<!-- 현장실습보험 클레임 통계 모달 끝-->
+
+<!-- 현장실습보험 질문서 번호를 클릭했을 때 모달 시작-->
+
+
+<div id="second-modal" class="q2Modal">
+    <div class="q2Modal-content">
+        <!--<button class="close-q2Modal">X</button>-->
+        <div id="second-modal-body">
+            <input type='hidden' id='questionwareNum_'><!-- questionware -->
+            <input type='hidden' id='school9_'>
+            <input type='hidden' id='inscompany_'>
+            <input type='hidden' id='cNum_' /><!-- 아이디 -->
+            
+
+            <!-- 두 번째 모달 내용 -->
+			
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+			    <span id="beforegabunho"></span>
+                <div class="select-container">
+					<select id="mem-id-select" class="styled-select"> </select>
+				</div>
+            </div>
+            <table  class='q2Table'>
+                <tr> 
+                    <th width='20%'>사업자번호</th>
+                    <td width='30%'><span id='school_2'></span></td>
+                    <th width='20%'>계약자</th>
+                    <td width='30%'><span id='school_1'></span></td>
+                </tr>
+                <tr> 
+                    <th>주소</th>
+                    <td colspan='3'><span id='school_3'></span></td>
+                </tr>
+                <tr> 
+                    <th>연락처</th>
+                    <td><span id='school_4'></span></td>
+                    <th>이메일</th>
+                    <td><span id='school_5'></span></td>
+                </tr>
+                <tr> 
+                    <th>시기</th>
+                    <td><span id='school_6'></span></td>
+                    <th>실습기간</th>
+                    <td><span id='school_7'></span>~<span id='school_8'></span></td>
+                </tr>
+                <tr> 
+                    <th>가입유형</th>
+                    <td colspan='3'><span id='school_9'></span> 대인대물 한도<span id='daein1_'></span> 산재초과 대인대물<span id='daein2_'></span></td>
+                </tr>
+                <tr> 
+                    <td colspan='4'><span id='inwon'></span></td>
+                </tr>
+                <tr> 
+                    <td colspan='4'>대인보험료: <span id='daein_'></span> 대물보험료 : <span id='daemool_'></span> 합계보험료 : <span id='totalP_'></span></td>
+                </tr>
+          
+                <tr>
+                    <th>청약번호</th>
+                    <td  >
+                        <input type="text" id="gabunho-input" class="styled-input" placeholder="청약번호를 입력하세요"  onkeypress="if(event.key === 'Enter') gabunhoInput()"/>
+                    </td>
+                    <th>증권번호</th>
+                    <td  >
+                        <input type="text" id="certi_" class="styled-input" placeholder="증권번호를 입력하세요" onkeypress="if(event.key === 'Enter') saveCerti()" />
+                    </td>
+                </tr>
+                <tr>
+                    <th>카드번호</th>
+                    <td ><input type="text" id="card-number" class="styled-input" placeholder="카드번호를 입력하세요"  onkeypress="if(event.key === 'Enter') saveCardNumber()"/></td>
+                    <th>유효기간</th>
+                    <td ><input type="text" id="card-expiry" class="styled-input" placeholder="MM/YY" onkeypress="if(event.key === 'Enter') saveCardExpiry()"/></td>
+                </tr>
+                <tr>
+                    <th>은행</th>
+                    <td ><input type="text" id="bank-name" class="styled-input" placeholder="은행명을 입력하세요" onkeypress="if(event.key === 'Enter') saveBankName()"/></td>
+                    <th>은행계좌</th>
+                    <td ><input type="text" id="bank-account" class="styled-input" placeholder="은행계좌를 입력하세요" onkeypress="if(event.key === 'Enter') saveBankAccount()"/></td>
+                </tr>
+                <tr>
+                    <th>담당자</th>
+                    <td ><input type="text" id="damdanga" class="styled-input" placeholder="담당자 이름을 입력하세요" onkeypress="if(event.key === 'Enter') saveDamdanga()" /></td>
+                    <th>연락처</th>
+                    <td ><input type="text" id="damdangat" class="styled-input" placeholder="담당자 연락처를 입력하세요" onkeypress="if(event.key === 'Enter') saveDamdangat()"/></td>
+                </tr>
+            </table>
+			<div class="button-group">
+				<button id="print-questionnaire" class="q2-btn-primary">질문서 프린트</button>
+				<button id="print-application" class="q2-btn-primary">청약서</button>
+				<button id="send-id-email" class="q2-btn-primary">아이디,비번초기화 메일</button>
+				<button id="no-accident-check" class="q2-btn-primary">무사고 확인서</button>
+				<button id="send-guide" class="q2-btn-primary">가입안내문</button>
+				<select id="noticeSelect" class="q2-btn-primary">
+					<option value="-1">공지사항</option>
+					<option value="1">[보험금 청구] 보험금 청구시 필요서류 안내</option>
+					<option value="2">[이용안내문] 한화 현장실습 보험 이용 안내문</option>
+					<option value="3">[무사고 확인서 메일]</option>
+				</select>
+			</div>
+           
+        </div>
+    </div>
+</div>
+
+<!-- 현장실습보험 질문서 번호를 클릭했을 때 모달 시작-->
+
+<!-- 현장실습보험 사업자번호 클릭 모달 시작-->
+<div id="q_3_Modal" class="question-modal">
+    <div class="question-modal-content">
+        <!--<button class="question-close-modal">X</button>-->
+
+		<div id="question-modal-body">
+			<!-- 계약자 정보 -->
+			<input type='hidden' id='questionwareNum'><!--questonware-->
+			<input type='hidden' id='school9'>
+			<input type='hidden' id='inscompany'>
+			<h5>1. 계약자 정보</h5>
+			<table class="info-table">
+				<tr>
+					<th width='20%'>사업자번호</th>
+					<td width='30%'><input class='etc-input' type="text" id="school2" ></td>
+					<th width='20%'>계약자</th>
+					<td width='30%'><input class='etc-input' type="text" id="school1" ></td>
+				</tr>
+				<tr>
+					<th>주소</th>
+					<td colspan="3"><textarea class='etc-input'  id="school3" rows="2" ></textarea></td>
+				</tr>
+				<tr>
+					<th>연락처</th>
+					<td><input class='etc-input'  type="text" id="school4" ></td>
+					<th>이메일</th>
+					<td><input class='etc-input'  type="text" id="school5" ></td>
+				</tr>
+			</table>
+
+			<!-- 현장실습 관련 사항 -->
+			<h5>2. 현장실습 관련 사항</h5>
+			<table class="info-table">
+				<tr>
+					<th width='20%'>현장실습시기</th>
+					<td width='80%'>
+					   <div class="radio-group">
+							<label class="radio-label"><input type="radio" name="school6" value="1"> 1학기</label>
+							<label class="radio-label"><input type="radio" name="school6" value="2"> 하계계절</label>
+							<label class="radio-label"><input type="radio" name="school6" value="3"> 2학기</label>
+							<label class="radio-label"><input type="radio" name="school6" value="4"> 동계계절</label>
+						</div>
+
+					</td>
+				</tr>
+				<tr>
+					<th>실습기간(보험기간)</th>
+					<td>
+						<div style="display: flex; align-items: center; justify-content: center; gap: 10px;">
+                            <input type="date" id="school7" class="date-input etc-input" style="width: 120px;">
+                            <span>~</span>
+                            <input type="date" id="school8" class="date-input etc-input" style="width: 120px;">
+                        </div>
+					</td>
+				</tr>
+			</table>
+			<h5>3. 가입유형</h5>
+			<table class="info-table">
+
+			  <tr>
+				<th width='20%' rowspan='2'>보장내용</th>
+				
+				<th width='80%' colspan='2'>가입유형선택</th>
+			  </tr>
+				<tr>
+				 <th><div class="radio-group"><label class="radio-label"><input type="radio" class='plan' name='plan' value="1"> PLAN A</label></div></th>
+				
+				<th><div class="radio-group"><label class="radio-label"><input type="radio" class='plan' name='plan' value="2"> PLAN B</label></div></th>
+			  </tr>
+			   <tr>
+				<th>대인 및 대물 보상 </th>
+				<td style="text-align: center;">1사고당 <span id='daein1'></span>억원</td><!--2-->
+				<td style="text-align: center;">1사고당 <span id='daein2'></span>억원</td><!--3-->
+			  </tr>
+			   <tr>
+				<th>산재보험 초과 <br>사용자배상 </th>
+				<td style="text-align: center;">1사고당 <span id='daein3'></span>억원</td><!--2-->
+				<td style="text-align: center;">1사고당 <span id='daein4'></span>억원</td><!--3-->
+			  </tr>
+			  <tr>
+				<th>배상책임 자기부담금 </th>
+				<td style="text-align: center;">1십만원</td>
+				<td style="text-align: center;">1십만원</td>
+			  </tr>
+			  <tr>
+				<th>실습 중 치료비 </th>
+				<td style="text-align: center;">1인당 및 1사고당 : 1천만원</td>
+				<td style="text-align: center;">1인당 및 1사고당 : 1천만원</td>
+			  </tr>
+
+			</table>
+			<!-- 참여인원 -->
+			<h5>4. 실습기간 별 참여인원</h5>
+			<table class="info-table">
+				<tr>
+					<th width='20%'>실습기간</th>
+					<th width='30%'>참여인원</th>
+					<th width='20%'>실습기간</th>
+					<th width='30%' >참여인원</th>
+				</tr>
+
+				<tr>
+					<th>4주</th>
+					<td><input  type="text" class="week-input" id="week4" onchange="calculateTotal()" ></td>
+					<th class='walign'>16주</th>
+					<td ><input class="week-input" type="text" id="week16"onchange="calculateTotal()" ></td>
+				</tr>
+				<tr>
+					<th>5주</th>
+					<td><input  type="text" class="week-input" id="week5" onchange="calculateTotal()"></td>
+					<th>17주</th>
+					<td ><input class="week-input" type="text" id="week17" onchange="calculateTotal()"></td>
+				</tr>
+				<tr>
+					<th>6주</th>
+					<td><input  type="text" class="week-input" id="week6" onchange="calculateTotal()"></td>
+					<th>18주</th>
+					<td ><input class="week-input" type="text" id="week18" onchange="calculateTotal()"></td>
+				</tr>
+				<tr>
+					<th>7주</th>
+					<td><input  type="text" class="week-input" id="week7" onchange="calculateTotal()"></td>
+					<th>19주</th>
+					<td ><input class="week-input" type="text" id="week19" onchange="calculateTotal()"></td>
+				</tr>
+				<tr>
+					<th>8주</th>
+					<td><input  type="text" class="week-input" id="week8" onchange="calculateTotal()"></td>
+					<th>20주</th>
+					<td ><input class="week-input" type="text" id="week20" onchange="calculateTotal()"></td>
+				</tr>
+				<tr>
+					<th>9주</th>
+					<td><input  type="text" class="week-input" id="week9" onchange="calculateTotal()"></td>
+					<th>21주</th>
+					<td ><input class="week-input" type="text" id="week21" onchange="calculateTotal()"></td>
+				</tr>
+				<tr>
+					<th>10주</th>
+					<td><input  type="text" class="week-input" id="week10" onchange="calculateTotal()"></td>
+					<th>22주</th>
+					<td><input class="week-input" type="text" id="week22"  onchange="calculateTotal()"></td>
+				</tr>
+				<tr>
+					<th>11주</th>
+					<td><input  type="text" class="week-input" id="week11" onchange="calculateTotal()"></td>
+					<th>23주</th>
+					<td ><input class="week-input" type="text" id="week23" onchange="calculateTotal()"></td>
+				</tr>
+				<tr>
+					<th>12주</th>
+					<td><input  type="text" class="week-input" id="week12" onchange="calculateTotal()"></td>
+					<th>24주</th>
+					<td ><input class="week-input" type="text" id="week24" onchange="calculateTotal()"></td>
+				</tr>
+				<tr>
+					<th>13주</th>
+					<td><input  type="text" class="week-input" id="week13" onchange="calculateTotal()"></td>
+					<th>25주</th>
+					<td colspan='2'><input class="week-input" type="text" id="week25" onchange="calculateTotal()"></td>
+				</tr>
+				<tr>
+					<th>14주</th>
+					<td><input  type="text" class="week-input" id="week14" onchange="calculateTotal()"></td>
+					<th>26주</th>
+					<td ><input class="week-input" type="text" id="week26" onchange="calculateTotal()"></td>
+				</tr>
+				<tr>
+					<th>15주</th>
+					<td><input  type="text" class="week-input" id="week15" onchange="calculateTotal()"></td>
+					<th></td>
+					<th></td>
+				</tr>
+				<tr>
+				<th >인원 계 <span id='week_total'></span> 명</th>
+				<td style="text-align: right;">대인보험료<span id='daein'></span></td>
+				<td style="text-align: right;">대물보험료<span id='daemool'></span></td>
+				<td style="text-align: right;">합계보험료<span id='totalP'></span></td>
+
+			  </tr>
+			  <tr>
+				<td colspan='4'><button type="submit" id="write_" class="btn btn-primary"><i class="fas fa-check"></i> 작성완료</button></td>
+			  </tr>
+			</table>
+		</div>
+	</div>
+</div>
+<!-- 현장실습번호 사업자번호 클릭 모달 끝-->
+
+<!-- upload 모달 시작-->
+<!-- 파일 업로드 모달 -->
+<div id="uploadModal" class="upModal">
+    <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+            <span id="cName">파일 업로드</span>
+			
+        </div>
+        <input type="hidden" id="qNum" />
+
+        <!-- Modal Body -->
+        
+            <div class="upload-container">
+                <!-- 파일 타입 선택 -->
+                
+            </div>
+        
+
+        <!-- 파일 목록 테이블 -->
+        <div>
+            <table class="file-table">
+
+                <thead id='fileThead'>
+                    
+                </thead>
+                <tbody id="file_list"></tbody>
+            </table>
+        </div>
+
+        <!-- Modal Footer -->
+        <div class="modal-footer">파일 업로드를 완료하세요.</div>
+    </div>
+</div>
+
+<!-- upload 모달 끝-->
+
+<!--claim 모달-->
+
+<!-- 
+1. 클레임 버튼 (questions.php)
+	- 클릭 시: 
+		$('#third-modal').fadeIn(); 실행 (JS 파일: lincModal.js)
+	- 백엔드 요청:
+		url: '_db/get_questionnaire_details.php'
+	- 동작 방식:
+		questionnaire 테이블에서 num 값을 이용하여 계약자 정보를 호출
+		클레임 관련 정보를 저장 및 업데이트
+2. 번호 클릭 (claimList2.php)
+	- 클릭 시: 
+		$('#third-modal').fadeIn(); 실행 (JS 파일: c_q_modal.js)
+	- 백엔드 요청: 
+		url: '_db/claim/get_claim_details.php'
+	- 동작 방식:
+		claim 테이블의 num 값을 이용하여 클레임 정보를 호출
+		questionnaire 테이블의 certi 값을 참조하여 계약자 번호를 가져옴
+3. 클레임 저장 (claimStore 버튼)
+	- 클릭 시: 
+		클레임 정보 저장 (claimEtc.js) 
+		 questions.php 저장은 cNum 저장 또는 업데이트 가능
+		 claimList2.php 업데이트 
+-->
+<div id="third-modal" class="claimModal">
+    <div class="claim-modal-content">
+        
+        <div id="claim-modal-body">
+            <input type='hidden' id='claimNum__'><!-- claimList Table 의 num   -->
+			<input type='hidden' id='questionNum__'><!-- questionnaire Table num -->
+			<input type='hidden' id='cNum__'><!-- 2014Costmer Table num -->
+            <!-- 두 번째 모달 내용 -->
+            <div class="claim-button-container2">
+				 <div>증권번호 : <span id="certi__" > </span> </div>
+				 <select id="noticeSelect2" class="styled-button">
+				   <option value="-1">공지사항</option>
+					<option value="1">[보험금 청구] 보험금 청구시 필요서류 안내</option>
+					<option value="2">[이용안내문] 한화 현장실습 보험 이용 안내문</option>
+					<option value="3">[무사고 확인서 메일]</option>
+				</select>		
+					
+            </div>
+            <table class="file-table2">
+                <tr> 
+                    <th width='20%'>사업자번호</th>
+                    <td width='30%'><span id='school_2_'></span></td>
+                    <th width='20%'>계약자</th>
+                    <td width='30%'><span id='school_1_'></span></td>
+					
+                    
+                </tr>
+                <tr> 
+                    <th>주소</th>
+                    <td colspan='3'><span id='school_3_'></span></td>
+                </tr>
+
+                <tr> 
+                    <th>시기</th>
+                    <td><span id='school_6_'></span></td>
+                    <th>실습기간</th>
+                    <td><span id='school_7_'></span>~<span id='school_8_'></span></th>
+				</tr>
+					<th>연락처</th>
+                    <td><span id='school_4_'></span></td>
+					<th>이메일</th>
+                    <td><span id='school_5_'></span></td>
+                </tr>
+                <tr> 
+                    <th>가입유형</th>
+                    <td colspan='3'><span id='school_9_'></span> 대인대물 한도<span id='daein1__'></span> 산재초과 대인대물<span id='daein2__'></span></td>
+                </tr>
+				 
+				 <tr>
+                    <th>학생</th>
+                    <td ><input type="text" id="student" class="styled-input" placeholder="학생명을 입력하세요" /></td>
+					<td  colspan='2'></td>
+				</tr>
+                <tr>
+                    <th>사고일자</th>
+                    <td  >
+                        <input type="date" id="wdate_3" class="styled-input" placeholder="사고일자 입력하세요" />
+                    </td>
+                    <th>사고접수번호</th>
+                    <td  >
+                        <input type="text" id="claimNumber" class="styled-input" placeholder="사고 접수번호를 입력하세요" />
+                    </td>
+					
+                </tr>
+			
+               
+				<tr>
+					<th>보험금지급일</th>
+                    <td ><input type="date" id="wdate_2" class="styled-input" placeholder="보험금 지급일 입력하세요" /></td>
+                    <th >보험금</th>
+                    <td ><input type="text" id="claimAmout" class="styled-input right-align" placeholder="보험금" /></td>
+                </tr>
+               
+				 <tr>
+                    <th >사고경위</th>
+                    <td colspan='3'><textarea id="accidentDescription" class="styled-input" placeholder="사고경위를 입력하세요" rows="4" maxlength="500"></textarea></td>
+                </tr>
+                <tr>
+                    <th >담당자</th>
+                    <td ><input type="text" id="damdanga_" class="styled-input" placeholder="담당자 이름을 입력하세요" /></td>
+                    <th>연락처</th>
+                    <td ><input type="text" id="damdangat_" class="styled-input" placeholder="숫자만 입력하세요" /></td>
+                </tr>
+				<tr>
+					<td  colspan='4'>
+						<div class="claim-button-container"> 
+								<button type="button" id="claimStore" class="styled-button">클레임 저장</button>
+						</div>
+					</td>
+				</tr>
+            </table>
+
+            <!-- 추가 버튼 -->
+			
+        </div>
+    </div>
+</div>
+<!-- 클레임 모달 끝-->
+
+
+<!--KJ 대리운전 배서 -->
+
+<div id="kj-endose1-modal" class="eQ2Modal">
+    <div class="eQ2Modal-content">
+        <!--<button class="close-q2Modal">X</button>-->
+        <div id="kj-endose1-modal-body">
+			
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+			    <span id="beforegabunho"></span>
+            </div>
+            <table  class='kjTable'>
+				<tr> 
+                    <th width='16%'>대리운전회사</th>
+                    <th width='12%'>대표자</th>
+					<th width='12%'>연락처</th>
+					<th width='12%'>담당자</th>
+					<th width='12%'>담당자</th>
+					<td width='36%' colspan='3'><input type='text' id='d_hphone' class='geInput2' oninput="formatPhoneNumber(this)"> </td>
+					
+                </tr>
+                <tr> 
+                    <td ><span id='daeri_1'></span></td>
+                    <td ><span id='daeri_2'></span></td>
+					<td ><span id='daeri_3'></span></td>
+					<td ><span id='daeri_4'></span></td>
+					<td ><span id='daeri_5'></span></td>
+					<td colspan='3' rowspan='2'><textarea id='smsContents' class='geInput2' rows="3" style="width:100%;"></textarea></td>
+					
+                </tr>
+				<tr> 
+                    <th>증권번호</th>
+                    <th>보험기간</th>
+					<th>납입방식</th>
+					<th>보험회사</th>
+					<th>정기납입일</th>
+					
+                </tr>
+				<tr> 
+                    <td ><span id='daeri_9'></span></td>
+                    <td ><span id='daeri_10'></span></td>
+					<td ><span id='daeri_11'></span></td>
+					<td ><span id='daeri_12'></span></td>
+					<td ><span id='daeri_13'></span></td>
+					<td colspan='3'><button class="kje-daeri-button" onclick="smsE_send()" >문자발송</button></td>
+					
+                </tr>
+                
+            </table>
+			<div class='right-align'><span id='gijun2'></span><span id='gijun'></span></div>
+			<table  class='kjTable'>
+			  
+			  <thead>
+			   <tr>
+			    <th>순번</th>
+				<th>성명</th>
+				<th>주민번호</th>
+				<th>증권종류</th>
+				<th>사유</th>
+				<th>요율</th>
+				<th>상태</th>				
+				<th>처리유무</th>
+				 <th>월보험료</th>
+				<th>c_preminum</th>
+			  </tr>
+			 </thead>
+			 <tbody id='e_list'></tbody>
+			 
+		 </table> 
+		  
+        </div>
+    </div>
+</div>
+<!--KJ 대리운전 회사 -->
+<div id="kj-DaeriCompany-modal" class="DaeriModal">
+    <div class="DaeriModal-content">
+        <!--<button class="close-q2Modal">X</button>-->
+        <div id="DaeriModal-body">
+			
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+			    <span id="daeri_company"></span>
+                
+            </div>
+             <div id='d_companyInfo'></div> <!-- 대리운전회사 정보-->
+
+			<div id='e_CeritList'></div><!-- 대리운전회사 보험증권 정보-->
+			 
+        </div>
+    </div>
+</div>
+<!--영업담당자 모달-->
+
+<div id="kj-damdangja-modal" class="damdangjaModal">
+    <div class="damdangjaModal-content">
+        <button class="close-damdangjaModal" aria-label="닫기">X</button>
+        <div id="damdangjaModal-body">
+            <div class="modal-header">
+                <span id="damdangja_daeriCompany"></span>
+            </div>
+            <table  class='kjTable'>
+			  <thead>
+			   <tr>
+			    <th>순번</th>
+				<th>성명</th>
+				<th>id</th>
+				<th>선택</th>
+				<th>통장</th>
+			  </tr>
+			 </thead>
+			 <tbody id='damdangja_list'></tbody>
+		 </table>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- 배서기준일 변경 모달 -->
+<div id="kj-date-modal" class="dateModal">
+    <div class="dateModal-content">
+        <button class="close-dateModal" aria-label="닫기">X</button>
+        <div id="dateModal-body">
+            <div class="modal-header">
+                <span id="date_daeriCompany"></span>
+            </div>
+            <table class='kjTable'>
+                <thead>
+                    <tr>
+                        <th width='50%'>변경 전 배서 기준일</th>
+                        <th width='50%'>변경 후 배서 기준일</th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><input type='date'  id='before_endorseDay'></td> 
+                        <td><input type='date'  id='after_endorseDay'></td>
+                        
+                    </tr>
+					
+                </tbody>
+            </table>
+
+			<div class='center-align'><span id='endorseChange'></span></div>
+        </div>
+    </div>
+</div>
+<!-- 일별 배서리스트 -->
+<div id="kj-dailyEndose-modal" class="dailyEndoseModal">
+    <div class="dailyEndoseModal-content">
+        <!--<button class="close-dailyEndoseModal" aria-label="닫기">X</button>-->
+        <div id="dailyEndoseModal-body">
+            <div class="modal-header">
+                <span id="dailyEndose_daeriCompany"></span>
+            </div>
+            <table class='sjTable'>
+                <thead>
+                    <tr>
+                        <th width='3%'>번호</th>
+                        <th width='5%'>성명</th>
+						<th width='8%'>주민번호</th>
+						<th width='8%'>핸드폰</th>
+						<th width='5%'>상태</th>
+						<th width='8%'>증권번호</th>
+						<th width='5%'>증권성격</th>
+						<th width='5%'>보험회사</th>
+						<th width='10%'>대리운전회사</th>
+						<th width='10%'>회사폰</th>
+						<th width='5%'>요율</th>
+						<th width='5%'>월보험료</th>
+						<th width='5%'>c_premium</th>
+						<th width='6%'>처리자</th>
+						<th width='17%'>wdate</th>
+                     </tr>
+                </thead>
+                <tbody id='m_dailyEndose'></tbody>
+            </table>
+
+			
+        </div>
+    </div>
+</div>
+
+<!--검토 -->
+<div id="kj-endorseCheck-modal" class="endorseCheckModal">
+    <div class="endorseCheckModal-content">
+        <button class="close-endorseCheckModal" aria-label="닫기">X</button>
+        <div id="endorseCheckModal-body">
+            <div class="modal-header">
+                <span id="endorseCheck_daeriCompany"></span>
+            </div>
+            <div id='m_endorseCheck'></div>
+        </div>
+    </div>
+</div>
+<!--현황 -->
+<div id="kj-endorseSituation-modal" class="endorseSituationModal">
+    <div class="endorseSituationModal-content">
+      <!--  <button class="close-endorseSituationModal" aria-label="닫기">X</button>-->
+        <div id="endorseSituationModal-body">
+            <div class="modal-header">
+                <span id="endorseSituation_daeriCompany"></span>
+            </div>
+            <div id='m_endorseSituation'></div>
+        </div>
+    </div>
+</div>
+<!-- 배서기준일 변경 모달 -->
+<div id="kj-smsList-modal" class="smsListModal">
+    <div class="smsListModal-content">
+        <button class="close-smsListModal" aria-label="닫기">X</button>
+        <div id="smsListModal-body">
+            <div class="modal-header">
+                <span id="smsList_daeriCompany"></span>
+            </div>
+            <table class='sjTable'>
+                <thead>
+                    <tr>
+                        <th width='6%'>번호</th>
+                        <th width='20%'>발송일</th>
+						<th width='58%'>문자내용</th>
+						<th width='16%'>핸드폰번호</th>
+                     </tr>
+                </thead>
+                <tbody id='m_smsList'></tbody>
+            </table>
+
+			<div id='sms-pagination'></div>
+
+			
+        </div>
+    </div>
+</div>
+<!--대리운전 회사 아이디 ,비밀번호 -->
+
+<div id="kj-id-modal" class="idModal">
+    <div class="idModal-content">
+        <button class="close-idModal" aria-label="닫기">X</button>
+        <div id="idModal-body">
+            <div class="modal-header">
+                <span id="id_daeriCompany"></span><!-- id Table num-->
+            </div>
+            <table  class='kjTable'>
+			  <thead>
+			   <tr>
+			    <th width='10%'>담당자</th>
+				<th width='20%'>id</th>
+				<th width='20%'>핸드폰번호</th>
+				<th width='15%'>읽기전용</th>
+				<th width='20%'>비번</th>
+				<th width='15%'>허용여부</th>
+			  </tr>
+			 </thead>
+			 <tbody id='id_list'></tbody>
+		 </table>
+		 <div id='idExplain' ></div><div id='idExplain2' ></div>
+        </div>
+    </div>
+</div>
+
+
+<!--sms 문자 -->
+<div id="kj-sms-modal" class="smsModal">
+    <div class="smsModal-content">
+        
+        <div id="smsModal-body">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+                <span id="gisa">222</span>
+            </div>
+			<div style="margin-bottom: 10px;">
+              
+               <!-- <span id='sendDate'></span><span id='sendList'></span>-->
+            </div>
+			<div style="margin-bottom: 10px;">
+				 <select id="smskind">
+					<option value="-1">선택</option>
+					<option value="1">주민번호 입력요청</option>
+					<option value="2">확인 </option>
+					<option value="3">확인 </option>
+					<option value="4">확인 </option>
+					<option value="5">확인 </option>
+				</select>  
+			</div>
+            <div style="margin-bottom: 10px;">
+                <label for="smsReceiver">수신번호:</label>
+                <input type="text" id="smsReceiver" class="smsInput" placeholder="숫자만 입력 (예: 01012345678)">
+            </div>
+
+            <div style="margin-bottom: 10px;">
+                <label for="smsMessage" id='sendDate'></label>
+                <textarea id="smsMessage" class="smsInput" rows="5" placeholder="보낼 문자 내용을 입력하세요" style="width: 100%;"></textarea>
+            </div>
+
+            <div style="text-align: right;">
+                <button class="sendSmsBtn" onclick="sendSms()">문자 전송</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!-- KJ 보험료 모달 (600px 고정 너비) -->
+<div id="kj-premium-modal" class="premiumModal">
+    <div class="premiumModal-content">
+        <button class="close-premiumModal" aria-label="닫기">X</button>
+        <div id="premiumModal-body">
+            <div class="modal-header">
+				<input type='hidden' id='p_Cnum'>
+                <span id="ceti_daeriCompany"></span>
+            </div>
+            <table class="kjTable">
+			   <thead>
+			   <tr>
+                    <th rowspan='2'>순번</th>
+                    <th colspan='2'>나이</th>
+                    <th colspan='3'>월보험료</th>
+                    <th colspan='3'>10회분납</th>
+                </tr>
+                <tr>
+
+                    <th>시작</th>
+                    <th>끝</th>
+                    <th>월기본</th>
+                    <th>월특약</th>
+                    <th>합계</th>
+                    <th>년기본</th>
+                    <th>년특약</th>
+                    <th>년계</th>
+                </tr>
+			  </thead>
+
+			  <tbody id='premiumList'></tbody>
+
+				 
+
+                <!-- 여기에 데이터 행이 추가될 것입니다 -->
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<!-- KJ 배서 모달 (600px 고정 너비) -->
+<div id="kj-endorse-modal" class="endorseModal">
+    <div class="endorseModal-content">
+        <button class="close-endorseModal" aria-label="닫기">X</button>
+        <div id="endorseModal-body">
+            <div class="modal-header">
+				<input type='hidden' id='e_Cnum'>
+                <span id="e_ceti_daeriCompany"></span>
+				
+            </div>
+            <table class="kjTable">
+
+			   <thead>
+			   <tr> 
+			     <th  colspan='2'>배서기준일</th>
+				<th ><input type='date' id='endorseDay'></th>
+			   </tr>
+			   <tr>
+                    <th width='10%'>순번</th>
+                    <th width='20%'>성명</th>
+                    <th width='30%'>주민번호</th>
+                    <th width='30%'>핸드폰번호</th>
+					<th width='10%'>증권성격</th>
+                </tr>
+                
+			  </thead>
+
+			  <tbody id='kj_endorseList'></tbody>
+
+				 
+
+                <!-- 여기에 데이터 행이 추가될 것입니다 -->
+            </table>
+        </div>
+    </div>
+</div>
+<!--
+<!-- KJ 신규 모달 (600px 고정 너비) -->
+<div id="kj-new-modal" class="newModal">
+    <div class="newModal-content">
+        <button class="close-newModal" aria-label="닫기">X</button>
+        <div id="newModal-body">
+            <div class="modal-header">
+				<input type='hidden' id='new_Cnum'>
+                <span id="new_ceti_daeriCompany"></span>
+            </div>
+            <table class="kjTable">
+			   <thead>
+			   <tr> 
+			     <th  colspan='2'>신규 기준일</th>
+				<th ><input type='date' id='newDay'></th>
+			   </tr>
+			   <tr>
+                    <th width='10%'>순번</th>
+                    <th width='20%'>성명</th>
+                    <th width='30%'>주민번호</th>
+                    <th width='30%'>핸드폰번호</th>
+					<th width='10%'>증권성격</th>
+                </tr>
+                
+			  </thead>
+
+			  <tbody id='kj_newList'></tbody>
+
+				 
+
+                <!-- 여기에 데이터 행이 추가될 것입니다 -->
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- 증권별코드 -->
+<div id="policyNum-modal" class="policyNumModal">
+    <div class="policyNumModal-content">
+      <!--  <button class="close-policyNumModal" aria-label="닫기">X</button>-->
+        <div id="policyNumModal-body">
+            <div class="modal-header">
+                <span id="policyNum_daeriCompany"></span>
+            </div>
+            <div id='m_policyNum'></div>
+			<div id='Insurance_premium_statistics'></div>
+        </div>
+    </div>
+</div>
+
+<!-- 대리기사리스트 -->
+<div id="gisaList-modal" class="gisaListModal">
+    <div class="gisaListModal-content">
+      <!--  <button class="close-gisaListModal" aria-label="닫기">X</button>-->
+        <div id="gisaListModal-body">
+            <div class="modal-header">
+                <span id="gisaList_daeriCompany"></span>
+            </div>
+            <div id='m_gisaList'></div>
+        </div>
+    </div>
+</div>
+<!-- 정산 -->
+<div id="adjustment-modal" class="adjustmentModal">
+    <div class="adjustmentModal-content">
+      <!--  <button class="close-adjustmentModal" aria-label="닫기">X</button>-->
+        <div id="adjustmentModal-body">
+            <div class="modal-header">
+                <span id="adjustment_daeriCompany"></span>
+            </div>
+            <div id='m_adjustment'></div>
+        </div>
+    </div>
+</div>
+<!--월 배서리스트 검토용 -->
+<div id="adjustmentMothly-modal" class="adjustmentMothlyModal">
+    <div class="adjustmentMothlyModal-content">
+        <button class="close-adjustmentMothlyModal" aria-label="닫기">X</button>
+        <div id="adjustmentMothlyModal-body">
+            <div class="modal-header">
+                <span id="adjustmentMothly_daeriCompany"></span>
+            </div>
+            <div id='m_adjustmentMothly'></div>
+        </div>
+    </div>
+</div>
+<!--정산리스트  -->
+<div id="settlementMothly-modal" class="settlementMothlyModal">
+    <div class="settlementMothlyModal-content">
+        <button class="close-settlementMothlyModal" aria-label="닫기">X</button>
+		 <div class="modal-header">
+                <span id="settlementMothly_daeriCompany"></span>
+            </div>
+        <div id="settlementMothlyModal-body">
+           
+            <div id='m_settlementMothly'></div>
+        </div>
+    </div>
+</div>
+<!-- 보험증권별 보험료 모달 (600px 고정 너비) -->
+<div id="po-premium-modal" class="policyPremiumModal">
+    <div class="policyPremiumModal-content">
+        <button class="close-policyPremiumModal" aria-label="닫기">X</button>
+        <div id="policyPremiumModal-body">
+            <div class="modal-header">
+				<input type='hidden' id='po_Cnum'>
+                <span id="po_ceti_daeriCompany"></span>
+            </div>
+            <table class="kjTable">
+			   <thead>
+			   <tr>
+                    <th rowspan='2'>순번</th>
+                    <th colspan='2'>나이</th>
+
+                    <th colspan='3'>10회분납</th>
+                </tr>
+                <tr>
+
+                    <th>시작</th>
+                    <th>끝</th>
+                    <th>년기본</th>
+                    <th>년특약</th>
+                    <th>년계</th>
+                </tr>
+			  </thead>
+
+			  <tbody id='policyPremiumList'></tbody>
+
+				 
+
+                <!-- 여기에 데이터 행이 추가될 것입니다 -->
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<!--홀인원 보험 -->
+
+
+<div id="hollinwon-modal" class="hollinwonModal">
+    <div class="hollinwonModal-content">
+       <button class="close-hollinwonModal" aria-label="닫기">X</button>
+        <div id="hollinwonModal-body">
+            <div class="modal-header">
+                <span id="hollinwon_daeriCompany"></span>
+            </div>
+            <div id='m_hollinwon'></div>
+			
+        </div>
+    </div>
+</div>
+
+
+<div id="dambo-modal" class="damboModal">
+    <div class="damboModal-content">
+       <button class="close-damboModal" aria-label="닫기">X</button>
+        <div id="damboModal-body">
+            <div class="modal-header">
+                <span id="dambo_daeriCompany"></span>
+            </div>
+            <div id='m_dambo'></div>
+			
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>
