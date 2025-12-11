@@ -50,7 +50,7 @@ try {
     $whereSql = $where ? ('WHERE ' . implode(' AND ', $where)) : '';
 
     // 총 개수
-    $countSql = "SELECT COUNT(*) FROM `DaeriMember` {$whereSql}";
+    $countSql = "SELECT COUNT(*) FROM `2012DaeriMember` {$whereSql}";
     $countStmt = $pdo->prepare($countSql);
     $countStmt->execute($params);
     $total = (int)$countStmt->fetchColumn();
@@ -74,7 +74,7 @@ try {
             `progress`,
             `sago`,
             `Hphone`
-        FROM `DaeriMember`
+        FROM `2012DaeriMember`
         {$whereSql}
         ORDER BY `num` DESC
         LIMIT :limit OFFSET :offset
