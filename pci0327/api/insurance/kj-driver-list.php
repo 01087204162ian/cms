@@ -1,8 +1,9 @@
 <?php
 /**
- * KJ 대리운전 기사 목록 API
+ * KJ 대리운전 기사 목록 API (JSON, UTF-8)
  * 경로: /pci0327/api/insurance/kj-driver-list.php
  * 호출: GET /api/insurance/kj-driver/list?page=&limit=&name=&jumin=&status=
+ * - 필터: 이름(name), 주민번호(jumin), 상태(status: 정상 | 전체)
  */
 
 header('Content-Type: application/json; charset=utf-8');
@@ -59,11 +60,20 @@ try {
         SELECT 
             `num`,
             `Name`,
-            `Hphone`,
+            `Jumin`,
+            `nai` AS age,
+            `push`,
+            `etag`,
+            `InsuranceCompany`,
+            `CertiTableNum`,
+            `dongbuCerti`,
+            `InputDay`,
+            `OutPutDay`,
             `2012DaeriCompanyNum` AS companyNum,
             `ch` AS status,
             `progress`,
-            `InputDay`
+            `sago`,
+            `Hphone`
         FROM `DaeriMember`
         {$whereSql}
         ORDER BY `num` DESC
@@ -79,7 +89,19 @@ try {
 
     $rows = $dataStmt->fetchAll();
 
-    // 응답 포맷
+    // 후처리: 정책번호, 회사명(가능하면 조회), 날짜 포맷
+    foreach ($rows as &$row) {
+        $row['policyNum'] = $row['dongbuCerti'] ?: $row['CertiTableNum'];
+        unset($row['dongbuCerti']);
+
+        // 0000-00-00 처리
+        if ($row['OutPutDay'] === '0000-00-00') {
+            $row['OutPutDay'] = null;
+        }
+    }
+
+    $totalPages = (int)ceil($total / $limit);
+
     echo json_encode([
         'success' => true,
         'data' => $rows,
@@ -87,6 +109,7 @@ try {
             'page' => $page,
             'limit' => $limit,
             'total' => $total,
+            'totalPages' => $totalPages,
         ],
     ], JSON_UNESCAPED_UNICODE);
     exit;
