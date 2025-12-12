@@ -32,29 +32,37 @@ try {
     $where  = [];
     $params = [];
 
-    // 날짜 필터 (FirstStartDay: 01-31 또는 '9999'는 전체)
-    // 구버전: getDay='9999' 또는 없으면 FirstStartDay>='01' (모든 날짜)
-    //         getDay가 있으면 FirstStartDay='$getDay' (특정 날짜)
-    if ($getDay === '' || $getDay === '9999') {
-        // 전체 날짜: FirstStartDay >= '01' (모든 날짜 포함)
-        $where[] = "c.`FirstStartDay` >= '01'";
-    } else {
-        // 특정 날짜: 2자리 문자열로 변환 (01, 02, ..., 31)
-        $dayStr = str_pad($getDay, 2, '0', STR_PAD_LEFT);
-        $where[] = 'c.`FirstStartDay` = :getDay';
-        $params[':getDay'] = $dayStr;
-    }
-
-    // 담당자 필터 (MemberNum)
-    if ($damdanja !== '' && $damdanja !== '9999') {
-        $where[] = 'c.`MemberNum` = :damdanja';
-        $params[':damdanja'] = (int)$damdanja;
-    }
-
     // 검색어 필터 (업체명)
+    // 구버전: 검색어가 있으면 날짜 필터 무시하고 검색어만으로 필터링
     if ($s_contents !== '') {
         $where[] = 'c.`company` LIKE :s_contents';
         $params[':s_contents'] = '%' . $s_contents . '%';
+        
+        // 검색어가 있을 때는 담당자 필터만 적용 (날짜 필터는 무시)
+        if ($damdanja !== '' && $damdanja !== '9999') {
+            $where[] = 'c.`MemberNum` = :damdanja';
+            $params[':damdanja'] = (int)$damdanja;
+        }
+    } else {
+        // 검색어가 없을 때만 날짜 필터 적용
+        // 날짜 필터 (FirstStartDay: 01-31 또는 '9999'는 전체)
+        // 구버전: getDay='9999' 또는 없으면 FirstStartDay>='01' (모든 날짜)
+        //         getDay가 있으면 FirstStartDay='$getDay' (특정 날짜)
+        if ($getDay === '' || $getDay === '9999') {
+            // 전체 날짜: FirstStartDay >= '01' (모든 날짜 포함)
+            $where[] = "c.`FirstStartDay` >= '01'";
+        } else {
+            // 특정 날짜: 2자리 문자열로 변환 (01, 02, ..., 31)
+            $dayStr = str_pad($getDay, 2, '0', STR_PAD_LEFT);
+            $where[] = 'c.`FirstStartDay` = :getDay';
+            $params[':getDay'] = $dayStr;
+        }
+
+        // 담당자 필터 (MemberNum)
+        if ($damdanja !== '' && $damdanja !== '9999') {
+            $where[] = 'c.`MemberNum` = :damdanja';
+            $params[':damdanja'] = (int)$damdanja;
+        }
     }
 
     $whereSql = $where ? ('WHERE ' . implode(' AND ', $where)) : '';
