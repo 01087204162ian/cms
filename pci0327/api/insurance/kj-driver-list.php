@@ -272,6 +272,12 @@ try {
 
         // 5-5. 대리운전회사명 (이미 companyName 있음)
         //      필요하면 필드 이름 변경/추가 가능.
+        
+        // 5-6. 핸드폰 번호 보장 (Hphone 필드가 응답에 포함되도록)
+        // Hphone은 이미 SELECT에 포함되어 있지만, null 처리
+        if (!isset($row['Hphone']) || $row['Hphone'] === null) {
+            $row['Hphone'] = '';
+        }
     }
     unset($row);
 
