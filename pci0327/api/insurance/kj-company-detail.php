@@ -178,6 +178,20 @@ try {
         $gitaNames = [1 => '일반', 2 => '탁송', 3 => '일반/렌트', 4 => '탁송/렌트', 5 => '전차량'];
         $certiRow['gitaName'] = $gitaNames[$gita] ?? '일반';
         
+        // 불필요한 필드 제거 (preminum, yearP 관련 필드)
+        $unwantedFields = [
+            'preminum1', 'preminum2', 'preminum3', 'preminum4', 'preminum5',
+            'preminum6', 'preminum7', 'preminum8', 'preminum9', 'preminum10',
+            'preminumE1', 'preminumE2', 'preminumE3', 'preminumE4', 'preminumE5',
+            'preminumE6', 'preminumE7', 'preminumE8', 'preminumE9', 'preminumE10',
+            'yearP1', 'yearP2', 'yearP3', 'yearP4', 'yearP5', 'yearP6',
+            'yearPE1', 'yearPE2', 'yearPE3', 'yearPE4', 'yearPE5', 'yearPE6'
+        ];
+        
+        foreach ($unwantedFields as $field) {
+            unset($certiRow[$field]);
+        }
+        
         $data[] = $certiRow;
     }
     
